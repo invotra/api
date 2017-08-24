@@ -1,0 +1,778 @@
+<!doctype html>
+<html>
+  <head>
+    <title>InvotraAPI</title>
+    <style type="text/css">
+      body {
+	font-family: Trebuchet MS, sans-serif;
+	font-size: 15px;
+	color: #444;
+	margin-right: 24px;
+}
+
+h1	{
+	font-size: 25px;
+}
+h2	{
+	font-size: 20px;
+}
+h3	{
+	font-size: 16px;
+	font-weight: bold;
+}
+hr	{
+	height: 1px;
+	border: 0;
+	color: #ddd;
+	background-color: #ddd;
+}
+
+.app-desc {
+  clear: both;
+  margin-left: 20px;
+}
+.param-name {
+  width: 100%;
+}
+.license-info {
+  margin-left: 20px;
+}
+
+.license-url {
+  margin-left: 20px;
+}
+
+.model {
+  margin: 0 0 0px 20px;
+}
+
+.method {
+  margin-left: 20px;
+}
+
+.method-notes	{
+	margin: 10px 0 20px 0;
+	font-size: 90%;
+	color: #555;
+}
+
+pre {
+  padding: 10px;
+  margin-bottom: 2px;
+}
+
+.http-method {
+ text-transform: uppercase;
+}
+
+pre.get {
+  background-color: #0f6ab4;
+}
+
+pre.post {
+  background-color: #10a54a;
+}
+
+pre.put {
+  background-color: #c5862b;
+}
+
+pre.delete {
+  background-color: #a41e22;
+}
+
+.huge	{
+	color: #fff;
+}
+
+pre.example {
+  background-color: #f3f3f3;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+code {
+  white-space: pre;
+}
+
+.nickname {
+  font-weight: bold;
+}
+
+.method-path {
+  font-size: 1.5em;
+  background-color: #0f6ab4;
+}
+
+.up {
+  float:right;
+}
+
+.parameter {
+  width: 500px;
+}
+
+.param {
+  width: 500px;
+  padding: 10px 0 0 20px;
+  font-weight: bold;
+}
+
+.param-desc {
+  width: 700px;
+  padding: 0 0 0 20px;
+  color: #777;
+}
+
+.param-type {
+  font-style: italic;
+}
+
+.param-enum-header {
+width: 700px;
+padding: 0 0 0 60px;
+color: #777;
+font-weight: bold;
+}
+
+.param-enum {
+width: 700px;
+padding: 0 0 0 80px;
+color: #777;
+font-style: italic;
+}
+
+.field-label {
+  padding: 0;
+  margin: 0;
+  clear: both;
+}
+
+.field-items	{
+	padding: 0 0 15px 0;
+	margin-bottom: 15px;
+}
+
+.return-type {
+  clear: both;
+  padding-bottom: 10px;
+}
+
+.param-header {
+  font-weight: bold;
+}
+
+.method-tags {
+  text-align: right;
+}
+
+.method-tag {
+  background: none repeat scroll 0% 0% #24A600;
+  border-radius: 3px;
+  padding: 2px 10px;
+  margin: 2px;
+  color: #FFF;
+  display: inline-block;
+  text-decoration: none;
+}
+
+    </style>
+  </head>
+  <body>
+  <h1>InvotraAPI</h1>
+    <div class="app-desc">Version: v0.1</div>
+    <div class="app-desc">BasePath:/v0.1</div>
+    <div class="license-info">All rights reserved</div>
+    <div class="license-url">http://apache.org/licenses/LICENSE-2.0.html</div>
+  <h2>Access</h2>
+
+  <h2><a name="__Methods">Methods</a></h2>
+  [ Jump to <a href="#__Models">Models</a> ]
+
+  <h3>Table of Contents </h3>
+  <div class="method-summary"></div>
+  <h4><a href="#Default">Default</a></h4>
+  <ul>
+  <li><a href="#teamsPost"><code><span class="http-method">post</span> /teams</code></a></li>
+  <li><a href="#teamsTeamIdGet"><code><span class="http-method">get</span> /teams/{teamId}</code></a></li>
+  <li><a href="#teamsTeamIdMembershipsGet"><code><span class="http-method">get</span> /teams/{teamId}/memberships</code></a></li>
+  <li><a href="#teamsTeamIdMembershipsUserIdDelete"><code><span class="http-method">delete</span> /teams/{teamId}/memberships/{userId}</code></a></li>
+  <li><a href="#teamsTeamIdMembershipsUserIdPut"><code><span class="http-method">put</span> /teams/{teamId}/memberships/{userId}</code></a></li>
+  <li><a href="#teamsTeamIdPut"><code><span class="http-method">put</span> /teams/{teamId}</code></a></li>
+  <li><a href="#usersPost"><code><span class="http-method">post</span> /users</code></a></li>
+  <li><a href="#usersUserIdGet"><code><span class="http-method">get</span> /users/{userId}</code></a></li>
+  <li><a href="#usersUserIdPut"><code><span class="http-method">put</span> /users/{userId}</code></a></li>
+  </ul>
+
+  <h1><a name="Default">Default</a></h1>
+  <div class="method"><a name="teamsPost"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /teams</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">teamsPost</span>)</div>
+    <div class="method-notes">Provision a new team.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#team-schema">team-schema</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="teamsTeamIdGet"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /teams/{teamId}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">teamsTeamIdGet</span>)</div>
+    <div class="method-notes">Get information about the team.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">teamId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The Invotra UUID of the team. </div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#team-schema">team-schema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "parent_uuid" : "aeiou",
+  "description" : "aeiou",
+  "title" : "aeiou",
+  "uuid" : "aeiou"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Returns a single complete Team object.
+        <a href="#team-schema">team-schema</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="teamsTeamIdMembershipsGet"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /teams/{teamId}/memberships</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">teamsTeamIdMembershipsGet</span>)</div>
+    <div class="method-notes">Get a list of team members.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">teamId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The Invotra UUID of the team. </div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#team-membership-list-schema">team-membership-list-schema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "parent_uuid" : "aeiou",
+  "members" : [ "aeiou" ],
+  "description" : "aeiou",
+  "title" : "aeiou",
+  "uuid" : "aeiou",
+  "administrators" : [ "aeiou" ]
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    List of team members.
+        <a href="#team-membership-list-schema">team-membership-list-schema</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="teamsTeamIdMembershipsUserIdDelete"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /teams/{teamId}/memberships/{userId}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">teamsTeamIdMembershipsUserIdDelete</span>)</div>
+    <div class="method-notes">Remove the user's membership of the team.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">userId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The Invotra UUID of the user. </div><div class="param">teamId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The Invotra UUID of the team. </div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    The user has been removed from the team.
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    The user or team does not exist, or the user was not a member
+of the team.
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="teamsTeamIdMembershipsUserIdPut"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /teams/{teamId}/memberships/{userId}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">teamsTeamIdMembershipsUserIdPut</span>)</div>
+    <div class="method-notes">Update information about a user's team membership.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">userId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The Invotra UUID of the user. </div><div class="param">teamId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The Invotra UUID of the team. </div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">user_uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Invotra UUID of the user to add to the group </div><div class="param">role_type (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash;  default: member </div>
+    </div>  <!-- field-items -->
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    The user's membership of this team was updated.
+        <a href="#"></a>
+    <h4 class="field-label">201</h4>
+    The user was added as a member of the team.
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    The user or team does not exist.
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="teamsTeamIdPut"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /teams/{teamId}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">teamsTeamIdPut</span>)</div>
+    <div class="method-notes">Update team information.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">teamId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The Invotra UUID of the team. </div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#team-schema-create">team-schema-create</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    OK
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="usersPost"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /users</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">usersPost</span>)</div>
+    <div class="method-notes">Provision a new user in Invotra.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#user-schema-create">user-schema-create</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    The user was created successfully.
+        <a href="#"></a>
+    <h4 class="field-label">422</h4>
+    The user was not saved due to Drupal validation failure or JSON
+schema validation failure.
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="usersUserIdGet"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /users/{userId}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">usersUserIdGet</span>)</div>
+    <div class="method-notes">Get the user's information.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">userId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The Invotra UUID of the user. </div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#user-schema">user-schema</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "profile" : {
+    "corporate" : {
+      "manager" : {
+        "uuid" : "aeiou"
+      },
+      "teams" : [ {
+        "uuid" : "aeiou"
+      } ]
+    },
+    "contact" : {
+      "home" : "aeiou"
+    },
+    "personal" : {
+      "name" : {
+        "firstname" : "aeiou",
+        "displayName" : "Damian Robinson",
+        "surname" : "aeiou",
+        "title" : "null"
+      }
+    }
+  },
+  "externalId" : "aeiou",
+  "uuid" : "aeiou",
+  "account" : {
+    "roles" : [ "Organisational user" ],
+    "email" : "aeiou",
+    "status" : "Active",
+    "username" : "aeiou"
+  }
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Returns a single complete user object.
+        <a href="#user-schema">user-schema</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="usersUserIdPut"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /users/{userId}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">usersUserIdPut</span>)</div>
+    <div class="method-notes">Update the user's information.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">userId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; The Invotra UUID of the user. </div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#user-schema-update">user-schema-update</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    The user's information was updated.
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+
+  <h2><a name="__Models">Models</a></h2>
+  [ Jump to <a href="#__Methods">Methods</a> ]
+
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#team-membership-list-schema"><code>team-membership-list-schema</code> - </a></li>
+    <li><a href="#team-schema"><code>team-schema</code> - </a></li>
+    <li><a href="#team-schema-create"><code>team-schema-create</code> - </a></li>
+    <li><a href="#user-schema"><code>user-schema</code> - </a></li>
+    <li><a href="#user-schema-create"><code>user-schema-create</code> - </a></li>
+    <li><a href="#user-schema-update"><code>user-schema-update</code> - </a></li>
+    <li><a href="#userschema_account"><code>userschema_account</code> - </a></li>
+    <li><a href="#userschema_profile"><code>userschema_profile</code> - </a></li>
+    <li><a href="#userschema_profile_contact"><code>userschema_profile_contact</code> - </a></li>
+    <li><a href="#userschema_profile_corporate"><code>userschema_profile_corporate</code> - </a></li>
+    <li><a href="#userschema_profile_corporate_manager"><code>userschema_profile_corporate_manager</code> - </a></li>
+    <li><a href="#userschema_profile_corporate_teams"><code>userschema_profile_corporate_teams</code> - </a></li>
+    <li><a href="#userschema_profile_personal"><code>userschema_profile_personal</code> - </a></li>
+    <li><a href="#userschema_profile_personal_name"><code>userschema_profile_personal_name</code> - </a></li>
+  </ol>
+
+  <div class="model">
+    <h3><a name="team-membership-list-schema"><code>team-membership-list-schema</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">uuid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is the Invotra UUID of the team. </div>
+<div class="param">title (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is the name of the team </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is a description of the team, optional. </div>
+<div class="param">parent_uuid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is the Invotra UUID of the teams parent team, optional. </div>
+<div class="param">administrators (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+<div class="param">members (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="team-schema"><code>team-schema</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">uuid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is the Invotra UUID of the team. </div>
+<div class="param">title (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is the name of the team </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is a description of the team, optional. </div>
+<div class="param">parent_uuid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is the Invotra UUID of the teams parent team, optional. </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="team-schema-create"><code>team-schema-create</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">title (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is the name of the team </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is a description of the team, optional. </div>
+<div class="param">parent_uuid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is the Invotra UUID of the teams parent team, optional. </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="user-schema"><code>user-schema</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">account (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_account">userschema_account</a></span>  </div>
+<div class="param">externalId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is used to store the users external reference id </div>
+<div class="param">profile (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_profile">userschema_profile</a></span>  </div>
+<div class="param">uuid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Invotra assigned UUID on creation of the user, and must be included when any updates are made to the user. </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="user-schema-create"><code>user-schema-create</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">account (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_account">userschema_account</a></span>  </div>
+<div class="param">externalId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is used to store the users external reference id </div>
+<div class="param">profile (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_profile">userschema_profile</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="user-schema-update"><code>user-schema-update</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">account (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_account">userschema_account</a></span>  </div>
+<div class="param">externalId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is used to store the users external reference id </div>
+<div class="param">profile (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_profile">userschema_profile</a></span>  </div>
+<div class="param">uuid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Invotra assigned UUID on creation of the user, and must be included when any updates are made to the user. </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="userschema_account"><code>userschema_account</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Users email address format: email</div>
+<div class="param">roles (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        
+<div class="param">status (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Flag to indicate whether account is active or blocked </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">Active</div><div class="param-enum">Blocked</div>
+<div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> The users username </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="userschema_profile"><code>userschema_profile</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">contact (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_profile_contact">userschema_profile_contact</a></span>  </div>
+<div class="param">corporate (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_profile_corporate">userschema_profile_corporate</a></span>  </div>
+<div class="param">personal (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_profile_personal">userschema_profile_personal</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="userschema_profile_contact"><code>userschema_profile_contact</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">home (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> The users home telephone number. </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="userschema_profile_corporate"><code>userschema_profile_corporate</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">manager (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_profile_corporate_manager">userschema_profile_corporate_manager</a></span>  </div>
+<div class="param">teams (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_profile_corporate_teams">array[userschema_profile_corporate_teams]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="userschema_profile_corporate_manager"><code>userschema_profile_corporate_manager</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">uuid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is the Invotra UUID of the users manager </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="userschema_profile_corporate_teams"><code>userschema_profile_corporate_teams</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">uuid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> This is the Invotra UUID for the team. </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="userschema_profile_personal"><code>userschema_profile_personal</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#userschema_profile_personal_name">userschema_profile_personal_name</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="userschema_profile_personal_name"><code>userschema_profile_personal_name</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">displayName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Display name for the user </div>
+<div class="param">title (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> The users title </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">Dr</div><div class="param-enum">Mr</div><div class="param-enum">Miss</div><div class="param-enum">Mrs</div><div class="param-enum">Ms</div>
+<div class="param">firstname (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> The users firstname </div>
+<div class="param">surname (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> The users surname </div>
+    </div>  <!-- field-items -->
+  </div>
+  </body>
+</html>
