@@ -1,0 +1,498 @@
+---
+swagger: "2.0"
+info:
+  title: "InvotraAPI"
+  version: "v0.1"
+schemes:
+- "https"
+host: "api.invotra.com"
+basePath: "/v0.1"
+definitions:
+  user-schema:
+    properties:
+      account:
+        properties:
+          email:
+            description: "Users email address"
+            format: "email"
+            type: "string"
+          roles:
+            items:
+              default: "Organisational user"
+              description: "This is the default Invotra user role"
+              enum:
+              - "Organisational user"
+              type: "string"
+            type: "array"
+            uniqueItems: true
+          status:
+            default: "Active"
+            description: "Flag to indicate whether account is active or blocked"
+            type: "string"
+            enum:
+            - "Active"
+            - "Blocked"
+          username:
+            description: "The users username"
+            type: "string"
+        type: "object"
+      externalId:
+        description: "This is used to store the users external reference id"
+        type: "string"
+      profile:
+        properties:
+          contact:
+            properties:
+              home:
+                description: "The users home telephone number."
+                type: "string"
+            type: "object"
+          corporate:
+            properties:
+              manager:
+                properties:
+                  uuid:
+                    description: "This is the Invotra UUID of the users manager"
+                    type: "string"
+                    pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+                type: "object"
+              teams:
+                items:
+                  properties:
+                    uuid:
+                      description: "This is the Invotra UUID for the team."
+                      type: "string"
+                      pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+                  type: "object"
+                type: "array"
+            type: "object"
+          personal:
+            properties:
+              name:
+                properties:
+                  displayName:
+                    default: "Damian Robinson"
+                    description: "Display name for the user"
+                    type: "string"
+                  title:
+                    default: null
+                    description: "The users title"
+                    type: "string"
+                    enum:
+                    - null
+                    - "Dr"
+                    - "Mr"
+                    - "Miss"
+                    - "Mrs"
+                    - "Ms"
+                  firstname:
+                    description: "The users firstname"
+                    type: "string"
+                  surname:
+                    description: "The users surname"
+                    type: "string"
+                type: "object"
+            type: "object"
+        type: "object"
+      uuid:
+        description: "Invotra assigned UUID on creation of the user, and must be included\
+          \ when any updates are made to the user."
+        type: "string"
+        pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    type: "object"
+  user-schema-create:
+    properties:
+      account:
+        properties:
+          email:
+            description: "Users email address"
+            format: "email"
+            type: "string"
+          roles:
+            items:
+              default: "Organisational user"
+              description: "This is the default Invotra user role"
+              enum:
+              - "Organisational user"
+              type: "string"
+            type: "array"
+            uniqueItems: true
+          status:
+            default: "Active"
+            description: "Flag to indicate whether account is active or blocked"
+            type: "string"
+            enum:
+            - "Active"
+            - "Blocked"
+          username:
+            description: "The users username"
+            type: "string"
+        type: "object"
+      externalId:
+        description: "This is used to store the users external reference id"
+        type: "string"
+      profile:
+        properties:
+          contact:
+            properties:
+              home:
+                description: "The users home telephone number."
+                type: "string"
+            type: "object"
+          corporate:
+            properties:
+              manager:
+                properties:
+                  uuid:
+                    description: "This is the Invotra UUID of the users manager"
+                    type: "string"
+                    pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+                type: "object"
+              teams:
+                items:
+                  properties:
+                    uuid:
+                      description: "This is the Invotra UUID for the team."
+                      type: "string"
+                      pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+                  type: "object"
+                type: "array"
+            type: "object"
+          personal:
+            properties:
+              name:
+                properties:
+                  displayName:
+                    default: "Damian Robinson"
+                    description: "Display name for the user"
+                    type: "string"
+                  title:
+                    default: null
+                    description: "The users title"
+                    type: "string"
+                    enum:
+                    - null
+                    - "Dr"
+                    - "Mr"
+                    - "Miss"
+                    - "Mrs"
+                    - "Ms"
+                  firstname:
+                    description: "The users firstname"
+                    type: "string"
+                  surname:
+                    description: "The users surname"
+                    type: "string"
+                type: "object"
+            type: "object"
+        type: "object"
+    type: "object"
+  user-schema-update:
+    properties:
+      account:
+        properties:
+          email:
+            description: "Users email address"
+            format: "email"
+            type: "string"
+          roles:
+            items:
+              default: "Organisational user"
+              description: "This is the default Invotra user role"
+              enum:
+              - "Organisational user"
+              type: "string"
+            type: "array"
+            uniqueItems: true
+          status:
+            default: "Active"
+            description: "Flag to indicate whether account is active or blocked"
+            type: "string"
+            enum:
+            - "Active"
+            - "Blocked"
+          username:
+            description: "The users username"
+            type: "string"
+        type: "object"
+      externalId:
+        description: "This is used to store the users external reference id"
+        type: "string"
+      profile:
+        properties:
+          contact:
+            properties:
+              home:
+                description: "The users home telephone number."
+                type: "string"
+            type: "object"
+          corporate:
+            properties:
+              manager:
+                properties:
+                  uuid:
+                    description: "This is the Invotra UUID of the users manager"
+                    type: "string"
+                    pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+                type: "object"
+              teams:
+                items:
+                  properties:
+                    uuid:
+                      description: "This is the Invotra UUID for the team."
+                      type: "string"
+                      pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+                  type: "object"
+                type: "array"
+            type: "object"
+          personal:
+            properties:
+              name:
+                properties:
+                  displayName:
+                    default: "Damian Robinson"
+                    description: "Display name for the user"
+                    type: "string"
+                  title:
+                    default: null
+                    description: "The users title"
+                    type: "string"
+                    enum:
+                    - null
+                    - "Dr"
+                    - "Mr"
+                    - "Miss"
+                    - "Mrs"
+                    - "Ms"
+                  firstname:
+                    description: "The users firstname"
+                    type: "string"
+                  surname:
+                    description: "The users surname"
+                    type: "string"
+                type: "object"
+            type: "object"
+        type: "object"
+      uuid:
+        description: "Invotra assigned UUID on creation of the user, and must be included\
+          \ when any updates are made to the user."
+        type: "string"
+        pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    type: "object"
+  team-schema:
+    properties:
+      uuid:
+        description: "This is the Invotra UUID of the team."
+        type: "string"
+        pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+      title:
+        description: "This is the name of the team"
+        type: "string"
+      description:
+        description: "This is a description of the team, optional."
+        type: "string"
+      parent_uuid:
+        description: "This is the Invotra UUID of the teams parent team, optional."
+        type: "string"
+        pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    type: "object"
+  team-schema-create:
+    properties:
+      title:
+        description: "This is the name of the team"
+        type: "string"
+      description:
+        description: "This is a description of the team, optional."
+        type: "string"
+      parent_uuid:
+        description: "This is the Invotra UUID of the teams parent team, optional."
+        type: "string"
+        pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    type: "object"
+  team-membership-list-schema:
+    properties:
+      uuid:
+        description: "This is the Invotra UUID of the team."
+        type: "string"
+        pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+      title:
+        description: "This is the name of the team"
+        type: "string"
+      description:
+        description: "This is a description of the team, optional."
+        type: "string"
+      parent_uuid:
+        description: "This is the Invotra UUID of the teams parent team, optional."
+        type: "string"
+        pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+      administrators:
+        items:
+          description: "Invotra UUID of team administrators."
+          type: "string"
+          pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+        type: "array"
+        uniqueItems: true
+      members:
+        items:
+          description: "Invotra UUID of team members."
+          type: "string"
+          pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+        type: "array"
+        uniqueItems: true
+    type: "object"
+paths:
+  /users:
+    post:
+      consumes:
+      - "application/json"
+      description: "Provision a new user in Invotra."
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/user-schema-create"
+      responses:
+        201:
+          description: "The user was created successfully."
+        422:
+          description: "The user was not saved due to Drupal validation failure or\
+            \ JSON\nschema validation failure.\n"
+  /users/{userId}:
+    parameters:
+    - in: "path"
+      name: "userId"
+      description: "The Invotra UUID of the user."
+      required: true
+      type: "string"
+      pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    get:
+      produces:
+      - "application/json"
+      description: "Get the user's information."
+      responses:
+        200:
+          description: "Returns a single complete user object."
+          schema:
+            $ref: "#/definitions/user-schema"
+    put:
+      consumes:
+      - "application/json"
+      description: "Update the user's information."
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/user-schema-update"
+      responses:
+        200:
+          description: "The user's information was updated."
+  /teams:
+    post:
+      consumes:
+      - "application/json"
+      description: "Provision a new team."
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/team-schema"
+      responses:
+        200:
+          description: "OK"
+  /teams/{teamId}:
+    parameters:
+    - in: "path"
+      name: "teamId"
+      description: "The Invotra UUID of the team."
+      required: true
+      type: "string"
+      pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    get:
+      produces:
+      - "application/json"
+      description: "Get information about the team."
+      responses:
+        200:
+          description: "Returns a single complete Team object."
+          schema:
+            $ref: "#/definitions/team-schema"
+    put:
+      consumes:
+      - "application/json"
+      description: "Update team information."
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/team-schema-create"
+      responses:
+        200:
+          description: "OK"
+  /teams/{teamId}/memberships:
+    parameters:
+    - in: "path"
+      name: "teamId"
+      description: "The Invotra UUID of the team."
+      required: true
+      type: "string"
+      pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    get:
+      produces:
+      - "application/json"
+      description: "Get a list of team members."
+      responses:
+        200:
+          description: "List of team members."
+          schema:
+            $ref: "#/definitions/team-membership-list-schema"
+  /teams/{teamId}/memberships/{userId}:
+    parameters:
+    - in: "path"
+      name: "userId"
+      description: "The Invotra UUID of the user."
+      required: true
+      type: "string"
+      pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    - in: "path"
+      name: "teamId"
+      description: "The Invotra UUID of the team."
+      required: true
+      type: "string"
+      pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    put:
+      description: "Update information about a user's team membership."
+      parameters:
+      - in: "query"
+        name: "user_uuid"
+        description: "Invotra UUID of the user to add to the group"
+        required: true
+        type: "string"
+        pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+      - in: "query"
+        name: "role_type"
+        default: "member"
+        required: true
+        type: "string"
+        enum:
+        - "admin"
+        - "member"
+      responses:
+        200:
+          description: "The user's membership of this team was updated."
+        201:
+          description: "The user was added as a member of the team."
+        404:
+          description: "The user or team does not exist."
+    delete:
+      description: "Remove the user's membership of the team."
+      responses:
+        200:
+          description: "The user has been removed from the team."
+        404:
+          description: "The user or team does not exist, or the user was not a member\n\
+            of the team.\n"
+
