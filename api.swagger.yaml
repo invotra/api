@@ -361,11 +361,10 @@ paths:
         type: "string"
       responses:
         200:
-          description: "List of users matching the filter criteria."
+          description: "List of users matching the filter criteria, or an empty array\
+            \ if no\nmatching users are found.\n"
           schema:
             $ref: "#/definitions/user-list-schema"
-        404:
-          description: "No matching users were found."
     post:
       consumes:
       - "application/json"
@@ -379,9 +378,15 @@ paths:
       responses:
         201:
           description: "The user was created successfully."
+        400:
+          description: "The user was not saved due to malformed JSON."
+        409:
+          description: "The user was not saved because the username or email address\
+            \ is\nalready in use.\n"
         422:
-          description: "The user was not saved due to Drupal validation failure or\
-            \ JSON\nschema validation failure.\n"
+          description: "The user was not saved due to Drupal validation failure (other\
+            \ than\na duplicate username or email address) or JSON schema validation\n\
+            failure.\n"
   /users/{userId}:
     parameters:
     - in: "path"
@@ -399,6 +404,10 @@ paths:
           description: "Returns a single complete user object."
           schema:
             $ref: "#/definitions/user-schema"
+        400:
+          description: "The supplied UUID was malformed."
+        404:
+          description: "No user with that UUID was found."
     put:
       consumes:
       - "application/json"
@@ -412,6 +421,17 @@ paths:
       responses:
         200:
           description: "The user's information was updated."
+        400:
+          description: "The supplied UUID or JSON was malformed."
+        404:
+          description: "The UUID does not correspond to an existing user."
+        409:
+          description: "The user was not saved because the requested new username\
+            \ or email\naddress is already in use by a different user.\n"
+        422:
+          description: "The user was not updated due to Drupal validation failure\
+            \ (other\nthan a duplicate username or email address) or JSON schema\n\
+            validation failure.\n"
   /teams:
     get:
       produces:
@@ -441,8 +461,13 @@ paths:
         schema:
           $ref: "#/definitions/team-schema"
       responses:
-        200:
-          description: "OK"
+        201:
+          description: "The team was created successfully."
+        400:
+          description: "The team was not saved due to malformed JSON."
+        422:
+          description: "The team was not saved due to Drupal validation failure or\
+            \ JSON\nschema validation failure.\n"
   /teams/{teamId}:
     parameters:
     - in: "path"
@@ -460,6 +485,10 @@ paths:
           description: "Returns a single complete Team object."
           schema:
             $ref: "#/definitions/team-schema"
+        400:
+          description: "The supplied UUID was malformed."
+        404:
+          description: "The UUID does not correspond to an existing team."
     put:
       consumes:
       - "application/json"
@@ -472,7 +501,14 @@ paths:
           $ref: "#/definitions/team-schema-create"
       responses:
         200:
-          description: "OK"
+          description: "The team information was updated successfully."
+        400:
+          description: "The supplied UUID or JSON was malformed."
+        404:
+          description: "The UUID does not correspond to an existing team."
+        422:
+          description: "The team was not updated due to a Drupal validation failure\
+            \ or a\nJSON schema validation failure.\n"
   /teams/{teamId}/memberships:
     parameters:
     - in: "path"
@@ -487,9 +523,13 @@ paths:
       description: "Get a list of team members."
       responses:
         200:
-          description: "List of team members."
+          description: "List of team members. If there are no members, an empty array.\n"
           schema:
             $ref: "#/definitions/team-membership-list-schema"
+        400:
+          description: "The supplied UUID was malformed."
+        404:
+          description: "The UUID does not correspond to an existing team."
   /teams/{teamId}/memberships/{userId}:
     parameters:
     - in: "path"
@@ -508,12 +548,6 @@ paths:
       description: "Update information about a user's team membership."
       parameters:
       - in: "query"
-        name: "user_uuid"
-        description: "Invotra UUID of the user to add to the group"
-        required: true
-        type: "string"
-        pattern: "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
-      - in: "query"
         name: "role_type"
         default: "member"
         required: true
@@ -526,6 +560,8 @@ paths:
           description: "The user's membership of this team was updated."
         201:
           description: "The user was added as a member of the team."
+        400:
+          description: "The UUID was malformed or the role type was invalid."
         404:
           description: "The user or team does not exist."
     delete:
@@ -533,6 +569,8 @@ paths:
       responses:
         200:
           description: "The user has been removed from the team."
+        400:
+          description: "The UUID was malformed."
         404:
           description: "The user or team does not exist, or the user was not a member\n\
             of the team.\n"
