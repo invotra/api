@@ -281,6 +281,8 @@ definitions:
     type: "object"
   user-list-schema:
     type: "array"
+    items:
+      type: string
   team-schema:
     properties:
       uuid:
@@ -347,6 +349,8 @@ definitions:
     type: "object"
   team-list-schema:
     type: "array"
+    items:
+      type: string
 paths:
   /users:
     get:
@@ -574,4 +578,3 @@ paths:
         404:
           description: "The user or team does not exist, or the user was not a member\n\
             of the team.\n"
-
