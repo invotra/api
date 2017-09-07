@@ -1,9 +1,9 @@
 swagger: '2.0'
 info:
   title: InvotraAPI
-  version: v0.1
+  version: v0.2
 host: localhost:8080
-basePath: /v0.1
+basePath: /v0.2
 schemes:
   - http
 security:
@@ -14,7 +14,7 @@ paths:
       parameters:
         - description: Filter by external ID.
           in: query
-          name: externalId
+          name: external_id
           required: true
           type: string
       responses:
@@ -48,8 +48,7 @@ paths:
         - description: The Invotra UUID of the team.
           in: path
           name: teamId
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
       responses:
@@ -67,8 +66,7 @@ paths:
         - description: The Invotra UUID of the team.
           in: path
           name: teamId
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
         - in: body
@@ -94,8 +92,7 @@ paths:
         - description: The Invotra UUID of the team.
           in: path
           name: teamId
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
       responses:
@@ -115,15 +112,13 @@ paths:
         - description: The Invotra UUID of the team.
           in: path
           name: teamId
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
         - description: The Invotra UUID of the user.
           in: path
           name: userId
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
       responses:
@@ -141,15 +136,13 @@ paths:
         - description: The Invotra UUID of the team.
           in: path
           name: teamId
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
         - description: The Invotra UUID of the user.
           in: path
           name: userId
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
         - default: member
@@ -175,7 +168,7 @@ paths:
       parameters:
         - description: Filter by external ID.
           in: query
-          name: externalId
+          name: external_id
           required: true
           type: string
       responses:
@@ -214,8 +207,7 @@ paths:
         - description: The Invotra UUID of the user.
           in: path
           name: userId
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
       responses:
@@ -233,8 +225,7 @@ paths:
         - description: The Invotra UUID of the user.
           in: path
           name: userId
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
         - in: body
@@ -265,8 +256,7 @@ definitions:
       administrators:
         items:
           description: Invotra UUID of team administrators.
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           type: string
         type: array
         uniqueItems: true
@@ -276,23 +266,20 @@ definitions:
       members:
         items:
           description: Invotra UUID of team members.
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           type: string
         type: array
         uniqueItems: true
       parent_uuid:
         description: 'This is the Invotra UUID of the teams parent team, optional.'
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         type: string
       title:
         description: This is the name of the team
         type: string
       uuid:
         description: This is the Invotra UUID of the team.
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         type: string
     required:
       - uuid
@@ -303,21 +290,19 @@ definitions:
       description:
         description: 'This is a description of the team, optional.'
         type: string
-      externalId:
+      external_id:
         description: This is used to store the team's external reference id
         type: string
       parent_uuid:
         description: 'This is the Invotra UUID of the team''s parent team, optional.'
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         type: string
       title:
         description: This is the name of the team
         type: string
       uuid:
         description: This is the Invotra UUID of the team.
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         type: string
     required:
       - uuid
@@ -330,8 +315,7 @@ definitions:
         type: string
       parent_uuid:
         description: 'This is the Invotra UUID of the teams parent team, optional.'
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         type: string
       title:
         description: This is the name of the team
@@ -341,289 +325,84 @@ definitions:
     type: object
   user-schema:
     properties:
-      account:
-        properties:
-          email:
-            description: Users email address
-            format: email
-            type: string
-          roles:
-            items:
-              default: Organisational user
-              description: This is the default Invotra user role
-              enum:
-                - Organisational user
-              type: string
-            type: array
-            uniqueItems: true
-          status:
-            default: Active
-            description: Flag to indicate whether account is active or blocked
-            enum:
-              - Active
-              - Blocked
-            type: string
-          username:
-            description: The user's username
-            type: string
-        type: object
-      externalId:
+      email:
+        description: Users email address
+        format: email
+        type: string
+      roles:
+        items:
+          default: Organisational user
+          description: This is the default Invotra user role
+          enum:
+            - Organisational user
+          type: string
+        type: array
+        uniqueItems: true
+      status:
+        default: Active
+        description: Flag to indicate whether account is active or blocked
+        enum:
+          - Active
+          - Blocked
+        type: string
+      username:
+        description: The user's username
+        type: string
+      external_id:
         description: The user's external reference ID
         type: string
-      profile:
-        properties:
-          contact:
-            properties:
-              home:
-                description: The user's home telephone number.
-                type: string
-            type: object
-          corporate:
-            properties:
-              manager:
-                properties:
-                  uuid:
-                    description: This is the Invotra UUID of the user's manager.
-                    pattern: >-
-                      ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-                    type: string
-                type: object
-              teams:
-                items:
-                  properties:
-                    uuid:
-                      description: This is the Invotra UUID for the team.
-                      pattern: >-
-                        ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-                      type: string
-                  type: object
-                type: array
-            type: object
-          personal:
-            properties:
-              name:
-                properties:
-                  displayName:
-                    default: Damian Robinson
-                    description: Display name for the user
-                    type: string
-                  firstname:
-                    description: The user's first name
-                    type: string
-                  surname:
-                    description: The user's surname
-                    type: string
-                  title:
-                    default: ''
-                    description: The user's title
-                    enum:
-                      - ''
-                      - Dr
-                      - Mr
-                      - Miss
-                      - Mrs
-                      - Ms
-                    type: string
-                type: object
-            type: object
-        type: object
-      uuid:
-        description: >-
-          Invotra UUID assigned on creation of the user. Must be included when
-          any updates are made to the user.
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      home_phone:
+        description: The user's home telephone number.
         type: string
-    required:
-      - uuid
+      manager_uuid:
+        description: This is the Invotra UUID of the user's manager.
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        type: string
+      teams:
+        items:
+          properties:
+            uuid:
+              description: This is the Invotra UUID for the team.
+              pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+              type: string
+          type: object
+        type: array
+      display_name:
+        default: Damian Robinson
+        description: Display name for the user
+        type: string
+      firstname:
+        description: The user's first name
+        type: string
+      surname:
+        description: The user's surname
+        type: string
+      title:
+        default: ''
+        description: The user's title
+        enum:
+          - ''
+          - Dr
+          - Mr
+          - Miss
+          - Mrs
+          - Ms
+        type: string
+      uuid:
+        description: Invotra UUID assigned on creation of the user. Must be included when any updates are made to the user.
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        type: string
     type: object
   user-schema-create:
-    properties:
-      account:
-        properties:
-          email:
-            description: Users email address
-            format: email
-            type: string
-          roles:
-            items:
-              default: Organisational user
-              description: This is the default Invotra user role
-              enum:
-                - Organisational user
-              type: string
-            type: array
-            uniqueItems: true
-          status:
-            default: Active
-            description: Flag to indicate whether account is active or blocked
-            enum:
-              - Active
-              - Blocked
-            type: string
-          username:
-            description: The users username
-            type: string
-        required:
-          - email
-          - username
-        type: object
-      externalId:
-        description: This is used to store the users external reference id
-        type: string
-      profile:
-        properties:
-          contact:
-            properties:
-              home:
-                description: The users home telephone number.
-                type: string
-            type: object
-          corporate:
-            properties:
-              manager:
-                properties:
-                  uuid:
-                    description: This is the Invotra UUID of the users manager
-                    pattern: >-
-                      ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-                    type: string
-                type: object
-              teams:
-                items:
-                  properties:
-                    uuid:
-                      description: This is the Invotra UUID for the team.
-                      pattern: >-
-                        ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-                      type: string
-                  type: object
-                type: array
-            type: object
-          personal:
-            properties:
-              name:
-                properties:
-                  displayName:
-                    default: Damian Robinson
-                    description: Display name for the user
-                    type: string
-                  firstname:
-                    description: The users firstname
-                    type: string
-                  surname:
-                    description: The users surname
-                    type: string
-                  title:
-                    default: ''
-                    description: The users title
-                    enum:
-                      - ''
-                      - Dr
-                      - Mr
-                      - Miss
-                      - Mrs
-                      - Ms
-                    type: string
-                type: object
-            type: object
-        type: object
+    allOf:
+      - $ref: '#definitions/user-schema'
+    required:
+      - email
+      - username
     type: object
   user-schema-update:
-    properties:
-      account:
-        properties:
-          email:
-            description: Users email address
-            format: email
-            type: string
-          roles:
-            items:
-              default: Organisational user
-              description: This is the default Invotra user role
-              enum:
-                - Organisational user
-              type: string
-            type: array
-            uniqueItems: true
-          status:
-            default: Active
-            description: Flag to indicate whether account is active or blocked
-            enum:
-              - Active
-              - Blocked
-            type: string
-          username:
-            description: The users username
-            type: string
-        type: object
-      externalId:
-        description: This is used to store the users external reference id
-        type: string
-      profile:
-        properties:
-          contact:
-            properties:
-              home:
-                description: The users home telephone number.
-                type: string
-            type: object
-          corporate:
-            properties:
-              manager:
-                properties:
-                  uuid:
-                    description: This is the Invotra UUID of the users manager
-                    pattern: >-
-                      ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-                    type: string
-                type: object
-              teams:
-                items:
-                  properties:
-                    uuid:
-                      description: This is the Invotra UUID for the team.
-                      pattern: >-
-                        ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-                      type: string
-                  type: object
-                type: array
-            type: object
-          personal:
-            properties:
-              name:
-                properties:
-                  displayName:
-                    default: Damian Robinson
-                    description: Display name for the user
-                    type: string
-                  firstname:
-                    description: The users firstname
-                    type: string
-                  surname:
-                    description: The users surname
-                    type: string
-                  title:
-                    default: ''
-                    description: The users title
-                    enum:
-                      - ''
-                      - Dr
-                      - Mr
-                      - Miss
-                      - Mrs
-                      - Ms
-                    type: string
-                type: object
-            type: object
-        type: object
-      uuid:
-        description: >-
-          Invotra assigned UUID on creation of the user, and must be included
-          when any updates are made to the user.
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-        type: string
+    allOf:
+      - $ref: '#definitions/user-schema'
     required:
       - uuid
     type: object
@@ -631,8 +410,7 @@ definitions:
     items:
       default: 00000000-0000-0000-0000-000000000000
       description: An array of UUIDs.
-      pattern: >-
-        ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
       type: string
     type: array
 securityDefinitions:
