@@ -348,7 +348,7 @@ definitions:
         type: array
         uniqueItems: true
       parent_uuid:
-        description: 'This is the Invotra UUID of the teams parent team, optional.'
+        description: 'This is the Invotra UUID of the parent team, optional.'
         pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         type: string
       title:
@@ -371,7 +371,7 @@ definitions:
         description: This is used to store the team's external reference id
         type: string
       parent_uuid:
-        description: 'This is the Invotra UUID of the team's parent team, optional.'
+        description: 'This is the Invotra UUID of the parent team, optional.'
         pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         type: string
       title:
@@ -391,7 +391,7 @@ definitions:
         description: 'This is a description of the team, optional.'
         type: string
       parent_uuid:
-        description: 'This is the Invotra UUID of the teams parent team, optional.'
+        description: 'This is the Invotra UUID of the parent team, optional.'
         pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         type: string
       title:
@@ -492,7 +492,7 @@ definitions:
         description: This is used to store the job role's external reference id
         type: string
       parent_uuid:
-        description: 'This is the Invotra UUID of the job role's parent job role, optional.'
+        description: 'This is the Invotra UUID of the parent job role, optional.'
         pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         type: string
       title:
@@ -512,7 +512,7 @@ definitions:
         description: 'This is a description of the job role, optional.'
         type: string
       parent_uuid:
-        description: 'This is the Invotra UUID of the job role's parent job role, optional.'
+        description: 'This is the Invotra UUID of the parent job role, optional.'
         pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         type: string
       title:
