@@ -272,7 +272,7 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/job-roles-schema'
+            $ref: '#/definitions/job-role-schema'
       responses:
         '201':
           description: The job role was created successfully.
@@ -283,12 +283,12 @@ paths:
             The job role was not saved due to Drupal validation failure or JSON
             schema validation failure.
       description: Provision a new job role.
-  '/job_roles/{jobRoleId}':
+  '/job_roles/{job_role_id}':
     get:
       parameters:
         - description: The Invotra UUID of the job role.
           in: path
-          name: jobroleId
+          name: job_role_id
           pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
@@ -306,7 +306,7 @@ paths:
       parameters:
         - description: The Invotra UUID of the job role.
           in: path
-          name: jobroleId
+          name: job_role_id
           pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
           type: string
