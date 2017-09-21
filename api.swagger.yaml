@@ -250,7 +250,7 @@ paths:
             than a duplicate username or email address) or JSON schema
             validation failure.
       description: Update the user's information.
-  /job-roles:
+  /job_roles:
     get:
       parameters:
         - description: Filter by external ID.
@@ -283,7 +283,7 @@ paths:
             The job role was not saved due to Drupal validation failure or JSON
             schema validation failure.
       description: Provision a new job role.
-  '/job-roles/{job-roleId}':
+  '/job_roles/{jobRoleId}':
     get:
       parameters:
         - description: The Invotra UUID of the job role.
