@@ -2,8 +2,8 @@ swagger: '2.0'
 info:
   title: InvotraAPI
   version: v0.2
-host: api.invotra.com
-basePath: /v0.2
+host: dev.invotra.com
+basePath: /api/v0.2
 schemes:
   - https
 security:
