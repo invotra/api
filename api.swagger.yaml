@@ -3,7 +3,7 @@ info:
   title: InvotraAPI
   version: v0.2
 host: api.invotra.com
-basePath: /v0.2
+basePath: /v0.2/api
 schemes:
   - https
 security:
