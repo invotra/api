@@ -269,6 +269,152 @@ paths:
             than a duplicate username or email address) or JSON schema
             validation failure.
       description: Update the user's information.
+  '/users/{user_id}/job_roles':
+    get:
+      description: List the user's job roles.
+      parameters:
+        - in: path
+          name: user_id
+          type: string
+          description: The Invotra UUID of the user.
+          required: true
+      responses:
+        '200':
+          description: >
+            List of job roles associated with the user, or an empty array if the
+            user has no job roles.
+          schema:
+            $ref: '#/definitions/uuid-list-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+  '/users/{user_id}/job_roles/{job_role_id}':
+    delete:
+      description: Remove a job role from a user.
+      parameters:
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - description: The Invotra UUID of the job role.
+          in: path
+          name: job_role_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The job role has been removed from the user.
+        '400':
+          description: One or both of the UUIDs was malformed.
+        '404':
+          description: >
+            The user or job role does not exist, or the user did not have that
+            job role.
+    put:
+      description: Add a job role to a user.
+      parameters:
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - description: The Invotra UUID of the job role.
+          in: path
+          name: job_role_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The user already has this job role.
+        '201':
+          description: The job role was added to the user.
+        '400':
+          description: One or both of the UUIDs was malformed.
+        '404':
+          description: The user or job role does not exist.
+  '/users/{user_id}/locations':
+    get:
+      description: List the user's locations.
+      parameters:
+        - in: path
+          name: user_id
+          type: string
+          description: The Invotra UUID of the user.
+          required: true
+      responses:
+        '200':
+          description: >
+            List of locations associated with the user, or an empty array if the
+            user has no locations.
+          schema:
+            $ref: '#/definitions/uuid-list-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+  '/users/{user_id}/locations/{location_id}':
+    delete:
+      description: Remove a location from a user.
+      parameters:
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The location has been removed from the user.
+        '400':
+          description: One or both of the UUIDs was malformed.
+        '404':
+          description: >
+            The user or location does not exist, or the user did not have that
+            location.
+    put:
+      description: Add a location to a user.
+      parameters:
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - description: The Invotra UUID of the job role.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The user already has this location.
+        '201':
+          description: The location was added to the user.
+        '400':
+          description: One or both of the UUIDs was malformed.
+        '404':
+          description: The user or location does not exist.
   /job_roles:
     get:
       parameters:
