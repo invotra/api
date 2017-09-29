@@ -781,7 +781,7 @@ definitions:
       phone:
         description: The location's telephone number.
         type: string
-        example: +44 123456789
+        example: +1-23-456-789
       email:
         description: The location's email address.
         type: string
