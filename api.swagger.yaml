@@ -157,14 +157,11 @@ paths:
             ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
           type: string
-        - default: member
-          enum:
-            - admin
-            - member
-          in: query
-          name: role_type
+        - in: body
+          name: body
           required: true
-          type: string
+          schema:
+            $ref: '#/definitions/team-membership-schema'
       responses:
         '200':
           description: The user's membership of this team was updated.
@@ -415,6 +412,27 @@ paths:
           description: One or both of the UUIDs was malformed.
         '404':
           description: The user or location does not exist.
+  '/users/{user_id}/teams':
+    get:
+      description: List a user's teams
+      parameters:
+        - in: path
+          name: user_id
+          type: string
+          description: The Invotra UUID of the user.
+          required: true
+      responses:
+        '200':
+          description: >
+            List of teams of which the user is a member, indicating the
+            membership type (admin or member) for each team. If the user is not
+            a member of any teams, an empty array is returned.
+          schema:
+            $ref: '#/definitions/user-team-membership-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
   /job_roles:
     get:
       parameters:
@@ -587,21 +605,6 @@ paths:
             JSON schema validation failure.
       description: Update location information.
 definitions:
-  team-membership-list-schema:
-    properties:
-      administrators:
-        allOf:
-          - $ref: '#definitions/uuid-list-schema'
-        items:
-          description: Invotra UUID of team administrators.
-        uniqueItems: true
-      members:
-        allOf:
-          - $ref: '#definitions/uuid-list-schema'
-        items:
-          description: Invotra UUID of team members.
-        uniqueItems: true
-    type: object
   team-schema:
     properties:
       title:
@@ -674,11 +677,6 @@ definitions:
           ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
         type: string
         example: 01234567-89ab-cdef-1234-56789abcdef0
-      teams:
-        allOf:
-          - $ref: '#definitions/uuid-list-schema'
-        items:
-          description: An array of UUIDs of the user's teams
       display_name:
         example: Damian Robinson
         description: Display name for the user
@@ -821,6 +819,47 @@ definitions:
       required:
         - uuid
         - type
+  team-membership-schema:
+    type: object
+    properties:
+      type:
+        description: The membership type.
+        type: string
+        enum:
+          - admin
+          - member
+    required:
+      - type
+  user-team-membership-schema:
+    type: array
+    items:
+      allOf:
+        - $ref: '#/definitions/team-membership-schema'
+        - type: object
+          properties:
+            uuid:
+              description: The UUID of the team.
+              type: string
+              pattern: >-
+                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+          required:
+            - uuid
+  team-membership-list-schema:
+    type: array
+    items:
+      allOf:
+        - $ref: '#/definitions/team-membership-schema'
+        - type: object
+          properties:
+            uuid:
+              description: The UUID of the user.
+              type: string
+              pattern: >-
+                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+          required:
+            - uuid
 securityDefinitions:
   APIKeyHeader:
     type: apiKey
