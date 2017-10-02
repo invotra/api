@@ -854,7 +854,7 @@ definitions:
     type: object
   team-schema-create:
     allOf:
-      - $ref: '#definitions/team-schema'
+      - $ref: '#/definitions/team-schema'
     required:
       - title
     type: object
@@ -930,7 +930,7 @@ definitions:
     type: object
   user-schema-create:
     allOf:
-      - $ref: '#definitions/user-schema'
+      - $ref: '#/definitions/user-schema'
     required:
       - email
       - username
@@ -958,7 +958,7 @@ definitions:
     type: object
   job-role-schema-create:
     allOf:
-      - $ref: '#definitions/job-role-schema'
+      - $ref: '#/definitions/job-role-schema'
     required:
       - title
   location-common-schema:
@@ -1017,12 +1017,12 @@ definitions:
             format: email
   location-site-schema-create:
     allOf:
-      - $ref: '#definitions/location-site-schema'
+      - $ref: '#/definitions/location-site-schema'
     required:
       - title
   location-building-schema:
     allOf:
-      - $ref: '#definitions/location-site-schema'
+      - $ref: '#/definitions/location-site-schema'
       - type: object
         properties:
           parent_uuid:
@@ -1035,12 +1035,12 @@ definitions:
             example: 01234567-89ab-cdef-1234-56789abcdef0
   location-building-schema-create:
     allOf:
-      - $ref: '#definitions/location-building-schema'
+      - $ref: '#/definitions/location-building-schema'
     required:
       - title
   location-floor-schema:
     allOf:
-      - $ref: '#definitions/location-common-schema'
+      - $ref: '#/definitions/location-common-schema'
       - type: object
         properties:
           parent_uuid:
@@ -1053,12 +1053,12 @@ definitions:
             example: 01234567-89ab-cdef-1234-56789abcdef0
   location-floor-schema-create:
     allOf:
-      - $ref: '#definitions/location-floor-schema'
+      - $ref: '#/definitions/location-floor-schema'
     required:
       - title
   location-space-schema:
     allOf:
-      - $ref: '#definitions/location-common-schema'
+      - $ref: '#/definitions/location-common-schema'
       - type: object
         properties:
           parent_uuid:
@@ -1071,7 +1071,7 @@ definitions:
             example: 01234567-89ab-cdef-1234-56789abcdef0
   location-space-schema-create:
     allOf:
-      - $ref: '#definitions/location-space-schema'
+      - $ref: '#/definitions/location-space-schema'
     required:
       - title
   uuid-list-schema:
@@ -1150,7 +1150,7 @@ definitions:
   team-team-membership-list-schema:
     type: array
     items:
-      $ref: '#definitions/team-team-membership-schema'
+      $ref: '#/definitions/team-team-membership-schema'
 securityDefinitions:
   APIKeyHeader:
     type: apiKey
