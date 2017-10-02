@@ -576,7 +576,9 @@ paths:
         '400':
           description: The supplied UUID was malformed.
         '404':
-          description: The UUID does not correspond to an existing location.
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a site.
       description: Get information about the location.
     put:
       parameters:
@@ -598,7 +600,231 @@ paths:
         '400':
           description: The supplied UUID or JSON was malformed.
         '404':
-          description: The UUID does not correspond to an existing location.
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a site.
+        '422':
+          description: |
+            The location was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update location information.
+  /locations/buildings:
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-building-schema-create'
+      responses:
+        '201':
+          description: The location was created successfully.
+          headers:
+            Location:
+              type: string
+              description: >
+                The URL at which the newly provisioned location may be
+                retrieved.
+        '400':
+          description: The location was not saved due to malformed JSON.
+        '422':
+          description: |
+            The location was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new location.
+  '/locations/buildings/{location_id}':
+    get:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns a single complete location object.
+          schema:
+            $ref: '#/definitions/location-building-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a building.
+      description: Get information about the location.
+    put:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-building-schema'
+      responses:
+        '200':
+          description: The location information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a building.
+        '422':
+          description: |
+            The location was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update location information.
+  /locations/floors:
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-floor-schema-create'
+      responses:
+        '201':
+          description: The location was created successfully.
+          headers:
+            Location:
+              type: string
+              description: >
+                The URL at which the newly provisioned location may be
+                retrieved.
+        '400':
+          description: The location was not saved due to malformed JSON.
+        '422':
+          description: |
+            The location was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new location.
+  '/locations/floors/{location_id}':
+    get:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns a single complete location object.
+          schema:
+            $ref: '#/definitions/location-floor-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a floor.
+      description: Get information about the location.
+    put:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-floor-schema'
+      responses:
+        '200':
+          description: The location information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a floor.
+        '422':
+          description: |
+            The location was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update location information.
+  /locations/spaces:
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-space-schema-create'
+      responses:
+        '201':
+          description: The location was created successfully.
+          headers:
+            Location:
+              type: string
+              description: >
+                The URL at which the newly provisioned location may be
+                retrieved.
+        '400':
+          description: The location was not saved due to malformed JSON.
+        '422':
+          description: |
+            The location was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new location.
+  '/locations/spaces/{location_id}':
+    get:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns a single complete location object.
+          schema:
+            $ref: '#/definitions/location-space-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a space.
+      description: Get information about the location.
+    put:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-space-schema'
+      responses:
+        '200':
+          description: The location information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a space.
         '422':
           description: |
             The location was not updated due to a Drupal validation failure or a
@@ -832,7 +1058,7 @@ definitions:
       - title
   location-space-schema:
     allOf:
-      - $ref: '#definitions/location-space-schema'
+      - $ref: '#definitions/location-common-schema'
       - type: object
         properties:
           parent_uuid:
