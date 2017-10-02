@@ -1082,28 +1082,30 @@ definitions:
       type: string
       example: 01234567-89ab-cdef-1234-56789abcdef0
     type: array
+  location-uuid-schema:
+    type: object
+    properties:
+      uuid:
+        description: The UUID of the location.
+        type: string
+        pattern: >-
+          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        example: 01234567-89ab-cdef-1234-56789abcdef0
+      type:
+        description: The location type.
+        type: string
+        enum:
+          - site
+          - building
+          - floor
+          - space
+    required:
+      - uuid
+      - type
   location-uuid-list-schema:
     type: array
     items:
-      type: object
-      properties:
-        uuid:
-          description: The UUID of the location.
-          type: string
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-        type:
-          description: The location type.
-          type: string
-          enum:
-            - site
-            - building
-            - floor
-            - space
-      required:
-        - uuid
-        - type
+      $ref: '#/definitions/location-uuid-schema'
   team-membership-schema:
     type: object
     properties:
