@@ -893,8 +893,8 @@ definitions:
           - Active
           - Blocked
         type: string
-      home_phone:
-        description: The user's home telephone number.
+      phone:
+        description: The user's telephone number.
         type: string
         example: +1-23-456-789
       manager_uuid:
