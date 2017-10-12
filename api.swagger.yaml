@@ -161,7 +161,7 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/team-team-membership-schema'
+            $ref: '#/definitions/team-membership-common-schema'
       responses:
         '200':
           description: The user's membership of this team was updated.
