@@ -3,6 +3,7 @@ info:
   title: InvotraAPI
   version: v0.3
 basePath: /api/v0.3
+host: 127.0.0.1
 schemes:
   - http
 security:
