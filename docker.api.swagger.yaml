@@ -1,0 +1,1154 @@
+swagger: '2.0'
+info:
+  title: InvotraAPI
+  version: v0.3
+host: dev.invotra.com
+basePath: /api/v0.3
+schemes:
+  - https
+security:
+  - APIKeyHeader: []
+paths:
+  /teams:
+    get:
+      parameters:
+        - description: Filter by external ID.
+          in: query
+          name: external_id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: List of teams matching the filter criteria.
+          schema:
+            $ref: '#/definitions/uuid-list-schema'
+        '404':
+          description: No matching teams were found.
+      description: Search for teams.
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/team-schema-create'
+      responses:
+        '201':
+          description: The team was created successfully.
+          headers:
+            Location:
+              type: string
+              description: |
+                The URL at which the newly provisioned team may be retrieved.
+        '400':
+          description: The team was not saved due to malformed JSON.
+        '422':
+          description: |
+            The team was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new team.
+  '/teams/{team_id}':
+    get:
+      parameters:
+        - description: The Invotra UUID of the team.
+          in: path
+          name: team_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns a single complete Team object.
+          schema:
+            $ref: '#/definitions/team-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing team.
+      description: Get information about the team.
+    put:
+      parameters:
+        - description: The Invotra UUID of the team.
+          in: path
+          name: team_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/team-schema'
+      responses:
+        '200':
+          description: The team information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: The UUID does not correspond to an existing team.
+        '422':
+          description: |
+            The team was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update team information.
+  '/teams/{team_id}/memberships':
+    get:
+      parameters:
+        - description: The Invotra UUID of the team.
+          in: path
+          name: team_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |
+            List of team members. If there are no members, an empty array.
+          schema:
+            $ref: '#/definitions/team-team-membership-list-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing team.
+      description: Get a list of team members.
+  '/teams/{team_id}/memberships/{user_id}':
+    delete:
+      parameters:
+        - description: The Invotra UUID of the team.
+          in: path
+          name: team_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The user has been removed from the team.
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: |
+            The user or team does not exist, or the user was not a member
+            of the team.
+      description: Remove the user's membership of the team.
+    put:
+      parameters:
+        - description: The Invotra UUID of the team.
+          in: path
+          name: team_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/team-membership-common-schema'
+      responses:
+        '200':
+          description: The user's membership of this team was updated.
+        '201':
+          description: The user was added as a member of the team.
+        '400':
+          description: The UUID was malformed or the role type was invalid.
+        '404':
+          description: The user or team does not exist.
+      description: Update information about a user's team membership.
+  /users:
+    get:
+      parameters:
+        - description: Filter by external ID.
+          in: query
+          name: external_id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: |
+            List of users matching the filter criteria, or an empty array if no
+            matching users are found.
+          schema:
+            $ref: '#/definitions/uuid-list-schema'
+      description: Search for users.
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/user-schema-create'
+      responses:
+        '201':
+          description: The user was created successfully.
+          headers:
+            Location:
+              type: string
+              description: |
+                The URL at which the newly provisioned user may be retrieved.
+        '400':
+          description: The user was not saved due to malformed JSON.
+        '409':
+          description: |
+            The user was not saved because the username or email address is
+            already in use.
+        '422':
+          description: |
+            The user was not saved due to Drupal validation failure (other than
+            a duplicate username or email address) or JSON schema validation
+            failure.
+      description: Provision a new user in Invotra.
+  '/users/{user_id}':
+    get:
+      parameters:
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns a single complete user object.
+          schema:
+            $ref: '#/definitions/user-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: No user with that UUID was found.
+      description: Get the user's information.
+    put:
+      parameters:
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/user-schema'
+      responses:
+        '200':
+          description: The user's information was updated.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+        '409':
+          description: |
+            The user was not saved because the requested new username or email
+            address is already in use by a different user.
+        '422':
+          description: |
+            The user was not updated due to Drupal validation failure (other
+            than a duplicate username or email address) or JSON schema
+            validation failure.
+      description: Update the user's information.
+  '/users/{user_id}/job_roles':
+    get:
+      description: List the user's job roles.
+      parameters:
+        - in: path
+          name: user_id
+          type: string
+          description: The Invotra UUID of the user.
+          required: true
+      responses:
+        '200':
+          description: >
+            List of job roles associated with the user, or an empty array if the
+            user has no job roles.
+          schema:
+            $ref: '#/definitions/uuid-list-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+  '/users/{user_id}/job_roles/{job_role_id}':
+    delete:
+      description: Remove a job role from a user.
+      parameters:
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - description: The Invotra UUID of the job role.
+          in: path
+          name: job_role_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The job role has been removed from the user.
+        '400':
+          description: One or both of the UUIDs was malformed.
+        '404':
+          description: >
+            The user or job role does not exist, or the user did not have that
+            job role.
+    put:
+      description: Add a job role to a user.
+      parameters:
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - description: The Invotra UUID of the job role.
+          in: path
+          name: job_role_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The user already has this job role.
+        '201':
+          description: The job role was added to the user.
+        '400':
+          description: One or both of the UUIDs was malformed.
+        '404':
+          description: The user or job role does not exist.
+  '/users/{user_id}/locations':
+    get:
+      description: List the user's locations.
+      parameters:
+        - in: path
+          name: user_id
+          type: string
+          description: The Invotra UUID of the user.
+          required: true
+      responses:
+        '200':
+          description: >
+            List of locations associated with the user, or an empty array if the
+            user has no locations.
+          schema:
+            $ref: '#/definitions/uuid-list-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+  '/users/{user_id}/locations/{location_id}':
+    delete:
+      description: Remove a location from a user.
+      parameters:
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The location has been removed from the user.
+        '400':
+          description: One or both of the UUIDs was malformed.
+        '404':
+          description: >
+            The user or location does not exist, or the user did not have that
+            location.
+    put:
+      description: Add a location to a user.
+      parameters:
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - description: The Invotra UUID of the job role.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: The user already has this location.
+        '201':
+          description: The location was added to the user.
+        '400':
+          description: One or both of the UUIDs was malformed.
+        '404':
+          description: The user or location does not exist.
+  '/users/{user_id}/teams':
+    get:
+      description: List a user's teams
+      parameters:
+        - in: path
+          name: user_id
+          type: string
+          description: The Invotra UUID of the user.
+          required: true
+      responses:
+        '200':
+          description: >
+            List of teams of which the user is a member, indicating the
+            membership type (admin or member) for each team. If the user is not
+            a member of any teams, an empty array is returned.
+          schema:
+            $ref: '#/definitions/user-team-membership-list-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+  /job_roles:
+    get:
+      parameters:
+        - description: Filter by external ID.
+          in: query
+          name: external_id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: >
+            List of job roles matching the filter criteria, or an empty array if
+            none were found.
+          schema:
+            $ref: '#/definitions/uuid-list-schema'
+      description: Search for job roles.
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/job-role-schema-create'
+      responses:
+        '201':
+          description: The job role was created successfully.
+          headers:
+            Location:
+              type: string
+              description: >
+                The URL at which the newly provisioned job role may be
+                retrieved.
+        '400':
+          description: The job role was not saved due to malformed JSON.
+        '422':
+          description: |
+            The job role was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new job role.
+  '/job_roles/{job_role_id}':
+    get:
+      parameters:
+        - description: The Invotra UUID of the job role.
+          in: path
+          name: job_role_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns a single complete job role object.
+          schema:
+            $ref: '#/definitions/job-role-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing job role.
+      description: Get information about the job role.
+    put:
+      parameters:
+        - description: The Invotra UUID of the job role.
+          in: path
+          name: job_role_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/job-role-schema'
+      responses:
+        '200':
+          description: The job role information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: The UUID does not correspond to an existing job role.
+        '422':
+          description: |
+            The job role was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update job role information.
+  /locations:
+    get:
+      parameters:
+        - description: Filter by external ID.
+          in: query
+          name: external_id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: >
+            List of locations matching the filter criteria, or an empty array if
+            none were found.
+          schema:
+            $ref: '#/definitions/location-uuid-list-schema'
+      description: Search for locations.
+  /locations/sites:
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-site-schema-create'
+      responses:
+        '201':
+          description: The location was created successfully.
+          headers:
+            Location:
+              type: string
+              description: >
+                The URL at which the newly provisioned location may be
+                retrieved.
+        '400':
+          description: The location was not saved due to malformed JSON.
+        '422':
+          description: |
+            The location was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new location.
+  '/locations/sites/{location_id}':
+    get:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns a single complete location object.
+          schema:
+            $ref: '#/definitions/location-site-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a site.
+      description: Get information about the location.
+    put:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-site-schema'
+      responses:
+        '200':
+          description: The location information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a site.
+        '422':
+          description: |
+            The location was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update location information.
+  /locations/buildings:
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-building-schema-create'
+      responses:
+        '201':
+          description: The location was created successfully.
+          headers:
+            Location:
+              type: string
+              description: >
+                The URL at which the newly provisioned location may be
+                retrieved.
+        '400':
+          description: The location was not saved due to malformed JSON.
+        '422':
+          description: |
+            The location was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new location.
+  '/locations/buildings/{location_id}':
+    get:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns a single complete location object.
+          schema:
+            $ref: '#/definitions/location-building-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a building.
+      description: Get information about the location.
+    put:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-building-schema'
+      responses:
+        '200':
+          description: The location information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a building.
+        '422':
+          description: |
+            The location was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update location information.
+  /locations/floors:
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-floor-schema-create'
+      responses:
+        '201':
+          description: The location was created successfully.
+          headers:
+            Location:
+              type: string
+              description: >
+                The URL at which the newly provisioned location may be
+                retrieved.
+        '400':
+          description: The location was not saved due to malformed JSON.
+        '422':
+          description: |
+            The location was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new location.
+  '/locations/floors/{location_id}':
+    get:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns a single complete location object.
+          schema:
+            $ref: '#/definitions/location-floor-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a floor.
+      description: Get information about the location.
+    put:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-floor-schema'
+      responses:
+        '200':
+          description: The location information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a floor.
+        '422':
+          description: |
+            The location was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update location information.
+  /locations/spaces:
+    post:
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-space-schema-create'
+      responses:
+        '201':
+          description: The location was created successfully.
+          headers:
+            Location:
+              type: string
+              description: >
+                The URL at which the newly provisioned location may be
+                retrieved.
+        '400':
+          description: The location was not saved due to malformed JSON.
+        '422':
+          description: |
+            The location was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new location.
+  '/locations/spaces/{location_id}':
+    get:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Returns a single complete location object.
+          schema:
+            $ref: '#/definitions/location-space-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a space.
+      description: Get information about the location.
+    put:
+      parameters:
+        - description: The Invotra UUID of the location.
+          in: path
+          name: location_id
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/location-space-schema'
+      responses:
+        '200':
+          description: The location information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a space.
+        '422':
+          description: |
+            The location was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update location information.
+definitions:
+  team-schema:
+    properties:
+      title:
+        description: This is the name of the team
+        type: string
+        example: Operations
+      description:
+        description: 'This is a description of the team, optional.'
+        type: string
+        example: The operations team
+      external_id:
+        description: This is used to store the team's external reference id
+        type: string
+        example: ABC123
+      parent_uuid:
+        description: 'This is the Invotra UUID of the parent team, optional.'
+        pattern: >-
+          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        type: string
+        example: 01234567-89ab-cdef-1234-56789abcdef0
+    type: object
+  team-schema-create:
+    allOf:
+      - $ref: '#/definitions/team-schema'
+    required:
+      - title
+    type: object
+  user-schema:
+    properties:
+      username:
+        description: The user's username
+        type: string
+        example: drobinson
+      email:
+        description: Users email address
+        format: email
+        type: string
+        example: drobinson@example.com
+      external_id:
+        description: The user's external reference ID
+        type: string
+        example: ABC123
+      roles:
+        items:
+          default: Organisational user
+          description: This is the default Invotra user role
+          enum:
+            - Organisational user
+            - Webmaster
+          type: string
+        type: array
+        example:
+          - Organisational user
+          - Webmaster
+        uniqueItems: true
+      status:
+        default: Active
+        description: Flag to indicate whether account is active or blocked
+        enum:
+          - Active
+          - Blocked
+        type: string
+      phone:
+        description: The user's telephone number.
+        type: string
+        example: +1-23-456-789
+      manager_uuid:
+        description: This is the Invotra UUID of the user's manager.
+        pattern: >-
+          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        type: string
+        example: 01234567-89ab-cdef-1234-56789abcdef0
+      firstname:
+        description: The user's first name
+        type: string
+        example: Damian
+      surname:
+        description: The user's surname
+        type: string
+        example: Robinson
+      title:
+        default: ''
+        description: The user's title
+        enum:
+          - ''
+          - Dr
+          - Mr
+          - Miss
+          - Mrs
+          - Ms
+        type: string
+        example: Mr
+    type: object
+  user-schema-create:
+    allOf:
+      - $ref: '#/definitions/user-schema'
+    required:
+      - email
+      - username
+    type: object
+  job-role-schema:
+    properties:
+      title:
+        description: This is the name of the job role
+        type: string
+        example: Director
+      description:
+        description: 'This is a description of the job role, optional.'
+        type: string
+        example: This is a very important job
+      external_id:
+        description: This is used to store the job role's external reference id
+        type: string
+        example: ABC123
+      parent_uuid:
+        description: 'This is the Invotra UUID of the parent job role, optional.'
+        pattern: >-
+          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        example: 01234567-89ab-cdef-1234-56789abcdef0
+        type: string
+    type: object
+  job-role-schema-create:
+    allOf:
+      - $ref: '#/definitions/job-role-schema'
+    required:
+      - title
+  location-common-schema:
+    type: object
+    properties:
+      title:
+        description: This is the name of the location.
+        type: string
+        example: Dublin
+      description:
+        description: This is a description of the location.
+        type: string
+        example: A beautiful city in Ireland
+      external_id:
+        description: This is used to store the location's external reference id.
+        type: string
+        example: ABC123
+  location-site-schema:
+    allOf:
+      - $ref: '#/definitions/location-common-schema'
+      - type: object
+        properties:
+          address1:
+            description: The first line of the location's postal address.
+            type: string
+            example: 1 Main Street
+          address2:
+            description: The second line of the location's postal address.
+            type: string
+            example: Littleton Village
+          address3:
+            description: The third line of the location's postal address.
+            type: string
+            example: Northern District
+          town:
+            description: The town where the location is.
+            type: string
+            example: Metropolis
+          postcode:
+            description: 'The location''s postal code or zip code, if any.'
+            type: string
+            example: ABC 123
+          team:
+            description: A team associated with the location.
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+          phone:
+            description: The location's telephone number.
+            type: string
+            example: +1-23-456-789
+          email:
+            description: The location's email address.
+            type: string
+            format: email
+  location-site-schema-create:
+    allOf:
+      - $ref: '#/definitions/location-site-schema'
+    required:
+      - title
+  location-building-schema:
+    allOf:
+      - $ref: '#/definitions/location-site-schema'
+      - type: object
+        properties:
+          parent_uuid:
+            description: >
+              The Invotra UUID of the parent location. This location must be a
+              site.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            type: string
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+  location-building-schema-create:
+    allOf:
+      - $ref: '#/definitions/location-building-schema'
+    required:
+      - title
+  location-floor-schema:
+    allOf:
+      - $ref: '#/definitions/location-common-schema'
+      - type: object
+        properties:
+          parent_uuid:
+            description: >
+              The Invotra UUID of the parent location. This location must be a
+              building.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            type: string
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+  location-floor-schema-create:
+    allOf:
+      - $ref: '#/definitions/location-floor-schema'
+    required:
+      - title
+  location-space-schema:
+    allOf:
+      - $ref: '#/definitions/location-common-schema'
+      - type: object
+        properties:
+          parent_uuid:
+            description: >
+              The Invotra UUID of the parent location. This location must be a
+              floor.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            type: string
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+  location-space-schema-create:
+    allOf:
+      - $ref: '#/definitions/location-space-schema'
+    required:
+      - title
+  uuid-list-schema:
+    items:
+      description: An array of UUIDs.
+      pattern: >-
+        ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      type: string
+      example: 01234567-89ab-cdef-1234-56789abcdef0
+    type: array
+  location-uuid-schema:
+    type: object
+    properties:
+      uuid:
+        description: The UUID of the location.
+        type: string
+        pattern: >-
+          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        example: 01234567-89ab-cdef-1234-56789abcdef0
+      type:
+        description: The location type.
+        type: string
+        enum:
+          - site
+          - building
+          - floor
+          - space
+    required:
+      - uuid
+      - type
+  location-uuid-list-schema:
+    type: array
+    items:
+      $ref: '#/definitions/location-uuid-schema'
+  team-membership-common-schema:
+    type: object
+    properties:
+      type:
+        description: The membership type.
+        type: string
+        enum:
+          - admin
+          - member
+    required:
+      - type
+  user-team-membership-schema:
+    allOf:
+      - $ref: '#/definitions/team-membership-common-schema'
+      - type: object
+        properties:
+          uuid:
+            description: The UUID of the team.
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+        required:
+          - uuid
+  user-team-membership-list-schema:
+    type: array
+    items:
+      $ref: '#/definitions/user-team-membership-schema'
+  team-team-membership-schema:
+    allOf:
+      - $ref: '#/definitions/team-membership-common-schema'
+      - type: object
+        properties:
+          uuid:
+            description: The UUID of the user.
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+        required:
+          - uuid
+  team-team-membership-list-schema:
+    type: array
+    items:
+      $ref: '#/definitions/team-team-membership-schema'
+securityDefinitions:
+  APIKeyHeader:
+    type: apiKey
+    in: header
+    name: X-API-Key
