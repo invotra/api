@@ -11,6 +11,8 @@ security:
 paths:
   /teams:
     get:
+      tags:
+        - teams
       parameters:
         - description: Filter by external ID.
           in: query
@@ -26,6 +28,8 @@ paths:
           description: No matching teams were found.
       description: Search for teams.
     post:
+      tags:
+        - teams
       parameters:
         - in: body
           name: body
@@ -49,6 +53,8 @@ paths:
       description: Provision a new team.
   '/teams/{team_id}':
     get:
+      tags:
+        - teams
       parameters:
         - description: The Invotra UUID of the team.
           in: path
@@ -68,6 +74,8 @@ paths:
           description: The UUID does not correspond to an existing team.
       description: Get information about the team.
     put:
+      tags:
+        - teams
       parameters:
         - description: The Invotra UUID of the team.
           in: path
@@ -95,6 +103,8 @@ paths:
       description: Update team information.
   '/teams/{team_id}/memberships':
     get:
+      tags:
+        - teams
       parameters:
         - description: The Invotra UUID of the team.
           in: path
@@ -116,6 +126,8 @@ paths:
       description: Get a list of team members.
   '/teams/{team_id}/memberships/{user_id}':
     delete:
+      tags:
+        - teams
       parameters:
         - description: The Invotra UUID of the team.
           in: path
@@ -142,6 +154,8 @@ paths:
             of the team.
       description: Remove the user's membership of the team.
     put:
+      tags:
+        - teams
       parameters:
         - description: The Invotra UUID of the team.
           in: path
@@ -174,6 +188,8 @@ paths:
       description: Update information about a user's team membership.
   /users:
     get:
+      tags:
+        - users
       parameters:
         - description: Filter by external ID.
           in: query
@@ -189,6 +205,8 @@ paths:
             $ref: '#/definitions/uuid-list-schema'
       description: Search for users.
     post:
+      tags:
+        - users
       parameters:
         - in: body
           name: body
@@ -217,6 +235,8 @@ paths:
       description: Provision a new user in Invotra.
   '/users/{user_id}':
     get:
+      tags:
+        - users
       parameters:
         - description: The Invotra UUID of the user.
           in: path
@@ -236,6 +256,8 @@ paths:
           description: No user with that UUID was found.
       description: Get the user's information.
     put:
+      tags:
+        - users
       parameters:
         - description: The Invotra UUID of the user.
           in: path
@@ -268,6 +290,8 @@ paths:
       description: Update the user's information.
   '/users/{user_id}/job_roles':
     get:
+      tags:
+        - users
       description: List the user's job roles.
       parameters:
         - in: path
@@ -288,6 +312,8 @@ paths:
           description: The UUID does not correspond to an existing user.
   '/users/{user_id}/job_roles/{job_role_id}':
     delete:
+      tags:
+        - users
       description: Remove a job role from a user.
       parameters:
         - description: The Invotra UUID of the user.
@@ -314,6 +340,8 @@ paths:
             The user or job role does not exist, or the user did not have that
             job role.
     put:
+      tags:
+        - users
       description: Add a job role to a user.
       parameters:
         - description: The Invotra UUID of the user.
@@ -341,6 +369,8 @@ paths:
           description: The user or job role does not exist.
   '/users/{user_id}/locations':
     get:
+      tags:
+        - users
       description: List the user's locations.
       parameters:
         - in: path
@@ -361,6 +391,8 @@ paths:
           description: The UUID does not correspond to an existing user.
   '/users/{user_id}/locations/{location_id}':
     delete:
+      tags:
+        - users
       description: Remove a location from a user.
       parameters:
         - description: The Invotra UUID of the user.
@@ -387,6 +419,8 @@ paths:
             The user or location does not exist, or the user did not have that
             location.
     put:
+      tags:
+        - users
       description: Add a location to a user.
       parameters:
         - description: The Invotra UUID of the user.
@@ -414,6 +448,8 @@ paths:
           description: The user or location does not exist.
   '/users/{user_id}/teams':
     get:
+      tags:
+        - users
       description: List a user's teams
       parameters:
         - in: path
@@ -435,6 +471,8 @@ paths:
           description: The UUID does not correspond to an existing user.
   /job_roles:
     get:
+      tags:
+        - job roles
       parameters:
         - description: Filter by external ID.
           in: query
@@ -450,6 +488,8 @@ paths:
             $ref: '#/definitions/uuid-list-schema'
       description: Search for job roles.
     post:
+      tags:
+        - job roles
       parameters:
         - in: body
           name: body
@@ -474,6 +514,8 @@ paths:
       description: Provision a new job role.
   '/job_roles/{job_role_id}':
     get:
+      tags:
+        - job roles
       parameters:
         - description: The Invotra UUID of the job role.
           in: path
@@ -493,6 +535,8 @@ paths:
           description: The UUID does not correspond to an existing job role.
       description: Get information about the job role.
     put:
+      tags:
+        - job roles
       parameters:
         - description: The Invotra UUID of the job role.
           in: path
@@ -520,6 +564,8 @@ paths:
       description: Update job role information.
   /locations:
     get:
+      tags:
+        - locations
       parameters:
         - description: Filter by external ID.
           in: query
@@ -536,6 +582,8 @@ paths:
       description: Search for locations.
   /locations/sites:
     post:
+      tags:
+        - locations
       parameters:
         - in: body
           name: body
@@ -560,6 +608,8 @@ paths:
       description: Provision a new location.
   '/locations/sites/{location_id}':
     get:
+      tags:
+        - locations
       parameters:
         - description: The Invotra UUID of the location.
           in: path
@@ -581,6 +631,8 @@ paths:
             location is not a site.
       description: Get information about the location.
     put:
+      tags:
+        - locations
       parameters:
         - description: The Invotra UUID of the location.
           in: path
@@ -610,6 +662,8 @@ paths:
       description: Update location information.
   /locations/buildings:
     post:
+      tags:
+        - locations
       parameters:
         - in: body
           name: body
@@ -634,6 +688,8 @@ paths:
       description: Provision a new location.
   '/locations/buildings/{location_id}':
     get:
+      tags:
+        - locations
       parameters:
         - description: The Invotra UUID of the location.
           in: path
@@ -655,6 +711,8 @@ paths:
             location is not a building.
       description: Get information about the location.
     put:
+      tags:
+        - locations
       parameters:
         - description: The Invotra UUID of the location.
           in: path
@@ -684,6 +742,8 @@ paths:
       description: Update location information.
   /locations/floors:
     post:
+      tags:
+        - locations
       parameters:
         - in: body
           name: body
@@ -708,6 +768,8 @@ paths:
       description: Provision a new location.
   '/locations/floors/{location_id}':
     get:
+      tags:
+        - locations
       parameters:
         - description: The Invotra UUID of the location.
           in: path
@@ -729,6 +791,8 @@ paths:
             location is not a floor.
       description: Get information about the location.
     put:
+      tags:
+        - locations
       parameters:
         - description: The Invotra UUID of the location.
           in: path
@@ -758,6 +822,8 @@ paths:
       description: Update location information.
   /locations/spaces:
     post:
+      tags:
+        - locations
       parameters:
         - in: body
           name: body
@@ -782,6 +848,8 @@ paths:
       description: Provision a new location.
   '/locations/spaces/{location_id}':
     get:
+      tags:
+        - locations
       parameters:
         - description: The Invotra UUID of the location.
           in: path
@@ -803,6 +871,8 @@ paths:
             location is not a space.
       description: Get information about the location.
     put:
+      tags:
+        - locations
       parameters:
         - description: The Invotra UUID of the location.
           in: path
