@@ -900,7 +900,79 @@ paths:
             The location was not updated due to a Drupal validation failure or a
             JSON schema validation failure.
       description: Update location information.
+  /notifications:
+    get:
+      tags:
+        - notifications
+      responses:
+        '200':
+          description: List of a users notifications.
+          schema:
+            type: array
+            items:
+              "$ref": "#/definitions/notification-item-schema"
+      description: Retrieve notifications for a user.
+  /feeds:
+    get:
+      tags:
+        - feeds
+      responses:
+        '200':
+          description: List of a users notifications.
+          schema:
+              "$ref": "#/definitions/feed-item-schema"
+      description: Check if any new feed items are available for a user.
 definitions:
+  feed-item-schema:
+    required:
+      - feed
+    properties:
+      feed:
+        description: This is the feed flag
+        type: integer
+        enum:
+         - 0
+         - 1
+  notification-item-schema:
+    required:
+      - uuid
+      - user_uuid
+    properties:
+      uuid:
+        description: This is the uuid of the notification
+        type: string
+        example: adad1ffa-fcf8-4b4c-a7a4-189d62228497
+      user_uuid:
+        description: This is the uuid of the user that the notification is for
+        type: string
+        example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
+      timestamp:
+        description: This is timestamp of when the notificaiton was created
+        type: integer
+        example: 1510941596
+      image:
+        description: This is image of the user who created the notification
+        type: string
+        example: https://demo.invotra.com/files/styles/large_avatar/public/user.png
+      link:
+        description: This is link to the notification
+        type: string
+        example: https://demo.invotra.com/post/ill-be-annual-leave
+      message:
+        description: This is text description of the  notification
+        type: string
+        example: Bob Matthews mentioned you in a post.
+      type:
+        description: This is type of the notification
+        type: string
+        enum:
+          - invotra.user.mention
+          - invotra.user.follow
+          - invotra.comment.reply
+          - invotra.post.like
+          - invotra.post.comment
+          - invotra.comment.like
+    type: object
   team-schema:
     properties:
       title:
