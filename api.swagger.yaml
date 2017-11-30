@@ -3,11 +3,16 @@ info:
   title: InvotraAPI
   version: v0.3
 host: dev.invotra.com
+consumes:
+  - application/json
+produces:
+  - application/json
 basePath: /api/v0.3
 schemes:
   - https
 security:
   - APIKeyHeader: []
+  - APISessionHeader: []
 paths:
   /teams:
     get:
@@ -928,7 +933,7 @@ definitions:
       - feed
     properties:
       feed:
-        description: This is the feed flag
+        description: This is the feed flag 
         type: integer
         enum:
          - 0
@@ -1289,8 +1294,14 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/team-team-membership-schema'
+
 securityDefinitions:
   APIKeyHeader:
     type: apiKey
     in: header
     name: X-API-Key
+  APISessionHeader:
+    type: apiKey
+    name: SESSS{value}
+    in: header
+    
