@@ -42,7 +42,7 @@ paths:
           description: Access denied
 
   /session/logout:
-    get:
+    post:
       tags:
         - session
       description: Logout the user.
