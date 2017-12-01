@@ -13,7 +13,42 @@ schemes:
 security:
   - APIKeyHeader: []
   - APISessionHeader: []
+  
 paths:
+
+  /session/token:
+    get:
+      tags:
+        - session
+      description: Returns a CSRF token.
+      responses:
+        '200':
+          description: Returns a CSRF token.
+  /session/login:
+    post:
+      tags:
+        - session
+      description: Login a user.
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/session-schema'
+      responses:
+        '200':
+          description: Successfully logged in a user.
+        '401':
+          description: Access denied
+
+  /session/logout:
+    get:
+      tags:
+        - session
+      description: Logout the user.
+      responses:
+        '200':
+          description: Successfully logged user out.
   /teams:
     get:
       tags:
@@ -928,6 +963,17 @@ paths:
               "$ref": "#/definitions/feed-item-schema"
       description: Check if any new feed items are available for a user.
 definitions:
+  session-schema:
+    required:
+      - username
+      - password
+    properties:
+      username:
+        description: This username that the user logs in with
+        type: string
+      password:
+        description: This password that the user logs in with
+        type: string
   feed-item-schema:
     required:
       - feed
@@ -1302,6 +1348,6 @@ securityDefinitions:
     name: X-API-Key
   APISessionHeader:
     type: apiKey
-    name: SESSS{value}
+    name: SESSS{name}
     in: header
-    
+  
