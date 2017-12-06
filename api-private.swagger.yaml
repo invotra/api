@@ -1,0 +1,112 @@
+swagger: '2.0'
+info:
+  title: InvotraPrivateAPI
+  version: v0.1
+host: dev.invotra.com
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /api/v0.1
+schemes:
+  - http
+security:
+  - APIKeyHeader: []
+paths:
+  '/sessions/{session_hash}':
+    put:
+      tags:
+        - sessions
+      summary: Create or update a user session.
+      parameters:
+        - name: session_hash
+          description: >-
+            The SHA-256 hash of the session ID. This is hashed to prevent it
+            being useful if leaked, for example via web server logs. Hexadecimal
+            encoded, lowercase.
+          in: path
+          type: string
+          pattern: '^[a-f0-9]{64}$'
+          required: true
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/session-schema'
+          required: true
+      responses:
+        '200':
+          description: An existing session was updated.
+        '201':
+          description: A new session was created.
+        '400':
+          description: The JSON was malformed.
+        '422':
+          description: JSON schema validation failed.
+    delete:
+      tags:
+        - sessions
+      summary: Destroy a user session.
+      parameters:
+        - name: session_hash
+          description: >-
+            The SHA-256 hash of the session ID. This is hashed to prevent it
+            being useful if leaked, for example via web server logs. Hexadecimal
+            encoded, lowercase.
+          in: path
+          type: string
+          pattern: '^[a-f0-9]{64}$'
+          required: true
+      responses:
+        '200':
+          description: The session was destroyed.
+        '400':
+          description: The JSON was malformed.
+        '404':
+          description: The session did not exist.
+        '422':
+          description: JSON schema validation failed.
+  '/sessions/users/{user_id}':
+    delete:
+      tags:
+        - sessions
+      summary: Destroy all sessions of a user.
+      parameters:
+        - name: user_id
+          in: path
+          type: string
+          description: The Invotra UUID of the user.
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          required: true
+      responses:
+        '200':
+          description: 'All the user''s sessions were destroyed, or the user had no sessions.'
+        '400':
+          description: The user UUID was malformed.
+        '404':
+          description: The user did not exist.
+definitions:
+  session-schema:
+    properties:
+      user_id:
+        description: The Invotra UUID of the user
+        type: string
+        pattern: >-
+          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+      user_internal_id:
+        description: The Drupal user ID
+        type: integer
+        example: 12345
+      expiry:
+        description: The number of seconds after which the session should expire
+        type: integer
+        example: 1209600
+    required:
+      - user_id
+      - expiry
+securityDefinitions:
+  APIKeyHeader:
+    type: apiKey
+    in: header
+    name: X-API-Key
