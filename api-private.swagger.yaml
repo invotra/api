@@ -12,22 +12,28 @@ schemes:
   - http
 security:
   - APIKeyHeader: []
+tags:
+  - name: sessions
+    description: Session management
+  - name: notifications
+    description: Notification messages
 paths:
   '/sessions/{session_hash}':
+    parameters:
+      - name: session_hash
+        description: >-
+          The SHA-256 hash of the session ID. This is hashed to prevent it being
+          useful if leaked, for example via web server logs. Hexadecimal
+          encoded, lowercase.
+        in: path
+        type: string
+        pattern: '^[a-f0-9]{64}$'
+        required: true
     put:
       tags:
         - sessions
       summary: Create or update a user session.
       parameters:
-        - name: session_hash
-          description: >-
-            The SHA-256 hash of the session ID. This is hashed to prevent it
-            being useful if leaked, for example via web server logs. Hexadecimal
-            encoded, lowercase.
-          in: path
-          type: string
-          pattern: '^[a-f0-9]{64}$'
-          required: true
         - name: body
           in: body
           schema:
@@ -46,16 +52,6 @@ paths:
       tags:
         - sessions
       summary: Destroy a user session.
-      parameters:
-        - name: session_hash
-          description: >-
-            The SHA-256 hash of the session ID. This is hashed to prevent it
-            being useful if leaked, for example via web server logs. Hexadecimal
-            encoded, lowercase.
-          in: path
-          type: string
-          pattern: '^[a-f0-9]{64}$'
-          required: true
       responses:
         '200':
           description: The session was destroyed.
@@ -66,18 +62,18 @@ paths:
         '422':
           description: JSON schema validation failed.
   '/sessions/users/{user_id}':
+    parameters:
+      - name: user_id
+        in: path
+        type: string
+        description: The Invotra UUID of the user.
+        pattern: >-
+          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        required: true
     delete:
       tags:
         - sessions
       summary: Destroy all sessions of a user.
-      parameters:
-        - name: user_id
-          in: path
-          type: string
-          description: The Invotra UUID of the user.
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          required: true
       responses:
         '200':
           description: 'All the user''s sessions were destroyed, or the user had no sessions.'
@@ -85,6 +81,93 @@ paths:
           description: The user UUID was malformed.
         '404':
           description: The user did not exist.
+  '/notifications/{user_id}':
+    parameters:
+      - name: user_id
+        in: path
+        type: string
+        description: The Invotra UUID of the notification recipient user.
+        pattern: >-
+          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        required: true
+    get:
+      tags:
+        - notifications
+      summary: Get all notifications for a user.
+      responses:
+        '200':
+          description: >-
+            A list of the user's notifications, or an empty array if there are
+            none.
+          schema:
+            $ref: '#/definitions/notification-list-schema'
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: The user was not found.
+    post:
+      tags:
+        - notifications
+      summary: Add a notification.
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/notification-schema'
+          required: true
+      responses:
+        '201':
+          description: The notification was added.
+          headers:
+            Location:
+              type: string
+              description: >
+                The URL of the newly added notification
+                (.../notifications/{user_id}/{notification_id}).
+        '400':
+          description: The UUID or JSON was malformed.
+        '404':
+          description: The user was not found.
+        '422':
+          description: JSON schema validation failed.
+    delete:
+      tags:
+        - notifications
+      summary: Delete all notifications for a user.
+      responses:
+        '200':
+          description: 'The notifications were deleted, or the user had no notifications.'
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: The user was not found.
+  '/notifications/{user_id}/{notification_id}':
+    delete:
+      tags:
+        - notifications
+      summary: Delete a notification.
+      parameters:
+        - name: user_id
+          in: path
+          type: string
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          description: The Invotra UUID of the user.
+          required: true
+        - name: notification_id
+          in: path
+          type: string
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          description: The UUID of the notification message.
+          required: true
+      responses:
+        '200':
+          description: The notification was deleted.
+        '400':
+          description: One or both of the UUIDs was malformed.
+        '404':
+          description: The user or the notification was not found.
 definitions:
   session-schema:
     properties:
@@ -105,6 +188,58 @@ definitions:
     required:
       - user_id
       - expiry
+  notification-schema:
+    properties:
+      type:
+        type: string
+        description: The type of notification.
+        example: invotra.user.mention
+      message:
+        type: string
+        description: 'The notification message text, which may contain HTML.'
+        example: Dorothy Whitehead mentioned you in a post
+      link:
+        type: string
+        description: The URL that the notification should link to.
+        example: 'https://www.example.com/post/interesting'
+      image:
+        type: string
+        description: The URL of an image associated with the notification.
+        example: 'https://www.example.com/sites/default/files/picture.jpg'
+      timestamp:
+        type: integer
+        description: The timestamp of the notification.
+        example: 1442089320
+    required:
+      - type
+      - message
+      - link
+      - image
+      - timestamp
+  notification-schema-retrieve:
+    allOf:
+      - $ref: '#/definitions/notification-schema'
+      - type: object
+        properties:
+          user_id:
+            description: The UUID of the user.
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+          notification_id:
+            description: The UUID of the notification message.
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 52000da2-8513-4472-8395-4a080f662b48
+        required:
+          - user_id
+          - notification_id
+  notification-list-schema:
+    type: array
+    items:
+      $ref: '#/definitions/notification-schema-retrieve'
 securityDefinitions:
   APIKeyHeader:
     type: apiKey
