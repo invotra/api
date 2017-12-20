@@ -963,6 +963,12 @@ paths:
     get:
       tags:
         - feeds
+      parameters:
+        - in: query
+          name: page
+          type: integer
+          required: true
+          description: Page to pull results from.
       responses:
         '200':
           description: Returns the feed for a user.
@@ -982,6 +988,22 @@ definitions:
         description: This password that the user logs in with
         type: string
   feed-schema:
+    required:
+      - user_uuid
+      - user_image
+      - username
+      - first_name
+      - last_name
+      - entity_uuid
+      - entity_title
+      - entity_body
+      - timestamp
+      - link
+      - short_text
+      - topic
+      - category
+      - category_colour
+      - likes
     properties:
       user_uuid:
         description: This is the uuid of the user who triggered the feed message
