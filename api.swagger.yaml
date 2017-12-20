@@ -1018,14 +1018,10 @@ definitions:
         description: The username of the user who triggered the feed message
         type: string
         example: Dorothy.Whitehead@akagera.com
-      first_name:
-        description: The first name of the the user who triggered the feed message
+      full_name:
+        description: The name of the user who triggered the feed message
         type: string
-        example: Dorothy
-      last_name:
-        description: The last name of the the user who triggered the feed message
-        type: string
-        example: Whitehead
+        example: Dorothy Whitehead
       entity_uuid:
         description: The UUID of the entity that the feed message is about
         type: string
