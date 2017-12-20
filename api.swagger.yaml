@@ -13,13 +13,11 @@ schemes:
 security:
   - APIKeyHeader: []
   - APISessionHeader: []
-  
 paths:
-
   /session/token:
     get:
       tags:
-        - session
+        - sessions
       description: Returns a CSRF token.
       responses:
         '200':
@@ -27,7 +25,7 @@ paths:
   /session/login:
     post:
       tags:
-        - session
+        - sessions
       description: Login a user.
       parameters:
         - in: body
@@ -40,11 +38,10 @@ paths:
           description: Successfully logged in a user.
         '401':
           description: Access denied
-
   /session/logout:
     post:
       tags:
-        - session
+        - sessions
       description: Logout the user.
       responses:
         '200':
@@ -950,18 +947,28 @@ paths:
           schema:
             type: array
             items:
-              "$ref": "#/definitions/notification-item-schema"
+              $ref: '#/definitions/notification-item-schema'
       description: Retrieve notifications for a user.
+  /feeds/status:
+    get:
+      tags:
+        - feeds
+      responses:
+        '200':
+          description: Feed item status for user retrieved successfully.
+          schema:
+            $ref: '#/definitions/feed-status-schema'
+      description: Check if any new feed items are available for a user.
   /feeds:
     get:
       tags:
         - feeds
       responses:
         '200':
-          description: List of a users notifications.
+          description: Returns the feed for a user.
           schema:
-              "$ref": "#/definitions/feed-item-schema"
-      description: Check if any new feed items are available for a user.
+            $ref: '#/definitions/feed-schema'
+      description: Returns the feed for a user.
 definitions:
   session-schema:
     required:
@@ -974,16 +981,88 @@ definitions:
       password:
         description: This password that the user logs in with
         type: string
-  feed-item-schema:
+  feed-schema:
+    properties:
+      user_uuid:
+        description: This is the uuid of the user who triggered the feed message
+        type: string
+        example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
+      user_image:
+        description: This is image of the user who triggered the feed message
+        type: string
+        example: >-
+          https://demo.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
+      username:
+        description: The username of the user who triggered the feed message
+        type: string
+        example: Dorothy.Whitehead@akagera.com
+      first_name:
+        description: The first name of the the user who triggered the feed message
+        type: string
+        example: Dorothy
+      last_name:
+        description: The last name of the the user who triggered the feed message
+        type: string
+        example: Whitehead
+      entity_uuid:
+        description: The UUID of the entity that the feed message is about
+        type: string
+        example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
+      entity_title:
+        description: The title of the entity that the feed message is about
+        type: string
+        example: A post about annual leave
+      entity_body:
+        description: The main body text of the entity
+        type: string
+        example: I'm taking annual leave next Thursday. Cover to be announced shortly
+      timestamp:
+        description: This is timestamp of when the feed message was created
+        type: integer
+        example: 1510941596
+      link:
+        description: This is link to the entity that the feed message is about
+        type: string
+        example: >-
+          https://demo.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
+      short_text:
+        description: >-
+          Contextual text for the feed message, which displays in between the
+          user's name and the entity title
+        type: string
+        example: created the following within
+      topic:
+        description: 'This is topic of the feed, used for filtering'
+        type: string
+        enum:
+          - people
+          - groups
+          - content
+      category:
+        description: The category of the feed message
+        type: string
+        enum:
+          - Problem/Risk
+          - etc
+      category_colour:
+        description: Hexidecimal colour for the category
+        type: string
+        example: FFF
+      likes:
+        description: Count of the likes for this feed message
+        type: integer
+        example: 5
+    type: object
+  feed-status-schema:
     required:
       - feed
     properties:
       feed:
-        description: This is the feed flag 
+        description: This is the feed flag
         type: integer
         enum:
-         - 0
-         - 1
+          - 0
+          - 1
   notification-item-schema:
     required:
       - uuid
@@ -1004,11 +1083,11 @@ definitions:
       image:
         description: This is image of the user who created the notification
         type: string
-        example: https://demo.invotra.com/files/styles/large_avatar/public/user.png
+        example: 'https://demo.invotra.com/files/styles/large_avatar/public/user.png'
       link:
         description: This is link to the notification
         type: string
-        example: https://demo.invotra.com/post/ill-be-annual-leave
+        example: 'https://demo.invotra.com/post/ill-be-annual-leave'
       message:
         description: This is text description of the  notification
         type: string
@@ -1340,7 +1419,6 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/team-team-membership-schema'
-
 securityDefinitions:
   APIKeyHeader:
     type: apiKey
@@ -1348,6 +1426,5 @@ securityDefinitions:
     name: X-API-Key
   APISessionHeader:
     type: apiKey
-    name: SESSS{name}
+    name: 'SESSS{name}'
     in: header
-  
