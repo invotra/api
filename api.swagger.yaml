@@ -270,6 +270,18 @@ paths:
             a duplicate username or email address) or JSON schema validation
             failure.
       description: Provision a new user in Invotra.
+  '/users/me':
+    get:
+      tags:
+        - users
+      responses:
+        '200':
+          description: Returns a single complete user object.
+          schema:
+            $ref: '#/definitions/user-schema'
+        '404':
+          description: Current user was not found.
+      description: Get the current user's information.
   '/users/{user_id}':
     get:
       tags:
@@ -973,7 +985,7 @@ paths:
         '200':
           description: Returns the feed for a user.
           schema:
-            $ref: '#/definitions/feed-schema'
+            $ref: '#/definitions/feed-list-schema'
       description: Returns the feed for a user.
 definitions:
   session-schema:
@@ -987,13 +999,15 @@ definitions:
       password:
         description: This password that the user logs in with
         type: string
+  feed-list-schema:
+    type: array
+    items:
+      $ref: '#/definitions/feed-schema'
   feed-schema:
     required:
       - user_uuid
       - user_image
       - username
-      - first_name
-      - last_name
       - entity_uuid
       - entity_title
       - entity_body
