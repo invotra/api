@@ -14,7 +14,7 @@ security:
   - APIKeyHeader: []
   - APISessionHeader: []
 paths:
-  /session/token:
+  /sessions/token:
     get:
       tags:
         - sessions
@@ -22,7 +22,7 @@ paths:
       responses:
         '200':
           description: Returns a CSRF token.
-  /session/login:
+  /sessions/login:
     post:
       tags:
         - sessions
@@ -38,7 +38,7 @@ paths:
           description: Successfully logged in a user.
         '401':
           description: Access denied
-  /session/logout:
+  /sessions/logout:
     post:
       tags:
         - sessions
