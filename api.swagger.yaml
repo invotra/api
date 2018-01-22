@@ -1074,7 +1074,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/content-create'
+              $ref: '#/components/schemas/content-schema-create'
         required: true
   '/content/{content_id}':
     get:
