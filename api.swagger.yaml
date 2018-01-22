@@ -1024,6 +1024,113 @@ paths:
             schema:
               $ref: '#/components/schemas/location-space-schema'
         required: true
+  /content:
+    get:
+      tags:
+        - content
+      parameters:
+        - description: Filter by external ID.
+          in: query
+          name: external_id
+          required: true
+          schema:
+            type: string
+        - description: Filter by content type.
+          in: query
+          name: type
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of content matching the filter criteria.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uuid-list-schema'
+        '404':
+          description: No matching content was found.
+      description: Search for content.
+    post:
+      tags:
+        - content
+      responses:
+        '201':
+          description: Content created successfully.
+          headers:
+            Location:
+              description: |
+                The URL at which the newly provisioned content may be retrieved.
+              schema:
+                type: string
+        '400':
+          description: The content was not saved due to malformed JSON.
+        '422':
+          description: |
+            The content was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new piece of content.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/content-create'
+        required: true
+  '/content/{content_id}':
+    get:
+      tags:
+        - content
+      parameters:
+        - description: The Invotra UUID of the content.
+          in: path
+          name: content_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: Returns a single complete content object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/content-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing piece of content.
+      description: Get information about the content item.
+    put:
+      tags:
+        - content
+      parameters:
+        - description: The Invotra UUID of the content.
+          in: path
+          name: content_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: The content item was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: The UUID does not correspond to an existing piece of content.
+        '422':
+          description: |
+            The team was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update content.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/content-schema'
+        required: true
   /notifications:
     get:
       tags:
@@ -1086,10 +1193,10 @@ components:
         - password
       properties:
         username:
-          description: This username that the user logs in with
+          description: The username that the user logs in with
           type: string
         password:
-          description: This password that the user logs in with
+          description: The password that the user logs in with
           type: string
     feed-list-schema:
       type: array
@@ -1116,7 +1223,7 @@ components:
           type: string
           example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
         user_image:
-          description: This is image of the user who triggered the feed message
+          description: This is an image of the user who triggered the feed message
           type: string
           example: >-
             https://demo.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
@@ -1141,7 +1248,7 @@ components:
           type: string
           example: I'm taking annual leave next Thursday. Cover to be announced shortly
         timestamp:
-          description: This is timestamp of when the feed message was created
+          description: This is a timestamp of when the feed message was created
           type: integer
           example: 1510941596
         link:
@@ -1201,23 +1308,23 @@ components:
           type: string
           example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
         timestamp:
-          description: This is timestamp of when the notificaiton was created
+          description: This is a timestamp of when the notificaiton was created
           type: integer
           example: 1510941596
         image:
-          description: This is image of the user who created the notification
+          description: This is an image of the user who created the notification
           type: string
           example: 'https://demo.invotra.com/files/styles/large_avatar/public/user.png'
         link:
-          description: This is link to the notification
+          description: This is a link to the notification
           type: string
           example: 'https://demo.invotra.com/post/ill-be-annual-leave'
         message:
-          description: This is text description of the  notification
+          description: This is a text description of the  notification
           type: string
           example: Bob Matthews mentioned you in a post.
         type:
-          description: This is type of the notification
+          description: This is the type of notification
           type: string
           enum:
             - invotra.user.mention
@@ -1543,3 +1650,75 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/team-team-membership-schema'
+    content-schema:
+      properties:
+        title:
+          description: This is the title for the content
+          type: string
+          example: Operational security awareness
+        body:
+          description: The main body text for the content.
+          type: string
+          example: A news item about increasing awareness of security in the workplace
+        type:
+          description: The content type of the content item
+          type: string
+          enum:
+            - gallery
+            - list
+            - news
+            - multi-media
+            - page
+            - policy
+            - promotion
+            - webform
+            - custom
+        external_id:
+          description: This is used to store the content item's external reference id
+          type: string
+          example: ABC123
+        author:
+          description: The UUID of the author.
+          type: string
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        created:
+          description: >-
+            This is a timestamp of when the content was created. Defaults to
+            current time if left blank.
+          type: integer
+          example: 1510941596
+        updated:
+          description: >-
+            This is a timestamp of when the content was updated. Defaults to
+            current time if left blank.
+          type: integer
+          example: 1510941596
+        site_section:
+          description: >-
+            This is the Invotra UUID of the site section that this content
+            belongs to.
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          type: string
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        status:
+          description: >-
+            The published status of the content item, defaults to 1 (Published).
+            0 (Draft) can be used instead.
+          type: integer
+          enum:
+            - 1
+            - 0
+      type: object
+    content-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/content-schema'
+      required:
+        - title
+        - body
+        - type
+        - author
+        - site_section
+      type: object
