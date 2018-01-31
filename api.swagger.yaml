@@ -465,7 +465,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/uuid-list-schema'
+                $ref: '#/components/schemas/location-uuid-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
