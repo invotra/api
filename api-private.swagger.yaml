@@ -247,7 +247,7 @@ definitions:
         example: 'https://www.example.com/sites/default/files/picture.jpg'
       timestamp:
         type: integer
-        description: The timestamp of the notification.
+        description: The timestamp of the notification (in seconds).
         example: 1442089320
     required:
       - type

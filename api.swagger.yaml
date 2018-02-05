@@ -1141,7 +1141,7 @@ components:
           type: string
           example: I'm taking annual leave next Thursday. Cover to be announced shortly
         timestamp:
-          description: This is timestamp of when the feed message was created
+          description: This is timestamp (in seconds) of when the feed message was created
           type: integer
           example: 1510941596
         link:
@@ -1201,7 +1201,7 @@ components:
           type: string
           example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
         timestamp:
-          description: This is timestamp of when the notificaiton was created
+          description: This is timestamp (in seconds) of when the notification was created
           type: integer
           example: 1510941596
         image:
