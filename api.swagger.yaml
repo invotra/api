@@ -1151,10 +1151,10 @@ components:
             https://demo.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
         short_text:
           description: >-
-            Contextual text for the feed message, which displays in between the
-            user's name and the entity title
+            Contextual text for the feed message, with placeholders @user for the user's
+            name and optionally @group for the group name.
           type: string
-          example: created the following within
+          example: @user created the following within @group
         topic:
           description: 'This is topic of the feed, used for filtering'
           type: string
