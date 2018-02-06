@@ -1154,7 +1154,7 @@ components:
             Contextual text for the feed message, with placeholders @user for the user's
             name and optionally @group for the group name.
           type: string
-          example: @user created the following within @group
+          example: "@user created the following within @group"
         topic:
           description: 'This is topic of the feed, used for filtering'
           type: string
