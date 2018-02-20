@@ -1490,8 +1490,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/location-uuid-label-list-schema'
-      description: 'Search for locations. An empty array is returned if no locations are found.''
-  '/locations/sites':
+      description: 'Search for locations. An empty array is returned if no locations are found.'
+  /locations/sites:
     post:
       tags:
         - locations
@@ -2332,20 +2332,6 @@ components:
             pattern: >-
               ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
-          category:
-            description: The category of a post
-            type: string
-            enum:
-              - Comment
-              - Idea
-              - News / Event
-              - Note
-              - Question
-              - To Do
-              - Problem / Risk
-              - Agreed
-              - Decision
-              - Done
           likes_count:
             description: Count of likes on the post
             type: integer
@@ -2395,15 +2381,23 @@ components:
           description: This is used to store the post's external reference id
           type: string
           example: ABC123
+        category:
+          description: The category of a post
+          type: string
+          enum:
+            - Comment
+            - Idea
+            - News / Event
+            - Note
+            - Question
+            - To Do
+            - Problem / Risk
+            - Agreed
+            - Decision
+            - Done
         attachments:
           allOf:
             - $ref: '#/components/schemas/uuid-list-schema'
-        category_uuid:
-          description: The UUID of the category of the post
-          type: string
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
     post-report-schema-create:
       properties:
