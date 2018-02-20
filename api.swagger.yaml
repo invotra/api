@@ -1929,6 +1929,10 @@ components:
   schemas:
     branding-schema:
       properties:
+        logo:
+          description: The logo for the site.
+          type: string
+          example: 'https://dev.invotra.com/sites/default/files/logo.png'
         toolbar_colour:
           description: The colour for the toolbar.
           type: string
@@ -1986,7 +1990,7 @@ components:
           description: This is image of the user who triggered the feed message
           type: string
           example: >-
-            https://demo.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
+            https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
         username:
           description: The username of the user who triggered the feed message
           type: string
@@ -2015,7 +2019,7 @@ components:
           description: This is link to the entity that the feed message is about
           type: string
           example: >-
-            https://demo.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
+            https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
         short_text:
           description: >-
             Contextual text for the feed message, with placeholders @user for the user's name and optionally @group for the group name.
@@ -2085,11 +2089,11 @@ components:
         image:
           description: This is image of the user who created the notification
           type: string
-          example: 'https://demo.invotra.com/files/styles/large_avatar/public/user.png'
+          example: 'https://dev.invotra.com/files/styles/large_avatar/public/user.png'
         link:
           description: This is link to the notification
           type: string
-          example: 'https://demo.invotra.com/post/ill-be-annual-leave'
+          example: 'https://dev.invotra.com/post/ill-be-annual-leave'
         message:
           description: This is text description of the  notification
           type: string
