@@ -11,7 +11,7 @@ paths:
   /branding:
     get:
       tags:
-        - branding
+        - configuration
       responses:
         '200':
           description: Branding returned.
@@ -20,6 +20,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/branding-schema'
       description: Returns the branding for an instance of Invotra.
+  /product_options:
+    get:
+      tags:
+        - configuration
+      responses:
+        '200':
+          description: Product options returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-options-schema'
+      description: Returns the product options for an instance of Invotra.
   /session/token:
     get:
       tags:
@@ -1852,6 +1864,28 @@ paths:
                 items:
                   $ref: '#/components/schemas/notification-item-schema'
       description: Retrieve notifications for a user.
+  '/notifications/{notification_id}':
+    put:
+      tags:
+        - notifications
+      parameters:
+        - description: The Invotra UUID of the notification.
+          in: path
+          name: notification_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: The user marked the notification as read.
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: |
+            The notification does not exist.
+      description: Mark a notification as read.
   /feeds/status:
     get:
       tags:
@@ -1954,6 +1988,13 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
+    product-options-schema:
+      type: object
+      additionalProperties:
+        type: boolean
+      example:
+        invotra_notes: true
+        invotra_notifications_page: false
     session-schema:
       required:
         - username
@@ -2095,7 +2136,7 @@ components:
           type: string
           example: 'https://dev.invotra.com/post/ill-be-annual-leave'
         message:
-          description: This is text description of the  notification
+          description: This is text description of the notification
           type: string
           example: Bob Matthews mentioned you in a post.
         type:
@@ -2108,6 +2149,10 @@ components:
             - invotra.post.like
             - invotra.post.comment
             - invotra.comment.like
+        status:
+          description: Whether the notification has been read or not
+          type: boolean
+          example: true
       type: object
     team-schema:
       properties:
