@@ -70,9 +70,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
-        '404':
-          description: No matching teams were found.
-      description: Search for teams.
+      description: Search for teams. An empty array is returned if no teams are found.
     post:
       tags:
         - teams
@@ -117,9 +115,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/uuid-label-list-schema'
-        '404':
-          description: No matching teams were found.
-      description: Search for teams.
+      description: Search for teams. An empty array is returned if no teams are found.
   '/teams/{team_id}':
     get:
       tags:
@@ -798,10 +794,9 @@ paths:
         - description: Filter by external ID.
           in: query
           name: external_id
+          required: true
           schema:
             type: string
-        - $ref: '#/components/parameters/offsetParam'
-        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: List of groups matching the filter criteria.
@@ -809,9 +804,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
-        '404':
-          description: No matching groups were found.
-      description: Search for groups. Returns list of uuids.
+      description: Search for groups. Returns list of uuids. Returns an empty array if no groups are found.
   '/groups/{group_id}/posts':
     get:
       tags:
@@ -868,9 +861,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/group-search-schema'
-        '404':
-          description: No matching groups were found.
-    description: Search for groups. Returns group snippets.
+    description: 'Search for groups. Returns group snippets. An empty array is returned if no groups are found.'
   /groups/categories:
     get:
       tags:
@@ -885,9 +876,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/title-uuid-list-common-schema'
-        '404':
-          description: No group categories were found.
-    description: List all group categories.
+    description: 'List all group categories. An empty array is returned if no categories are found'
   '/groups/{group_id}':
     get:
       tags:
@@ -1045,10 +1034,9 @@ paths:
         - description: Filter by external ID.
           in: query
           name: external_id
+          required: true
           schema:
             type: string
-        - $ref: '#/components/parameters/offsetParam'
-        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: >
@@ -1215,7 +1203,7 @@ paths:
           description: The UUID was malformed.
         '404':
           description: The post does not exist. 
-    description: Check if the current user has liked a post.
+      description: Check if the current user has liked a post.
     put:
       tags:
         - posts
@@ -1502,10 +1490,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/location-uuid-label-list-schema'
-        '404':
-          description: No matching locations were found.
-      description: Search for locations.
-  /locations/sites:
+      description: 'Search for locations. An empty array is returned if no locations are found.''
+  '/locations/sites':
     post:
       tags:
         - locations
@@ -1948,7 +1934,7 @@ components:
           type: string
           example: '#FFFFFF'
         toolbar_icons_colour:
-          description: This is colour for hyperlinks.
+          description: This is colour for the toolbar icons.
           type: string
           example: '#FFFFFF'
         primary_button_colour:
@@ -2032,8 +2018,7 @@ components:
             https://demo.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
         short_text:
           description: >-
-            Contextual text for the feed message, which displays in between the
-            user's name and the entity title
+            Contextual text for the feed message, with placeholders @user for the user's name and optionally @group for the group name.
           type: string
           example: "@user created the following within @group"
         topic:
@@ -2347,6 +2332,20 @@ components:
             pattern: >-
               ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
+          category:
+            description: The category of a post
+            type: string
+            enum:
+              - Comment
+              - Idea
+              - News / Event
+              - Note
+              - Question
+              - To Do
+              - Problem / Risk
+              - Agreed
+              - Decision
+              - Done
           likes_count:
             description: Count of likes on the post
             type: integer
@@ -2396,23 +2395,15 @@ components:
           description: This is used to store the post's external reference id
           type: string
           example: ABC123
-        category:
-          description: The category of a post
-          type: string
-          enum:
-            - Comment
-            - Idea
-            - News / Event
-            - Note
-            - Question
-            - To Do
-            - Problem / Risk
-            - Agreed
-            - Decision
-            - Done
         attachments:
           allOf:
             - $ref: '#/components/schemas/uuid-list-schema'
+        category_uuid:
+          description: The UUID of the category of the post
+          type: string
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
     post-report-schema-create:
       properties:
