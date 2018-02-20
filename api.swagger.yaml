@@ -928,6 +928,32 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
+  '/groups/{group_id}/member':  
+    get:
+      tags:
+        - groups
+      parameters:
+        - description: The Invotra UUID of the group to check following status against.
+          in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: |
+            Membership status returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/common-status-schema'
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: The group does not exist.
+      description: Check if the current user is a member of a group.
   '/groups/{group_id}/members/{user_id}':
     delete:
       tags:
