@@ -1857,6 +1857,12 @@ paths:
       tags:
         - notifications
       parameters:
+        - description: Filter the notifications for the mobile app. If true, this will return notifications with entity type user, and entity type node and bundle type post only.
+          in: query
+          name: app_notifications_only
+          schema:
+            type: boolean
+            default: false
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
