@@ -18,7 +18,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/branding-schema'
+                $ref: '#/components/schemas/'
       description: Returns the branding for an instance of Invotra.
   /product_options:
     get:
@@ -1972,7 +1972,7 @@ components:
           type: string
           example: 'https://dev.invotra.com/sites/default/files/mobile_logo.png'
         navigation_first_level_nav_link:
-          description: This is colour for the main navigation text. Any CSS colour allowed.
+          description: This is the colour for the main navigation text. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
         navigation_menu_background_colour:
