@@ -1976,19 +1976,19 @@ components:
           type: string
           example: '#FFFFFF'
         navigation_menu_background_colour:
-          description: This is colour for the main navigation background. Any CSS colour allowed.
+          description: This is the colour for the main navigation background. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
         toolbar_background_colour:
-          description: This is colour for the toolbar background. Any CSS colour allowed.
+          description: This is the colour for the toolbar background. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
         toolbar_text_colour:
-          description: This is colour for the toolbar text. Any CSS colour allowed.
+          description: This is the colour for the toolbar text. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
         mobile_icons_colour:
-          description: This is colour for the mobile icons on the toolbar. Any CSS colour allowed.
+          description: This is the colour for the mobile icons on the toolbar. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
         standard_button_normal_state_colour:
@@ -2008,7 +2008,7 @@ components:
           type: string
           example: '#FFFFFF'
         link_colour:
-          description: This is colour for hyperlinks. Any CSS colour allowed.
+          description: This is the colour for hyperlinks. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
         vertical_tabs_colour:
