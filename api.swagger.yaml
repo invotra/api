@@ -18,7 +18,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/'
+                $ref: '#/components/schemas/branding-schema'
       description: Returns the branding for an instance of Invotra.
   /product_options:
     get:
