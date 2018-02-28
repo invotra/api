@@ -341,6 +341,11 @@ paths:
           name: fulltext_search
           schema:
             type: string
+        - description: Autocomplete term. Matches on username.
+          in: query
+          name: autocomplete
+          schema:
+            type: string
         - description: Filter by team.
           in: query
           name: team
