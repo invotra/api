@@ -895,6 +895,16 @@ paths:
       tags:
         - groups
       parameters:
+        - description: Filter by label. Matches on whole words.
+          in: query
+          name: label
+          schema:
+            type: string
+        - description: Autocomplete term. Matches on group category name, per letter, from the start of the word.
+          in: query
+          name: autocomplete
+          schema:
+            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
