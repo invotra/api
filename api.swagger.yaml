@@ -131,7 +131,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/uuid-label-list-schema'
+                $ref: '#/components/schemas/uuid-label-context-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
   '/teams/{team_id}':
     get:
@@ -1522,7 +1522,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/location-uuid-label-list-schema'
+                $ref: '#/components/schemas/location-uuid-label-context-list-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
   /locations/sites:
     post:
@@ -2711,7 +2711,7 @@ components:
         type: string
         example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
-    uuid-label-list-schema:
+    uuid-label-context-list-schema:
       items:
         type: object
         properties:
@@ -2741,7 +2741,7 @@ components:
                   type: string
                   example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
-    location-uuid-label-list-schema:
+    location-uuid-label-context-list-schema:
       items:
         type: object
         properties:
@@ -2763,6 +2763,21 @@ components:
               - building
               - floor
               - space
+          context:
+            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
+            type: array
+            items:
+              type: object
+              properties:
+                label:
+                  description: The entity label.
+                  type: string
+                uuid:
+                  description: The entity UUID.
+                  pattern: >-
+                    ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+                  type: string
+                  example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
     location-uuid-schema:
       type: object
