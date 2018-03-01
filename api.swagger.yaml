@@ -862,7 +862,7 @@ paths:
       tags:
         - groups
       parameters:
-        - description: Search term.
+        - description: Search term. Matches on whole words.
           in: query
           name: fulltext_search
           schema:
@@ -872,6 +872,12 @@ paths:
           name: category
           schema:
             type: string
+        - description: Filter by groups the current user is a member of.
+          in: query
+          name: my_groups
+          schema:
+            type: boolean
+            default: false
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
