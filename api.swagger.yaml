@@ -131,7 +131,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/uuid-label-context-list-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    $ref: '#/components/schemas/uuid-label-context-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
   '/teams/{team_id}':
     get:
@@ -210,9 +218,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/team-team-membership-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/team-team-membership-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -373,9 +389,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/user-search-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user-search-schema'
     description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
   /users/me:
     get:
@@ -473,9 +497,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/feed-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/feed-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -502,7 +534,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/uuid-list-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    $ref: '#/components/schemas/uuid-list-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -590,7 +630,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/location-uuid-list-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    $ref: '#/components/schemas/location-uuid-list-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -679,9 +727,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/user-team-membership-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user-team-membership-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -707,9 +763,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/user-search-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user-search-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -735,9 +799,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/group-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/group-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -849,9 +921,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/post-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/post-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -886,9 +966,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/group-search-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/group-search-schema'
     description: 'Search for groups. Returns group snippets. An empty array is returned if no groups are found.'
   /groups/categories:
     get:
@@ -913,7 +1001,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/title-uuid-list-common-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    $ref: '#/components/schemas/title-uuid-list-common-schema'
     description: 'List all group categories. An empty array is returned if no categories are found'
   '/groups/{group_id}':
     get:
@@ -962,9 +1058,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/group-membership-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/group-membership-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -1187,9 +1291,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/user-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -1532,7 +1644,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/location-uuid-label-context-list-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    $ref: '#/components/schemas/location-uuid-label-context-list-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
   /locations/sites:
     post:
@@ -1897,9 +2017,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/notification-item-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/notification-item-schema'
       description: Retrieve notifications for a user.
   '/notifications/{notification_id}':
     put:
@@ -1963,9 +2091,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/feed-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/feed-schema'
       description: Returns the feed for a user.
 components:
   securitySchemes:
