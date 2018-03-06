@@ -362,11 +362,6 @@ paths:
           name: fulltext_search
           schema:
             type: string
-        - description: Autocomplete term. Matches on username, per letter, from the start of the word.
-          in: query
-          name: autocomplete
-          schema:
-            type: string
         - description: Filter by team.
           in: query
           name: team
@@ -401,6 +396,43 @@ paths:
                     items:
                       $ref: '#/components/schemas/user-search-schema'
     description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
+  /users/mention:
+    get:
+      tags:
+        - users
+      summary: Autocomplete usernames for @-mentioning.
+      description: Autocomplete usernames for @-mentioning. The text parameter matches against the start of the username. Full user objects are returned. The list may optionally be filtered by group to show only members of the group, to allow completing only users that can be mentioned when composing a group post. You can not filter by members of a private or secret group unless you are a member yourself. Webmasters can always be mentioned, so they are always matched even if they are not members of the group being filtered. Redacted users are never matched.
+      parameters:
+        - name: text
+          in: query
+          schema:
+            type: string
+          description: Text to match against the start of the username.
+          required: true
+        - name: group
+          in: query
+          schema:
+            type: string
+            format: uuid
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          description: UUID of the group to filter by.
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of matching users, or an empty array if none match.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user-search-schema'
+        '404':
+          description: A group UUID was supplied but no existing group matches.
+        '403':
+          description: A group UUID was supplied but the group is a private or secret group and the user making the request is not a member.
+        '400':
+          description: A malformed group UUID was supplied.
   /users/me:
     get:
       tags:
