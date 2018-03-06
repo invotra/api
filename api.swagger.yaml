@@ -1280,7 +1280,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/post-category-schema'
+                type: array
+                items:
+                  $ref: '#/components/schemas/post-category-schema'
       description: List post categories.
   '/posts/{post_id}/likes':
     get:
