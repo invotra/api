@@ -2650,6 +2650,10 @@ components:
             description: Count of attachments on the post
             type: integer
             example: 5
+          timestamp:
+            description: This is the timestamp (in seconds) of when the post was created
+            type: integer
+            example: 1510941596
     post-schema-create:
       allOf:
       - $ref: '#/components/schemas/post-schema-base'
