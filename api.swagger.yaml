@@ -2680,7 +2680,7 @@ components:
             example: 01234567-89ab-cdef-1234-56789abcdef0
             type: string
           description:
-            description: The HTML-rendered main body of the post. This value is read-only and should not be used for editing - use the source field instead.
+            description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
             type: string
             example: 'Hey <a href="/users/username" data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John Smith</a>, check out the latest <a href="/apps/groups/chat?hashtag=security">#security</a> news in this group!'
           pin:
