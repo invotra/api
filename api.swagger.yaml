@@ -1500,6 +1500,15 @@ paths:
       description: Report a post as the current user.
   /files:
     post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/file-schema-create'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/file-schema-create'
+        required: true
       tags:
         - files
       responses:
@@ -1518,12 +1527,6 @@ paths:
             The file was not saved due to Drupal validation failure or JSON
             schema validation failure.
       description: Provision a new file.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/file-schema-create'
-        required: true
   '/files/{file_id}':
     get:
       tags:
@@ -2769,11 +2772,11 @@ components:
     file-schema-create:
       properties:
         filename:
-          description: This is the filename
+          description: This is the filename. If using multipart/form-data this field may be omitted in favour of the 'filename' directive of the subpart Content-Disposition header.
           type: string
           example: wallpaper.jpeg
         type:
-          description: The type of file
+          description: The type of file.
           type: string
           enum:
             - image
@@ -2781,12 +2784,13 @@ components:
             - audio
             - video
         filemime:
-          description: The MIME type for the file
+          description: The MIME type for the file. If using multipart/form-data this field may be omitted in favour of the subpart Content-Type header.
           type: string
           example: image/jpeg
         file:
-          description: Base64 encoded version of the file
+          description: Base64 encoded version of the file.
           type: string
+          format: base64
       type: object
     job-role-schema:
       properties:
