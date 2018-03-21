@@ -2106,10 +2106,26 @@ paths:
             The notification does not exist.
       description: Mark a notification as read.
   /notifications/register/{service_id}/{token}:
+    parameters:
+      - description: Identifying name of the notification service to be used.
+        in: path
+        name: service_id
+        required: true
+        schema:
+          type: string
+          enum:
+            - apns
+            - fcm
+      - description: A token identifying the user to the notification service.
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
     put:
       tags:
         - notifications
-      description: Register a token to identify the user with a push notification service.
+      summary: Register a token to identify the user with a push notification service.
       responses:
         '200':
           description: The token was already registered.
@@ -2120,7 +2136,7 @@ paths:
     delete:
       tags:
         - notifications
-      description: Deregister a token identifying the user with a push notification service.
+      summary: Deregister a token identifying the user with a push notification service.
       responses:
         '200':
           description: The token was deregistered.
