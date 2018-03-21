@@ -2105,6 +2105,27 @@ paths:
           description: |
             The notification does not exist.
       description: Mark a notification as read.
+  /notifications/register/{service_id}/{token}:
+    put:
+      tags:
+        - notifications
+      description: Register a token to identify the user with a push notification service.
+      responses:
+        '200':
+          description: The token was already registered.
+        '201':
+          description: The token was registered successfully.
+        '404':
+          description: Unknown service.
+    delete:
+      tags:
+        - notifications
+      description: Deregister a token identifying the user with a push notification service.
+      responses:
+        '200':
+          description: The token was deregistered.
+        '404':
+          description: The token was not registered or the service was unknown.
   /feeds/status:
     get:
       tags:
