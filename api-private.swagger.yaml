@@ -249,12 +249,22 @@ definitions:
         type: integer
         description: The timestamp of the notification (in seconds).
         example: 1442089320
+      target_type:
+        type: string
+        description: The type of the notification target entity.
+        example: node
+      target_subtype:
+        type: string
+        description: The subtype (or "bundle") of the notification target entity.
+        example: group_status
     required:
       - type
       - message
       - link
       - image
       - timestamp
+      - target_type
+      - target_subtype
   notification-schema-retrieve:
     allOf:
       - $ref: '#/definitions/notification-schema'
