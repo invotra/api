@@ -968,7 +968,7 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing group.
-      description: Get a list of group posts.  
+      description: Get a list of group posts. This returns only the top-level posts in the group, not their replies.
   /groups/search:
     get:
       tags:
@@ -1305,6 +1305,47 @@ paths:
             schema:
               $ref: '#/components/schemas/post-schema-base'
         required: true
+  '/posts/{post_id}/replies':
+    get:
+      summary: Get the replies to a post.
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the parent post. Currently this must be a top-level post in its group. This restriction may be relaxed in a future API version.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: |
+            List of post replies. If there are no replies, an empty array.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/post-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '403':
+          description: The user does not have access to the parent post, perhaps because the post is in a private or secret group of which the user is not a member.
+        '404':
+          description: The UUID does not correspond to an existing post, or the post is not a top-level post in its group.
+      description: "Get a list of post replies. The replies are returned in thread order, old-to-new. Replies to a post appear after the post but before the next post at the same level, and posts are ordered oldest-to-newest within each level."
   '/posts/categories':
     get:
       tags:
@@ -2708,6 +2749,10 @@ components:
             description: This is the timestamp (in seconds) of when the post was created
             type: integer
             example: 1510941596
+          depth:
+            description: The depth of the post in the hierarchy of replies. Top-level posts are 0, their replies are 1, replies to replies are 2 etc.
+            type: integer
+            example: 1
     post-schema-create:
       allOf:
       - $ref: '#/components/schemas/post-schema-base'
