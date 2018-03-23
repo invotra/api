@@ -1126,7 +1126,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/common-status-schema'
+                $ref: '#/components/schemas/group-membership-status-schema'
         '400':
           description: The UUID was malformed.
         '404':
@@ -2624,6 +2624,17 @@ components:
           description: A boolean flag
           type: boolean
           example: true
+    group-membership-status-schema:
+      type: object
+      properties:
+        status:
+          description: |
+            'active', if the user is a member, 'inactive' if not, or 'pending' if they have requested but not yet been granted membership.
+          type: string
+          enum:
+            - active
+            - inactive
+            - pending
     group-schema:
       properties:
         title:
