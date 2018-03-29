@@ -1113,7 +1113,7 @@ paths:
       parameters:
         - description: The Invotra UUID of the group to check membership status against.
           in: path
-          name: user_id
+          name: group_id
           required: true
           schema:
             type: string
