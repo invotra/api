@@ -1,19 +1,37 @@
-swagger: '2.0'
+openapi: 3.0.0
+servers:
+  - url: 'https://dev.invotra.com/api/v0.3'
 info:
   title: InvotraAPI
   version: v0.3
-host: dev.invotra.com
-consumes:
-  - application/json
-produces:
-  - application/json
-basePath: /api/v0.3
-schemes:
-  - https
 security:
   - APIKeyHeader: []
   - APISessionHeader: []
 paths:
+  /branding:
+    get:
+      tags:
+        - configuration
+      responses:
+        '200':
+          description: Branding returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/branding-schema'
+      description: Returns the branding for an instance of Invotra.
+  /product_options:
+    get:
+      tags:
+        - configuration
+      responses:
+        '200':
+          description: Product options returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/product-options-schema'
+      description: Returns the product options for an instance of Invotra.
   /sessions/token:
     get:
       tags:
@@ -27,17 +45,17 @@ paths:
       tags:
         - sessions
       description: Login a user.
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/session-schema'
       responses:
         '200':
           description: Successfully logged in a user.
         '401':
           description: Access denied
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/session-schema'
+        required: true
   /sessions/logout:
     post:
       tags:
@@ -55,32 +73,28 @@ paths:
           in: query
           name: external_id
           required: true
-          type: string
+          schema:
+            type: string
       responses:
         '200':
           description: List of teams matching the filter criteria.
-          schema:
-            $ref: '#/definitions/uuid-list-schema'
-        '404':
-          description: No matching teams were found.
-      description: Search for teams.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uuid-list-schema'
+      description: Search for teams. An empty array is returned if no teams are found.
     post:
       tags:
         - teams
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/team-schema-create'
       responses:
         '201':
           description: The team was created successfully.
           headers:
             Location:
-              type: string
               description: |
                 The URL at which the newly provisioned team may be retrieved.
+              schema:
+                type: string
         '400':
           description: The team was not saved due to malformed JSON.
         '422':
@@ -88,6 +102,45 @@ paths:
             The team was not saved due to Drupal validation failure or JSON
             schema validation failure.
       description: Provision a new team.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/team-schema-create'
+        required: true
+  /teams/list:
+    get:
+      tags:
+        - teams
+      parameters:
+        - description: Filter by label. Matches on whole words.
+          in: query
+          name: label
+          schema:
+            type: string
+        - description: Autocomplete term. Matches on team name, per letter, from the start of the word.
+          in: query
+          name: autocomplete
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of teams matching the filter criteria.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    $ref: '#/components/schemas/uuid-label-context-list-schema'
+      description: Search for teams. An empty array is returned if no teams are found.
   '/teams/{team_id}':
     get:
       tags:
@@ -96,15 +149,18 @@ paths:
         - description: The Invotra UUID of the team.
           in: path
           name: team_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: Returns a single complete Team object.
-          schema:
-            $ref: '#/definitions/team-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/team-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -117,15 +173,11 @@ paths:
         - description: The Invotra UUID of the team.
           in: path
           name: team_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          required: true
-          type: string
-        - in: body
-          name: body
           required: true
           schema:
-            $ref: '#/definitions/team-schema'
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The team information was updated successfully.
@@ -138,6 +190,12 @@ paths:
             The team was not updated due to a Drupal validation failure or a
             JSON schema validation failure.
       description: Update team information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/team-schema'
+        required: true
   '/teams/{team_id}/memberships':
     get:
       tags:
@@ -146,16 +204,31 @@ paths:
         - description: The Invotra UUID of the team.
           in: path
           name: team_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: |
             List of team members. If there are no members, an empty array.
-          schema:
-            $ref: '#/definitions/team-team-membership-list-schema'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/team-team-membership-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -169,17 +242,19 @@ paths:
         - description: The Invotra UUID of the team.
           in: path
           name: team_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The user has been removed from the team.
@@ -197,22 +272,19 @@ paths:
         - description: The Invotra UUID of the team.
           in: path
           name: team_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          required: true
-          type: string
-        - in: body
-          name: body
           required: true
           schema:
-            $ref: '#/definitions/team-membership-common-schema'
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The user's membership of this team was updated.
@@ -223,6 +295,12 @@ paths:
         '404':
           description: The user or team does not exist.
       description: Update information about a user's team membership.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/team-membership-common-schema'
+        required: true
   /users:
     get:
       tags:
@@ -232,32 +310,30 @@ paths:
           in: query
           name: external_id
           required: true
-          type: string
+          schema:
+            type: string
       responses:
         '200':
           description: |
             List of users matching the filter criteria, or an empty array if no
             matching users are found.
-          schema:
-            $ref: '#/definitions/uuid-list-schema'
-      description: Search for users.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uuid-list-schema'
+      description: Search for users. Returns list of uuids.
     post:
       tags:
         - users
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/user-schema-create'
       responses:
         '201':
           description: The user was created successfully.
           headers:
             Location:
-              type: string
               description: |
                 The URL at which the newly provisioned user may be retrieved.
+              schema:
+                type: string
         '400':
           description: The user was not saved due to malformed JSON.
         '409':
@@ -270,15 +346,104 @@ paths:
             a duplicate username or email address) or JSON schema validation
             failure.
       description: Provision a new user in Invotra.
-  '/users/me':
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user-schema-create'
+        required: true
+  /users/search:
+    get:
+      tags:
+        - users
+      parameters:
+        - description: Search term. Matches on whole words.
+          in: query
+          name: fulltext_search
+          schema:
+            type: string
+        - description: Filter by team.
+          in: query
+          name: team
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - description: Filter by location.
+          in: query
+          name: location
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of users matching the filter criteria.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user-search-schema'
+    description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
+  /users/mention:
+    get:
+      tags:
+        - users
+      summary: Autocomplete usernames for @-mentioning.
+      description: Autocomplete usernames for @-mentioning. The text parameter matches against the start of the username. Full user objects are returned. The list may optionally be filtered by group to show only members of the group, to allow completing only users that can be mentioned when composing a group post. You can not filter by members of a private or secret group unless you are a member yourself. Webmasters can always be mentioned, so they are always matched even if they are not members of the group being filtered. Redacted users are never matched.
+      parameters:
+        - name: text
+          in: query
+          schema:
+            type: string
+          description: Text to match against the start of the username.
+          required: true
+        - name: group
+          in: query
+          schema:
+            type: string
+            format: uuid
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          description: UUID of the group to filter by.
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of matching users, or an empty array if none match.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user-search-schema'
+        '404':
+          description: A group UUID was supplied but no existing group matches.
+        '403':
+          description: A group UUID was supplied but the group is a private or secret group and the user making the request is not a member.
+        '400':
+          description: A malformed group UUID was supplied.
+  /users/me:
     get:
       tags:
         - users
       responses:
         '200':
           description: Returns a single complete user object.
-          schema:
-            $ref: '#/definitions/user-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-schema'
         '404':
           description: Current user was not found.
       description: Get the current user's information.
@@ -290,15 +455,18 @@ paths:
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: Returns a single complete user object.
-          schema:
-            $ref: '#/definitions/user-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -311,15 +479,11 @@ paths:
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          required: true
-          type: string
-        - in: body
-          name: body
           required: true
           schema:
-            $ref: '#/definitions/user-schema'
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The user's information was updated.
@@ -337,6 +501,49 @@ paths:
             than a duplicate username or email address) or JSON schema
             validation failure.
       description: Update the user's information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user-schema'
+        required: true
+  '/users/{user_id}/activity':
+    get:
+      tags:
+        - users
+      description: Return the user's activity feed.
+      parameters:
+        - in: path
+          name: user_id
+          description: The Invotra UUID of the user.
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: >
+            Activity feed returned successfully. An empty array is returned if
+            there are no results.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/feed-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
   '/users/{user_id}/job_roles':
     get:
       tags:
@@ -345,16 +552,29 @@ paths:
       parameters:
         - in: path
           name: user_id
-          type: string
           description: The Invotra UUID of the user.
           required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: >
             List of job roles associated with the user, or an empty array if the
             user has no job roles.
-          schema:
-            $ref: '#/definitions/uuid-list-schema'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    $ref: '#/components/schemas/uuid-list-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -368,17 +588,19 @@ paths:
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
         - description: The Invotra UUID of the job role.
           in: path
           name: job_role_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The job role has been removed from the user.
@@ -396,17 +618,19 @@ paths:
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
         - description: The Invotra UUID of the job role.
           in: path
           name: job_role_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The user already has this job role.
@@ -424,16 +648,29 @@ paths:
       parameters:
         - in: path
           name: user_id
-          type: string
           description: The Invotra UUID of the user.
           required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: >
             List of locations associated with the user, or an empty array if the
             user has no locations.
-          schema:
-            $ref: '#/definitions/uuid-list-schema'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    $ref: '#/components/schemas/location-uuid-list-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -447,17 +684,19 @@ paths:
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The location has been removed from the user.
@@ -475,17 +714,19 @@ paths:
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
-        - description: The Invotra UUID of the job role.
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - description: The Invotra UUID of the location.
           in: path
           name: location_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The user already has this location.
@@ -503,21 +744,855 @@ paths:
       parameters:
         - in: path
           name: user_id
-          type: string
           description: The Invotra UUID of the user.
           required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: >
             List of teams of which the user is a member, indicating the
             membership type (admin or member) for each team. If the user is not
             a member of any teams, an empty array is returned.
-          schema:
-            $ref: '#/definitions/user-team-membership-list-schema'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user-team-membership-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+  '/users/{user_id}/following':
+    get:
+      tags:
+        - users
+      description: List of who a user is following.
+      parameters:
+        - in: path
+          name: user_id
+          description: The Invotra UUID of the user.
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: |
+            List of who a user is following.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user-search-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+  '/users/{user_id}/groups':
+    get:
+      tags:
+        - users
+      description: List a user's groups.
+      parameters:
+        - in: path
+          name: user_id
+          description: The Invotra UUID of the user.
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: |
+            List of a user's groups.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/group-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+  '/users/{user_id}/follow':
+    delete:
+      tags:
+        - users
+      parameters:
+        - description: The Invotra UUID of the user to unfollow.
+          in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: Follower flag removed.
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: |
+            The user or follower flag does not exist.
+      description: Stop following a user.
+    get:
+      tags:
+        - users
+      parameters:
+        - description: The Invotra UUID of the user to check following status against.
+          in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: |
+            Follow status returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/common-status-schema'
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: The user does not exist.
+    put:
+      tags:
+        - users
+      parameters:
+        - description: The Invotra UUID of the user to follow.
+          in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: The user is now following the other user.
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: The user or follower does not exist.
+      description: Follow a user as another user.
+  /groups:
+    get:
+      tags:
+        - groups
+      parameters:
+        - description: Filter by external ID.
+          in: query
+          name: external_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of groups matching the filter criteria.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uuid-list-schema'
+      description: Search for groups. Returns list of uuids. Returns an empty array if no groups are found.
+  '/groups/{group_id}/posts':
+    get:
+      tags:
+        - groups
+      parameters:
+        - description: The Invotra UUID of the group.
+          in: path
+          name: group_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: |
+            List of group posts. If there are no posts, an empty array.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/post-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing group.
+      description: Get a list of group posts. This returns only the top-level posts in the group, not their replies.
+  /groups/search:
+    get:
+      tags:
+        - groups
+      parameters:
+        - description: Search term. Matches on whole words.
+          in: query
+          name: fulltext_search
+          schema:
+            type: string
+        - description: Filter by UUID of a category.
+          in: query
+          name: category
+          schema:
+            type: string
+        - description: Filter by groups the current user is a member of.
+          in: query
+          name: my_groups
+          schema:
+            type: boolean
+            default: false
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of groups matching the filter criteria.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/group-search-schema'
+    description: 'Search for groups. Returns group snippets. An empty array is returned if no groups are found.'
+  /groups/categories:
+    get:
+      tags:
+        - groups
+      parameters:
+        - description: Filter by label. Matches on whole words.
+          in: query
+          name: label
+          schema:
+            type: string
+        - description: Autocomplete term. Matches on group category name, per letter, from the start of the word.
+          in: query
+          name: autocomplete
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of group categories.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    $ref: '#/components/schemas/title-uuid-list-common-schema'
+    description: 'List all group categories. An empty array is returned if no categories are found'
+  '/groups/{group_id}':
+    get:
+      tags:
+        - groups
+      parameters:
+        - description: The Invotra UUID of the group.
+          in: path
+          name: group_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: Returns a single complete group object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing group.
+      description: Get information about the group.
+  '/groups/{group_id}/members':
+    get:
+      tags:
+        - groups
+      parameters:
+        - description: The Invotra UUID of the group.
+          in: path
+          name: group_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: |
+            List of group members. If there are no members, an empty array.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/group-membership-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing group.
+      description: Get a list of group members.
+  '/groups/{group_id}/my_membership':  
+    get:
+      tags:
+        - groups
+      parameters:
+        - description: The Invotra UUID of the group to check membership status against.
+          in: path
+          name: group_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: |
+            Membership status returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group-membership-status-schema'
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: The group does not exist.
+      description: Check if the current user is a member of a group.
+  '/groups/{group_id}/members/{user_id}':
+    delete:
+      tags:
+        - groups
+      parameters:
+        - description: The Invotra UUID of the group.
+          in: path
+          name: group_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: The user has been removed from the group.
+        '400':
+          description: The UUID was malformed.
+        '403':
+          description: The logged-in user is not authorized to remove the specified user from the group. (Since group admin functionality is not yet implemented, all users will currently receive this response if trying to remove users other than themselves from a group).
+        '404':
+          description: |
+            The user or group does not exist, or the user was not a member
+            of the group.
+      description: Remove the user's membership of the group. Note that at present the {user_id} must match that of the current logged-in user.
+    put:
+      tags:
+        - groups
+      parameters:
+        - description: The Invotra UUID of the group.
+          in: path
+          name: group_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - description: The Invotra UUID of the user.
+          in: path
+          name: user_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: The user's membership of this group was updated.
+        '201':
+          description: The user was added as a member of the group.
+        '400':
+          description: The UUID was malformed or the role type was invalid.
+        '403':
+          description: The logged-in user is not authorized to add the specified user to the group or modify their membership. (Since group admin functionality is not yet implemented, all users will currently receive this response if trying to add users other than themselves to a group or modify other users' group memberships).
+        '404':
+          description: The user or group does not exist.
+      description: >-
+        Add a user to a group or update information about a user's existing
+        group membership. Note that at present the {user_id} must match that of the current logged-in user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-membership-common-schema'
+  /posts:
+    get:
+      tags:
+        - posts
+      parameters:
+        - description: Filter by external ID.
+          in: query
+          name: external_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >
+            List of posts matching the filter criteria, or an empty array if
+            none were found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uuid-list-schema'
+      description: Search for posts.
+    post:
+      tags:
+        - posts
+      responses:
+        '201':
+          description: The post was created successfully.
+          headers:
+            Location:
+              description: |
+                The URL at which the newly provisioned post may be retrieved.
+              schema:
+                type: string
+        '400':
+          description: The post was not saved due to malformed JSON.
+        '422':
+          description: |
+            The post was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Create a post.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post-schema-create'
+        required: true
+  '/posts/{post_id}':
+    get:
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the post.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: Returns a single complete post object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/post-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing post.
+      description: Get information about the post.
+    put:
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the post.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: The post information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: The UUID does not correspond to an existing post.
+        '422':
+          description: |
+            The post was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update post information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post-schema-base'
+        required: true
+  '/posts/{post_id}/replies':
+    get:
+      summary: Get the replies to a post.
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the parent post. Currently this must be a top-level post in its group. This restriction may be relaxed in a future API version.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: |
+            List of post replies. If there are no replies, an empty array.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/post-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '403':
+          description: The user does not have access to the parent post, perhaps because the post is in a private or secret group of which the user is not a member.
+        '404':
+          description: The UUID does not correspond to an existing post, or the post is not a top-level post in its group.
+      description: "Get a list of post replies. The replies are returned in thread order, old-to-new. Replies to a post appear after the post but before the next post at the same level, and posts are ordered oldest-to-newest within each level."
+  '/posts/categories':
+    get:
+      tags:
+        - posts
+      responses:
+        '200':
+          description: >
+            List of posts categories.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/post-category-schema'
+      description: List post categories.
+  '/posts/{post_id}/likes':
+    get:
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the post.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: |
+            List of likes for a post.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing post.
+      description: Get a list of users who have liked a post.
+  '/posts/{post_id}/like':
+    delete:
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the post.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: The user unliked the post.
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: |
+            The user, post or like does not exist.
+      description: Remove the current user's like from a post.
+    get:
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the post to check like status against.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: |
+            Like status returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/common-status-schema'
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: The post does not exist. 
+      description: Check if the current user has liked a post.
+    put:
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the post.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: The user liked this post.
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: The user or post does not exist.
+      description: Like a post as the current user.
+  '/posts/{post_id}/report':
+    delete:
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the post.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: The user removed their report flag from the post.
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: |
+            The user, post or report flag does not exist.
+      description: Remove the current user's report flag from a post.
+    get:
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the post to check report status against.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: |
+            Report status returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/common-status-schema'
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: The post does not exist.
+      description: Check if the current user has reported a post.
+    put:
+      tags:
+        - posts
+      parameters:
+        - description: The Invotra UUID of the post.
+          in: path
+          name: post_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post-report-schema-create'
+        required: true
+      responses:
+        '200':
+          description: The user reported this post as inappropriate.
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: The user or post does not exist.
+      description: Report a post as the current user.
+  /files:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/file-schema-create'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/file-schema-create'
+        required: true
+      tags:
+        - files
+      responses:
+        '201':
+          description: The file was created successfully.
+          headers:
+            Location:
+              description: |
+                The URL at which the file entity may be retrieved.
+              schema:
+                type: string
+        '400':
+          description: The file was not saved due to malformed JSON.
+        '422':
+          description: |
+            The file was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new file.
+  '/files/{file_id}':
+    get:
+      tags:
+        - files
+      parameters:
+        - description: The Invotra UUID of the file.
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: Returns a single complete file object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing file.
+      description: Get information about the file.
   /job_roles:
     get:
       tags:
@@ -527,33 +1602,31 @@ paths:
           in: query
           name: external_id
           required: true
-          type: string
+          schema:
+            type: string
       responses:
         '200':
           description: >
             List of job roles matching the filter criteria, or an empty array if
             none were found.
-          schema:
-            $ref: '#/definitions/uuid-list-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uuid-list-schema'
       description: Search for job roles.
     post:
       tags:
         - job roles
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/job-role-schema-create'
       responses:
         '201':
           description: The job role was created successfully.
           headers:
             Location:
-              type: string
               description: >
                 The URL at which the newly provisioned job role may be
                 retrieved.
+              schema:
+                type: string
         '400':
           description: The job role was not saved due to malformed JSON.
         '422':
@@ -561,6 +1634,12 @@ paths:
             The job role was not saved due to Drupal validation failure or JSON
             schema validation failure.
       description: Provision a new job role.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/job-role-schema-create'
+        required: true
   '/job_roles/{job_role_id}':
     get:
       tags:
@@ -569,15 +1648,18 @@ paths:
         - description: The Invotra UUID of the job role.
           in: path
           name: job_role_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: Returns a single complete job role object.
-          schema:
-            $ref: '#/definitions/job-role-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/job-role-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -590,15 +1672,11 @@ paths:
         - description: The Invotra UUID of the job role.
           in: path
           name: job_role_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          required: true
-          type: string
-        - in: body
-          name: body
           required: true
           schema:
-            $ref: '#/definitions/job-role-schema'
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The job role information was updated successfully.
@@ -611,6 +1689,12 @@ paths:
             The job role was not updated due to a Drupal validation failure or a
             JSON schema validation failure.
       description: Update job role information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/job-role-schema'
+        required: true
   /locations:
     get:
       tags:
@@ -620,34 +1704,65 @@ paths:
           in: query
           name: external_id
           required: true
-          type: string
+          schema:
+            type: string
       responses:
         '200':
           description: >
             List of locations matching the filter criteria, or an empty array if
             none were found.
-          schema:
-            $ref: '#/definitions/location-uuid-list-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location-uuid-list-schema'
       description: Search for locations.
+  /locations/list:
+    get:
+      tags:
+        - locations
+      parameters:
+        - description: Filter by label. Matches on whole words.
+          in: query
+          name: label
+          schema:
+            type: string
+        - description: Autocomplete term. Matches on location name, per letter, from the start of the word.
+          in: query
+          name: autocomplete
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of locations matching the filter criteria.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    $ref: '#/components/schemas/location-uuid-label-context-list-schema'
+      description: 'Search for locations. An empty array is returned if no locations are found.'
   /locations/sites:
     post:
       tags:
         - locations
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/location-site-schema-create'
       responses:
         '201':
           description: The location was created successfully.
           headers:
             Location:
-              type: string
               description: >
                 The URL at which the newly provisioned location may be
                 retrieved.
+              schema:
+                type: string
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -655,6 +1770,12 @@ paths:
             The location was not saved due to Drupal validation failure or JSON
             schema validation failure.
       description: Provision a new location.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location-site-schema-create'
+        required: true
   '/locations/sites/{location_id}':
     get:
       tags:
@@ -663,15 +1784,18 @@ paths:
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: Returns a single complete location object.
-          schema:
-            $ref: '#/definitions/location-site-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location-site-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -686,15 +1810,11 @@ paths:
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          required: true
-          type: string
-        - in: body
-          name: body
           required: true
           schema:
-            $ref: '#/definitions/location-site-schema'
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The location information was updated successfully.
@@ -709,25 +1829,26 @@ paths:
             The location was not updated due to a Drupal validation failure or a
             JSON schema validation failure.
       description: Update location information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location-site-schema'
+        required: true
   /locations/buildings:
     post:
       tags:
         - locations
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/location-building-schema-create'
       responses:
         '201':
           description: The location was created successfully.
           headers:
             Location:
-              type: string
               description: >
                 The URL at which the newly provisioned location may be
                 retrieved.
+              schema:
+                type: string
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -735,6 +1856,12 @@ paths:
             The location was not saved due to Drupal validation failure or JSON
             schema validation failure.
       description: Provision a new location.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location-building-schema-create'
+        required: true
   '/locations/buildings/{location_id}':
     get:
       tags:
@@ -743,15 +1870,18 @@ paths:
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: Returns a single complete location object.
-          schema:
-            $ref: '#/definitions/location-building-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location-building-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -766,15 +1896,11 @@ paths:
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          required: true
-          type: string
-        - in: body
-          name: body
           required: true
           schema:
-            $ref: '#/definitions/location-building-schema'
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The location information was updated successfully.
@@ -789,25 +1915,26 @@ paths:
             The location was not updated due to a Drupal validation failure or a
             JSON schema validation failure.
       description: Update location information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location-building-schema'
+        required: true
   /locations/floors:
     post:
       tags:
         - locations
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/location-floor-schema-create'
       responses:
         '201':
           description: The location was created successfully.
           headers:
             Location:
-              type: string
               description: >
                 The URL at which the newly provisioned location may be
                 retrieved.
+              schema:
+                type: string
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -815,6 +1942,12 @@ paths:
             The location was not saved due to Drupal validation failure or JSON
             schema validation failure.
       description: Provision a new location.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location-floor-schema-create'
+        required: true
   '/locations/floors/{location_id}':
     get:
       tags:
@@ -823,15 +1956,18 @@ paths:
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: Returns a single complete location object.
-          schema:
-            $ref: '#/definitions/location-floor-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location-floor-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -846,15 +1982,11 @@ paths:
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          required: true
-          type: string
-        - in: body
-          name: body
           required: true
           schema:
-            $ref: '#/definitions/location-floor-schema'
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The location information was updated successfully.
@@ -869,25 +2001,26 @@ paths:
             The location was not updated due to a Drupal validation failure or a
             JSON schema validation failure.
       description: Update location information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location-floor-schema'
+        required: true
   /locations/spaces:
     post:
       tags:
         - locations
-      parameters:
-        - in: body
-          name: body
-          required: true
-          schema:
-            $ref: '#/definitions/location-space-schema-create'
       responses:
         '201':
           description: The location was created successfully.
           headers:
             Location:
-              type: string
               description: >
                 The URL at which the newly provisioned location may be
                 retrieved.
+              schema:
+                type: string
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -895,6 +2028,12 @@ paths:
             The location was not saved due to Drupal validation failure or JSON
             schema validation failure.
       description: Provision a new location.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location-space-schema-create'
+        required: true
   '/locations/spaces/{location_id}':
     get:
       tags:
@@ -903,15 +2042,18 @@ paths:
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           required: true
-          type: string
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: Returns a single complete location object.
-          schema:
-            $ref: '#/definitions/location-space-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location-space-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -926,15 +2068,11 @@ paths:
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-          required: true
-          type: string
-        - in: body
-          name: body
           required: true
           schema:
-            $ref: '#/definitions/location-space-schema'
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
           description: The location information was updated successfully.
@@ -949,18 +2087,102 @@ paths:
             The location was not updated due to a Drupal validation failure or a
             JSON schema validation failure.
       description: Update location information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location-space-schema'
+        required: true
   /notifications:
     get:
       tags:
         - notifications
+      parameters:
+        - description: Filter the notifications for the mobile app. If true, this will return notifications with entity type user, and entity type node and bundle type post only.
+          in: query
+          name: app_notifications_only
+          schema:
+            type: boolean
+            default: false
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: List of a users notifications.
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/notification-item-schema'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/notification-item-schema'
       description: Retrieve notifications for a user.
+  '/notifications/{notification_id}':
+    put:
+      tags:
+        - notifications
+      parameters:
+        - description: The Invotra UUID of the notification.
+          in: path
+          name: notification_id
+          required: true
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+      responses:
+        '200':
+          description: The user marked the notification as read.
+        '400':
+          description: The UUID was malformed.
+        '404':
+          description: |
+            The notification does not exist.
+      description: Mark a notification as read.
+  /notifications/register/{service_id}/{token}:
+    parameters:
+      - description: Identifying name of the notification service to be used.
+        in: path
+        name: service_id
+        required: true
+        schema:
+          type: string
+          enum:
+            - apns
+            - fcm
+      - description: A token identifying the user to the notification service.
+        in: path
+        name: token
+        required: true
+        schema:
+          type: string
+    put:
+      tags:
+        - notifications
+      summary: Register a token to identify the user with a push notification service.
+      responses:
+        '200':
+          description: The token was already registered.
+        '201':
+          description: The token was registered successfully.
+        '404':
+          description: Unknown service.
+    delete:
+      tags:
+        - notifications
+      summary: Deregister a token identifying the user with a push notification service.
+      responses:
+        '200':
+          description: The token was deregistered.
+        '404':
+          description: The token was not registered or the service was unknown.
   /feeds/status:
     get:
       tags:
@@ -968,9 +2190,22 @@ paths:
       responses:
         '200':
           description: Feed item status for user retrieved successfully.
-          schema:
-            $ref: '#/definitions/feed-status-schema'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/feed-status-schema'
       description: Check if any new feed items are available for a user.
+    put:
+      tags:
+        - feeds
+      responses:
+        '200':
+          description: Feed item status for user updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/feed-status-schema'
+      description: Set the feed as read for a user. You should only set this to 0.
   /feeds:
     get:
       tags:
@@ -978,485 +2213,970 @@ paths:
       parameters:
         - in: query
           name: page
-          type: integer
           required: true
           description: Page to pull results from.
+          schema:
+            type: integer
       responses:
         '200':
           description: Returns the feed for a user.
-          schema:
-            $ref: '#/definitions/feed-list-schema'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/feed-schema'
       description: Returns the feed for a user.
-definitions:
-  session-schema:
-    required:
-      - username
-      - password
-    properties:
-      username:
-        description: This username that the user logs in with
-        type: string
-      password:
-        description: This password that the user logs in with
-        type: string
-  feed-list-schema:
-    type: array
-    items:
-      $ref: '#/definitions/feed-schema'
-  feed-schema:
-    required:
-      - user_uuid
-      - user_image
-      - username
-      - entity_uuid
-      - entity_title
-      - entity_body
-      - timestamp
-      - link
-      - short_text
-      - topic
-      - category
-      - category_colour
-      - likes
-    properties:
-      user_uuid:
-        description: This is the uuid of the user who triggered the feed message
-        type: string
-        example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
-      user_image:
-        description: This is image of the user who triggered the feed message
-        type: string
-        example: >-
-          https://demo.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
-      username:
-        description: The username of the user who triggered the feed message
-        type: string
-        example: Dorothy.Whitehead@akagera.com
-      full_name:
-        description: The name of the user who triggered the feed message
-        type: string
-        example: Dorothy Whitehead
-      entity_uuid:
-        description: The UUID of the entity that the feed message is about
-        type: string
-        example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
-      entity_title:
-        description: The title of the entity that the feed message is about
-        type: string
-        example: A post about annual leave
-      entity_body:
-        description: The main body text of the entity
-        type: string
-        example: I'm taking annual leave next Thursday. Cover to be announced shortly
-      timestamp:
-        description: This is timestamp of when the feed message was created
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    APISessionHeader:
+      type: apiKey
+      name: 'SESSS{name}'
+      in: header
+  parameters:
+    offsetParam:
+      in: query
+      name: offset
+      required: false
+      schema:
         type: integer
-        example: 1510941596
-      link:
-        description: This is link to the entity that the feed message is about
-        type: string
-        example: >-
-          https://demo.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
-      short_text:
-        description: >-
-          Contextual text for the feed message, which displays in between the
-          user's name and the entity title
-        type: string
-        example: created the following within
-      topic:
-        description: 'This is topic of the feed, used for filtering'
-        type: string
-        enum:
-          - people
-          - groups
-          - content
-      category:
-        description: The category of the feed message
-        type: string
-        enum:
-          - Problem/Risk
-          - etc
-      category_colour:
-        description: Hexidecimal colour for the category
-        type: string
-        example: FFF
-      likes:
-        description: Count of the likes for this feed message
+        minimum: 0
+        default: 0
+      description: The number of items to skip before starting to collect the result set.
+    limitParam:
+      in: query
+      name: limit
+      required: false
+      schema:
         type: integer
-        example: 5
-    type: object
-  feed-status-schema:
-    required:
-      - feed
-    properties:
-      feed:
-        description: This is the feed flag
-        type: integer
-        enum:
-          - 0
-          - 1
-  notification-item-schema:
-    required:
-      - uuid
-      - user_uuid
-    properties:
-      uuid:
-        description: This is the uuid of the notification
-        type: string
-        example: adad1ffa-fcf8-4b4c-a7a4-189d62228497
-      user_uuid:
-        description: This is the uuid of the user that the notification is for
-        type: string
-        example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
-      timestamp:
-        description: This is timestamp of when the notificaiton was created
-        type: integer
-        example: 1510941596
-      image:
-        description: This is image of the user who created the notification
-        type: string
-        example: 'https://demo.invotra.com/files/styles/large_avatar/public/user.png'
-      link:
-        description: This is link to the notification
-        type: string
-        example: 'https://demo.invotra.com/post/ill-be-annual-leave'
-      message:
-        description: This is text description of the  notification
-        type: string
-        example: Bob Matthews mentioned you in a post.
-      type:
-        description: This is type of the notification
-        type: string
-        enum:
-          - invotra.user.mention
-          - invotra.user.follow
-          - invotra.comment.reply
-          - invotra.post.like
-          - invotra.post.comment
-          - invotra.comment.like
-    type: object
-  team-schema:
-    properties:
-      title:
-        description: This is the name of the team
-        type: string
-        example: Operations
-      description:
-        description: 'This is a description of the team, optional.'
-        type: string
-        example: The operations team
-      external_id:
-        description: This is used to store the team's external reference id
-        type: string
-        example: ABC123
-      parent_uuid:
-        description: 'This is the Invotra UUID of the parent team, optional.'
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-        type: string
-        example: 01234567-89ab-cdef-1234-56789abcdef0
-    type: object
-  team-schema-create:
-    allOf:
-      - $ref: '#/definitions/team-schema'
-    required:
-      - title
-    type: object
-  user-schema:
-    properties:
-      username:
-        description: The user's username
-        type: string
-        example: drobinson
-      email:
-        description: Users email address
-        format: email
-        type: string
-        example: drobinson@example.com
-      external_id:
-        description: The user's external reference ID
-        type: string
-        example: ABC123
-      roles:
-        items:
-          default: Organisational user
-          description: This is the default Invotra user role
+        minimum: 1
+        maximum: 25
+        default: 25
+      description: The numbers of items to return.
+  schemas:
+    branding-schema:
+      properties:
+        logo:
+          description: The logo for the site.
+          type: string
+          example: 'https://dev.invotra.com/sites/default/files/logo.png'
+        mobile_logo:
+          description: The mobile logo for the site.
+          type: string
+          example: 'https://dev.invotra.com/sites/default/files/mobile_logo.png'
+        navigation_first_level_nav_link:
+          description: This is the colour for the main navigation text. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        navigation_menu_background_colour:
+          description: This is the colour for the main navigation background. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        toolbar_background_colour:
+          description: This is the colour for the toolbar background. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        toolbar_text_colour:
+          description: This is the colour for the toolbar text. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        mobile_icons_colour:
+          description: This is the colour for the mobile icons on the toolbar. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        standard_button_normal_state_colour:
+          description: This is the standard button colour. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        standard_button_normal_state_border_colour:
+          description: This is the standard button border colour. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        primary_button_normal_state_colour:
+          description: This is the primary button colour. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        primary_button_normal_state_border_colour:
+          description: This is the primary button border colour. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        link_colour:
+          description: This is the colour for hyperlinks. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        vertical_tabs_colour:
+          description: This is the colour for vertical tabs. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+      type: object
+    product-options-schema:
+      type: object
+      additionalProperties:
+        type: boolean
+      example:
+        invotra_notes: true
+        invotra_notifications_page: false
+    session-schema:
+      required:
+        - username
+        - password
+      properties:
+        username:
+          description: This username that the user logs in with
+          type: string
+        password:
+          description: This password that the user logs in with
+          type: string
+    feed-schema:
+      required:
+        - user_uuid
+        - user_image
+        - username
+        - entity_uuid
+        - entity_title
+        - entity_body
+        - timestamp
+        - link
+        - short_text
+        - topic
+        - category
+        - category_colour
+        - likes
+        - comment_count
+      properties:
+        user_uuid:
+          description: This is the uuid of the user who triggered the feed message
+          type: string
+          example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
+        user_image:
+          description: This is image of the user who triggered the feed message
+          type: string
+          example: >-
+            https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
+        username:
+          description: The username of the user who triggered the feed message
+          type: string
+          example: Dorothy.Whitehead@akagera.com
+        full_name:
+          description: The name of the user who triggered the feed message
+          type: string
+          example: Dorothy Whitehead
+        entity_uuid:
+          description: The UUID of the entity that the feed message is about
+          type: string
+          example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
+        entity_title:
+          description: The title of the entity that the feed message is about
+          type: string
+          example: A post about annual leave
+        entity_body:
+          description: The main body text of the entity
+          type: string
+          example: I'm taking annual leave next Thursday. Cover to be announced shortly
+        timestamp:
+          description: This is the timestamp (in seconds) of when the feed message was created
+          type: integer
+          example: 1510941596
+        link:
+          description: This is link to the entity that the feed message is about
+          type: string
+          example: >-
+            https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
+        short_text:
+          description: >-
+            Contextual text for the feed message, with placeholders @user for the user's name and optionally @group for the group name.
+          type: string
+          example: "@user created the following within @group"
+        topic:
+          description: 'This is topic of the feed, used for filtering'
+          type: string
           enum:
+            - people
+            - groups
+            - content
+        category:
+          description: The category of a post
+          type: string
+          enum:
+            - Comment
+            - Idea
+            - News / Event
+            - Note
+            - Question
+            - To Do
+            - Problem / Risk
+            - Agreed
+            - Decision
+            - Done
+        category_colour:
+          description: Colour for the category. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+        likes:
+          description: Count of the likes for this feed message
+          type: integer
+          example: 5
+        comment_count:
+          description: Count of the comments for this feed message
+          type: integer
+          example: 5
+      type: object
+    feed-status-schema:
+      required:
+        - feed
+      properties:
+        feed:
+          description: This is the feed flag
+          type: integer
+          enum:
+            - 0
+            - 1
+    notification-item-schema:
+      required:
+        - uuid
+        - user_uuid
+      properties:
+        uuid:
+          description: This is the uuid of the notification
+          type: string
+          example: adad1ffa-fcf8-4b4c-a7a4-189d62228497
+        user_uuid:
+          description: This is the uuid of the user that the notification is for
+          type: string
+          example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
+        timestamp:
+          description: This is the timestamp (in seconds) of when the notification was created
+          type: integer
+          example: 1510941596
+        image:
+          description: This is image of the user who created the notification
+          type: string
+          example: 'https://dev.invotra.com/files/styles/large_avatar/public/user.png'
+        link:
+          description: This is link to the notification
+          type: string
+          example: 'https://dev.invotra.com/post/ill-be-annual-leave'
+        message:
+          description: This is text description of the notification
+          type: string
+          example: Bob Matthews mentioned you in a post.
+        type:
+          description: This is type of the notification
+          type: string
+          enum:
+            - invotra.user.mention
+            - invotra.user.follow
+            - invotra.comment.reply
+            - invotra.post.like
+            - invotra.post.comment
+            - invotra.comment.like
+        status:
+          description: Whether the notification has been read or not
+          type: boolean
+          example: true
+      type: object
+    team-schema:
+      properties:
+        title:
+          description: This is the name of the team
+          type: string
+          example: Operations
+        description:
+          description: 'This is a description of the team, optional.'
+          type: string
+          example: The operations team
+        external_id:
+          description: This is used to store the team's external reference id
+          type: string
+          example: ABC123
+        parent_uuid:
+          description: 'This is the Invotra UUID of the parent team, optional.'
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          type: string
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+      type: object
+    team-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/team-schema'
+      required:
+        - title
+      type: object
+    user-schema:
+      properties:
+        username:
+          description: The user's username
+          type: string
+          example: drobinson
+        email:
+          description: Users email address
+          format: email
+          type: string
+          example: drobinson@example.com
+        external_id:
+          description: The user's external reference ID
+          type: string
+          example: ABC123
+        roles:
+          items:
+            default: Organisational user
+            description: This is the default Invotra user role
+            enum:
+              - Organisational user
+              - Webmaster
+            type: string
+          type: array
+          example:
             - Organisational user
             - Webmaster
+          uniqueItems: true
+        status:
+          default: Active
+          description: Flag to indicate whether account is active or blocked
+          enum:
+            - Active
+            - Blocked
           type: string
-        type: array
-        example:
-          - Organisational user
-          - Webmaster
-        uniqueItems: true
-      status:
-        default: Active
-        description: Flag to indicate whether account is active or blocked
-        enum:
-          - Active
-          - Blocked
-        type: string
-      phone:
-        description: The user's telephone number.
-        type: string
-        example: +1-23-456-789
-      manager_uuid:
-        description: This is the Invotra UUID of the user's manager.
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-        type: string
-        example: 01234567-89ab-cdef-1234-56789abcdef0
-      firstname:
-        description: The user's first name
-        type: string
-        example: Damian
-      surname:
-        description: The user's surname
-        type: string
-        example: Robinson
-      title:
-        default: ''
-        description: The user's title
-        enum:
-          - ''
-          - Dr
-          - Mr
-          - Miss
-          - Mrs
-          - Ms
-        type: string
-        example: Mr
-    type: object
-  user-schema-create:
-    allOf:
-      - $ref: '#/definitions/user-schema'
-    required:
-      - email
-      - username
-    type: object
-  job-role-schema:
-    properties:
-      title:
-        description: This is the name of the job role
-        type: string
-        example: Director
-      description:
-        description: 'This is a description of the job role, optional.'
-        type: string
-        example: This is a very important job
-      external_id:
-        description: This is used to store the job role's external reference id
-        type: string
-        example: ABC123
-      parent_uuid:
-        description: 'This is the Invotra UUID of the parent job role, optional.'
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-        example: 01234567-89ab-cdef-1234-56789abcdef0
-        type: string
-    type: object
-  job-role-schema-create:
-    allOf:
-      - $ref: '#/definitions/job-role-schema'
-    required:
-      - title
-  location-common-schema:
-    type: object
-    properties:
-      title:
-        description: This is the name of the location.
-        type: string
-        example: Dublin
-      description:
-        description: This is a description of the location.
-        type: string
-        example: A beautiful city in Ireland
-      external_id:
-        description: This is used to store the location's external reference id.
-        type: string
-        example: ABC123
-  location-site-schema:
-    allOf:
-      - $ref: '#/definitions/location-common-schema'
-      - type: object
-        properties:
-          address1:
-            description: The first line of the location's postal address.
-            type: string
-            example: 1 Main Street
-          address2:
-            description: The second line of the location's postal address.
-            type: string
-            example: Littleton Village
-          address3:
-            description: The third line of the location's postal address.
-            type: string
-            example: Northern District
-          town:
-            description: The town where the location is.
-            type: string
-            example: Metropolis
-          postcode:
-            description: 'The location''s postal code or zip code, if any.'
-            type: string
-            example: ABC 123
-          team:
-            description: A team associated with the location.
-            type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          phone:
-            description: The location's telephone number.
-            type: string
-            example: +1-23-456-789
-          email:
-            description: The location's email address.
-            type: string
-            format: email
-  location-site-schema-create:
-    allOf:
-      - $ref: '#/definitions/location-site-schema'
-    required:
-      - title
-  location-building-schema:
-    allOf:
-      - $ref: '#/definitions/location-site-schema'
-      - type: object
-        properties:
-          parent_uuid:
-            description: >
-              The Invotra UUID of the parent location. This location must be a
-              site.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-            type: string
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-  location-building-schema-create:
-    allOf:
-      - $ref: '#/definitions/location-building-schema'
-    required:
-      - title
-  location-floor-schema:
-    allOf:
-      - $ref: '#/definitions/location-common-schema'
-      - type: object
-        properties:
-          parent_uuid:
-            description: >
-              The Invotra UUID of the parent location. This location must be a
-              building.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-            type: string
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-  location-floor-schema-create:
-    allOf:
-      - $ref: '#/definitions/location-floor-schema'
-    required:
-      - title
-  location-space-schema:
-    allOf:
-      - $ref: '#/definitions/location-common-schema'
-      - type: object
-        properties:
-          parent_uuid:
-            description: >
-              The Invotra UUID of the parent location. This location must be a
-              floor.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-            type: string
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-  location-space-schema-create:
-    allOf:
-      - $ref: '#/definitions/location-space-schema'
-    required:
-      - title
-  uuid-list-schema:
-    items:
-      description: An array of UUIDs.
-      pattern: >-
-        ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-      type: string
-      example: 01234567-89ab-cdef-1234-56789abcdef0
-    type: array
-  location-uuid-schema:
-    type: object
-    properties:
-      uuid:
-        description: The UUID of the location.
-        type: string
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-        example: 01234567-89ab-cdef-1234-56789abcdef0
-      type:
-        description: The location type.
-        type: string
-        enum:
-          - site
-          - building
-          - floor
-          - space
-    required:
-      - uuid
-      - type
-  location-uuid-list-schema:
-    type: array
-    items:
-      $ref: '#/definitions/location-uuid-schema'
-  team-membership-common-schema:
-    type: object
-    properties:
-      type:
-        description: The membership type.
-        type: string
-        enum:
-          - admin
-          - member
-    required:
-      - type
-  user-team-membership-schema:
-    allOf:
-      - $ref: '#/definitions/team-membership-common-schema'
+        phone:
+          description: The user's telephone number.
+          type: string
+          example: +1-23-456-789
+        mobile:
+          description: The user's mobile number.
+          type: string
+          example: +1-23-456-789
+        manager_uuid:
+          description: This is the Invotra UUID of the user's manager.
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          type: string
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        firstname:
+          description: The user's first name
+          type: string
+          example: Damian
+        surname:
+          description: The user's surname
+          type: string
+          example: Robinson
+        title:
+          default: ''
+          description: The user's title
+          enum:
+            - ''
+            - Dr
+            - Mr
+            - Miss
+            - Mrs
+            - Ms
+          type: string
+          example: Mr
+        team:
+          description: This is the Invotra UUID of the user's team.
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          type: string
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        location:
+          description: This is the Invotra UUID of the user's location.
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          type: string
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        job_role:
+          description: This is the Invotra UUID of the user's job role.
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          type: string
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+      type: object
+    user-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/user-schema'
+      required:
+        - email
+        - username
+      type: object
+    user-search-schema:
+      allOf:
+        - $ref: '#/components/schemas/user-schema'
+        - type: object
+          properties:
+            user_uuid:
+              description: This is the uuid of the user
+              type: string
+              example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
+    common-status-schema:
+      properties:
+        status:
+          description: A boolean flag
+          type: boolean
+          example: true
+    group-membership-status-schema:
+      type: object
+      properties:
+        status:
+          description: |
+            'active', if the user is a member, 'inactive' if not, or 'pending' if they have requested but not yet been granted membership.
+          type: string
+          enum:
+            - active
+            - inactive
+            - pending
+    group-schema:
+      properties:
+        title:
+          description: This is the name of the group
+          type: string
+          example: Security awareness
+        description:
+          description: This is a description of the group.
+          type: string
+          example: A group to discuss security awareness.
+        group_category:
+          description: The category for the group.
+          type: string
+          example: Security
+        group_category_uuid:
+          description: The uuid of the category
+          type: string
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        privacy_setting:
+          description: This is the privacy setting for the group.
+          type: string
+          enum:
+            - public
+            - private
+            - secret
+        members_count:
+          description: A count of members in group
+          type: integer
+          example: 150
+        author_uuid:
+          description: The uuid of the author
+          type: string
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+      type: object
+    group-search-schema:
+      allOf:
+        - $ref: '#/components/schemas/group-schema'
+        - type: object
+          properties:
+            group_uuid:
+              description: The UUID of the group.
+              type: string
+              pattern: >-
+                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+    group-membership-schema:
+      allOf:
+        - $ref: '#/components/schemas/group-membership-common-schema'
+        - type: object
+          properties:
+            uuid:
+              description: The UUID of the user.
+              type: string
+              pattern: >-
+                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+          required:
+            - uuid
+    group-membership-common-schema:
+      type: object
+      properties:
+        type:
+          description: The membership type.
+          type: string
+          enum:
+            - admin
+            - member
+      required:
+        - type
+    post-schema:
+      allOf:
+      - $ref: '#/components/schemas/post-schema-base'
       - type: object
         properties:
           uuid:
-            description: The UUID of the team.
+            type: string
+            description: This is the Invotra UUID of the post.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+          parent_uuid:
+            type: string
+            description: This is the Invotra UUID of the parent of the post.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+          group_uuid:
+            description: This is the Invotra UUID of the group that the post belongs to.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+            type: string
+          description:
+            description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
+            type: string
+            example: 'Hey <a href="/users/username" data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John Smith</a>, check out the latest <a href="/apps/groups/chat?hashtag=security">#security</a> news in this group!'
+          pin:
+            description: Whether or not this post is pinned.
+            type: boolean
+          author_uuid:
+            description: The uuid of the author
             type: string
             pattern: >-
               ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
-        required:
-          - uuid
-  user-team-membership-list-schema:
-    type: array
-    items:
-      $ref: '#/definitions/user-team-membership-schema'
-  team-team-membership-schema:
-    allOf:
-      - $ref: '#/definitions/team-membership-common-schema'
+          likes_count:
+            description: Count of likes on the post
+            type: integer
+            example: 5
+          comment_count:
+            description: Count of comments on the post
+            type: integer
+            example: 5
+          attachments_count:
+            description: Count of attachments on the post
+            type: integer
+            example: 5
+          timestamp:
+            description: This is the timestamp (in seconds) of when the post was created
+            type: integer
+            example: 1510941596
+          depth:
+            description: The depth of the post in the hierarchy of replies. Top-level posts are 0, their replies are 1, replies to replies are 2 etc.
+            type: integer
+            example: 1
+    post-schema-create:
+      allOf:
+      - $ref: '#/components/schemas/post-schema-base'
       - type: object
         properties:
-          uuid:
-            description: The UUID of the user.
+          parent_uuid:
+            type: string
+            description: This is the Invotra UUID of the parent of the post.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+          author_uuid:
+            description: The uuid of the author
             type: string
             pattern: >-
               ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
-        required:
-          - uuid
-  team-team-membership-list-schema:
-    type: array
-    items:
-      $ref: '#/definitions/team-team-membership-schema'
-securityDefinitions:
-  APIKeyHeader:
-    type: apiKey
-    in: header
-    name: X-API-Key
-  APISessionHeader:
-    type: apiKey
-    name: 'SESSS{name}'
-    in: header
+          group_uuid:
+            description: This is the Invotra UUID of the group that the post belongs to.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+            type: string
+      required:
+        - description
+        - group_uuid
+        - category
+        - author_uuid
+    post-schema-base:
+      properties:
+        source:
+          description: The unrendered main body for the post. This value should be used only for editing and is *NOT* safe to display as-is in any HTML context.
+          type: string
+          example: 'Hey [@username], check out the latest #security news in this group!'
+        external_id:
+          description: This is used to store the post's external reference id
+          type: string
+          example: ABC123
+        category:
+          description: The category of a post
+          type: string
+          enum:
+            - Comment
+            - Idea
+            - News / Event
+            - Note
+            - Question
+            - To Do
+            - Problem / Risk
+            - Agreed
+            - Decision
+            - Done
+        attachments:
+          allOf:
+            - $ref: '#/components/schemas/uuid-list-schema'
+      type: object
+    post-report-schema-create:
+      properties:
+        reason:
+          description: Reason for flagging post as inappropriate
+          type: string
+          example: I find this offensive
+    post-category-schema:
+      properties:
+        name: 
+          description: 'Category name'
+          type: string
+          example: Note
+        uuid:
+          description: 'This is the Invotra UUID of the category.'
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          type: string
+        category_colour:
+          description: Colour of the category. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+      type: object
+    file-schema:
+      type: object
+      properties:
+        filename:
+          description: This is the filename
+          type: string
+          example: wallpaper.jpeg
+        file_download:
+          description: The location of the file
+          type: string
+          example: 'https://dev.invotra.com/file/1234/download'
+        type:
+          description: The type of file
+          type: string
+          enum:
+            - image
+            - document
+            - audio
+            - video
+        filemime:
+          description: The MIME type for the file
+          type: string
+          example: image/jpeg
+    file-schema-create:
+      properties:
+        filename:
+          description: This is the filename. If using multipart/form-data this field may be omitted in favour of the 'filename' directive of the subpart Content-Disposition header.
+          type: string
+          example: wallpaper.jpeg
+        type:
+          description: The type of file.
+          type: string
+          enum:
+            - image
+            - document
+            - audio
+            - video
+        filemime:
+          description: The MIME type for the file. If using multipart/form-data this field may be omitted in favour of the subpart Content-Type header.
+          type: string
+          example: image/jpeg
+        file:
+          description: Base64 encoded version of the file.
+          type: string
+          format: base64
+      type: object
+    job-role-schema:
+      properties:
+        title:
+          description: This is the name of the job role
+          type: string
+          example: Director
+        description:
+          description: 'This is a description of the job role, optional.'
+          type: string
+          example: This is a very important job
+        external_id:
+          description: This is used to store the job role's external reference id
+          type: string
+          example: ABC123
+        parent_uuid:
+          description: 'This is the Invotra UUID of the parent job role, optional.'
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          type: string
+      type: object
+    job-role-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/job-role-schema'
+      required:
+        - title
+    location-common-schema:
+      type: object
+      properties:
+        title:
+          description: This is the name of the location.
+          type: string
+          example: Dublin
+        description:
+          description: This is a description of the location.
+          type: string
+          example: A beautiful city in Ireland
+        external_id:
+          description: This is used to store the location's external reference id.
+          type: string
+          example: ABC123
+    location-site-schema:
+      allOf:
+        - $ref: '#/components/schemas/location-common-schema'
+        - type: object
+          properties:
+            address1:
+              description: The first line of the location's postal address.
+              type: string
+              example: 1 Main Street
+            address2:
+              description: The second line of the location's postal address.
+              type: string
+              example: Littleton Village
+            address3:
+              description: The third line of the location's postal address.
+              type: string
+              example: Northern District
+            town:
+              description: The town where the location is.
+              type: string
+              example: Metropolis
+            postcode:
+              description: 'The location''s postal code or zip code, if any.'
+              type: string
+              example: ABC 123
+            team:
+              description: A team associated with the location.
+              type: string
+              pattern: >-
+                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            phone:
+              description: The location's telephone number.
+              type: string
+              example: +1-23-456-789
+            email:
+              description: The location's email address.
+              type: string
+              format: email
+    location-site-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/location-site-schema'
+      required:
+        - title
+    location-building-schema:
+      allOf:
+        - $ref: '#/components/schemas/location-site-schema'
+        - type: object
+          properties:
+            parent_uuid:
+              description: >
+                The Invotra UUID of the parent location. This location must be a
+                site.
+              pattern: >-
+                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              type: string
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+    location-building-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/location-building-schema'
+      required:
+        - title
+    location-floor-schema:
+      allOf:
+        - $ref: '#/components/schemas/location-common-schema'
+        - type: object
+          properties:
+            parent_uuid:
+              description: >
+                The Invotra UUID of the parent location. This location must be a
+                building.
+              pattern: >-
+                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              type: string
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+    location-floor-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/location-floor-schema'
+      required:
+        - title
+    location-space-schema:
+      allOf:
+        - $ref: '#/components/schemas/location-common-schema'
+        - type: object
+          properties:
+            parent_uuid:
+              description: >
+                The Invotra UUID of the parent location. This location must be a
+                floor.
+              pattern: >-
+                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              type: string
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+    location-space-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/location-space-schema'
+      required:
+        - title
+    uuid-list-schema:
+      items:
+        description: An array of UUIDs.
+        pattern: >-
+          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        type: string
+        example: 01234567-89ab-cdef-12F34-56789abcdef0
+      type: array
+    uuid-label-context-list-schema:
+      items:
+        type: object
+        properties:
+          uuid:
+            description: The entity UUID.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            type: string
+            example: 01234567-89ab-cdef-12F34-56789abcdef0
+          label:
+            description: The entity label.
+            type: string
+            example: Security
+          context:
+            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
+            type: array
+            items:
+              type: object
+              properties:
+                label:
+                  description: The entity label.
+                  type: string
+                uuid:
+                  description: The entity UUID.
+                  pattern: >-
+                    ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+                  type: string
+                  example: 01234567-89ab-cdef-12F34-56789abcdef0
+      type: array
+    location-uuid-label-context-list-schema:
+      items:
+        type: object
+        properties:
+          uuid:
+            description: The entity UUID.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            type: string
+            example: 01234567-89ab-cdef-12F34-56789abcdef0
+          label:
+            description: The entity label.
+            type: string
+            example: Security
+          type:
+            description: The location type.
+            type: string
+            enum:
+              - site
+              - building
+              - floor
+              - space
+          context:
+            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
+            type: array
+            items:
+              type: object
+              properties:
+                label:
+                  description: The entity label.
+                  type: string
+                uuid:
+                  description: The entity UUID.
+                  pattern: >-
+                    ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+                  type: string
+                  example: 01234567-89ab-cdef-12F34-56789abcdef0
+      type: array
+    location-uuid-schema:
+      type: object
+      properties:
+        uuid:
+          description: The UUID of the location.
+          type: string
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        type:
+          description: The location type.
+          type: string
+          enum:
+            - site
+            - building
+            - floor
+            - space
+      required:
+        - uuid
+        - type
+    location-uuid-list-schema:
+      type: array
+      items:
+        $ref: '#/components/schemas/location-uuid-schema'
+    team-membership-common-schema:
+      type: object
+      properties:
+        type:
+          description: The membership type.
+          type: string
+          enum:
+            - admin
+            - member
+      required:
+        - type
+    user-team-membership-schema:
+      allOf:
+        - $ref: '#/components/schemas/team-membership-common-schema'
+        - type: object
+          properties:
+            uuid:
+              description: The UUID of the team.
+              type: string
+              pattern: >-
+                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+          required:
+            - uuid
+    team-team-membership-schema:
+      allOf:
+        - $ref: '#/components/schemas/team-membership-common-schema'
+        - type: object
+          properties:
+            uuid:
+              description: The UUID of the user.
+              type: string
+              pattern: >-
+                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+          required:
+            - uuid
+    title-uuid-list-common-schema:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            description: The title of the entity.
+            type: string
+            example: Security
+          uuid:
+            description: The UUID of the entity.
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            example: 01234567-89ab-cdef-1234-56789abcdef0
