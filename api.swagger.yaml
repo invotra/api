@@ -32,7 +32,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/product-options-schema'
       description: Returns the product options for an instance of Invotra.
-  /session/token:
+  /sessions/token:
     get:
       tags:
         - sessions
@@ -40,7 +40,7 @@ paths:
       responses:
         '200':
           description: Returns a CSRF token.
-  /session/login:
+  /sessions/login:
     post:
       tags:
         - sessions
@@ -56,7 +56,7 @@ paths:
             schema:
               $ref: '#/components/schemas/session-schema'
         required: true
-  /session/logout:
+  /sessions/logout:
     post:
       tags:
         - sessions
