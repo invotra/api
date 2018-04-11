@@ -2486,6 +2486,21 @@ components:
           description: Whether the notification has been read or not
           type: boolean
           example: true
+        target_uuid:
+          description: This is the uuid of the entity that the notification links to
+          type: string
+          example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
+        target_type:
+          description: This is the type of the entity that the notification links to
+          type: string
+          enum:
+           - node
+           - user
+           - comment
+        target_bundle:
+          description: This is the bundle (subtype) of the entity that the notification links to
+          type: string
+          example: 'group_status'
       type: object
     team-schema:
       properties:
