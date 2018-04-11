@@ -2358,8 +2358,10 @@ components:
       properties:
         user_uuid:
           description: This is the uuid of the user who triggered the feed message
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
-          example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         user_image:
           description: This is image of the user who triggered the feed message
           type: string
@@ -2375,8 +2377,10 @@ components:
           example: Dorothy Whitehead
         entity_uuid:
           description: The UUID of the entity that the feed message is about
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
-          example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         entity_title:
           description: The title of the entity that the feed message is about
           type: string
@@ -2450,12 +2454,16 @@ components:
       properties:
         uuid:
           description: This is the uuid of the notification
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
-          example: adad1ffa-fcf8-4b4c-a7a4-189d62228497
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         user_uuid:
           description: This is the uuid of the user that the notification is for
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
-          example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         timestamp:
           description: This is the timestamp (in seconds) of when the notification was created
           type: integer
@@ -2486,6 +2494,23 @@ components:
           description: Whether the notification has been read or not
           type: boolean
           example: true
+        target_uuid:
+          description: This is the uuid of the entity that the notification links to
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          type: string
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        target_type:
+          description: This is the type of the entity that the notification links to
+          type: string
+          enum:
+           - node
+           - user
+           - comment
+        target_bundle:
+          description: This is the bundle (subtype) of the entity that the notification links to
+          type: string
+          example: 'group_status'
       type: object
     team-schema:
       properties:
