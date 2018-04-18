@@ -1187,7 +1187,11 @@ paths:
               ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
       responses:
         '200':
-          description: The user's membership of this group was updated.
+          description: The user's membership of this group was updated. The new status of their membership is returned in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group-membership-status-schema'
         '201':
           description: The user was added as a member of the group.
         '400':
