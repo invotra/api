@@ -1192,8 +1192,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/group-membership-status-schema'
-        '201':
-          description: The user was added as a member of the group.
         '400':
           description: The UUID was malformed or the role type was invalid.
         '403':
