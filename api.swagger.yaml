@@ -376,6 +376,26 @@ paths:
             type: string
             pattern: >-
               ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - description: Field to sort by
+          in: query
+          name: sort
+          schema:
+            type: string
+            enum:
+              - firstname
+              - surname
+              - updated
+              - relevance
+            default: relevance
+        - description: Sort order
+          in: query
+          name: order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
