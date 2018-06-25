@@ -32,6 +32,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/product-options-schema'
       description: Returns the product options for an instance of Invotra.
+  /entities/path-lookup:
+    get:
+      tags:
+        - entities
+      summary: Look up information about an entity based on its URL path.
+      parameters:
+        - description: The (Drupal) URL path of the entity to look up. Include the leading slash.
+          in: query
+          name: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Entity found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/entity-lookup-schema'
+        '400':
+          description: Path not provided or malformed.
+        '403':
+          description: User is not authorized to perform the lookup (e.g. they are unauthenticated and anonymous content access is disabled), or does not have access to the entity that was found (e.g. it is a private group and the user is not a member).
+        '404':
+          description: No matching entity was found for the given path.
   /sessions/token:
     get:
       tags:
@@ -3233,3 +3258,24 @@ components:
             pattern: >-
               ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
+    entity-lookup-schema:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The entity type.
+          example: node
+        subtype:
+          type: string
+          description: The entity subtype (or "bundle" in Drupal parlance).
+          example: group
+        uuid:
+          description: The UUID of the entity.
+          type: string
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+      required:
+        - type
+        - subtype
+        - uuid
