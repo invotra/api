@@ -445,14 +445,14 @@ paths:
     get:
       tags:
         - users
-      summary: Autocomplete usernames for @-mentioning.
-      description: Autocomplete usernames for @-mentioning. The text parameter matches against the start of the username. Full user objects are returned. The list may optionally be filtered by group to show only members of the group, to allow completing only users that can be mentioned when composing a group post. You can not filter by members of a private or secret group unless you are a member yourself. Webmasters can always be mentioned, so they are always matched even if they are not members of the group being filtered. Redacted users are never matched.
+      summary: Autocomplete names and email addresses for @-mentioning.
+      description: Autocomplete names and email addresses for @-mentioning. The text parameter matches against the start of the user's full name (forename surname or surname forename) or email address. Full user objects are returned. The list may optionally be filtered by group to show only members of the group, to allow completing only users that can be mentioned when composing a group post. You can not filter by members of a private or secret group unless you are a member yourself. Webmasters can always be mentioned, so they are always matched even if they are not members of the group being filtered. Redacted users are never matched.
       parameters:
         - name: text
           in: query
           schema:
             type: string
-          description: Text to match against the start of the username.
+          description: Text to match against the start of the user's full name or email address.
           required: true
         - name: group
           in: query
