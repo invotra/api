@@ -401,6 +401,13 @@ paths:
             type: string
             pattern: >-
               ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        - description: Filter by group.
+          in: query
+          name: group
+          schema:
+            type: string
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
         - description: Field to sort by
           in: query
           name: sort
@@ -440,6 +447,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/user-search-schema'
+        '403':
+          description: Access denied. This may occur if you try to filter by a private or secret group that you are not a member of.
     description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
   /users/mention:
     get:
