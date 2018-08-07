@@ -38,7 +38,7 @@ paths:
         - configuration
       responses:
         '200':
-          description: Configuration returned.
+          description: Configuration returned. Any configuration that the user does not have access to view is omitted.
           content:
             application/json:
               schema:
