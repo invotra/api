@@ -32,6 +32,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/product-options-schema'
       description: Returns the product options for an instance of Invotra.
+  /configuration:
+    get:
+      tags:
+        - configuration
+      responses:
+        '200':
+          description: Configuration returned. Any configuration that the user does not have access to view is omitted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/configuration-schema'
   /entities/path-lookup:
     get:
       tags:
@@ -2384,6 +2395,28 @@ components:
       example:
         invotra_notes: true
         invotra_notifications_page: false
+    configuration-schema:
+      type: object
+      properties:
+        analytics:
+          type: object
+          properties:
+            matomo:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                url:
+                  type: string
+                site_id:
+                  type: object
+                  properties:
+                    desktop:
+                      type: integer
+                      example: 1
+                    mobile:
+                      type: integer
+                      example: 2
     session-schema:
       required:
         - username
