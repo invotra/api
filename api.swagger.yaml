@@ -1905,7 +1905,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-site-schema'
+              $ref: '#/components/schemas/location-site-schema-update'
         required: true
   /locations/buildings:
     post:
@@ -3102,13 +3102,23 @@ components:
           description: The location's email address.
           type: string
           format: email
-    location-site-schema:
+    location-site-common-schema:
       allOf:
         - $ref: '#/components/schemas/location-common-schema'
         - $ref: '#/components/schemas/location-info-schema'
+    location-site-schema:
+      allOf:
+        - $ref: '#/components/schemas/location-site-common-schema'
+        - $ref: '#/components/schemas/location-parent-schema'
+        - properties:
+            context:
+              $ref: '#/components/schemas/location-context-list-schema'
+    location-site-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-site-common-schema'
     location-site-schema-create:
       allOf:
-        - $ref: '#/components/schemas/location-site-schema'
+        - $ref: '#/components/schemas/location-site-schema-update'
       required:
         - title
     location-building-common-schema:
