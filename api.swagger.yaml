@@ -174,8 +174,9 @@ paths:
                     type: integer
                     example: 50
                   results:
-                    description: The results set.
-                    $ref: '#/components/schemas/uuid-label-context-list-schema'
+                    allOf:
+                      - description: The results set.
+                      - $ref: '#/components/schemas/uuid-label-context-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
   '/teams/{team_id}':
     get:
@@ -638,8 +639,9 @@ paths:
                     type: integer
                     example: 50
                   results:
-                    description: The results set.
-                    $ref: '#/components/schemas/uuid-list-schema'
+                    allOf:
+                      - description: The results set.
+                      - $ref: '#/components/schemas/uuid-list-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -734,8 +736,9 @@ paths:
                     type: integer
                     example: 50
                   results:
-                    description: The results set.
-                    $ref: '#/components/schemas/location-uuid-list-schema'
+                    allOf:
+                      - description: The results set.
+                      - $ref: '#/components/schemas/location-uuid-list-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -1105,8 +1108,9 @@ paths:
                     type: integer
                     example: 50
                   results:
-                    description: The results set.
-                    $ref: '#/components/schemas/title-uuid-list-common-schema'
+                    allOf:
+                      - description: The results set.
+                      - $ref: '#/components/schemas/title-uuid-list-common-schema'
     description: 'List all group categories. An empty array is returned if no categories are found'
   '/groups/{group_id}':
     get:
@@ -1813,8 +1817,9 @@ paths:
                     type: integer
                     example: 50
                   results:
-                    description: The results set.
-                    $ref: '#/components/schemas/location-uuid-label-context-list-schema'
+                    allOf:
+                      - description: The results set.
+                      - $ref: '#/components/schemas/location-uuid-label-context-list-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
   /locations/sites:
     post:
@@ -1986,7 +1991,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-building-schema'
+              $ref: '#/components/schemas/location-building-schema-update'
         required: true
   /locations/floors:
     post:
@@ -2072,7 +2077,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-floor-schema'
+              $ref: '#/components/schemas/location-floor-schema-update'
         required: true
   /locations/spaces:
     post:
@@ -2158,7 +2163,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-space-schema'
+              $ref: '#/components/schemas/location-space-schema-update'
         required: true
   /notifications:
     get:
@@ -3050,102 +3055,130 @@ components:
           description: This is used to store the location's external reference id.
           type: string
           example: ABC123
+    location-parent-schema:
+      type: object
+      properties:
+        parent_uuid:
+          description: >
+            The Invotra UUID of the parent location.
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          type: string
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+    location-info-schema:
+      type: object
+      properties:
+        address1:
+          description: The first line of the location's postal address.
+          type: string
+          example: 1 Main Street
+        address2:
+          description: The second line of the location's postal address.
+          type: string
+          example: Littleton Village
+        address3:
+          description: The third line of the location's postal address.
+          type: string
+          example: Northern District
+        town:
+          description: The town where the location is.
+          type: string
+          example: Metropolis
+        postcode:
+          description: 'The location''s postal code or zip code, if any.'
+          type: string
+          example: ABC 123
+        team:
+          description: A team associated with the location.
+          type: string
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        phone:
+          description: The location's telephone number.
+          type: string
+          example: +1-23-456-789
+        email:
+          description: The location's email address.
+          type: string
+          format: email
     location-site-schema:
       allOf:
         - $ref: '#/components/schemas/location-common-schema'
-        - type: object
-          properties:
-            address1:
-              description: The first line of the location's postal address.
-              type: string
-              example: 1 Main Street
-            address2:
-              description: The second line of the location's postal address.
-              type: string
-              example: Littleton Village
-            address3:
-              description: The third line of the location's postal address.
-              type: string
-              example: Northern District
-            town:
-              description: The town where the location is.
-              type: string
-              example: Metropolis
-            postcode:
-              description: 'The location''s postal code or zip code, if any.'
-              type: string
-              example: ABC 123
-            team:
-              description: A team associated with the location.
-              type: string
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-            phone:
-              description: The location's telephone number.
-              type: string
-              example: +1-23-456-789
-            email:
-              description: The location's email address.
-              type: string
-              format: email
+        - $ref: '#/components/schemas/location-info-schema'
     location-site-schema-create:
       allOf:
         - $ref: '#/components/schemas/location-site-schema'
       required:
         - title
+    location-building-common-schema:
+      allOf:
+        - $ref: '#/components/schemas/location-common-schema'
+        - $ref: '#/components/schemas/location-info-schema'
+        - $ref: '#/components/schemas/location-parent-schema'
     location-building-schema:
       allOf:
-        - $ref: '#/components/schemas/location-site-schema'
-        - type: object
-          properties:
+        - $ref: '#/components/schemas/location-building-common-schema'
+        - properties:
+            context:
+              $ref: '#/components/schemas/location-context-list-schema'
+    location-building-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-building-common-schema'
+        - properties:
             parent_uuid:
               description: >
                 The Invotra UUID of the parent location. This location must be a
                 site.
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-              type: string
-              example: 01234567-89ab-cdef-1234-56789abcdef0
     location-building-schema-create:
       allOf:
-        - $ref: '#/components/schemas/location-building-schema'
+        - $ref: '#/components/schemas/location-building-schema-update'
       required:
         - title
-    location-floor-schema:
+    location-floor-common-schema:
       allOf:
         - $ref: '#/components/schemas/location-common-schema'
-        - type: object
-          properties:
+        - $ref: '#/components/schemas/location-parent-schema'
+    location-floor-schema:
+      allOf:
+        - $ref: '#/components/schemas/location-floor-common-schema'
+        - properties:
+            context:
+              $ref: '#/components/schemas/location-context-list-schema'
+    location-floor-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-floor-common-schema'
+        - properties:
             parent_uuid:
               description: >
                 The Invotra UUID of the parent location. This location must be a
                 building.
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-              type: string
-              example: 01234567-89ab-cdef-1234-56789abcdef0
     location-floor-schema-create:
       allOf:
-        - $ref: '#/components/schemas/location-floor-schema'
+        - $ref: '#/components/schemas/location-floor-schema-update'
       required:
         - title
-    location-space-schema:
+    location-space-common-schema:
       allOf:
         - $ref: '#/components/schemas/location-common-schema'
-        - type: object
-          properties:
+        - $ref: '#/components/schemas/location-parent-schema'
+    location-space-schema:
+      allOf:
+        - $ref: '#/components/schemas/location-space-common-schema'
+        - properties:
+            context:
+              $ref: '#/components/schemas/location-context-list-schema'
+    location-space-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-space-common-schema'
+        - properties:
             parent_uuid:
               description: >
                 The Invotra UUID of the parent location. This location must be a
                 floor.
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-              type: string
-              example: 01234567-89ab-cdef-1234-56789abcdef0
     location-space-schema-create:
       allOf:
-        - $ref: '#/components/schemas/location-space-schema'
+        - $ref: '#/components/schemas/location-space-schema-update'
       required:
         - title
     uuid-schema:
@@ -3219,21 +3252,31 @@ components:
               - floor
               - space
           context:
-            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
-            type: array
-            items:
-              type: object
-              properties:
-                label:
-                  description: The entity label.
-                  type: string
-                uuid:
-                  description: The entity UUID.
-                  pattern: >-
-                    ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-                  type: string
-                  example: 01234567-89ab-cdef-12F34-56789abcdef0
+            $ref: '#/components/schemas/location-context-list-schema'
       type: array
+    location-context-list-schema:
+      description: Parent items of the location entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
+      type: array
+      items:
+        type: object
+        properties:
+          label:
+            description: The entity label.
+            type: string
+          uuid:
+            description: The entity UUID.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            type: string
+            example: 01234567-89ab-cdef-12F34-56789abcdef0
+          type:
+            description: The location type.
+            type: string
+            enum:
+              - site
+              - building
+              - floor
+              - space
     location-uuid-schema:
       type: object
       properties:
