@@ -2444,6 +2444,7 @@ components:
         - category_colour
         - likes
         - comment_count
+        - current_user_liked
       properties:
         user_uuid:
           description: This is the uuid of the user who triggered the feed message
@@ -2525,6 +2526,10 @@ components:
           description: Count of the comments for this feed message
           type: integer
           example: 5
+        current_user_liked:
+          description: A flag to determine if the current user has liked this post
+          type: boolean
+          example: true
       type: object
     feed-status-schema:
       required:
@@ -2884,6 +2889,10 @@ components:
             description: The depth of the post in the hierarchy of replies. Top-level posts are 0, their replies are 1, replies to replies are 2 etc.
             type: integer
             example: 1
+          current_user_liked:
+            description: A flag to determine if the current user has liked this post
+            type: boolean
+            example: true
     post-schema-create:
       allOf:
       - $ref: '#/components/schemas/post-schema-base'
