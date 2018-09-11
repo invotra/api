@@ -2478,6 +2478,9 @@ components:
           description: The main body text of the entity
           type: string
           example: I'm taking annual leave next Thursday. Cover to be announced shortly
+        entity_image:
+          description: The entity image
+          example: https://dev.invotra.com/system/files/my-calendar.png  
         timestamp:
           description: This is the timestamp (in seconds) of when the feed message was created
           type: integer
