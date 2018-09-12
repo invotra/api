@@ -2925,6 +2925,7 @@ components:
         category:
           description: The category of a post
           type: string
+          enum: 
             - Comment
             - Note
             - Done
