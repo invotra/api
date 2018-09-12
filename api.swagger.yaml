@@ -2456,6 +2456,10 @@ components:
           type: string
           example: >-
             https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
+        username:
+          description: The username of the user who triggered the feed message
+          type: string
+          example: Dorothy.Whitehead@akagera.com
         display_name:
           description: The display name of the user who triggered the feed message
           type: string
