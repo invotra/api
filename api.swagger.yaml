@@ -2509,15 +2509,15 @@ components:
           type: string
           enum:
             - Comment
-            - Idea
-            - News / Event
             - Note
+            - Done
+            - News / Event
+            - Suggestion
             - Question
             - To Do
             - Problem / Risk
             - Agreed
             - Decision
-            - Done
         category_colour:
           description: Colour for the category. Any CSS colour allowed.
           type: string
@@ -2942,17 +2942,17 @@ components:
         category:
           description: The category of a post
           type: string
-          enum:
+          enum: 
             - Comment
-            - Idea
-            - News / Event
             - Note
+            - Done
+            - News / Event
+            - Suggestion
             - Question
             - To Do
             - Problem / Risk
             - Agreed
             - Decision
-            - Done
         attachments:
           allOf:
             - $ref: '#/components/schemas/uuid-list-schema'
