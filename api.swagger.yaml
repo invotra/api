@@ -175,7 +175,8 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    $ref: '#/components/schemas/uuid-label-context-list-schema'
+                    allOf:
+                      - $ref: '#/components/schemas/uuid-label-context-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
   '/teams/{team_id}':
     get:
@@ -639,7 +640,8 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    $ref: '#/components/schemas/uuid-list-schema'
+                    allOf:
+                      - $ref: '#/components/schemas/uuid-list-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -735,7 +737,8 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    $ref: '#/components/schemas/location-uuid-list-schema'
+                    allOf:
+                      - $ref: '#/components/schemas/location-uuid-list-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -1106,7 +1109,8 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    $ref: '#/components/schemas/title-uuid-list-common-schema'
+                    allOf:
+                      - $ref: '#/components/schemas/title-uuid-list-common-schema'
     description: 'List all group categories. An empty array is returned if no categories are found'
   '/groups/{group_id}':
     get:
@@ -1814,7 +1818,8 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    $ref: '#/components/schemas/location-uuid-label-context-list-schema'
+                    allOf:
+                      - $ref: '#/components/schemas/location-uuid-label-context-list-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
   /locations/sites:
     post:
