@@ -2371,7 +2371,7 @@ components:
           description: This is the standard button border colour. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
-        standard_button_normal_text_colour
+        standard_button_normal_state_text_colour:
           description: This is the standard button text colour. Any CSS colour allowed.
           type: string
           example: '#FFFFF'
