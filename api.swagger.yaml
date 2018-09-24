@@ -3335,7 +3335,6 @@ components:
           name:
             description: The title of the entity.
             type: string
-            example: String
             readOnly: true
           uuid:
             description: The UUID of the entity.
