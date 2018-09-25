@@ -2642,12 +2642,12 @@ components:
         username:
           description: The user's username
           type: string
-          example: drobinson
+          example: Dorothy Whitehead
         email:
           description: Users email address
           format: email
           type: string
-          example: drobinson@example.com
+          example: dorothy.whitehead@akagera.com
         external_id:
           description: The user's external reference ID
           type: string
@@ -2689,11 +2689,11 @@ components:
         firstname:
           description: The user's first name
           type: string
-          example: Damian
+          example: Dorothy
         surname:
           description: The user's surname
           type: string
-          example: Robinson
+          example: Whitehead
         title:
           default: ''
           description: The user's title
