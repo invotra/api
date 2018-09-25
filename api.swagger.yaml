@@ -1175,7 +1175,7 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
-  '/groups/{group_id}/my_membership':  
+  '/groups/{group_id}/my_membership':
     get:
       tags:
         - groups
@@ -1515,7 +1515,7 @@ paths:
         '400':
           description: The UUID was malformed.
         '404':
-          description: The post does not exist. 
+          description: The post does not exist.
       description: Check if the current user has liked a post.
     put:
       tags:
@@ -2491,7 +2491,7 @@ components:
         entity_image:
           description: The entity image
           type: string
-          example: https://dev.invotra.com/system/files/my-calendar.png  
+          example: https://dev.invotra.com/system/files/my-calendar.png
         timestamp:
           description: This is the timestamp (in seconds) of when the feed message was created
           type: integer
@@ -2989,7 +2989,7 @@ components:
           example: I find this offensive
     post-category-schema:
       properties:
-        name: 
+        name:
           description: 'Category name'
           type: string
           example: Note
