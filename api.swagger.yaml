@@ -3031,8 +3031,12 @@ components:
         alt_text:
           description: Alt text for an image.
           type: string
-          required: true
       type: object
+      required:
+        - file
+        - filename
+        - alt_text
+        - type
     job-role-schema:
       properties:
         title:
