@@ -3027,6 +3027,9 @@ components:
           description: The MIME type for the file
           type: string
           example: image/jpeg
+        alt_text:
+          description: Alt text for an image.
+          type: string
     file-schema-create:
       properties:
         filename:
@@ -3049,7 +3052,15 @@ components:
           description: Base64 encoded version of the file.
           type: string
           format: base64
+        alt_text:
+          description: Alt text for an image.
+          type: string
       type: object
+      required:
+        - file
+        - filename
+        - alt_text
+        - type
     job-role-schema:
       properties:
         title:
