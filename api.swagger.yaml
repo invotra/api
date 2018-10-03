@@ -2543,6 +2543,11 @@ components:
           description: A flag to determine if the current user has liked this post
           type: boolean
           example: true
+        parent:
+          description: The parent post for displaying context for comment related feed messages.
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/post-schema'
       type: object
     feed-status-schema:
       required:
