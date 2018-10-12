@@ -2489,9 +2489,10 @@ components:
           type: string
           example: I'm taking annual leave next Thursday. Cover to be announced shortly
         entity_image:
-          description: The entity image
-          type: string
-          example: https://dev.invotra.com/system/files/my-calendar.png  
+          description: The featured image for this post
+          type: object
+          allOf:
+           - $ref: '#/components/schemas/file-schema'  
         timestamp:
           description: This is the timestamp (in seconds) of when the feed message was created
           type: integer
@@ -2977,9 +2978,17 @@ components:
             - Problem / Risk
             - Agreed
             - Decision
-        attachments:
+        featured_image:
+          description: The featured image for this post
+          type: object
           allOf:
-            - $ref: '#/components/schemas/uuid-list-schema'
+           - $ref: '#/components/schemas/file-schema'
+        attachments:
+          description: A list of attachments for the post
+          type: array
+          items: 
+            allOf:
+              - $ref: '#/components/schemas/file-schema'
       type: object
     post-report-schema-create:
       properties:
@@ -3030,6 +3039,14 @@ components:
         alt_text:
           description: Alt text for an image.
           type: string
+        image_height:
+          description: The height of the image in pixels. Only returned if the type is an image.
+          type: integer
+          example: 200
+        image_width:
+          description: The width of the image in pixels. Only returned if the type is an image.
+          type: integer
+          example: 200
     file-schema-create:
       properties:
         filename:
