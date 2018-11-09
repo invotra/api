@@ -2615,8 +2615,8 @@ components:
            - node
            - user
            - comment
-        target_bundle:
-          description: This is the bundle (subtype) of the entity that the notification links to
+        target_subtype:
+          description: This is the subtype (or "bundle" in Drupal parlance) of the entity that the notification links to
           type: string
           example: 'group_status'
       type: object
