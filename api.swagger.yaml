@@ -399,6 +399,7 @@ paths:
           name: fulltext_search
           schema:
             type: string
+          required: true
         - description: Filter by team.
           in: query
           name: team
@@ -1047,6 +1048,7 @@ paths:
           name: fulltext_search
           schema:
             type: string
+          required: true
         - description: Filter by UUID of a category.
           in: query
           name: category
