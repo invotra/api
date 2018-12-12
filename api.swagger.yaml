@@ -509,7 +509,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/uuid-schema'
+                $ref: '#/components/schemas/user-schema'
         '404':
           description: Current user was not found.
       description: Get the current user's information.
@@ -2653,6 +2653,10 @@ components:
           description: The user's username
           type: string
           example: Dorothy Whitehead
+        user_avatar:
+          description: The user's image
+          type: string
+          example: "https://dev.invotra.com/sites/default/files/styles/small_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
         email:
           description: Users email address
           format: email
