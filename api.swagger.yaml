@@ -2622,6 +2622,13 @@ components:
       type: object
     team-schema:
       properties:
+        uuid:
+          description: The UUID of the team
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          type: string
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          readOnly: true
         title:
           description: This is the name of the team
           type: string
