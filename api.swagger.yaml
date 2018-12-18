@@ -1792,9 +1792,9 @@ paths:
       tags:
         - locations
       parameters:
-        - description: Filter by label. Matches on whole words.
+        - description: Filter by title. Matches on whole words.
           in: query
-          name: label
+          name: title
           schema:
             type: string
         - description: Autocomplete term. Matches on location name, per letter, from the start of the word.
@@ -1819,7 +1819,7 @@ paths:
                   results:
                     description: The results set.
                     allOf:
-                      - $ref: '#/components/schemas/location-uuid-label-context-list-schema'
+                      - $ref: '#/components/schemas/location-uuid-title-context-list-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
   /locations/sites:
     post:
@@ -3276,7 +3276,7 @@ components:
                   type: string
                   example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
-    location-uuid-label-context-list-schema:
+    location-uuid-title-context-list-schema:
       items:
         type: object
         properties:
@@ -3286,10 +3286,10 @@ components:
               ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             type: string
             example: 01234567-89ab-cdef-12F34-56789abcdef0
-          label:
-            description: The entity label.
+          title:
+            description: The entity title.
             type: string
-            example: Security
+            example: Chertsey House
           type:
             description: The location type.
             type: string
@@ -3298,17 +3298,45 @@ components:
               - building
               - floor
               - space
+          description:
+            description: 'The description of the location.'
+            type: string
+            example: Woking
+          parent_uuid:
+            description: The parent UUID.
+            pattern: >-
+              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            type: string
+            example: 01234567-89ab-cdef-12F34-56789abcdef0
           context:
             description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
             type: array
             items:
               type: object
               properties:
-                label:
-                  description: The entity label.
-                  type: string
                 uuid:
                   description: The entity UUID.
+                  pattern: >-
+                    ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+                  type: string
+                  example: 01234567-89ab-cdef-12F34-56789abcdef0
+                title:
+                  description: The entity title.
+                  type: string
+                type:
+                  description: The location type.
+                  type: string
+                  enum:
+                    - site
+                    - building
+                    - floor
+                    - space
+                description:
+                  description: 'The description of the location.'
+                  type: string
+                  example: Woking
+                parent_uuid:
+                  description: The parent UUID.
                   pattern: >-
                     ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
                   type: string
