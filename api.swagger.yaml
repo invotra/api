@@ -1665,6 +1665,37 @@ paths:
         '404':
           description: The UUID does not correspond to an existing file.
       description: Get information about the file.
+    put:
+      tags:
+        - files
+      parameters:
+        - description: The Invotra UUID of the file.
+          in: path
+          name: file_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/file-schema-update'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/file-schema-update'
+        required: true
+      responses:
+        '200':
+          description: The file was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: The UUID does not correspond to an existing file.
+        '422':
+          description: |
+            The file was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
   /job_roles:
     get:
       tags:
@@ -3074,7 +3105,7 @@ components:
           description: The width of the image in pixels. Only returned if the type is an image.
           type: integer
           example: 200
-    file-schema-create:
+    file-schema-update:
       properties:
         filename:
           description: This is the filename. If using multipart/form-data this field may be omitted in favour of the 'filename' directive of the subpart Content-Disposition header.
@@ -3100,11 +3131,14 @@ components:
           description: Alt text for an image.
           type: string
       type: object
-      required:
-        - file
-        - filename
-        - alt_text
-        - type
+    file-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/file-schema-update'
+        - required:
+            - file
+            - filename
+            - alt_text
+            - type
     job-role-schema:
       properties:
         title:
