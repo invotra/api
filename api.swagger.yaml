@@ -1094,6 +1094,11 @@ paths:
           name: autocomplete
           schema:
             type: string
+        - description: Filter the list of categories to those that include groups matching a search term. This is useful when you have already searched for groups and want to refine your search by category (like a faceted search). Like the fulltext_search parameter of /groups/search, this matches on whole words.
+          in: query
+          name: group_fulltext_search
+          schema:
+            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
