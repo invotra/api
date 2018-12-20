@@ -190,8 +190,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Returns a single complete Team object.
@@ -214,8 +213,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The team information was updated successfully.
@@ -245,8 +243,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -283,16 +280,14 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user has been removed from the team.
@@ -313,16 +308,14 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user's membership of this team was updated.
@@ -405,22 +398,19 @@ paths:
           name: team
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: Filter by location.
           in: query
           name: location
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: Filter by group.
           in: query
           name: group
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: Field to sort by
           in: query
           name: sort
@@ -481,8 +471,6 @@ paths:
           schema:
             type: string
             format: uuid
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           description: UUID of the group to filter by.
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -525,8 +513,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Returns a single complete user object.
@@ -549,8 +536,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user's information was updated.
@@ -659,16 +645,14 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: The Invotra UUID of the job role.
           in: path
           name: job_role_id
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The job role has been removed from the user.
@@ -689,16 +673,14 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: The Invotra UUID of the job role.
           in: path
           name: job_role_id
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user already has this job role.
@@ -756,16 +738,14 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The location has been removed from the user.
@@ -786,16 +766,14 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: The Invotra UUID of the location.
           in: path
           name: location_id
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user already has this location.
@@ -926,8 +904,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Follower flag removed.
@@ -947,8 +924,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: |
@@ -971,8 +947,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user is now following the other user.
@@ -1011,8 +986,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1124,8 +1098,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Returns a single complete group object.
@@ -1149,8 +1122,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1187,8 +1159,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: |
@@ -1213,16 +1184,14 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user has been removed from the group.
@@ -1245,16 +1214,14 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - description: The Invotra UUID of the user.
           in: path
           name: user_id
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user's membership of this group was updated. The new status of their membership is returned in the response body.
@@ -1333,8 +1300,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Returns a single complete post object.
@@ -1357,8 +1323,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The post information was updated successfully.
@@ -1389,8 +1354,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1444,8 +1408,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1482,8 +1445,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user unliked the post.
@@ -1503,8 +1465,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: |
@@ -1528,8 +1489,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user liked this post.
@@ -1549,8 +1509,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user removed their report flag from the post.
@@ -1570,8 +1529,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: |
@@ -1595,8 +1553,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       requestBody:
         content:
           application/json:
@@ -1651,8 +1608,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Returns a single complete file object.
@@ -1754,8 +1710,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Returns a single complete job role object.
@@ -1778,8 +1733,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The job role information was updated successfully.
@@ -1891,8 +1845,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Returns a single complete location object.
@@ -1917,8 +1870,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The location information was updated successfully.
@@ -1977,8 +1929,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Returns a single complete location object.
@@ -2003,8 +1954,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The location information was updated successfully.
@@ -2063,8 +2013,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Returns a single complete location object.
@@ -2089,8 +2038,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The location information was updated successfully.
@@ -2149,8 +2097,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: Returns a single complete location object.
@@ -2175,8 +2122,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The location information was updated successfully.
@@ -2239,8 +2185,7 @@ paths:
           required: true
           schema:
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
       responses:
         '200':
           description: The user marked the notification as read.
@@ -2489,9 +2434,8 @@ components:
       properties:
         user_uuid:
           description: This is the uuid of the user who triggered the feed message
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
         user_image:
           description: This is image of the user who triggered the feed message
@@ -2508,9 +2452,8 @@ components:
           example: Dorothy Whitehead
         entity_uuid:
           description: The UUID of the entity that the feed message is about
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
         entity_title:
           description: The title of the entity that the feed message is about
@@ -2594,15 +2537,13 @@ components:
       properties:
         uuid:
           description: This is the uuid of the notification
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
         user_uuid:
           description: This is the uuid of the user that the notification is for
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
         timestamp:
           description: This is the timestamp (in seconds) of when the notification was created
@@ -2636,9 +2577,8 @@ components:
           example: true
         target_uuid:
           description: This is the uuid of the entity that the notification links to
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
         target_type:
           description: This is the type of the entity that the notification links to
@@ -2656,9 +2596,8 @@ components:
       properties:
         uuid:
           description: The UUID of the team
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
           readOnly: true
         title:
@@ -2675,9 +2614,8 @@ components:
           example: ABC123
         parent_uuid:
           description: 'This is the Invotra UUID of the parent team, optional.'
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
     team-schema-create:
@@ -2690,9 +2628,8 @@ components:
       properties:
         uuid:
           description: The UUID of the user
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
           readOnly: true
         username:
@@ -2742,9 +2679,8 @@ components:
           example: +1-23-456-789
         manager_uuid:
           description: This is the Invotra UUID of the user's manager.
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
         firstname:
           description: The user's first name
@@ -2768,23 +2704,20 @@ components:
           example: Mr
         team:
           description: This is the Invotra UUID of the user's team.
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
           deprecated: true
         location:
           description: This is the Invotra UUID of the user's location.
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
           deprecated: true
         job_role:
           description: This is the Invotra UUID of the user's job role.
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
           deprecated: true
         teams:
@@ -2801,9 +2734,8 @@ components:
             - $ref: '#/components/schemas/title-uuid-list-common-schema'
         user_uuid:
           description: The UUID of the user
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
           deprecated: true
           readOnly: true
@@ -2858,8 +2790,7 @@ components:
         group_category_uuid:
           description: The uuid of the category
           type: string
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
         privacy_setting:
           description: This is the privacy setting for the group.
@@ -2875,8 +2806,7 @@ components:
         author_uuid:
           description: The uuid of the author
           type: string
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
     group-search-schema:
@@ -2887,8 +2817,7 @@ components:
             group_uuid:
               description: The UUID of the group.
               type: string
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
     group-membership-schema:
       allOf:
@@ -2898,8 +2827,7 @@ components:
             uuid:
               description: The UUID of the user.
               type: string
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
           required:
             - uuid
@@ -2921,28 +2849,24 @@ components:
         properties:
           uuid:
             type: string
+            format: uuid
             description: This is the Invotra UUID of the post.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
           parent_uuid:
             type: string
+            format: uuid
             description: This is the Invotra UUID of the parent of the post.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
           thread_uuid:
             type: string
+            format: uuid
             description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
           group_uuid:
             description: This is the Invotra UUID of the group that the post belongs to.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
             type: string
+            format: uuid
           description:
             description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
             type: string
@@ -2953,8 +2877,7 @@ components:
           author_uuid:
             description: The uuid of the author
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
             example: 01234567-89ab-cdef-1234-56789abcdef0
           display_name:
             description: The display name of the author
@@ -2991,22 +2914,19 @@ components:
         properties:
           parent_uuid:
             type: string
+            format: uuid
             description: This is the Invotra UUID of the parent of the post.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
           author_uuid:
             description: The uuid of the author
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
             example: 01234567-89ab-cdef-1234-56789abcdef0
           group_uuid:
             description: This is the Invotra UUID of the group that the post belongs to.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             example: 01234567-89ab-cdef-1234-56789abcdef0
             type: string
+            format: uuid
       required:
         - description
         - group_uuid
@@ -3062,10 +2982,9 @@ components:
           example: Note
         uuid:
           description: 'This is the Invotra UUID of the category.'
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           example: 01234567-89ab-cdef-1234-56789abcdef0
           type: string
+          format: uuid
         category_colour:
           description: Colour of the category. Any CSS colour allowed.
           type: string
@@ -3155,10 +3074,9 @@ components:
           example: ABC123
         parent_uuid:
           description: 'This is the Invotra UUID of the parent job role, optional.'
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           example: 01234567-89ab-cdef-1234-56789abcdef0
           type: string
+          format: uuid
       type: object
     job-role-schema-create:
       allOf:
@@ -3208,8 +3126,7 @@ components:
             team:
               description: A team associated with the location.
               type: string
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
             phone:
               description: The location's telephone number.
@@ -3233,9 +3150,8 @@ components:
               description: >
                 The Invotra UUID of the parent location. This location must be a
                 site.
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
               type: string
+              format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
     location-building-schema-create:
       allOf:
@@ -3251,9 +3167,8 @@ components:
               description: >
                 The Invotra UUID of the parent location. This location must be a
                 building.
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
               type: string
+              format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
     location-floor-schema-create:
       allOf:
@@ -3269,9 +3184,8 @@ components:
               description: >
                 The Invotra UUID of the parent location. This location must be a
                 floor.
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
               type: string
+              format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
     location-space-schema-create:
       allOf:
@@ -3284,16 +3198,14 @@ components:
       properties:
         uuid:
           description: The entity UUID.
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           example: 01234567-89ab-cdef-12F34-56789abcdef0
     uuid-list-schema:
       items:
         description: An array of UUIDs.
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
         type: string
+        format: uuid
         example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
     uuid-label-context-list-schema:
@@ -3302,9 +3214,8 @@ components:
         properties:
           uuid:
             description: The entity UUID.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             type: string
+            format: uuid
             example: 01234567-89ab-cdef-12F34-56789abcdef0
           label:
             description: The entity label.
@@ -3321,9 +3232,8 @@ components:
                   type: string
                 uuid:
                   description: The entity UUID.
-                  pattern: >-
-                    ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
                   type: string
+                  format: uuid
                   example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
     location-uuid-title-context-list-schema:
@@ -3332,9 +3242,8 @@ components:
         properties:
           uuid:
             description: The entity UUID.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             type: string
+            format: uuid
             example: 01234567-89ab-cdef-12F34-56789abcdef0
           title:
             description: The entity title.
@@ -3354,9 +3263,8 @@ components:
             example: Woking
           parent_uuid:
             description: The parent UUID.
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             type: string
+            format: uuid
             example: 01234567-89ab-cdef-12F34-56789abcdef0
           context:
             description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
@@ -3366,9 +3274,8 @@ components:
               properties:
                 uuid:
                   description: The entity UUID.
-                  pattern: >-
-                    ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
                   type: string
+                  format: uuid
                   example: 01234567-89ab-cdef-12F34-56789abcdef0
                 title:
                   description: The entity title.
@@ -3387,9 +3294,8 @@ components:
                   example: Woking
                 parent_uuid:
                   description: The parent UUID.
-                  pattern: >-
-                    ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
                   type: string
+                  format: uuid
                   example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
     location-uuid-schema:
@@ -3398,8 +3304,7 @@ components:
         uuid:
           description: The UUID of the location.
           type: string
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
         type:
           description: The location type.
@@ -3435,8 +3340,7 @@ components:
             uuid:
               description: The UUID of the team.
               type: string
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
           required:
             - uuid
@@ -3448,8 +3352,7 @@ components:
             uuid:
               description: The UUID of the user.
               type: string
-              pattern: >-
-                ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+              format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
           required:
             - uuid
@@ -3465,8 +3368,7 @@ components:
           uuid:
             description: The UUID of the entity.
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            format: uuid
             example: 01234567-89ab-cdef-1234-56789abcdef0
     entity-lookup-schema:
       type: object
@@ -3482,8 +3384,7 @@ components:
         uuid:
           description: The UUID of the entity.
           type: string
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
       required:
         - type
