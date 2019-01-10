@@ -150,14 +150,19 @@ paths:
       tags:
         - teams
       parameters:
-        - description: Filter by label. Matches on whole words.
+        - name: label
+          description: Filter by label. Matches on whole words.
           in: query
-          name: label
           schema:
             type: string
-        - description: Autocomplete term. Matches on team name, per letter, from the start of the word.
+        - name: autocomplete
+          description: Autocomplete term. Matches on team name, per letter, from the start of the word.
           in: query
-          name: autocomplete
+          schema:
+            type: string
+        - name: user_fulltext_search
+          description: Filter the list of teams to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by team (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          in: query
           schema:
             type: string
         - $ref: '#/components/parameters/offsetParam'
