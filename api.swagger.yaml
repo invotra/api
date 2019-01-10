@@ -1829,14 +1829,19 @@ paths:
       tags:
         - locations
       parameters:
-        - description: Filter by title. Matches on whole words.
+        - name: title
+          description: Filter by title. Matches on whole words.
           in: query
-          name: title
           schema:
             type: string
-        - description: Autocomplete term. Matches on location name, per letter, from the start of the word.
+        - name: autocomplete
+          description: Autocomplete term. Matches on location name, per letter, from the start of the word.
           in: query
-          name: autocomplete
+          schema:
+            type: string
+        - name: user_fulltext_search
+          description: Filter the list of locations to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by location (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          in: query
           schema:
             type: string
         - $ref: '#/components/parameters/offsetParam'
