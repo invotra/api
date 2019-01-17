@@ -1545,6 +1545,8 @@ paths:
           description: The user liked this post.
         '400':
           description: The UUID was malformed.
+        '403':
+          description: Access was denied because the user tried to like their own post.
         '404':
           description: The user or post does not exist.
       description: Like a post as the current user.
@@ -1618,6 +1620,8 @@ paths:
           description: The user reported this post as inappropriate.
         '400':
           description: The UUID was malformed.
+        '403':
+          description: Access was denied because the user tried to report their own post.
         '404':
           description: The user or post does not exist.
       description: Report a post as the current user.
