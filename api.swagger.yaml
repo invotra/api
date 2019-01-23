@@ -2483,10 +2483,10 @@ components:
         - password
       properties:
         username:
-          description: This username that the user logs in with
+          description: The username that the user logs in with
           type: string
         password:
-          description: This password that the user logs in with
+          description: The password that the user logs in with
           type: string
     feed-schema:
       required:
@@ -2728,6 +2728,10 @@ components:
           description: The user's username
           type: string
           example: Dorothy Whitehead
+        password:
+          description: The password that the user logs in with
+          type: string
+          writeOnly: true
         user_avatar:
           description: The user's image
           type: string
