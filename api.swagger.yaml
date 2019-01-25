@@ -2728,10 +2728,6 @@ components:
           description: The user's username
           type: string
           example: Dorothy Whitehead
-        password:
-          description: The password that the user logs in with
-          type: string
-          writeOnly: true
         user_avatar:
           description: The user's image
           type: string
@@ -2850,7 +2846,15 @@ components:
                 - $ref: '#/components/schemas/title-or-uuid-writable-list-schema'
     user-schema-create:
       allOf:
-        - $ref: '#/components/schemas/user-schema-update'
+        - $ref: '#/components/schemas/user-schema'
+        - properties:
+            job_roles:
+              allOf:
+                - $ref: '#/components/schemas/title-or-uuid-writable-list-schema'
+            password:
+              description: The password that the user logs in with
+              type: string
+              writeOnly: true
         - required:
             - email
             - username
