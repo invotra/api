@@ -2900,9 +2900,9 @@ components:
           description: This is the privacy setting for the group.
           type: string
           enum:
-            - public
-            - private
-            - secret
+            - Public
+            - Private
+            - Secret
         members_count:
           description: A count of members in group
           type: integer
