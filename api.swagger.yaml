@@ -1619,7 +1619,7 @@ paths:
         '200':
           description: The user reported this post as inappropriate.
         '400':
-          description: The UUID was malformed.
+          description: The UUID or request body JSON was malformed.
         '403':
           description: Access was denied because the user tried to report their own post.
         '404':
@@ -3089,6 +3089,7 @@ components:
           description: Reason for flagging post as inappropriate
           type: string
           example: I find this offensive
+          required: true
     post-category-schema:
       properties:
         name: 
