@@ -2872,7 +2872,7 @@ components:
     user-metrics-accessed-schema:
       type: object
       properties:
-        'users who accessed the site on 4 or more days within a month':
+        access_threshold_users:
           description: 'users who accessed the site on 4 or more days within a month'
           type: integer
           example: 500
