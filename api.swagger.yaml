@@ -3102,6 +3102,11 @@ components:
     file-schema:
       type: object
       properties:
+        uuid:
+          description: The UUID of the entity.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         filename:
           description: This is the filename
           type: string
