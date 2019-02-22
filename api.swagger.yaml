@@ -395,6 +395,27 @@ paths:
             schema:
               $ref: '#/components/schemas/user-schema-create'
         required: true
+  /users/metrics/accessed:
+    get:
+      tags:
+        - users
+      parameters:
+        - description: 'Filter by calendar month. Format: YYYY-MM'
+          in: query
+          name: month
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Count of users returned.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-metrics-accessed-schema'
+        '403':
+          description: 'User is not authorized to view this.'
+      description: Returns a count of users who accessed the site on 4 or more days within a given calendar month.
   /users/search:
     get:
       tags:
@@ -2843,6 +2864,13 @@ components:
         - required:
             - email
             - username
+    user-metrics-accessed-schema:
+      type: object
+      properties:
+        access_threshold_users:
+          description: 'users who accessed the site on 4 or more days within a month'
+          type: integer
+          example: 500
     user-search-schema:
       allOf:
         - $ref: '#/components/schemas/user-schema'
