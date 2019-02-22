@@ -1353,6 +1353,51 @@ paths:
             schema:
               $ref: '#/components/schemas/post-schema-create'
         required: true
+  /posts/list:
+    get:
+      summary: List of posts.
+      tags:
+        - posts
+      parameters:
+        - description: Field to sort by
+          in: query
+          name: sort
+          schema:
+            type: string
+            enum:
+              - timestamp
+              - comment_count
+              - likes_count
+            default: timestamp
+        - description: Sort order
+          in: query
+          name: order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of posts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/post-schema'
+      description: List of posts. An empty array is returned if no posts are found.
   '/posts/{post_id}':
     get:
       tags:
