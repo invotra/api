@@ -413,6 +413,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user-metrics-accessed-schema'
+        '403':
+          description: 'User is not authorized to view this.'
       description: Returns a count of users who accessed the site on 4 or more days within a given calendar month.
   /users/search:
     get:
