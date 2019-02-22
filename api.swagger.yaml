@@ -150,14 +150,19 @@ paths:
       tags:
         - teams
       parameters:
-        - description: Filter by label. Matches on whole words.
+        - name: label
+          description: Filter by label. Matches on whole words.
           in: query
-          name: label
           schema:
             type: string
-        - description: Autocomplete term. Matches on team name, per letter, from the start of the word.
+        - name: autocomplete
+          description: Autocomplete term. Matches on team name, per letter, from the start of the word.
           in: query
-          name: autocomplete
+          schema:
+            type: string
+        - name: user_fulltext_search
+          description: Filter the list of teams to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by team (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          in: query
           schema:
             type: string
         - $ref: '#/components/parameters/offsetParam'
@@ -383,6 +388,27 @@ paths:
             schema:
               $ref: '#/components/schemas/user-schema-create'
         required: true
+  /users/metrics/accessed:
+    get:
+      tags:
+        - users
+      parameters:
+        - description: 'Filter by calendar month. Format: YYYY-MM'
+          in: query
+          name: month
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Count of users returned.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-metrics-accessed-schema'
+        '403':
+          description: 'User is not authorized to view this.'
+      description: Returns a count of users who accessed the site on 4 or more days within a given calendar month.
   /users/search:
     get:
       tags:
@@ -558,7 +584,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/user-schema'
+              $ref: '#/components/schemas/user-schema-update'
         required: true
   '/users/{user_id}/activity':
     get:
@@ -975,6 +1001,31 @@ paths:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
       description: Search for groups. Returns list of uuids. Returns an empty array if no groups are found.
+    post:
+      tags:
+        - groups
+      responses:
+        '201':
+          description: The group was created successfully.
+          headers:
+            Location:
+              description: |
+                The URL at which the newly created group may be retrieved.
+              schema:
+                type: string
+        '400':
+          description: The group was not saved due to malformed JSON.
+        '422':
+          description: |
+            The group was not saved due to Drupal validation failure or JSON schema validation
+            failure.
+      description: Create a group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-schema'
+        required: true
   '/groups/{group_id}/posts':
     get:
       tags:
@@ -1068,6 +1119,11 @@ paths:
           name: autocomplete
           schema:
             type: string
+        - description: Filter the list of categories to those that include groups matching a search term. This is useful when you have already searched for groups and want to refine your search by category (like a faceted search). Like the fulltext_search parameter of /groups/search, this matches on whole words.
+          in: query
+          name: group_fulltext_search
+          schema:
+            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1142,7 +1198,7 @@ paths:
                     description: The results set.
                     type: array
                     items:
-                      $ref: '#/components/schemas/group-membership-schema'
+                      $ref: '#/components/schemas/user-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -1289,6 +1345,51 @@ paths:
             schema:
               $ref: '#/components/schemas/post-schema-create'
         required: true
+  /posts/list:
+    get:
+      summary: List of posts.
+      tags:
+        - posts
+      parameters:
+        - description: Field to sort by
+          in: query
+          name: sort
+          schema:
+            type: string
+            enum:
+              - timestamp
+              - comment_count
+              - likes_count
+            default: timestamp
+        - description: Sort order
+          in: query
+          name: order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of posts.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/post-schema'
+      description: List of posts. An empty array is returned if no posts are found.
   '/posts/{post_id}':
     get:
       tags:
@@ -1495,6 +1596,8 @@ paths:
           description: The user liked this post.
         '400':
           description: The UUID was malformed.
+        '403':
+          description: Access was denied because the user tried to like their own post.
         '404':
           description: The user or post does not exist.
       description: Like a post as the current user.
@@ -1564,9 +1667,13 @@ paths:
         '200':
           description: The user reported this post as inappropriate.
         '400':
-          description: The UUID was malformed.
+          description: The UUID or request body JSON was malformed.
+        '403':
+          description: Access was denied because the user tried to report their own post.
         '404':
           description: The user or post does not exist.
+        '422':
+          description: JSON schema validation failure
       description: Report a post as the current user.
   /files:
     post:
@@ -1778,14 +1885,19 @@ paths:
       tags:
         - locations
       parameters:
-        - description: Filter by title. Matches on whole words.
+        - name: title
+          description: Filter by title. Matches on whole words.
           in: query
-          name: title
           schema:
             type: string
-        - description: Autocomplete term. Matches on location name, per letter, from the start of the word.
+        - name: autocomplete
+          description: Autocomplete term. Matches on location name, per letter, from the start of the word.
           in: query
-          name: autocomplete
+          schema:
+            type: string
+        - name: user_fulltext_search
+          description: Filter the list of locations to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by location (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          in: query
           schema:
             type: string
         - $ref: '#/components/parameters/offsetParam'
@@ -2519,6 +2631,16 @@ components:
           description: A flag to determine if the current user has liked this post
           type: boolean
           example: true
+        group_name:
+          description: This is the name of the group
+          type: string
+          example: Operations
+        group_uuid:
+          description: This is the uuid of the group
+          pattern: >-
+            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          type: string
+          example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
     feed-status-schema:
       required:
@@ -2533,15 +2655,9 @@ components:
     notification-item-schema:
       required:
         - uuid
-        - user_uuid
       properties:
         uuid:
           description: This is the uuid of the notification
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-        user_uuid:
-          description: This is the uuid of the user that the notification is for
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
@@ -2740,13 +2856,26 @@ components:
           deprecated: true
           readOnly: true
       type: object
-    user-schema-create:
+    user-schema-update:
       allOf:
         - $ref: '#/components/schemas/user-schema'
-      required:
-        - email
-        - username
+        - properties:
+            job_roles:
+              allOf:
+                - $ref: '#/components/schemas/title-or-uuid-writable-list-schema'
+    user-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/user-schema-update'
+        - required:
+            - email
+            - username
+    user-metrics-accessed-schema:
       type: object
+      properties:
+        access_threshold_users:
+          description: 'users who accessed the site on 4 or more days within a month'
+          type: integer
+          example: 500
     user-search-schema:
       allOf:
         - $ref: '#/components/schemas/user-schema'
@@ -2774,6 +2903,12 @@ components:
             - inactive
             - pending
     group-schema:
+      required:
+        - title
+        - description
+        - group_category_uuid
+        - privacy_setting
+        - author_uuid
       properties:
         title:
           description: This is the name of the group
@@ -2787,6 +2922,7 @@ components:
           description: The category for the group.
           type: string
           example: Security
+          readOnly: true
         group_category_uuid:
           description: The uuid of the category
           type: string
@@ -2796,13 +2932,14 @@ components:
           description: This is the privacy setting for the group.
           type: string
           enum:
-            - public
-            - private
-            - secret
+            - Public
+            - Private
+            - Secret
         members_count:
           description: A count of members in group
           type: integer
           example: 150
+          readOnly: true
         author_uuid:
           description: The uuid of the author
           type: string
@@ -2819,18 +2956,6 @@ components:
               type: string
               format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
-    group-membership-schema:
-      allOf:
-        - $ref: '#/components/schemas/group-membership-common-schema'
-        - type: object
-          properties:
-            uuid:
-              description: The UUID of the user.
-              type: string
-              format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-          required:
-            - uuid
     group-membership-common-schema:
       type: object
       properties:
@@ -2974,6 +3099,7 @@ components:
           description: Reason for flagging post as inappropriate
           type: string
           example: I find this offensive
+          required: true
     post-category-schema:
       properties:
         name: 
@@ -2993,6 +3119,11 @@ components:
     file-schema:
       type: object
       properties:
+        uuid:
+          description: The UUID of the entity.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         filename:
           description: This is the filename
           type: string
@@ -3014,14 +3145,14 @@ components:
           type: string
           example: image/jpeg
         alt_text:
-          description: Alt text for an image.
+          description: Alt text for an image. Returned if and only if the type is an image.
           type: string
         image_height:
-          description: The height of the image in pixels. Only returned if the type is an image.
+          description: The height of the image in pixels. Returned if and only if the type is an image.
           type: integer
           example: 200
         image_width:
-          description: The width of the image in pixels. Only returned if the type is an image.
+          description: The width of the image in pixels. Returned if and only if the type is an image.
           type: integer
           example: 200
     file-schema-update:
@@ -3192,15 +3323,6 @@ components:
         - $ref: '#/components/schemas/location-space-schema'
       required:
         - title
-    uuid-schema:
-      description: A single UUID.
-      type: object
-      properties:
-        uuid:
-          description: The entity UUID.
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-12F34-56789abcdef0
     uuid-list-schema:
       items:
         description: An array of UUIDs.
@@ -3370,6 +3492,23 @@ components:
             type: string
             format: uuid
             example: 01234567-89ab-cdef-1234-56789abcdef0
+    title-or-uuid-writable-list-schema:
+      type: array
+      items:
+        anyOf:
+          - type: object
+            properties:
+              name:
+                description: The title of the entity. Case sensitive.
+                type: string
+                example: Entity Title
+          - type: object
+            properties:
+              uuid:
+                description: The UUID of the entity.
+                type: string
+                format: uuid
+                example: 01234567-89ab-cdef-1234-56789abcdef0
     entity-lookup-schema:
       type: object
       properties:
