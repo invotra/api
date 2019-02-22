@@ -3133,7 +3133,7 @@ components:
           description: Alt text for an image. Only required and returned if the type is an image.
           type: string
         image_height:
-          description: The height of the image in pixels. Only required and returned if the type is an image.
+          description: The height of the image in pixels. Returned if and only if the type is an image.
           type: integer
           example: 200
         image_width:
