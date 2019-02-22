@@ -1344,8 +1344,10 @@ paths:
           schema:
             type: string
             enum:
+              - timestamp
               - comment_count
               - likes_count
+            default: timestamp
         - description: Sort order
           in: query
           name: order
