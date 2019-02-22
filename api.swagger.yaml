@@ -3191,14 +3191,14 @@ components:
           type: string
           example: image/jpeg
         alt_text:
-          description: Alt text for an image.
+          description: Alt text for an image. Returned if and only if the type is an image.
           type: string
         image_height:
-          description: The height of the image in pixels. Only returned if the type is an image.
+          description: The height of the image in pixels. Returned if and only if the type is an image.
           type: integer
           example: 200
         image_width:
-          description: The width of the image in pixels. Only returned if the type is an image.
+          description: The width of the image in pixels. Returned if and only if the type is an image.
           type: integer
           example: 200
     file-schema-update:
