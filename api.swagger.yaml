@@ -2905,7 +2905,7 @@ components:
       required:
         - title
         - description
-        - group_category
+        - group_category_uuid
         - privacy_setting
         - author_uuid
       properties:
