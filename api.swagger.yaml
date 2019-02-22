@@ -2902,6 +2902,12 @@ components:
             - inactive
             - pending
     group-schema:
+      required:
+        - title
+        - description
+        - group_category
+        - privacy_setting
+        - author_uuid
       properties:
         title:
           description: This is the name of the group
@@ -2926,9 +2932,9 @@ components:
           description: This is the privacy setting for the group.
           type: string
           enum:
-            - public
-            - private
-            - secret
+            - Public
+            - Private
+            - Secret
         members_count:
           description: A count of members in group
           type: integer
