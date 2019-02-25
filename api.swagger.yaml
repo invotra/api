@@ -1110,6 +1110,24 @@ paths:
           schema:
             type: boolean
             default: false
+        - description: Field to sort by.
+          in: query
+          name: sort
+          schema:
+            type: string
+            enum:
+              - likes
+              - relevance
+            default: relevance
+        - description: Sort order.
+          in: query
+          name: order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -3007,6 +3025,11 @@ components:
           description: A count of members in group
           type: integer
           example: 150
+          readOnly: true
+        likes:
+          description: Total likes for all content in the group.
+          type: integer
+          example: 200
           readOnly: true
         author_uuid:
           description: The uuid of the author
