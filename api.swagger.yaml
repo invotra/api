@@ -2846,11 +2846,8 @@ components:
                 - $ref: '#/components/schemas/title-or-uuid-writable-list-schema'
     user-schema-create:
       allOf:
-        - $ref: '#/components/schemas/user-schema'
+        - $ref: '#/components/schemas/user-schema-update'
         - properties:
-            job_roles:
-              allOf:
-                - $ref: '#/components/schemas/title-or-uuid-writable-list-schema'
             password:
               description: The password that the user logs in with
               type: string
