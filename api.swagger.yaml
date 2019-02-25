@@ -3200,7 +3200,8 @@ components:
           description: Reason for flagging post as inappropriate
           type: string
           example: I find this offensive
-          required: true
+      required:
+        - reason
     post-category-schema:
       properties:
         name: 
