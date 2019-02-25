@@ -2539,10 +2539,10 @@ components:
         - password
       properties:
         username:
-          description: This username that the user logs in with
+          description: The username that the user logs in with
           type: string
         password:
-          description: This password that the user logs in with
+          description: The password that the user logs in with
           type: string
     feed-schema:
       required:
@@ -2883,6 +2883,11 @@ components:
     user-schema-create:
       allOf:
         - $ref: '#/components/schemas/user-schema-update'
+        - properties:
+            password:
+              description: The password that the user logs in with
+              type: string
+              writeOnly: true
         - required:
             - email
             - username
