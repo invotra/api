@@ -1161,6 +1161,19 @@ paths:
                     allOf:
                       - $ref: '#/components/schemas/title-uuid-list-common-schema'
     description: 'List all group categories. An empty array is returned if no categories are found'
+  '/groups/metrics':
+    get:
+      tags:
+        - groups
+      responses:
+        '200':
+          description: Summary of metrics across all groups.
+          content:
+            applicaiton/json:
+              schema:
+                $ref: '#/components/schemas/group-metrics-schema'
+        '403':
+          description: The user is not permitted to view metrics.
   '/groups/{group_id}':
     get:
       tags:
@@ -2994,6 +3007,17 @@ components:
             - member
       required:
         - type
+    group-metrics-schema:
+      type: object
+      properties:
+        likes:
+          description: Total likes of content and replies across all groups.
+          type: integer
+          example: 500
+        members_count:
+          description: Total number of users that are a member of at least one group.
+          type: integer
+          example: 150
     post-schema:
       allOf:
       - $ref: '#/components/schemas/post-schema-base'
