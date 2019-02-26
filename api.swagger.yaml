@@ -2594,6 +2594,18 @@ components:
           description: The display name of the user who triggered the feed message
           type: string
           example: Dorothy Whitehead
+        teams:
+          description: The user's teams. An array of team names and UUIDs.
+          allOf:
+            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+        locations:
+          description: The user's locations. An array of location names and UUIDs.
+          allOf:
+            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+        job_roles:
+          description: The user's job roles. An array of job role names and UUIDs.
+          allOf:
+            - $ref: '#/components/schemas/title-uuid-list-common-schema'
         entity_uuid:
           description: The UUID of the entity that the feed message is about
           type: string
@@ -2607,6 +2619,13 @@ components:
           description: The main body text of the entity
           type: string
           example: I'm taking annual leave next Thursday. Cover to be announced shortly
+        entity_type:
+          description: The type of entity that the feed message is about
+          type: string
+          enum:
+            - node
+            - comment
+            - user
         entity_image:
           description: The featured image for this post
           type: object
