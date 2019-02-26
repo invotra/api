@@ -1090,8 +1090,9 @@ paths:
           schema:
             type: string
             enum:
-              - likes
               - relevance
+              - likes
+              - members_count
             default: relevance
         - description: Sort order.
           in: query
