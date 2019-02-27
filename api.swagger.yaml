@@ -1421,6 +1421,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/post-schema'
+        '400':
+          description: An invalid query parameter was supplied.
       description: List of posts. An empty array is returned if no posts are found.
   '/posts/{post_id}':
     get:
