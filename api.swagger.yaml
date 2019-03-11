@@ -1805,33 +1805,16 @@ paths:
               schema:
                 type: object
                 properties:
-                  total:
+                  count:
                     description: Total count manuals
                     type: integer
                     example: 248
-                  offset:
-                    description: Offset into results
-                    type: integer
-                    example: 20
-                  limit:
-                    description: Limit of results (page size)
-                    type: integer
-                    example: 10
                   results:
-                    description: All the root manual pages
+                    description: A list of attachments for the manual
                     type: array
                     items:
-                      type: object
-                      properties:
-                        uuid:
-                          description: The Invotra UUID of root manual page
-                          type: string
-                          format: uuid
-                          example: '01234567-89ab-cdef-1234-56789abcdef0'
-                        title:
-                          description: Manual page title
-                          type: string
-                          example: Title of a manual page
+                      allOf:
+                        - $ref: '#/components/schemas/manual-page-listing-schema'
   '/manuals/{manual_page_id}':
     get:
       description: Get a manual page, including the root manual page. Offset and limit refer to child pages
@@ -1854,24 +1837,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total_child_page_count:
-                    description: Total count of child pages
-                    type: integer
-                    example: 248
-                  child_page_offset:
-                    description: Current offset of child page results
-                    type: integer
-                    example: 20
-                  child_page_limit:
-                    description: Limit of child page results (page size)
-                    type: integer
-                    example: 10
-                  manual_page:
-                    description: The single complete manual or manual page object.
-                    allOf:
-                      - $ref: '#/components/schemas/manual-page-schema'
+                $ref: '#/components/schemas/manual-page-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -3403,6 +3369,23 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
+    manual-page-listing-schema:
+      type: object
+      properties:
+        uuid:
+          description: The Invotra UUID of root manual page
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        title:
+          description: Manual page title
+          type: string
+          example: Title of a manual page
+        image:
+          description: Manual Cover Image
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/file-schema'
     manual-page-schema:
       type: object
       properties:
@@ -3455,23 +3438,30 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
         children:
           description: The visable child manual pages
-          type: array
-          items:
-            type: object
-            properties:
-              uuid:
-                description: The Invotra UUID of the child manual page
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
-              title:
-                description: Child manual page title
-                type: string
-                example: Title of a manual page
-              section_name:
-                description: The manual section name
-                type: string
-                example: Appendix
+          type: object
+          properties:
+            count:
+              description: Total count of child pages
+              type: integer
+              example: 248
+            results:
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: The Invotra UUID of the child manual page
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  title:
+                    description: Child manual page title
+                    type: string
+                    example: Title of a manual page
+                  section_name:
+                    description: The manual section name
+                    type: string
+                    example: Appendix
     file-schema:
       type: object
       properties:
