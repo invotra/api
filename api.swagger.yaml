@@ -1810,7 +1810,7 @@ paths:
                     type: integer
                     example: 248
                   results:
-                    description: A list of attachments for the manual
+                    description: An array of the manual pages
                     type: array
                     items:
                       allOf:
