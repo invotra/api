@@ -1791,7 +1791,7 @@ paths:
       description: Report a post as the current user.
   '/manuals':
     get:
-      description: Get all the manual (root) pages
+      description: Get a listing of all manuals
       tags:
         - manuals
       parameters:
@@ -1799,25 +1799,25 @@ paths:
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
-          description: Returns all the root manual pages
+          description: Returns a listing of manuals
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   count:
-                    description: Total count manuals
+                    description: Total count of manuals
                     type: integer
                     example: 248
                   results:
-                    description: An array of the manual pages
+                    description: An array of manuals
                     type: array
                     items:
                       allOf:
-                        - $ref: '#/components/schemas/manual-page-listing-schema'
+                        - $ref: '#/components/schemas/manual-listing-schema'
   '/manuals/{manual_page_id}':
     get:
-      description: Get a manual page, including the root manual page. Offset and limit refer to child pages
+      description: Get a manual page, including the root manual page
       tags:
         - manuals
       parameters:
@@ -1829,17 +1829,15 @@ paths:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/parameters/offsetParam'
-        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
-          description: Returns a single complete manual or manual page object.
+          description: Returns a single complete manual page object.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/manual-page-schema'
         '400':
-          description: The supplied UUID was malformed.
+          description: The UUID or request body JSON was malformed.
         '404':
           description: No manual page with that UUID was found.
   /files:
@@ -3369,18 +3367,18 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
-    manual-page-listing-schema:
+    manual-listing-schema:
       type: object
       properties:
         uuid:
-          description: The Invotra UUID of root manual page
+          description: Invotra UUID of Manual (root page)
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
         title:
-          description: Manual page title
+          description: Manual title
           type: string
-          example: Title of a manual page
+          example: Employee Handbook
         image:
           description: Manual Cover Image
           type: object
@@ -3390,78 +3388,67 @@ components:
       type: object
       properties:
         uuid:
-          description: This is the Invotra UUID of the manual page.
+          description: Invotra UUID of the manual page.
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
         title:
-          description: The title of the manual
+          description: Title of the manual page
           type: string
-          example: Branding manual
+          example: Code of Conduct
         summary:
-          description: The summary main body text of the manual
+          description: Summary text of the manual page
           type: string
-          example: The summary of the company branding manual
+          example: How a company's employees should act
         body:
-          description: The main body text describing the contents of the manual
+          description: The main body text contents of the manual page
           type: string
-          example: The manual for company branding.
+          example: The full body describing Code of Conduct.
         site_section:
-          description: This Invotra UUID of site section of the manual page
+          description: Invotra UUID of site section of the manual page
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
         reference:
-          description: The reference name of the manual
+          description: Reference for the manual page
           type: string
-          example: 'BM-1'
+          example: 'CCM-1'
         attachments:
-          description: A list of attachments for the manual
+          description: List of attachments on manual page
           type: array
           items:
             allOf:
               - $ref: '#/components/schemas/file-schema'
         parent_page_uuid:
-          description: This Invotra UUID of the parent manual page.
+          description: Invotra UUID of the parent manual page (empty at root).
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
-        next_page_uuid:
-          description: This Invotra UUID of the next sibling manual page.
-          type: string
-          format: uuid
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-        previous_page_uuid:
-          description: This Invotra UUID of the previous sibling manual page.
-          type: string
-          format: uuid
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-        children:
-          description: The visable child manual pages
-          type: object
-          properties:
-            count:
-              description: Total count of child pages
-              type: integer
-              example: 248
-            results:
-              type: array
-              items:
-                type: object
-                properties:
-                  uuid:
-                    description: The Invotra UUID of the child manual page
-                    type: string
-                    format: uuid
-                    example: '01234567-89ab-cdef-1234-56789abcdef0'
-                  title:
-                    description: Child manual page title
-                    type: string
-                    example: Title of a manual page
-                  section_name:
-                    description: The manual section name
-                    type: string
-                    example: Appendix
+        child_sections:
+          description: The manual sections of child manual pages
+          type: array
+          items:
+            type: object
+            properties:
+              section_name:
+                description: Manual page section name
+                type: string
+                example: Appendix
+              child_pages:
+                description: Manual child pages in section
+                type: array
+                items:
+                  type: object
+                  properties:
+                    uuid:
+                      description: Invotra UUID of the child manual page
+                      type: string
+                      format: uuid
+                      example: '01234567-89ab-cdef-1234-56789abcdef0'
+                    title:
+                      description: Title of child manual page
+                      type: string
+                      example: Appendix A - Acronyms
     file-schema:
       type: object
       properties:
