@@ -3,7 +3,10 @@ servers:
   - url: 'https://dev.invotra.com/api/v0.3'
 info:
   title: InvotraAPI
-  description: In general most fields are optional for update (PUT) requests; you can leave them blank (pass an empty string / array / whatever as appropriate) to clear them, or omit the key to leave them unchanged.
+  description: >-
+    In general most fields are optional for update (PUT) requests; you can leave
+    them blank (pass an empty string / array / whatever as appropriate) to clear
+    them, or omit the key to leave them unchanged.
   version: v0.3
 security:
   - APIKeyHeader: []
@@ -39,7 +42,9 @@ paths:
         - configuration
       responses:
         '200':
-          description: Configuration returned. Any configuration that the user does not have access to view is omitted.
+          description: >-
+            Configuration returned. Any configuration that the user does not
+            have access to view is omitted.
           content:
             application/json:
               schema:
@@ -50,7 +55,9 @@ paths:
         - entities
       summary: Look up information about an entity based on its URL path.
       parameters:
-        - description: The (Drupal) URL path of the entity to look up. Include the leading slash.
+        - description: >-
+            The (Drupal) URL path of the entity to look up. Include the leading
+            slash.
           in: query
           name: path
           required: true
@@ -66,7 +73,11 @@ paths:
         '400':
           description: Path not provided or malformed.
         '403':
-          description: User is not authorized to perform the lookup (e.g. they are unauthenticated and anonymous content access is disabled), or does not have access to the entity that was found (e.g. it is a private group and the user is not a member).
+          description: >-
+            User is not authorized to perform the lookup (e.g. they are
+            unauthenticated and anonymous content access is disabled), or does
+            not have access to the entity that was found (e.g. it is a private
+            group and the user is not a member).
         '404':
           description: No matching entity was found for the given path.
   /sessions/token:
@@ -156,12 +167,19 @@ paths:
           schema:
             type: string
         - name: autocomplete
-          description: Autocomplete term. Matches on team name, per letter, from the start of the word.
+          description: >-
+            Autocomplete term. Matches on team name, per letter, from the start
+            of the word.
           in: query
           schema:
             type: string
         - name: user_fulltext_search
-          description: Filter the list of teams to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by team (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          description: >-
+            Filter the list of teams to those that include users matching a
+            search term. This is useful when you have already searched for users
+            and want to refine your search by team (like a faceted search). Like
+            the fulltext_search parameter of /users/search, this matches on
+            whole words.
           in: query
           schema:
             type: string
@@ -401,14 +419,16 @@ paths:
             type: string
       responses:
         '200':
-          description: 'Count of users returned.'
+          description: Count of users returned.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/user-metrics-accessed-schema'
         '403':
-          description: 'User is not authorized to view this.'
-      description: Returns a count of users who accessed the site on 4 or more days within a given calendar month.
+          description: User is not authorized to view this.
+      description: >-
+        Returns a count of users who accessed the site on 4 or more days within
+        a given calendar month.
   /users/search:
     get:
       tags:
@@ -477,20 +497,35 @@ paths:
                     items:
                       $ref: '#/components/schemas/user-search-schema'
         '403':
-          description: Access denied. This may occur if you try to filter by a private or secret group that you are not a member of.
-    description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
+          description: >-
+            Access denied. This may occur if you try to filter by a private or
+            secret group that you are not a member of.
+    description: >-
+      Search for users. Returns user snippets. If there are no result, an empty
+      array is returned.
   /users/mention:
     get:
       tags:
         - users
       summary: Autocomplete names and email addresses for @-mentioning.
-      description: Autocomplete names and email addresses for @-mentioning. The text parameter matches against the start of the user's full name (forename surname or surname forename) or email address. Full user objects are returned. The list may optionally be filtered by group to show only members of the group, to allow completing only users that can be mentioned when composing a group post. You can not filter by members of a private or secret group unless you are a member yourself. Webmasters can always be mentioned, so they are always matched even if they are not members of the group being filtered. Redacted users are never matched.
+      description: >-
+        Autocomplete names and email addresses for @-mentioning. The text
+        parameter matches against the start of the user's full name (forename
+        surname or surname forename) or email address. Full user objects are
+        returned. The list may optionally be filtered by group to show only
+        members of the group, to allow completing only users that can be
+        mentioned when composing a group post. You can not filter by members of
+        a private or secret group unless you are a member yourself. Webmasters
+        can always be mentioned, so they are always matched even if they are not
+        members of the group being filtered. Redacted users are never matched.
       parameters:
         - name: text
           in: query
           schema:
             type: string
-          description: Text to match against the start of the user's full name or email address.
+          description: >-
+            Text to match against the start of the user's full name or email
+            address.
           required: true
         - name: group
           in: query
@@ -501,19 +536,21 @@ paths:
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
-          description: List of matching users, or an empty array if none match.
+          description: 'List of matching users, or an empty array if none match.'
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/user-search-schema'
-        '404':
-          description: A group UUID was supplied but no existing group matches.
-        '403':
-          description: A group UUID was supplied but the group is a private or secret group and the user making the request is not a member.
         '400':
           description: A malformed group UUID was supplied.
+        '403':
+          description: >-
+            A group UUID was supplied but the group is a private or secret group
+            and the user making the request is not a member.
+        '404':
+          description: A group UUID was supplied but no existing group matches.
   /users/me:
     get:
       tags:
@@ -1000,7 +1037,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
-      description: Search for groups. Returns list of uuids. Returns an empty array if no groups are found.
+      description: >-
+        Search for groups. Returns list of uuids. Returns an empty array if no
+        groups are found.
     post:
       tags:
         - groups
@@ -1016,8 +1055,10 @@ paths:
         '400':
           description: The group was not saved due to malformed JSON.
         '422':
-          description: |
-            The group was not saved due to Drupal validation failure or JSON schema validation
+          description: >
+            The group was not saved due to Drupal validation failure or JSON
+            schema validation
+
             failure.
       description: Create a group.
       requestBody:
@@ -1062,7 +1103,9 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing group.
-      description: Get a list of group posts. This returns only the top-level posts in the group, not their replies.
+      description: >-
+        Get a list of group posts. This returns only the top-level posts in the
+        group, not their replies.
   /groups/search:
     get:
       tags:
@@ -1122,7 +1165,9 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/group-search-schema'
-    description: 'Search for groups. Returns group snippets. An empty array is returned if no groups are found.'
+    description: >-
+      Search for groups. Returns group snippets. An empty array is returned if
+      no groups are found.
   /groups/categories:
     get:
       tags:
@@ -1133,12 +1178,19 @@ paths:
           name: label
           schema:
             type: string
-        - description: Autocomplete term. Matches on group category name, per letter, from the start of the word.
+        - description: >-
+            Autocomplete term. Matches on group category name, per letter, from
+            the start of the word.
           in: query
           name: autocomplete
           schema:
             type: string
-        - description: Filter the list of categories to those that include groups matching a search term. This is useful when you have already searched for groups and want to refine your search by category (like a faceted search). Like the fulltext_search parameter of /groups/search, this matches on whole words.
+        - description: >-
+            Filter the list of categories to those that include groups matching
+            a search term. This is useful when you have already searched for
+            groups and want to refine your search by category (like a faceted
+            search). Like the fulltext_search parameter of /groups/search, this
+            matches on whole words.
           in: query
           name: group_fulltext_search
           schema:
@@ -1161,8 +1213,10 @@ paths:
                     description: The results set.
                     allOf:
                       - $ref: '#/components/schemas/title-uuid-list-common-schema'
-    description: 'List all group categories. An empty array is returned if no categories are found'
-  '/groups/metrics':
+    description: >-
+      List all group categories. An empty array is returned if no categories are
+      found
+  /groups/metrics:
     get:
       tags:
         - groups
@@ -1236,7 +1290,7 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
-  '/groups/{group_id}/my_membership':  
+  '/groups/{group_id}/my_membership':
     get:
       tags:
         - groups
@@ -1286,12 +1340,18 @@ paths:
         '400':
           description: The UUID was malformed.
         '403':
-          description: The logged-in user is not authorized to remove the specified user from the group. (Since group admin functionality is not yet implemented, all users will currently receive this response if trying to remove users other than themselves from a group).
+          description: >-
+            The logged-in user is not authorized to remove the specified user
+            from the group. (Since group admin functionality is not yet
+            implemented, all users will currently receive this response if
+            trying to remove users other than themselves from a group).
         '404':
           description: |
             The user or group does not exist, or the user was not a member
             of the group.
-      description: Remove the user's membership of the group. Note that at present the {user_id} must match that of the current logged-in user.
+      description: >-
+        Remove the user's membership of the group. Note that at present the
+        {user_id} must match that of the current logged-in user.
     put:
       tags:
         - groups
@@ -1312,7 +1372,9 @@ paths:
             format: uuid
       responses:
         '200':
-          description: The user's membership of this group was updated. The new status of their membership is returned in the response body.
+          description: >-
+            The user's membership of this group was updated. The new status of
+            their membership is returned in the response body.
           content:
             application/json:
               schema:
@@ -1320,12 +1382,18 @@ paths:
         '400':
           description: The UUID was malformed or the role type was invalid.
         '403':
-          description: The logged-in user is not authorized to add the specified user to the group or modify their membership. (Since group admin functionality is not yet implemented, all users will currently receive this response if trying to add users other than themselves to a group or modify other users' group memberships).
+          description: >-
+            The logged-in user is not authorized to add the specified user to
+            the group or modify their membership. (Since group admin
+            functionality is not yet implemented, all users will currently
+            receive this response if trying to add users other than themselves
+            to a group or modify other users' group memberships).
         '404':
           description: The user or group does not exist.
       description: >-
         Add a user to a group or update information about a user's existing
-        group membership. Note that at present the {user_id} must match that of the current logged-in user.
+        group membership. Note that at present the {user_id} must match that of
+        the current logged-in user.
       requestBody:
         content:
           application/json:
@@ -1483,7 +1551,10 @@ paths:
       tags:
         - posts
       parameters:
-        - description: The Invotra UUID of the parent post. Currently this must be a top-level post in its group. This restriction may be relaxed in a future API version.
+        - description: >-
+            The Invotra UUID of the parent post. Currently this must be a
+            top-level post in its group. This restriction may be relaxed in a
+            future API version.
           in: path
           name: post_id
           required: true
@@ -1513,17 +1584,26 @@ paths:
         '400':
           description: The supplied UUID was malformed.
         '403':
-          description: The user does not have access to the parent post, perhaps because the post is in a private or secret group of which the user is not a member.
+          description: >-
+            The user does not have access to the parent post, perhaps because
+            the post is in a private or secret group of which the user is not a
+            member.
         '404':
-          description: The UUID does not correspond to an existing post, or the post is not a top-level post in its group.
-      description: "Get a list of post replies. The replies are returned in thread order, old-to-new. Replies to a post appear after the post but before the next post at the same level, and posts are ordered oldest-to-newest within each level."
-  '/posts/categories':
+          description: >-
+            The UUID does not correspond to an existing post, or the post is not
+            a top-level post in its group.
+      description: >-
+        Get a list of post replies. The replies are returned in thread order,
+        old-to-new. Replies to a post appear after the post but before the next
+        post at the same level, and posts are ordered oldest-to-newest within
+        each level.
+  /posts/categories:
     get:
       tags:
         - posts
       responses:
         '200':
-          description: >
+          description: |
             List of posts categories.
           content:
             application/json:
@@ -1612,7 +1692,7 @@ paths:
         '400':
           description: The UUID was malformed.
         '404':
-          description: The post does not exist. 
+          description: The post does not exist.
       description: Check if the current user has liked a post.
     put:
       tags:
@@ -1709,6 +1789,57 @@ paths:
         '422':
           description: JSON schema validation failure
       description: Report a post as the current user.
+  '/manuals':
+    get:
+      description: Get a listing of all manuals
+      tags:
+        - manuals
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Returns a listing of manuals
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Total count of manuals
+                    type: integer
+                    example: 248
+                  results:
+                    description: An array of manuals
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/manual-listing-schema'
+  '/manuals/{manual_page_id}':
+    get:
+      description: Get a manual page, including the root manual page
+      tags:
+        - manuals
+      parameters:
+        - description: The Invotra UUID of a manual page.
+          in: path
+          name: manual_page_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+      responses:
+        '200':
+          description: Returns a single complete manual page object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/manual-page-schema'
+        '400':
+          description: The UUID or request body JSON was malformed.
+        '404':
+          description: No manual page with that UUID was found.
   /files:
     post:
       requestBody:
@@ -1925,12 +2056,19 @@ paths:
           schema:
             type: string
         - name: autocomplete
-          description: Autocomplete term. Matches on location name, per letter, from the start of the word.
+          description: >-
+            Autocomplete term. Matches on location name, per letter, from the
+            start of the word.
           in: query
           schema:
             type: string
         - name: user_fulltext_search
-          description: Filter the list of locations to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by location (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          description: >-
+            Filter the list of locations to those that include users matching a
+            search term. This is useful when you have already searched for users
+            and want to refine your search by location (like a faceted search).
+            Like the fulltext_search parameter of /users/search, this matches on
+            whole words.
           in: query
           schema:
             type: string
@@ -1951,8 +2089,11 @@ paths:
                   results:
                     description: The results set.
                     allOf:
-                      - $ref: '#/components/schemas/location-uuid-title-context-list-schema'
-      description: 'Search for locations. An empty array is returned if no locations are found.'
+                      - $ref: >-
+                          #/components/schemas/location-uuid-title-context-list-schema
+      description: >-
+        Search for locations. An empty array is returned if no locations are
+        found.
   /locations/sites:
     post:
       tags:
@@ -2294,7 +2435,10 @@ paths:
       tags:
         - notifications
       parameters:
-        - description: Filter the notifications for the mobile app. If true, this will return notifications with entity type user, and entity type node and bundle type post only.
+        - description: >-
+            Filter the notifications for the mobile app. If true, this will
+            return notifications with entity type user, and entity type node and
+            bundle type post only.
           in: query
           name: app_notifications_only
           schema:
@@ -2341,7 +2485,7 @@ paths:
           description: |
             The notification does not exist.
       description: Mark a notification as read.
-  /notifications/register/{service_id}/{token}:
+  '/notifications/register/{service_id}/{token}':
     parameters:
       - description: Identifying name of the notification service to be used.
         in: path
@@ -2372,7 +2516,9 @@ paths:
     delete:
       tags:
         - notifications
-      summary: Deregister a token identifying the user with a push notification service.
+      summary: >-
+        Deregister a token identifying the user with a push notification
+        service.
       responses:
         '200':
           description: The token was deregistered.
@@ -2478,15 +2624,21 @@ components:
           type: string
           example: 'https://dev.invotra.com/sites/default/files/mobile_logo.png'
         navigation_first_level_nav_link:
-          description: This is the colour for the main navigation text. Any CSS colour allowed.
+          description: >-
+            This is the colour for the main navigation text. Any CSS colour
+            allowed.
           type: string
           example: '#FFFFFF'
         navigation_menu_background_colour:
-          description: This is the colour for the main navigation background. Any CSS colour allowed.
+          description: >-
+            This is the colour for the main navigation background. Any CSS
+            colour allowed.
           type: string
           example: '#FFFFFF'
         toolbar_background_colour:
-          description: This is the colour for the toolbar background. Any CSS colour allowed.
+          description: >-
+            This is the colour for the toolbar background. Any CSS colour
+            allowed.
           type: string
           example: '#FFFFFF'
         toolbar_text_colour:
@@ -2494,7 +2646,9 @@ components:
           type: string
           example: '#FFFFFF'
         mobile_icons_colour:
-          description: This is the colour for the mobile icons on the toolbar. Any CSS colour allowed.
+          description: >-
+            This is the colour for the mobile icons on the toolbar. Any CSS
+            colour allowed.
           type: string
           example: '#FFFFFF'
         standard_button_normal_state_colour:
@@ -2638,9 +2792,11 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'  
+            - $ref: '#/components/schemas/file-schema'
         timestamp:
-          description: This is the timestamp (in seconds) of when the feed message was created
+          description: >-
+            This is the timestamp (in seconds) of when the feed message was
+            created
           type: integer
           example: 1510941596
         link:
@@ -2650,9 +2806,10 @@ components:
             https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
         short_text:
           description: >-
-            Contextual text for the feed message, with placeholders @user for the user's name and optionally @group for the group name.
+            Contextual text for the feed message, with placeholders @user for
+            the user's name and optionally @group for the group name.
           type: string
-          example: "@user created the following within @group"
+          example: '@user created the following within @group'
         topic:
           description: 'This is topic of the feed, used for filtering'
           type: string
@@ -2720,7 +2877,9 @@ components:
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
         timestamp:
-          description: This is the timestamp (in seconds) of when the notification was created
+          description: >-
+            This is the timestamp (in seconds) of when the notification was
+            created
           type: integer
           example: 1510941596
         image:
@@ -2758,13 +2917,15 @@ components:
           description: This is the type of the entity that the notification links to
           type: string
           enum:
-           - node
-           - user
-           - comment
+            - node
+            - user
+            - comment
         target_subtype:
-          description: This is the subtype (or "bundle" in Drupal parlance) of the entity that the notification links to
+          description: >-
+            This is the subtype (or "bundle" in Drupal parlance) of the entity
+            that the notification links to
           type: string
-          example: 'group_status'
+          example: group_status
       type: object
     team-schema:
       properties:
@@ -2813,7 +2974,8 @@ components:
         user_avatar:
           description: The user's image
           type: string
-          example: "https://dev.invotra.com/sites/default/files/styles/small_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+          example: >-
+            https://dev.invotra.com/sites/default/files/styles/small_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19
         email:
           description: Users email address
           format: email
@@ -2936,7 +3098,7 @@ components:
       type: object
       properties:
         access_threshold_users:
-          description: 'users who accessed the site on 4 or more days within a month'
+          description: users who accessed the site on 4 or more days within a month
           type: integer
           example: 500
     user-search-schema:
@@ -2958,8 +3120,9 @@ components:
       type: object
       properties:
         status:
-          description: |
-            'active', if the user is a member, 'inactive' if not, or 'pending' if they have requested but not yet been granted membership.
+          description: >
+            'active', if the user is a member, 'inactive' if not, or 'pending'
+            if they have requested but not yet been granted membership.
           type: string
           enum:
             - active
@@ -3048,89 +3211,100 @@ components:
           example: 150
     post-schema:
       allOf:
-      - $ref: '#/components/schemas/post-schema-base'
-      - type: object
-        properties:
-          uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the post.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          parent_uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the parent of the post.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          thread_uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          group_uuid:
-            description: This is the Invotra UUID of the group that the post belongs to.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-            type: string
-            format: uuid
-          description:
-            description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
-            type: string
-            example: 'Hey <a href="/users/username" data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John Smith</a>, check out the latest <a href="/apps/groups/chat?hashtag=security">#security</a> news in this group!'
-          pin:
-            description: Whether or not this post is pinned.
-            type: boolean
-          author_uuid:
-            description: The uuid of the author
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          display_name:
-            description: The display name of the author
-            type: string
-            example: Dorothy Whitehead
-          likes_count:
-            description: Count of likes on the post
-            type: integer
-            example: 5
-          comment_count:
-            description: Count of comments on the post
-            type: integer
-            example: 5
-          attachments_count:
-            description: Count of attachments on the post
-            type: integer
-            example: 5
-          timestamp:
-            description: This is the timestamp (in seconds) of when the post was created
-            type: integer
-            example: 1510941596
-          depth:
-            description: The depth of the post in the hierarchy of replies. Top-level posts are 0, their replies are 1, replies to replies are 2 etc.
-            type: integer
-            example: 1
-          current_user_liked:
-            description: A flag to determine if the current user has liked this post
-            type: boolean
-            example: true
+        - $ref: '#/components/schemas/post-schema-base'
+        - type: object
+          properties:
+            uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the post.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            parent_uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the parent of the post.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            thread_uuid:
+              type: string
+              format: uuid
+              description: >-
+                This is the Invotra UUID of the root post of this thread (same
+                as uuid if this is the root post).
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            group_uuid:
+              description: This is the Invotra UUID of the group that the post belongs to.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+              type: string
+              format: uuid
+            description:
+              description: >-
+                The HTML-rendered main body of the post. Do not use this value
+                for editing - use the value in the source field instead.
+              type: string
+              example: >-
+                Hey <a href="/users/username"
+                data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John
+                Smith</a>, check out the latest <a
+                href="/apps/groups/chat?hashtag=security">#security</a> news in
+                this group!
+            pin:
+              description: Whether or not this post is pinned.
+              type: boolean
+            author_uuid:
+              description: The uuid of the author
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            display_name:
+              description: The display name of the author
+              type: string
+              example: Dorothy Whitehead
+            likes_count:
+              description: Count of likes on the post
+              type: integer
+              example: 5
+            comment_count:
+              description: Count of comments on the post
+              type: integer
+              example: 5
+            attachments_count:
+              description: Count of attachments on the post
+              type: integer
+              example: 5
+            timestamp:
+              description: This is the timestamp (in seconds) of when the post was created
+              type: integer
+              example: 1510941596
+            depth:
+              description: >-
+                The depth of the post in the hierarchy of replies. Top-level
+                posts are 0, their replies are 1, replies to replies are 2 etc.
+              type: integer
+              example: 1
+            current_user_liked:
+              description: A flag to determine if the current user has liked this post
+              type: boolean
+              example: true
     post-schema-create:
       allOf:
-      - $ref: '#/components/schemas/post-schema-base'
-      - type: object
-        properties:
-          parent_uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the parent of the post.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          author_uuid:
-            description: The uuid of the author
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          group_uuid:
-            description: This is the Invotra UUID of the group that the post belongs to.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-            type: string
-            format: uuid
+        - $ref: '#/components/schemas/post-schema-base'
+        - type: object
+          properties:
+            parent_uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the parent of the post.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            author_uuid:
+              description: The uuid of the author
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            group_uuid:
+              description: This is the Invotra UUID of the group that the post belongs to.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+              type: string
+              format: uuid
       required:
         - description
         - group_uuid
@@ -3139,7 +3313,10 @@ components:
     post-schema-base:
       properties:
         source:
-          description: The unrendered main body for the post. This value should be used only for editing and is *NOT* safe to display as-is in any HTML context.
+          description: >-
+            The unrendered main body for the post. This value should be used
+            only for editing and is *NOT* safe to display as-is in any HTML
+            context.
           type: string
           example: 'Hey [@username], check out the latest #security news in this group!'
         external_id:
@@ -3149,7 +3326,7 @@ components:
         category:
           description: The category of a post
           type: string
-          enum: 
+          enum:
             - Comment
             - Note
             - Done
@@ -3164,11 +3341,11 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'
+            - $ref: '#/components/schemas/file-schema'
         attachments:
           description: A list of attachments for the post
           type: array
-          items: 
+          items:
             allOf:
               - $ref: '#/components/schemas/file-schema'
       type: object
@@ -3182,12 +3359,12 @@ components:
         - reason
     post-category-schema:
       properties:
-        name: 
-          description: 'Category name'
+        name:
+          description: Category name
           type: string
           example: Note
         uuid:
-          description: 'This is the Invotra UUID of the category.'
+          description: This is the Invotra UUID of the category.
           example: 01234567-89ab-cdef-1234-56789abcdef0
           type: string
           format: uuid
@@ -3196,6 +3373,88 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
+    manual-listing-schema:
+      type: object
+      properties:
+        uuid:
+          description: Invotra UUID of Manual (root page)
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        title:
+          description: Manual title
+          type: string
+          example: Employee Handbook
+        image:
+          description: Manual Cover Image
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/file-schema'
+    manual-page-schema:
+      type: object
+      properties:
+        uuid:
+          description: Invotra UUID of the manual page.
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        title:
+          description: Title of the manual page
+          type: string
+          example: Code of Conduct
+        summary:
+          description: Summary text of the manual page
+          type: string
+          example: How a company's employees should act
+        body:
+          description: The main body text contents of the manual page
+          type: string
+          example: The full body describing Code of Conduct.
+        site_section:
+          description: Invotra UUID of site section of the manual page
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        reference:
+          description: Reference for the manual page
+          type: string
+          example: 'CCM-1'
+        attachments:
+          description: List of attachments on manual page
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/file-schema'
+        parent_page_uuid:
+          description: Invotra UUID of the parent manual page (empty at root).
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        child_sections:
+          description: The manual sections of child manual pages
+          type: array
+          items:
+            type: object
+            properties:
+              section_name:
+                description: Manual page section name
+                type: string
+                example: Appendix
+              child_pages:
+                description: Manual child pages in section
+                type: array
+                items:
+                  type: object
+                  properties:
+                    uuid:
+                      description: Invotra UUID of the child manual page
+                      type: string
+                      format: uuid
+                      example: '01234567-89ab-cdef-1234-56789abcdef0'
+                    title:
+                      description: Title of child manual page
+                      type: string
+                      example: Appendix A - Acronyms
     file-schema:
       type: object
       properties:
@@ -3228,17 +3487,24 @@ components:
           description: Alt text for an image. Returned if and only if the type is an image.
           type: string
         image_height:
-          description: The height of the image in pixels. Returned if and only if the type is an image.
+          description: >-
+            The height of the image in pixels. Returned if and only if the type
+            is an image.
           type: integer
           example: 200
         image_width:
-          description: The width of the image in pixels. Returned if and only if the type is an image.
+          description: >-
+            The width of the image in pixels. Returned if and only if the type
+            is an image.
           type: integer
           example: 200
     file-schema-update:
       properties:
         filename:
-          description: This is the filename. If using multipart/form-data this field may be omitted in favour of the 'filename' directive of the subpart Content-Disposition header.
+          description: >-
+            This is the filename. If using multipart/form-data this field may be
+            omitted in favour of the 'filename' directive of the subpart
+            Content-Disposition header.
           type: string
           example: wallpaper.jpeg
         type:
@@ -3250,7 +3516,9 @@ components:
             - audio
             - video
         filemime:
-          description: The MIME type for the file. If using multipart/form-data this field may be omitted in favour of the subpart Content-Type header.
+          description: >-
+            The MIME type for the file. If using multipart/form-data this field
+            may be omitted in favour of the subpart Content-Type header.
           type: string
           example: image/jpeg
         file:
@@ -3424,7 +3692,9 @@ components:
             type: string
             example: Security
           context:
-            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
+            description: >-
+              Parent items of the entity that was returned. Ordered from the
+              immediate parent, 3 levels up, towards the root.
             type: array
             items:
               type: object
@@ -3460,7 +3730,7 @@ components:
               - floor
               - space
           description:
-            description: 'The description of the location.'
+            description: The description of the location.
             type: string
             example: Woking
           parent_uuid:
@@ -3469,7 +3739,9 @@ components:
             format: uuid
             example: 01234567-89ab-cdef-12F34-56789abcdef0
           context:
-            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
+            description: >-
+              Parent items of the entity that was returned. Ordered from the
+              immediate parent, 3 levels up, towards the root.
             type: array
             items:
               type: object
@@ -3491,7 +3763,7 @@ components:
                     - floor
                     - space
                 description:
-                  description: 'The description of the location.'
+                  description: The description of the location.
                   type: string
                   example: Woking
                 parent_uuid:
