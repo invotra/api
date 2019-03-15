@@ -3304,6 +3304,10 @@ components:
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
+        child_pages_count:
+          description: Total count of child pages across all sections on this level of the manual hierarchy
+          type: integer
+          example: 50
         child_sections:
           description: The manual sections of child manual pages
           type: array
