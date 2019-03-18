@@ -3272,6 +3272,11 @@ components:
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
+        author_uuid:
+          description: The uuid of the author
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         title:
           description: Title of the manual page
           type: string
@@ -3293,6 +3298,14 @@ components:
           description: Reference for the manual page
           type: string
           example: 'CCM-1'
+        timestamp_created:
+            description: This is the timestamp (in seconds) of when the manual page was created
+            type: integer
+            example: 1510941596
+        timestamp_updated:
+            description: This is the timestamp (in seconds) of when the manual page was last updated
+            type: integer
+            example: 1510941696
         attachments:
           description: List of attachments on manual page
           type: array
