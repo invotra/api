@@ -1170,7 +1170,7 @@ paths:
         '200':
           description: Summary of metrics across all groups.
           content:
-            applicaiton/json:
+            application/json:
               schema:
                 $ref: '#/components/schemas/group-metrics-schema'
         '403':
