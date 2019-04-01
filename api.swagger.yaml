@@ -1423,6 +1423,8 @@ paths:
                       $ref: '#/components/schemas/post-schema'
         '400':
           description: An invalid query parameter was supplied.
+        '403':
+          description: The user does not have permission to view a list of posts.
       description: List of posts. An empty array is returned if no posts are found.
   '/posts/{post_id}':
     get:
