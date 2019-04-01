@@ -3650,6 +3650,6 @@ components:
       properties:
         token:
           type: string
-          description: A token to protect aganst cross-site request forgery. Clients should treat this as an opaque value.
+          description: A token to protect against cross-site request forgery. Clients should treat this as an opaque value.
       required:
         - token
