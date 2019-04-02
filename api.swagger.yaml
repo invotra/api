@@ -77,6 +77,34 @@ paths:
       responses:
         '200':
           description: Returns a CSRF token.
+    post:
+      tags:
+        - sessions
+      description: Exchange a temporary single-use token for a valid user session and CSRF token. This is intended for use by mobile apps.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/auth-token-schema'
+        required: true
+      responses:
+        '200':
+          description: A valid token was exchanged for a valid session.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/csrf-token-schema'
+          headers:
+            Set-Cookie:
+              description: A valid session cookie.
+              schema:
+                type: string
+        '400':
+          description: The JSON was malformed.
+        '401':
+          description: The token was not valid.
+        '422':
+          description: The JSON did not match the schema.
   /sessions/login:
     post:
       tags:
@@ -3611,3 +3639,19 @@ components:
         - type
         - subtype
         - uuid
+    auth-token-schema:
+      type: object
+      properties:
+        token:
+          type: string
+          description: A temporary single-use token previously received from the website. Clients should treat this as an opaque value.
+      required:
+        - token
+    csrf-token-schema:
+      type: object
+      properties:
+        token:
+          type: string
+          description: A token to protect against cross-site request forgery. Clients should treat this as an opaque value.
+      required:
+        - token
