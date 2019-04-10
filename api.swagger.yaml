@@ -1278,7 +1278,7 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
-  '/groups/{group_id}/my_membership':  
+  '/groups/{group_id}/my_membership':
     get:
       tags:
         - groups
@@ -1656,7 +1656,7 @@ paths:
         '400':
           description: The UUID was malformed.
         '404':
-          description: The post does not exist. 
+          description: The post does not exist.
       description: Check if the current user has liked a post.
     put:
       tags:
@@ -2682,7 +2682,7 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'  
+           - $ref: '#/components/schemas/file-schema'
         timestamp:
           description: This is the timestamp (in seconds) of when the feed message was created
           type: integer
@@ -2987,15 +2987,15 @@ components:
       type: object
       properties:
         user_count:
-          description: 'the total number of users'
+          description: 'total active user count as of right now'
           type: integer
           example: 500
         users_with_profile_photos:
-          description: 'users who have profile pictures'
+          description: 'number of accounts with a profile photo'
           type: integer
           example: 500
         users_with_descriptions:
-          description: 'users who have about me filled out'
+          description: 'number of accounts with text in the description field'
           type: integer
           example: 500
     user-search-schema:
@@ -3208,7 +3208,7 @@ components:
         category:
           description: The category of a post
           type: string
-          enum: 
+          enum:
             - Comment
             - Note
             - Done
@@ -3227,7 +3227,7 @@ components:
         attachments:
           description: A list of attachments for the post
           type: array
-          items: 
+          items:
             allOf:
               - $ref: '#/components/schemas/file-schema'
       type: object
@@ -3241,7 +3241,7 @@ components:
         - reason
     post-category-schema:
       properties:
-        name: 
+        name:
           description: 'Category name'
           type: string
           example: Note
