@@ -437,6 +437,20 @@ paths:
         '403':
           description: 'User is not authorized to view this.'
       description: Returns a count of users who accessed the site on 4 or more days within a given calendar month.
+  /users/metrics/profiles:
+    get:
+      tags:
+        - users
+      responses:
+        '200':
+          description: 'Count of users profile metrics returned.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-metrics-profiles-schema'
+        '403':
+          description: 'User is not authorized to view this.'
+      description: Returns a count of users in relation to user profile metrics.
   /users/search:
     get:
       tags:
@@ -2967,6 +2981,21 @@ components:
       properties:
         access_threshold_users:
           description: 'users who accessed the site on 4 or more days within a month'
+          type: integer
+          example: 500
+    user-metrics-profiles-schema:
+      type: object
+      properties:
+        user_count:
+          description: 'the total number of users'
+          type: integer
+          example: 500
+        users_with_profile_photos:
+          description: 'users who have profile pictures'
+          type: integer
+          example: 500
+        users_with_descriptions:
+          description: 'users who have about me filled out'
           type: integer
           example: 500
     user-search-schema:
