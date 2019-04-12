@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers:
-  - url: 'https://dev.invotra.com/api/v0.3'
+  - url: 'https://dev.invotra.com/api/0.3'
 info:
   title: InvotraAPI
   description: In general most fields are optional for update (PUT) requests; you can leave them blank (pass an empty string / array / whatever as appropriate) to clear them, or omit the key to leave them unchanged.
