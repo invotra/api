@@ -4,7 +4,7 @@ servers:
 info:
   title: InvotraAPI
   description: In general most fields are optional for update (PUT) requests; you can leave them blank (pass an empty string / array / whatever as appropriate) to clear them, or omit the key to leave them unchanged.
-  version: 0.3
+  version: '0.3'
 security:
   - APIKeyHeader: []
   - APISessionHeader: []
