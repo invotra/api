@@ -443,14 +443,14 @@ paths:
         - users
       responses:
         '200':
-          description: 'Count of users profile metrics returned.'
+          description: 'Count of users profile metrics.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/user-metrics-profiles-schema'
         '403':
           description: 'User is not authorized to view this.'
-      description: Returns a count of users in relation to user profile metrics.
+      description: Returns the total count of active current users.
   /users/search:
     get:
       tags:
@@ -2980,22 +2980,22 @@ components:
       type: object
       properties:
         access_threshold_users:
-          description: 'users who accessed the site on 4 or more days within a month'
+          description: 'Users who accessed the site on 4 or more days within a month'
           type: integer
           example: 500
     user-metrics-profiles-schema:
       type: object
       properties:
         user_count:
-          description: 'total active user count as of right now'
+          description: 'The total number of active users'
           type: integer
           example: 500
         users_with_profile_photos:
-          description: 'number of accounts with a profile photo'
+          description: 'Number of profiles with a profile photo'
           type: integer
           example: 500
         users_with_descriptions:
-          description: 'number of accounts with text in the description field'
+          description: 'Number of profiles with text in the description field'
           type: integer
           example: 500
     user-search-schema:
