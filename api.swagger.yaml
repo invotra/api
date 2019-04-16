@@ -3164,7 +3164,6 @@ components:
       required:
         - description
         - group_uuid
-        - category
         - author_uuid
     post-schema-base:
       properties:
