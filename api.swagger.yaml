@@ -69,6 +69,30 @@ paths:
           description: User is not authorized to perform the lookup (e.g. they are unauthenticated and anonymous content access is disabled), or does not have access to the entity that was found (e.g. it is a private group and the user is not a member).
         '404':
           description: No matching entity was found for the given path.
+  '/node/{node_id}':
+    get:
+      tags:
+        - nodes
+      summary: Retrieve data for a paricular node.
+      parameters:
+        - description: The Invotra UUID of the node.
+          in: path
+          name: node_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Node data found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/node-schema'
+        '400':
+          description: Node UUID not provided or malformed.
+        '404':
+          description: The UUID does not correspond to an existing node.
   /sessions/token:
     get:
       tags:
@@ -1264,7 +1288,7 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
-  '/groups/{group_id}/my_membership':  
+  '/groups/{group_id}/my_membership':
     get:
       tags:
         - groups
@@ -1642,7 +1666,7 @@ paths:
         '400':
           description: The UUID was malformed.
         '404':
-          description: The post does not exist. 
+          description: The post does not exist.
       description: Check if the current user has liked a post.
     put:
       tags:
@@ -2668,7 +2692,7 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'  
+           - $ref: '#/components/schemas/file-schema'
         timestamp:
           description: This is the timestamp (in seconds) of when the feed message was created
           type: integer
@@ -3179,7 +3203,7 @@ components:
         category:
           description: The category of a post
           type: string
-          enum: 
+          enum:
             - Comment
             - Note
             - Done
@@ -3198,7 +3222,7 @@ components:
         attachments:
           description: A list of attachments for the post
           type: array
-          items: 
+          items:
             allOf:
               - $ref: '#/components/schemas/file-schema'
       type: object
@@ -3212,7 +3236,7 @@ components:
         - reason
     post-category-schema:
       properties:
-        name: 
+        name:
           description: 'Category name'
           type: string
           example: Note
@@ -3639,6 +3663,23 @@ components:
         - type
         - subtype
         - uuid
+    node-schema:
+      type: object
+      properties:
+        title:
+          description: The title of the node.
+          type: string
+          example: Node Title
+        body:
+          description: The title of the Node.
+          type: string
+          example: Node Body
+        field_image:
+          description: A list of node image properties
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/file-schema'
     auth-token-schema:
       type: object
       properties:
