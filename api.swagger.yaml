@@ -2370,6 +2370,446 @@ paths:
             schema:
               $ref: '#/components/schemas/location-space-schema'
         required: true
+  /grades:
+    get:
+      tags:
+        - grades
+      parameters:
+        - description: Filter by external ID.
+          in: query
+          name: external_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >
+            List of grades matching the filter criteria, or an empty array if
+            none were found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uuid-list-schema'
+      description: Search for grades.
+    post:
+      tags:
+        - grades
+      responses:
+        '201':
+          description: The grade was created successfully.
+          headers:
+            Location:
+              description: |
+                The URL at which the newly provisioned grade may be retrieved.
+              schema:
+                type: string
+        '400':
+          description: The grade was not saved due to malformed JSON.
+        '422':
+          description: |
+            The grade was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new grade.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/grade-schema-create'
+        required: true
+  /grades/list:
+    get:
+      tags:
+        - grades
+      parameters:
+        - name: title
+          description: Filter by title. Matches on whole words.
+          in: query
+          schema:
+            type: string
+        - name: autocomplete
+          description: Autocomplete term. Matches on grade name, per letter, from the start of the word.
+          in: query
+          schema:
+            type: string
+        - name: user_fulltext_search
+          description: Filter the list of grades to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by grades (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of grades matching the filter criteria.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    allOf:
+                      - $ref: '#/components/schemas/grade-schema'
+      description: 'Search for grades. An empty array is returned if no grades are found.'
+  /grades/{grade_id}:
+    get:
+      tags:
+        - grades
+      parameters:
+        - description: The Invotra UUID of the grade.
+          in: path
+          name: grade_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Returns a single complete grade object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/grade-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing grades.
+      description: Get information about the grade.
+    put:
+      tags:
+        - grades
+      parameters:
+        - description: The Invotra UUID of the grade.
+          in: path
+          name: grade_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The grade information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: The UUID does not correspond to an existing grade.
+        '422':
+          description: |
+            The grade was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update grade information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/grade-schema'
+        required: true
+  /skills:
+    get:
+      tags:
+        - skills
+      parameters:
+        - description: Filter by external ID.
+          in: query
+          name: external_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >
+            List of skills matching the filter criteria, or an empty array if
+            none were found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uuid-list-schema'
+      description: Search for skills.
+    post:
+      tags:
+        - skills
+      responses:
+        '201':
+          description: The skill was created successfully.
+          headers:
+            Location:
+              description: |
+                The URL at which the newly provisioned skill may be retrieved.
+              schema:
+                type: string
+        '400':
+          description: The skill was not saved due to malformed JSON.
+        '422':
+          description: |
+            The skill was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new skill.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/skill-schema-create'
+        required: true
+  /skills/list:
+    get:
+      tags:
+        - skills
+      parameters:
+        - name: title
+          description: Filter by title. Matches on whole words.
+          in: query
+          schema:
+            type: string
+        - name: autocomplete
+          description: Autocomplete term. Matches on skill name, per letter, from the start of the word.
+          in: query
+          schema:
+            type: string
+        - name: user_fulltext_search
+          description: Filter the list of skills to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by skills (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of skills matching the filter criteria.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    allOf:
+                      - $ref: '#/components/schemas/skill-schema'
+      description: 'Search for skills. An empty array is returned if no locations are found.'
+  '/skills/{skill_id}':
+    get:
+      tags:
+        - skills
+      parameters:
+        - description: The Invotra UUID of the skill.
+          in: path
+          name: skill_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Returns a single complete skill object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/skill-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing skills.
+      description: Get information about the skill.
+    put:
+      tags:
+        - skills
+      parameters:
+        - description: The Invotra UUID of the skill.
+          in: path
+          name: skill_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The skill information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: The UUID does not correspond to an existing skill.
+        '422':
+          description: |
+            The skill was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update skill information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/skill-schema'
+        required: true
+  /badges:
+    get:
+      tags:
+        - badges
+      parameters:
+        - description: Filter by external ID.
+          in: query
+          name: external_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >
+            List of badges matching the filter criteria, or an empty array if
+            none were found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uuid-list-schema'
+      description: Search for badges.
+    post:
+      tags:
+        - badges
+      responses:
+        '201':
+          description: The badge was created successfully.
+          headers:
+            Location:
+              description: |
+                The URL at which the newly provisioned badge may be retrieved.
+              schema:
+                type: string
+        '400':
+          description: The badge was not saved due to malformed JSON.
+        '422':
+          description: |
+            The badge was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new badge.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/badge-schema-create'
+        required: true
+  /badges/list:
+    get:
+      tags:
+        - badges
+      parameters:
+        - name: title
+          description: Filter by title. Matches on whole words.
+          in: query
+          schema:
+            type: string
+        - name: autocomplete
+          description: Autocomplete term. Matches on badge name, per letter, from the start of the word.
+          in: query
+          schema:
+            type: string
+        - name: user_fulltext_search
+          description: Filter the list of badges to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by badges (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of badges matching the filter criteria.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    allOf:
+                      - $ref: '#/components/schemas/badge-schema'
+      description: 'Search for badges. An empty array is returned if no badges are found.'
+  '/badges/{badge_id}':
+    get:
+      tags:
+        - badges
+      parameters:
+        - description: The Invotra UUID of the badge.
+          in: path
+          name: badge_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Returns a single complete badge object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/badge-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing badge.
+      description: Get information about the badge.
+    put:
+      tags:
+        - badges
+      parameters:
+        - description: The Invotra UUID of the badge.
+          in: path
+          name: badge_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The badge information was updated successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: The UUID does not correspond to an existing badge.
+        '422':
+          description: |
+            The badge was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: Update badge information.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/badge-schema'
+        required: true
+  '/taxonomy_children/{parent_id}':
+    get:
+      tags:
+        - taxonomy
+      description: 'List the children of a taxonomy term'
+      parameters:
+        - description: 'The Invotra UUID of the parent taxonomy term'
+          in: path
+          name: parent_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of a users notifications.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/uuid-list-schema'
+        '400':
+          description: 'The supplied UUID was malformed'
+        '404':
+          description: 'The UUID does not correspond to an existing taxonomy'
   /notifications:
     get:
       tags:
@@ -2872,6 +3312,10 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
+        has_children:
+          description: 'Indicates that this team has children'
+          type: boolean
+          readOnly: true
       type: object
     team-schema-create:
       allOf:
@@ -3451,6 +3895,12 @@ components:
             - type
     job-role-schema:
       properties:
+        uuid:
+          description: 'The UUID of the job role'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          readOnly: true
         title:
           description: This is the name of the job role
           type: string
@@ -3468,6 +3918,10 @@ components:
           example: 01234567-89ab-cdef-1234-56789abcdef0
           type: string
           format: uuid
+        has_children:
+          description: 'Indicates that this job role has children'
+          type: boolean
+          readOnly: true
       type: object
     job-role-schema-create:
       allOf:
@@ -3489,6 +3943,10 @@ components:
           description: This is used to store the location's external reference id.
           type: string
           example: ABC123
+        has_children:
+          description: 'Indicates that this location has children'
+          type: boolean
+          readOnly: true
     location-site-schema:
       allOf:
         - $ref: '#/components/schemas/location-common-schema'
@@ -3714,6 +4172,113 @@ components:
             - member
       required:
         - type
+    grade-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the grade'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this taxonomy term has children'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/grade-schema-create'
+    grade-schema-create:
+      type: object
+      properties:
+        title:
+          description: 'Name of the grade'
+          type: string
+          example: 'Grade 3'
+        description:
+          description: 'Description of the grade, optional'
+          type: string
+          example: 'The most middle of the grades'
+        external_id:
+          description: 'Grades external reference id, optional'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent grade, optional'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+    skill-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the skill'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this taxonomy term has children'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/skill-schema-create'
+    skill-schema-create:
+      type: object
+      properties:
+        title:
+          description: 'Name of the skill'
+          type: string
+          example: 'Accountancy'
+        description:
+          description: 'Description of the skill, optional'
+          type: string
+          example: 'Accountancy can be dull and boring'
+        external_id:
+          description: 'Skill external reference id, optional'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent grade, optional'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+    badge-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the badge'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this taxonomy term has children'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/badge-schema-create'
+    badge-schema-create:
+      type: object
+      properties:
+        title:
+          description: 'Name of the badge'
+          type: string
+          example: 'Fire Warden'
+        description:
+          description: 'Description of the badge, optional'
+          type: string
+          example: 'In the event of a fire they will rescue people'
+        external_id:
+          description: 'Badge external reference id, optional'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent badge, optional'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        image:
+          description: 'Badge Image'
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/file-schema'
     user-team-membership-schema:
       allOf:
         - $ref: '#/components/schemas/team-membership-common-schema'
