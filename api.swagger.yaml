@@ -2370,6 +2370,90 @@ paths:
             schema:
               $ref: '#/components/schemas/location-space-schema'
         required: true
+  '/locations/any':
+    post:
+      tags:
+        - locations
+      responses:
+        '201':
+          description: 'The location was created successfully.'
+          headers:
+            Location:
+              description: >
+                The URL at which the newly provisioned location may be
+                retrieved.
+              schema:
+                type: string
+        '400':
+          description: 'The location was not saved due to malformed JSON.'
+        '422':
+          description: |
+            The location was not saved due to Drupal validation failure or JSON
+            schema validation failure.
+      description: 'Provision a new location.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location-any-schema-create'
+        required: true
+  '/locations/any/{location_id}':
+    get:
+      tags:
+        - locations
+      parameters:
+        - description: 'The Invotra UUID of the location.'
+          in: path
+          name: location_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete location object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location-any-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a space.
+      description: 'Get information about the location.'
+    put:
+      tags:
+        - locations
+      parameters:
+        - description: 'The Invotra UUID of the location'
+          in: path
+          name: location_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The location information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '404':
+          description: >-
+            The UUID does not correspond to an existing location, or the
+            location is not a space.
+        '422':
+          description: |
+            The location was not updated due to a Drupal validation failure or a
+            JSON schema validation failure.
+      description: 'Update location information.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/location-any-schema'
+        required: true
   /notifications:
     get:
       tags:
@@ -3703,6 +3787,73 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/location-uuid-schema'
+    location-any-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the location'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this location has children'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/location-any-schema-create'
+    location-any-schema-create:
+      type: object
+      properties:
+        title:
+          description: 'Name of the location'
+          type: string
+          example: 'Dublin'
+        description:
+          description: 'Description of the location'
+          type: string
+          example: 'A beautiful city in Ireland'
+        external_id:
+          description: 'This is used to store the location external reference id'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent location, optional'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        address1:
+          description: 'The first line of the location postal address'
+          type: string
+          example: '1 Main Street'
+        address2:
+          description: 'The second line of the location postal address'
+          type: string
+          example: 'Littleton Village'
+        address3:
+          description: 'The third line of the location postal address'
+          type: string
+          example: 'Northern District'
+        town:
+          description: 'The town where the location is'
+          type: string
+          example: 'Metropolis'
+        postcode:
+          description: 'The location postal code or zip code, if any'
+          type: string
+          example: 'AB12 3CD'
+        team:
+          description: 'A team associated with the location'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        phone:
+          description: 'The location telephone number'
+          type: string
+          example: '+1-23-456-789'
+        email:
+          description: 'The location email address'
+          type: string
+          format: email
     team-membership-common-schema:
       type: object
       properties:
