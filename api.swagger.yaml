@@ -3804,6 +3804,14 @@ components:
     location-any-schema-create:
       type: object
       properties:
+        type:
+          description: 'The location type'
+          type: string
+          enum:
+            - site
+            - building
+            - floor
+            - space
         title:
           description: 'Name of the location'
           type: string
