@@ -443,14 +443,14 @@ paths:
         - users
       responses:
         '200':
-          description: 'Count of users profile metrics.'
+          description: 'Counts of user profiles matching various conditions.'
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/user-metrics-profiles-schema'
         '403':
           description: 'User is not authorized to view this.'
-      description: Returns the total count of active current users.
+      description: Returns the total count of active users profiles matching various conditions.
   /users/search:
     get:
       tags:
