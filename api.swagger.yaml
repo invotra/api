@@ -450,7 +450,7 @@ paths:
                 $ref: '#/components/schemas/user-metrics-profiles-schema'
         '403':
           description: 'User is not authorized to view this.'
-      description: Returns the total count of active users profiles matching various conditions.
+      description: Returns the total count of active users (i.e. not blocked) profiles matching various conditions.
   /users/search:
     get:
       tags:
@@ -2987,15 +2987,15 @@ components:
       type: object
       properties:
         user_count:
-          description: 'The total number of active users'
+          description: 'The total number of active users (i.e. not blocked)'
           type: integer
           example: 500
         users_with_profile_photos:
-          description: 'Number of profiles with a profile photo'
+          description: 'Number of active user (i.e. not blocked) profiles with a profile photo'
           type: integer
           example: 500
         users_with_descriptions:
-          description: 'Number of profiles with text in the description field'
+          description: 'Number of active user (i.e. not blocked) profiles with text in the description field'
           type: integer
           example: 500
     user-search-schema:
