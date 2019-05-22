@@ -2846,6 +2846,14 @@ components:
           description: This is the subtype (or "bundle" in Drupal parlance) of the entity that the notification links to
           type: string
           example: 'group_status'
+        title:
+          description: The user who generated the notification
+          type: string
+          example: Bob Matthews
+        body:
+          description: The subject of the notification
+          type: string
+          example: mentioned you in a post
       type: object
     team-schema:
       properties:
