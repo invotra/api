@@ -1264,7 +1264,7 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
-  '/groups/{group_id}/my_membership':  
+  '/groups/{group_id}/my_membership':
     get:
       tags:
         - groups
@@ -1642,7 +1642,7 @@ paths:
         '400':
           description: The UUID was malformed.
         '404':
-          description: The post does not exist. 
+          description: The post does not exist.
       description: Check if the current user has liked a post.
     put:
       tags:
@@ -1974,6 +1974,25 @@ paths:
             schema:
               $ref: '#/components/schemas/job-role-schema'
         required: true
+    delete:
+      tags:
+      - job roles
+      description: Remove job role information.
+      parameters:
+      - description: The Invotra UUID of the job role.
+        in: path
+        name: job_role_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The job role was removed successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: The UUID does not correspond to an existing job role.
   /locations:
     get:
       tags:
@@ -2719,7 +2738,7 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'  
+           - $ref: '#/components/schemas/file-schema'
         timestamp:
           description: This is the timestamp (in seconds) of when the feed message was created
           type: integer
@@ -3237,7 +3256,7 @@ components:
         category:
           description: The category of a post
           type: string
-          enum: 
+          enum:
             - Comment
             - Note
             - Done
@@ -3256,7 +3275,7 @@ components:
         attachments:
           description: A list of attachments for the post
           type: array
-          items: 
+          items:
             allOf:
               - $ref: '#/components/schemas/file-schema'
       type: object
@@ -3270,7 +3289,7 @@ components:
         - reason
     post-category-schema:
       properties:
-        name: 
+        name:
           description: 'Category name'
           type: string
           example: Note
