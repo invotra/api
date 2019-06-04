@@ -188,7 +188,7 @@ paths:
           in: query
           schema:
             type: string
-        - name: user_fulltext_search
+        - name: users_fulltext_search
           description: Filter the list of teams to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by team (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
           in: query
           schema:
@@ -2010,7 +2010,7 @@ paths:
           in: query
           schema:
             type: string
-        - name: user_fulltext_search
+        - name: users_fulltext_search
           description: Filter the list of locations to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by location (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
           in: query
           schema:
