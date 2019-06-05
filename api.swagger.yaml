@@ -1043,6 +1043,8 @@ paths:
                 type: string
         '400':
           description: The group was not saved due to malformed JSON.
+        '403':
+          description: The user does not have permission to create groups.
         '422':
           description: |
             The group was not saved due to Drupal validation failure or JSON schema validation
@@ -1088,6 +1090,8 @@ paths:
                       $ref: '#/components/schemas/post-schema'
         '400':
           description: The supplied UUID was malformed.
+        '403':
+          description: The group is private or secret and the user is not a member.
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group posts. This returns only the top-level posts in the group, not their replies.
@@ -1224,6 +1228,8 @@ paths:
                 $ref: '#/components/schemas/group-schema'
         '400':
           description: The supplied UUID was malformed.
+        '403':
+          description: The group is secret and the user is not a member.
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get information about the group.
@@ -1261,6 +1267,8 @@ paths:
                       $ref: '#/components/schemas/user-schema'
         '400':
           description: The supplied UUID was malformed.
+        '403':
+          description: The group is private or secret and the user is not a member.
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
