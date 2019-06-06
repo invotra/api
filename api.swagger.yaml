@@ -1992,7 +1992,7 @@ paths:
         '400':
           description: The supplied UUID or JSON was malformed.
         '403':
-          description: The user does not have permission to remove job role.
+          description: The user does not have permission to remove this job role.
         '404':
           description: The UUID does not correspond to an existing job role.
   /locations:
