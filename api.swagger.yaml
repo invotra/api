@@ -2477,7 +2477,7 @@ paths:
         '400':
           description: The supplied UUID was malformed.
         '404':
-          description: The UUID does not correspond to an existing grades.
+          description: The UUID does not correspond to an existing grade.
       description: Get information about the grade.
     put:
       tags:
@@ -2508,10 +2508,10 @@ paths:
             schema:
               $ref: '#/components/schemas/grade-schema'
         required: true
-  /skills:
+  /organisational_skills:
     get:
       tags:
-        - skills
+        - organisational skills
       parameters:
         - description: Filter by external ID.
           in: query
@@ -2522,42 +2522,42 @@ paths:
       responses:
         '200':
           description: >
-            List of skills matching the filter criteria, or an empty array if
+            List of organisational skills matching the filter criteria, or an empty array if
             none were found.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
-      description: Search for skills.
+      description: Search for organisational skills.
     post:
       tags:
-        - skills
+        - organisational skills
       responses:
         '201':
-          description: The skill was created successfully.
+          description: The organisational skill was created successfully.
           headers:
             Location:
               description: |
-                The URL at which the newly provisioned skill may be retrieved.
+                The URL at which the newly provisioned organisational skill may be retrieved.
               schema:
                 type: string
         '400':
-          description: The skill was not saved due to malformed JSON.
+          description: The organisational skill was not saved due to malformed JSON.
         '422':
           description: |
-            The skill was not saved due to Drupal validation failure or JSON
+            The organisational skill was not saved due to Drupal validation failure or JSON
             schema validation failure.
-      description: Provision a new skill.
+      description: Provision a new organisational skill.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/skill-schema-create'
+              $ref: '#/components/schemas/organisational-skill-schema-create'
         required: true
-  /skills/list:
+  /organisational_skill/list:
     get:
       tags:
-        - skills
+        - organisational skills
       parameters:
         - name: title
           description: Filter by title. Matches on whole words.
@@ -2565,12 +2565,12 @@ paths:
           schema:
             type: string
         - name: autocomplete
-          description: Autocomplete term. Matches on skill name, per letter, from the start of the word.
+          description: Autocomplete term. Matches on organisational skill name, per letter, from the start of the word.
           in: query
           schema:
             type: string
         - name: user_fulltext_search
-          description: Filter the list of skills to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by skills (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          description: Filter the list of organisational skills to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by organisational skills (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
           in: query
           schema:
             type: string
@@ -2578,7 +2578,7 @@ paths:
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
-          description: List of skills matching the filter criteria.
+          description: List of organisational skills matching the filter criteria.
           content:
             application/json:
               schema:
@@ -2591,60 +2591,60 @@ paths:
                   results:
                     description: The results set.
                     allOf:
-                      - $ref: '#/components/schemas/skill-schema'
-      description: 'Search for skills. An empty array is returned if no locations are found.'
-  '/skills/{skill_id}':
+                      - $ref: '#/components/schemas/organisational-skill-schema'
+      description: 'Search for organisational skills. An empty array is returned if no organisational skills are found.'
+  '/organisational_skills/{organisational_skill_id}':
     get:
       tags:
-        - skills
+        - organisational skills
       parameters:
-        - description: The Invotra UUID of the skill.
+        - description: The Invotra UUID of the organisational skill.
           in: path
-          name: skill_id
+          name: organisational_skill_id
           required: true
           schema:
             type: string
             format: uuid
       responses:
         '200':
-          description: Returns a single complete skill object.
+          description: Returns a single complete organisational skill object.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/skill-schema'
+                $ref: '#/components/schemas/organisational-skill-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
-          description: The UUID does not correspond to an existing skills.
-      description: Get information about the skill.
+          description: The UUID does not correspond to an existing organisational skill.
+      description: Get information about the organisational skill.
     put:
       tags:
-        - skills
+        - organisational skills
       parameters:
-        - description: The Invotra UUID of the skill.
+        - description: The Invotra UUID of the organisational skill.
           in: path
-          name: skill_id
+          name: organisational_skill_id
           required: true
           schema:
             type: string
             format: uuid
       responses:
         '200':
-          description: The skill information was updated successfully.
+          description: The organisational skill information was updated successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
         '404':
-          description: The UUID does not correspond to an existing skill.
+          description: The UUID does not correspond to an existing organisational skill.
         '422':
           description: |
-            The skill was not updated due to a Drupal validation failure or a
+            The organisational skill was not updated due to a Drupal validation failure or a
             JSON schema validation failure.
-      description: Update skill information.
+      description: Update organisational skill information.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/skill-schema'
+              $ref: '#/components/schemas/organisational-skill-schema'
         required: true
   /badges:
     get:
@@ -2801,11 +2801,23 @@ paths:
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
-          description: List of a users notifications.
+          description: 'List of children taxonomy term UUIDs.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/uuid-list-schema'
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'Children taxonomy term UUIDs'
+                    type: array
+                    items:
+                      type: string
+                      format: uuid
+                      example: '01234567-89ab-cdef-1234-56789abcdef0'
         '400':
           description: 'The supplied UUID was malformed'
         '404':
@@ -4182,14 +4194,14 @@ components:
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
             has_children:
-              description: 'Indicates that this taxonomy term has children'
+              description: 'Indicates that this grade has children'
               type: boolean
               readOnly: true
         - $ref: '#/components/schemas/grade-schema-create'
     grade-schema-create:
       type: object
       properties:
-        title:
+        name:
           description: 'Name of the grade'
           type: string
           example: 'Grade 3'
@@ -4198,7 +4210,7 @@ components:
           type: string
           example: 'The most middle of the grades'
         external_id:
-          description: 'Grades external reference id, optional'
+          description: 'Grade external reference id, optional'
           type: string
           example: 'ABC123'
         parent_uuid:
@@ -4206,40 +4218,48 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
-    skill-schema:
+        published:
+          description: 'Indicates that this grade is published'
+          type: boolean
+          example: true
+    organisational-skill-schema:
       allOf:
         - type: object
           properties:
             uuid:
-              description: 'Invotra UUID of the skill'
+              description: 'Invotra UUID of the organisational skill'
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
             has_children:
-              description: 'Indicates that this taxonomy term has children'
+              description: 'Indicates that this organisational skill has children'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/skill-schema-create'
-    skill-schema-create:
+        - $ref: '#/components/schemas/organisational-skill-schema-create'
+    organisational-skill-schema-create:
       type: object
       properties:
-        title:
-          description: 'Name of the skill'
+        name:
+          description: 'Name of the organisational skill'
           type: string
           example: 'Accountancy'
         description:
-          description: 'Description of the skill, optional'
+          description: 'Description of the organisational skill, optional'
           type: string
           example: 'Accountancy can be dull and boring'
         external_id:
-          description: 'Skill external reference id, optional'
+          description: 'Organisational skill external reference id, optional'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent grade, optional'
+          description: 'Invotra UUID of the parent organisational skill, optional'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
+        published:
+          description: 'Indicates that this organisational skill is published'
+          type: boolean
+          example: true
     badge-schema:
       allOf:
         - type: object
@@ -4250,14 +4270,14 @@ components:
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
             has_children:
-              description: 'Indicates that this taxonomy term has children'
+              description: 'Indicates that this badge has children'
               type: boolean
               readOnly: true
         - $ref: '#/components/schemas/badge-schema-create'
     badge-schema-create:
       type: object
       properties:
-        title:
+        name:
           description: 'Name of the badge'
           type: string
           example: 'Fire Warden'
@@ -4274,6 +4294,10 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
+        published:
+          description: 'Indicates that this badge is published'
+          type: boolean
+          example: true
         image:
           description: 'Badge Image'
           type: object
