@@ -2436,6 +2436,11 @@ paths:
           in: query
           schema:
             type: string
+        - name: status
+          description: 'Filter the list of grades on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -2508,6 +2513,25 @@ paths:
             schema:
               $ref: '#/components/schemas/grade-schema'
         required: true
+    delete:
+      tags:
+        - grades
+      description: Delete a grade
+      parameters:
+        - description: The Invotra UUID of the grade.
+          in: path
+          name: grade_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The grade was successfully deleted.
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing grade.
   /organisational_skills:
     get:
       tags:
@@ -2571,6 +2595,11 @@ paths:
             type: string
         - name: user_fulltext_search
           description: Filter the list of organisational skills to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by organisational skills (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          in: query
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of organisational skills on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -2646,6 +2675,25 @@ paths:
             schema:
               $ref: '#/components/schemas/organisational-skill-schema'
         required: true
+    delete:
+      tags:
+        - organisational skills
+      description: Delete an organisational skill
+      parameters:
+        - description: The Invotra UUID of the organisational skill.
+          in: path
+          name: organisational_skill_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The organisational skill was successfully deleted.
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing organisational skill.
   /badges:
     get:
       tags:
@@ -2709,6 +2757,11 @@ paths:
             type: string
         - name: user_fulltext_search
           description: Filter the list of badges to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by badges (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          in: query
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of badges on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -2784,6 +2837,25 @@ paths:
             schema:
               $ref: '#/components/schemas/badge-schema'
         required: true
+    delete:
+      tags:
+        - badges
+      description: Delete a badge
+      parameters:
+        - description: The Invotra UUID of the badge.
+          in: path
+          name: badge_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The badge was successfully deleted.
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing badge.
   '/taxonomy_children/{parent_id}':
     get:
       tags:
