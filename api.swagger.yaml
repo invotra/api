@@ -1359,6 +1359,8 @@ paths:
           description: The logged-in user is not authorized to add the specified user to the group or modify their membership. (Since group admin functionality is not yet implemented, all users will currently receive this response if trying to add users other than themselves to a group or modify other users' group memberships).
         '404':
           description: The user or group does not exist.
+        '409':
+          description: The user is already a member of this group.
       description: >-
         Add a user to a group or update information about a user's existing
         group membership. Note that at present the {user_id} must match that of the current logged-in user.
