@@ -279,7 +279,7 @@ paths:
             format: uuid
       responses:
         '200':
-          description: The team information was remove successfully.
+          description: The team information was removed successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
         '403':
