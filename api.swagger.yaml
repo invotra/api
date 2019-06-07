@@ -2140,13 +2140,13 @@ paths:
             format: uuid
       responses:
         '200':
-          description: The location information was remove successfully.
+          description: The location information was removed successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
         '403':
           description: The user does not have permission to remove this location.
         '404':
-          description: The UUID does not correspond to an existing location.
+          description: The UUID does not correspond to an existing location, or the location is not a floor.
   /locations/buildings:
     post:
       tags:
@@ -2245,13 +2245,13 @@ paths:
             format: uuid
       responses:
         '200':
-          description: The location information was remove successfully.
+          description: The location information was removed successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
         '403':
           description: The user does not have permission to remove this location.
         '404':
-          description: The UUID does not correspond to an existing location.
+          description: The UUID does not correspond to an existing location, or the location is not a floor.
   /locations/floors:
     post:
       tags:
@@ -2350,13 +2350,13 @@ paths:
             format: uuid
       responses:
         '200':
-          description: The location information was remove successfully.
+          description: The location information was removed successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
         '403':
           description: The user does not have permission to remove this location.
         '404':
-          description: The UUID does not correspond to an existing location.
+          description: The UUID does not correspond to an existing location, or the location is not a floor.
   /locations/spaces:
     post:
       tags:
@@ -2455,13 +2455,13 @@ paths:
             format: uuid
       responses:
         '200':
-          description: The location information was remove successfully.
+          description: The location information was removed successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
         '403':
           description: The user does not have permission to remove this location.
         '404':
-          description: The UUID does not correspond to an existing location.
+          description: The UUID does not correspond to an existing location, or the location is not a floor.
   /notifications:
     get:
       tags:
