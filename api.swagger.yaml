@@ -2973,6 +2973,10 @@ components:
             - Ms
           type: string
           example: Mr
+        person_type:
+          description: The user's person type.
+          allOf:
+            - $ref: '#/components/schemas/single-title-uuid-list-common-schema'
         team:
           description: This is the Invotra UUID of the user's team.
           type: string
@@ -2994,15 +2998,15 @@ components:
         teams:
           description: The user's teams. An array of team names and UUIDs.
           allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+            - $ref: '#/components/schemas/multiple-title-uuid-list-common-schema'
         locations:
           description: The user's locations. An array of location names and UUIDs.
           allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+            - $ref: '#/components/schemas/multiple-title-uuid-list-common-schema'
         job_roles:
           description: The user's job roles. An array of job role names and UUIDs.
           allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+            - $ref: '#/components/schemas/multiple-title-uuid-list-common-schema'
         user_uuid:
           description: The UUID of the user
           type: string
@@ -3753,7 +3757,19 @@ components:
               example: 01234567-89ab-cdef-1234-56789abcdef0
           required:
             - uuid
-    title-uuid-list-common-schema:
+    single-title-uuid-list-common-schema:
+      type: object
+      properties:
+        name:
+          description: The title of the entity.
+          type: string
+          readOnly: true
+        uuid:
+          description: The UUID of the entity.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+    multiple-title-uuid-list-common-schema:
       type: array
       items:
         type: object
