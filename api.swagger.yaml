@@ -2549,8 +2549,6 @@ paths:
           description: 'The organisational skill was not saved due to malformed JSON.'
         '403':
           description: 'User is not authorized to create an organisational skill.'
-        '409':
-          description: 'The organisational skill was not saved because the name is already in use.'
         '422':
           description: |
             The organisational skill was not saved due to Drupal validation failure or JSON
@@ -2658,7 +2656,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/organisational-skill-schema'
+              $ref: '#/components/schemas/organisational-skill-schema-create'
         required: true
     delete:
       tags:
