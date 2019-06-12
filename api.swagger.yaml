@@ -2533,26 +2533,6 @@ paths:
         '404':
           description: The UUID does not correspond to an existing grade.
   /organisational_skills:
-    get:
-      tags:
-        - organisational skills
-      parameters:
-        - description: Filter by external ID.
-          in: query
-          name: external_id
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: >
-            List of organisational skills matching the filter criteria, or an empty array if
-            none were found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/uuid-list-schema'
-      description: Search for organisational skills.
     post:
       tags:
         - organisational skills
@@ -2566,7 +2546,11 @@ paths:
               schema:
                 type: string
         '400':
-          description: The organisational skill was not saved due to malformed JSON.
+          description: 'The organisational skill was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create an organisational skill.'
+        '409':
+          description: 'The organisational skill was not saved because the name is already in use.'
         '422':
           description: |
             The organisational skill was not saved due to Drupal validation failure or JSON
@@ -2578,24 +2562,19 @@ paths:
             schema:
               $ref: '#/components/schemas/organisational-skill-schema-create'
         required: true
-  /organisational_skill/list:
+  /organisational_skills/list:
     get:
       tags:
         - organisational skills
       parameters:
-        - name: title
-          description: Filter by title. Matches on whole words.
+        - name: name
+          description: Filter by name. Matches on whole words.
           in: query
           schema:
             type: string
-        - name: autocomplete
-          description: Autocomplete term. Matches on organisational skill name, per letter, from the start of the word.
+        - description: Filter by external ID.
           in: query
-          schema:
-            type: string
-        - name: user_fulltext_search
-          description: Filter the list of organisational skills to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by organisational skills (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
-          in: query
+          name: external_id
           schema:
             type: string
         - name: status
@@ -2621,6 +2600,8 @@ paths:
                     description: The results set.
                     allOf:
                       - $ref: '#/components/schemas/organisational-skill-schema'
+        '403':
+          description: 'User is not authorized to list organisational skills.'
       description: 'Search for organisational skills. An empty array is returned if no organisational skills are found.'
   '/organisational_skills/{organisational_skill_id}':
     get:
@@ -2643,6 +2624,8 @@ paths:
                 $ref: '#/components/schemas/organisational-skill-schema'
         '400':
           description: The supplied UUID was malformed.
+        '403':
+          description: 'User is not authorized to show this organisational skills.'
         '404':
           description: The UUID does not correspond to an existing organisational skill.
       description: Get information about the organisational skill.
@@ -2662,6 +2645,8 @@ paths:
           description: The organisational skill information was updated successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
+        '403':
+          description: 'User is not authorized to update this organisational skill.'
         '404':
           description: The UUID does not correspond to an existing organisational skill.
         '422':
@@ -2692,6 +2677,8 @@ paths:
           description: The organisational skill was successfully deleted.
         '400':
           description: The supplied UUID was malformed.
+        '403':
+          description: 'User is not authorized to delete this organisational skill.'
         '404':
           description: The UUID does not correspond to an existing organisational skill.
   /badges:
@@ -4332,6 +4319,10 @@ components:
           description: 'Indicates that this organisational skill is published'
           type: boolean
           example: true
+        weight:
+          description: 'Determines the position of an organisational skill in the hierarchy in relation to its siblings'
+          type: integer
+          example: 3
     badge-schema:
       allOf:
         - type: object
