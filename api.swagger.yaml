@@ -2378,6 +2378,3414 @@ paths:
             schema:
               $ref: '#/components/schemas/location-space-schema'
         required: true
+  '/badges':
+    post:
+      tags:
+        - 'badges'
+      description: 'Provision a new badge.'
+      responses:
+        '201':
+          description: 'The badge was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned badge may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The badge was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a badge.'
+        '422':
+          description: 'The badge was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/badge-schema-create'
+        required: true
+  '/badges/list':
+    get:
+      tags:
+        - 'badges'
+      description: 'Search for badges. An empty array is returned if no badges are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of badges on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of badges matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/badge-schema'
+        '403':
+          description: 'User is not authorized to list badges.'
+  '/badges/{badge_id}':
+    get:
+      tags:
+        - 'badges'
+      description: 'Get information about the badge.'
+      parameters:
+        - description: 'The Invotra UUID of the badge.'
+          in: path
+          name: badge_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete badge object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/badge-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this badge.'
+        '404':
+          description: 'The UUID does not correspond to an existing badge.'
+    put:
+      tags:
+        - 'badges'
+      description: 'Update badge information.'
+      parameters:
+        - description: 'The Invotra UUID of the badge.'
+          in: path
+          name: badge_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The badge information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this badge.'
+        '404':
+          description: 'The UUID does not correspond to an existing badge.'
+        '422':
+          description: 'The badge was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/badge-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'badges'
+      description: 'Delete a badge.'
+      parameters:
+        - description: 'The Invotra UUID of the badge.'
+          in: path
+          name: badge_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The badge was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this badge.'
+        '404':
+          description: 'The UUID does not correspond to an existing badge.'
+  '/content_categories':
+    post:
+      tags:
+        - 'content categories'
+      description: 'Provision a new content category.'
+      responses:
+        '201':
+          description: 'The content category was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned content category may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The content category was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a content category.'
+        '422':
+          description: 'The content category was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/content-category-schema-create'
+        required: true
+  '/content_categories/list':
+    get:
+      tags:
+        - 'content categories'
+      description: 'Search for content categories. An empty array is returned if no content categories are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of content categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of content categories matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/content-category-schema'
+        '403':
+          description: 'User is not authorized to list content categories.'
+  '/content_categories/{content_category_id}':
+    get:
+      tags:
+        - 'content categories'
+      description: 'Get information about the content category.'
+      parameters:
+        - description: 'The Invotra UUID of the content category.'
+          in: path
+          name: content_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete content category object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/content-category-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this content category.'
+        '404':
+          description: 'The UUID does not correspond to an existing content category.'
+    put:
+      tags:
+        - 'content categories'
+      description: 'Update content category information.'
+      parameters:
+        - description: 'The Invotra UUID of the content category.'
+          in: path
+          name: content_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The content category information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this content category.'
+        '404':
+          description: 'The UUID does not correspond to an existing content category.'
+        '422':
+          description: 'The content category was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/content-category-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'content categories'
+      description: 'Delete a content category.'
+      parameters:
+        - description: 'The Invotra UUID of the content category.'
+          in: path
+          name: content_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The content category was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this content category.'
+        '404':
+          description: 'The UUID does not correspond to an existing content category.'
+  '/content_types':
+    post:
+      tags:
+        - 'content types'
+      description: 'Provision a new content type.'
+      responses:
+        '201':
+          description: 'The content type was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned content type may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The content type was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a content type.'
+        '422':
+          description: 'The content type was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/content-type-schema-create'
+        required: true
+  '/content_types/list':
+    get:
+      tags:
+        - 'content types'
+      description: 'Search for content types. An empty array is returned if no content types are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of content types on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of content types matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/content-type-schema'
+        '403':
+          description: 'User is not authorized to list content types.'
+  '/content_types/{content_type_id}':
+    get:
+      tags:
+        - 'content types'
+      description: 'Get information about the content type.'
+      parameters:
+        - description: 'The Invotra UUID of the content type.'
+          in: path
+          name: content_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete content type object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/content-type-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this content type.'
+        '404':
+          description: 'The UUID does not correspond to an existing content type.'
+    put:
+      tags:
+        - 'content types'
+      description: 'Update content type information.'
+      parameters:
+        - description: 'The Invotra UUID of the content type.'
+          in: path
+          name: content_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The content type information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this content type.'
+        '404':
+          description: 'The UUID does not correspond to an existing content type.'
+        '422':
+          description: 'The content type was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/content-type-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'content types'
+      description: 'Delete a content type.'
+      parameters:
+        - description: 'The Invotra UUID of the content type.'
+          in: path
+          name: content_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The content type was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this content type.'
+        '404':
+          description: 'The UUID does not correspond to an existing content type.'
+  '/countries':
+    post:
+      tags:
+        - 'countries'
+      description: 'Provision a new country.'
+      responses:
+        '201':
+          description: 'The country was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned country may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The country was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a country.'
+        '422':
+          description: 'The country was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/country-schema-create'
+        required: true
+  '/countries/list':
+    get:
+      tags:
+        - 'countries'
+      description: 'Search for countries. An empty array is returned if no countries are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of countries on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of countries matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/country-schema'
+        '403':
+          description: 'User is not authorized to list countries.'
+  '/countries/{country_id}':
+    get:
+      tags:
+        - 'countries'
+      description: 'Get information about the country.'
+      parameters:
+        - description: 'The Invotra UUID of the country.'
+          in: path
+          name: country_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete country object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/country-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this country.'
+        '404':
+          description: 'The UUID does not correspond to an existing country.'
+    put:
+      tags:
+        - 'countries'
+      description: 'Update country information.'
+      parameters:
+        - description: 'The Invotra UUID of the country.'
+          in: path
+          name: country_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The country information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this country.'
+        '404':
+          description: 'The UUID does not correspond to an existing country.'
+        '422':
+          description: 'The country was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/country-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'countries'
+      description: 'Delete a country.'
+      parameters:
+        - description: 'The Invotra UUID of the country.'
+          in: path
+          name: country_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The country was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this country.'
+        '404':
+          description: 'The UUID does not correspond to an existing country.'
+  '/event_statuses':
+    post:
+      tags:
+        - 'event statuses'
+      description: 'Provision a new event status.'
+      responses:
+        '201':
+          description: 'The event status was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned event status may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The event status was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create an event status.'
+        '422':
+          description: 'The event status was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/event-status-schema-create'
+        required: true
+  '/event_statuses/list':
+    get:
+      tags:
+        - 'event statuses'
+      description: 'Search for event statuses. An empty array is returned if no event statuses are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of event statuses on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of event statuses matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/event-status-schema'
+        '403':
+          description: 'User is not authorized to list event statuses.'
+  '/event_statuses/{event_status_id}':
+    get:
+      tags:
+        - 'event statuses'
+      description: 'Get information about the event status.'
+      parameters:
+        - description: 'The Invotra UUID of the event status.'
+          in: path
+          name: event_status_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete event status object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/event-status-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this event status.'
+        '404':
+          description: 'The UUID does not correspond to an existing event status.'
+    put:
+      tags:
+        - 'event statuses'
+      description: 'Update event status information.'
+      parameters:
+        - description: 'The Invotra UUID of the event status.'
+          in: path
+          name: event_status_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The event status information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this event status.'
+        '404':
+          description: 'The UUID does not correspond to an existing event status.'
+        '422':
+          description: 'The event status was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/event-status-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'event statuses'
+      description: 'Delete an event status.'
+      parameters:
+        - description: 'The Invotra UUID of the event status.'
+          in: path
+          name: event_status_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The event status was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this event status.'
+        '404':
+          description: 'The UUID does not correspond to an existing event status.'
+  '/event_topics':
+    post:
+      tags:
+        - 'event topics'
+      description: 'Provision a new event topic.'
+      responses:
+        '201':
+          description: 'The event topic was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned event topic may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The event topic was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create an event topic.'
+        '422':
+          description: 'The event topic was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/event-topic-schema-create'
+        required: true
+  '/event_topics/list':
+    get:
+      tags:
+        - 'event topics'
+      description: 'Search for event topics. An empty array is returned if no event topics are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of event topics on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of event topics matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/event-topic-schema'
+        '403':
+          description: 'User is not authorized to list event topics.'
+  '/event_topics/{event_topic_id}':
+    get:
+      tags:
+        - 'event topics'
+      description: 'Get information about the event topic.'
+      parameters:
+        - description: 'The Invotra UUID of the event topic.'
+          in: path
+          name: event_topic_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete event topic object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/event-topic-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this event topic.'
+        '404':
+          description: 'The UUID does not correspond to an existing event topic.'
+    put:
+      tags:
+        - 'event topics'
+      description: 'Update event topic information.'
+      parameters:
+        - description: 'The Invotra UUID of the event topic.'
+          in: path
+          name: event_topic_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The event topic information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this event topic.'
+        '404':
+          description: 'The UUID does not correspond to an existing event topic.'
+        '422':
+          description: 'The event topic was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/event-topic-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'event topics'
+      description: 'Delete an event topic.'
+      parameters:
+        - description: 'The Invotra UUID of the event topic.'
+          in: path
+          name: event_topic_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The event topic was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this event topic.'
+        '404':
+          description: 'The UUID does not correspond to an existing event topic.'
+  '/free_skills':
+    post:
+      tags:
+        - 'free skills'
+      description: 'Provision a new free skill.'
+      responses:
+        '201':
+          description: 'The free skill was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned free skill may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The free skill was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a free skill.'
+        '422':
+          description: 'The free skill was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/free-skill-schema-create'
+        required: true
+  '/free_skills/list':
+    get:
+      tags:
+        - 'free skills'
+      description: 'Search for free skills. An empty array is returned if no free skills are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of free skills on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of free skills matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/free-skill-schema'
+        '403':
+          description: 'User is not authorized to list free skills.'
+  '/free_skills/{free_skill_id}':
+    get:
+      tags:
+        - 'free skills'
+      description: 'Get information about the free skill.'
+      parameters:
+        - description: 'The Invotra UUID of the free skill.'
+          in: path
+          name: free_skill_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete free skill object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/free-skill-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this free skill.'
+        '404':
+          description: 'The UUID does not correspond to an existing free skill.'
+    put:
+      tags:
+        - 'free skills'
+      description: 'Update free skill information.'
+      parameters:
+        - description: 'The Invotra UUID of the free skill.'
+          in: path
+          name: free_skill_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The free skill information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this free skill.'
+        '404':
+          description: 'The UUID does not correspond to an existing free skill.'
+        '422':
+          description: 'The free skill was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/free-skill-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'free skills'
+      description: 'Delete a free skill.'
+      parameters:
+        - description: 'The Invotra UUID of the free skill.'
+          in: path
+          name: free_skill_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The free skill was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this free skill.'
+        '404':
+          description: 'The UUID does not correspond to an existing free skill.'
+  '/general_topics':
+    post:
+      tags:
+        - 'general topics'
+      description: 'Provision a new general topic.'
+      responses:
+        '201':
+          description: 'The general topic was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned general topic may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The general topic was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a general topic.'
+        '422':
+          description: 'The general topic was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/general-topic-schema-create'
+        required: true
+  '/general_topics/list':
+    get:
+      tags:
+        - 'general topics'
+      description: 'Search for general topics. An empty array is returned if no general topics are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of general topics on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of general topics matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/general-topic-schema'
+        '403':
+          description: 'User is not authorized to list general topics.'
+  '/general_topics/{general_topic_id}':
+    get:
+      tags:
+        - 'general topics'
+      description: 'Get information about the general topic.'
+      parameters:
+        - description: 'The Invotra UUID of the general topic.'
+          in: path
+          name: general_topic_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete general topic object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/general-topic-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this general topic.'
+        '404':
+          description: 'The UUID does not correspond to an existing general topic.'
+    put:
+      tags:
+        - 'general topics'
+      description: 'Update general topic information.'
+      parameters:
+        - description: 'The Invotra UUID of the general topic.'
+          in: path
+          name: general_topic_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The general topic information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this general topic.'
+        '404':
+          description: 'The UUID does not correspond to an existing general topic.'
+        '422':
+          description: 'The general topic was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/general-topic-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'general topics'
+      description: 'Delete a general topic.'
+      parameters:
+        - description: 'The Invotra UUID of the general topic.'
+          in: path
+          name: general_topic_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The general topic was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this general topic.'
+        '404':
+          description: 'The UUID does not correspond to an existing general topic.'
+  '/grades':
+    post:
+      tags:
+        - 'grades'
+      description: 'Provision a new grade.'
+      responses:
+        '201':
+          description: 'The grade was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned grade may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The grade was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a grade.'
+        '422':
+          description: 'The grade was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/grade-schema-create'
+        required: true
+  '/grades/list':
+    get:
+      tags:
+        - 'grades'
+      description: 'Search for grades. An empty array is returned if no grades are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of grades on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of grades matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/grade-schema'
+        '403':
+          description: 'User is not authorized to list grades.'
+  '/grades/{grade_id}':
+    get:
+      tags:
+        - 'grades'
+      description: 'Get information about the grade.'
+      parameters:
+        - description: 'The Invotra UUID of the grade.'
+          in: path
+          name: grade_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete grade object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/grade-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this grade.'
+        '404':
+          description: 'The UUID does not correspond to an existing grade.'
+    put:
+      tags:
+        - 'grades'
+      description: 'Update grade information.'
+      parameters:
+        - description: 'The Invotra UUID of the grade.'
+          in: path
+          name: grade_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The grade information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this grade.'
+        '404':
+          description: 'The UUID does not correspond to an existing grade.'
+        '422':
+          description: 'The grade was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/grade-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'grades'
+      description: 'Delete a grade.'
+      parameters:
+        - description: 'The Invotra UUID of the grade.'
+          in: path
+          name: grade_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The grade was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this grade.'
+        '404':
+          description: 'The UUID does not correspond to an existing grade.'
+  '/group_categories':
+    post:
+      tags:
+        - 'group categories'
+      description: 'Provision a new group category.'
+      responses:
+        '201':
+          description: 'The group category was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned group category may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The group category was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a group category.'
+        '422':
+          description: 'The group category was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-category-schema-create'
+        required: true
+  '/group_categories/list':
+    get:
+      tags:
+        - 'group categories'
+      description: 'Search for group categories. An empty array is returned if no group categories are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of group categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of group categories matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/group-category-schema'
+        '403':
+          description: 'User is not authorized to list group categories.'
+  '/group_categories/{group_category_id}':
+    get:
+      tags:
+        - 'group categories'
+      description: 'Get information about the group category.'
+      parameters:
+        - description: 'The Invotra UUID of the group category.'
+          in: path
+          name: group_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete group category object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group-category-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this group category.'
+        '404':
+          description: 'The UUID does not correspond to an existing group category.'
+    put:
+      tags:
+        - 'group categories'
+      description: 'Update group category information.'
+      parameters:
+        - description: 'The Invotra UUID of the group category.'
+          in: path
+          name: group_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The group category information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this group category.'
+        '404':
+          description: 'The UUID does not correspond to an existing group category.'
+        '422':
+          description: 'The group category was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-category-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'group categories'
+      description: 'Delete a group category.'
+      parameters:
+        - description: 'The Invotra UUID of the group category.'
+          in: path
+          name: group_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The group category was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this group category.'
+        '404':
+          description: 'The UUID does not correspond to an existing group category.'
+  '/idea_categories':
+    post:
+      tags:
+        - 'idea categories'
+      description: 'Provision a new idea category.'
+      responses:
+        '201':
+          description: 'The idea category was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned idea category may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The idea category was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create an idea category.'
+        '422':
+          description: 'The idea category was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/idea-category-schema-create'
+        required: true
+  '/idea_categories/list':
+    get:
+      tags:
+        - 'idea categories'
+      description: 'Search for idea categories. An empty array is returned if no idea categories are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of idea categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of idea categories matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/idea-category-schema'
+        '403':
+          description: 'User is not authorized to list idea categories.'
+  '/idea_categories/{idea_category_id}':
+    get:
+      tags:
+        - 'idea categories'
+      description: 'Get information about the idea category.'
+      parameters:
+        - description: 'The Invotra UUID of the idea category.'
+          in: path
+          name: idea_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete idea category object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/idea-category-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this idea category.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea category.'
+    put:
+      tags:
+        - 'idea categories'
+      description: 'Update idea category information.'
+      parameters:
+        - description: 'The Invotra UUID of the idea category.'
+          in: path
+          name: idea_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The idea category information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this idea category.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea category.'
+        '422':
+          description: 'The idea category was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/idea-category-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'idea categories'
+      description: 'Delete an idea category.'
+      parameters:
+        - description: 'The Invotra UUID of the idea category.'
+          in: path
+          name: idea_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The idea category was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this idea category.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea category.'
+  '/interests':
+    post:
+      tags:
+        - 'interests'
+      description: 'Provision a new interest.'
+      responses:
+        '201':
+          description: 'The interest was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned interest may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The interest was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create an interest.'
+        '422':
+          description: 'The interest was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interest-schema-create'
+        required: true
+  '/interests/list':
+    get:
+      tags:
+        - 'interests'
+      description: 'Search for interests. An empty array is returned if no interests are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of interests on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of interests matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/interest-schema'
+        '403':
+          description: 'User is not authorized to list interests.'
+  '/interests/{interest_id}':
+    get:
+      tags:
+        - 'interests'
+      description: 'Get information about the interest.'
+      parameters:
+        - description: 'The Invotra UUID of the interest.'
+          in: path
+          name: interest_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete interest object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/interest-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this interest.'
+        '404':
+          description: 'The UUID does not correspond to an existing interest.'
+    put:
+      tags:
+        - 'interests'
+      description: 'Update interest information.'
+      parameters:
+        - description: 'The Invotra UUID of the interest.'
+          in: path
+          name: interest_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The interest information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this interest.'
+        '404':
+          description: 'The UUID does not correspond to an existing interest.'
+        '422':
+          description: 'The interest was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/interest-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'interests'
+      description: 'Delete an interest.'
+      parameters:
+        - description: 'The Invotra UUID of the interest.'
+          in: path
+          name: interest_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The interest was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this interest.'
+        '404':
+          description: 'The UUID does not correspond to an existing interest.'
+  '/message_types':
+    post:
+      tags:
+        - 'message types'
+      description: 'Provision a new message type.'
+      responses:
+        '201':
+          description: 'The message type was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned message type may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The message type was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a message type.'
+        '422':
+          description: 'The message type was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/message-type-schema-create'
+        required: true
+  '/message_types/list':
+    get:
+      tags:
+        - 'message types'
+      description: 'Search for message types. An empty array is returned if no message types are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of message types on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of message types matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/message-type-schema'
+        '403':
+          description: 'User is not authorized to list message types.'
+  '/message_types/{message_type_id}':
+    get:
+      tags:
+        - 'message types'
+      description: 'Get information about the message type.'
+      parameters:
+        - description: 'The Invotra UUID of the message type.'
+          in: path
+          name: message_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete message type object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message-type-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this message type.'
+        '404':
+          description: 'The UUID does not correspond to an existing message type.'
+    put:
+      tags:
+        - 'message types'
+      description: 'Update message type information.'
+      parameters:
+        - description: 'The Invotra UUID of the message type.'
+          in: path
+          name: message_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The message type information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this message type.'
+        '404':
+          description: 'The UUID does not correspond to an existing message type.'
+        '422':
+          description: 'The message type was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/message-type-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'message types'
+      description: 'Delete a message type.'
+      parameters:
+        - description: 'The Invotra UUID of the message type.'
+          in: path
+          name: message_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The message type was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this message type.'
+        '404':
+          description: 'The UUID does not correspond to an existing message type.'
+  '/organisational_skills':
+    post:
+      tags:
+        - 'organisational skills'
+      description: 'Provision a new organisational skill.'
+      responses:
+        '201':
+          description: 'The organisational skill was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned organisational skill may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The organisational skill was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create an organisational skill.'
+        '422':
+          description: 'The organisational skill was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/organisational-skill-schema-create'
+        required: true
+  '/organisational_skills/list':
+    get:
+      tags:
+        - 'organisational skills'
+      description: 'Search for organisational skills. An empty array is returned if no organisational skills are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of organisational skills on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of organisational skills matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/organisational-skill-schema'
+        '403':
+          description: 'User is not authorized to list organisational skills.'
+  '/organisational_skills/{organisational_skill_id}':
+    get:
+      tags:
+        - 'organisational skills'
+      description: 'Get information about the organisational skill.'
+      parameters:
+        - description: 'The Invotra UUID of the organisational skill.'
+          in: path
+          name: organisational_skill_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete organisational skill object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/organisational-skill-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this organisational skill.'
+        '404':
+          description: 'The UUID does not correspond to an existing organisational skill.'
+    put:
+      tags:
+        - 'organisational skills'
+      description: 'Update organisational skill information.'
+      parameters:
+        - description: 'The Invotra UUID of the organisational skill.'
+          in: path
+          name: organisational_skill_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The organisational skill information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this organisational skill.'
+        '404':
+          description: 'The UUID does not correspond to an existing organisational skill.'
+        '422':
+          description: 'The organisational skill was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/organisational-skill-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'organisational skills'
+      description: 'Delete an organisational skill.'
+      parameters:
+        - description: 'The Invotra UUID of the organisational skill.'
+          in: path
+          name: organisational_skill_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The organisational skill was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this organisational skill.'
+        '404':
+          description: 'The UUID does not correspond to an existing organisational skill.'
+  '/person_types':
+    post:
+      tags:
+        - 'person types'
+      description: 'Provision a new person type.'
+      responses:
+        '201':
+          description: 'The person type was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned person type may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The person type was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a person type.'
+        '422':
+          description: 'The person type was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/person-type-schema-create'
+        required: true
+  '/person_types/list':
+    get:
+      tags:
+        - 'person types'
+      description: 'Search for person types. An empty array is returned if no person types are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of person types on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of person types matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/person-type-schema'
+        '403':
+          description: 'User is not authorized to list person types.'
+  '/person_types/{person_type_id}':
+    get:
+      tags:
+        - 'person types'
+      description: 'Get information about the person type.'
+      parameters:
+        - description: 'The Invotra UUID of the person type.'
+          in: path
+          name: person_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete person type object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person-type-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this person type.'
+        '404':
+          description: 'The UUID does not correspond to an existing person type.'
+    put:
+      tags:
+        - 'person types'
+      description: 'Update person type information.'
+      parameters:
+        - description: 'The Invotra UUID of the person type.'
+          in: path
+          name: person_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The person type information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this person type.'
+        '404':
+          description: 'The UUID does not correspond to an existing person type.'
+        '422':
+          description: 'The person type was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/person-type-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'person types'
+      description: 'Delete a person type.'
+      parameters:
+        - description: 'The Invotra UUID of the person type.'
+          in: path
+          name: person_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The person type was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this person type.'
+        '404':
+          description: 'The UUID does not correspond to an existing person type.'
+  '/policy_types':
+    post:
+      tags:
+        - 'policy types'
+      description: 'Provision a new policy type.'
+      responses:
+        '201':
+          description: 'The policy type was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned policy type may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The policy type was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a policy type.'
+        '422':
+          description: 'The policy type was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/policy-type-schema-create'
+        required: true
+  '/policy_types/list':
+    get:
+      tags:
+        - 'policy types'
+      description: 'Search for policy types. An empty array is returned if no policy types are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of policy types on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of policy types matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/policy-type-schema'
+        '403':
+          description: 'User is not authorized to list policy types.'
+  '/policy_types/{policy_type_id}':
+    get:
+      tags:
+        - 'policy types'
+      description: 'Get information about the policy type.'
+      parameters:
+        - description: 'The Invotra UUID of the policy type.'
+          in: path
+          name: policy_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete policy type object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/policy-type-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this policy type.'
+        '404':
+          description: 'The UUID does not correspond to an existing policy type.'
+    put:
+      tags:
+        - 'policy types'
+      description: 'Update policy type information.'
+      parameters:
+        - description: 'The Invotra UUID of the policy type.'
+          in: path
+          name: policy_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The policy type information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this policy type.'
+        '404':
+          description: 'The UUID does not correspond to an existing policy type.'
+        '422':
+          description: 'The policy type was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/policy-type-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'policy types'
+      description: 'Delete a policy type.'
+      parameters:
+        - description: 'The Invotra UUID of the policy type.'
+          in: path
+          name: policy_type_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The policy type was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this policy type.'
+        '404':
+          description: 'The UUID does not correspond to an existing policy type.'
+  '/primary_categories':
+    post:
+      tags:
+        - 'primary categories'
+      description: 'Provision a new primary category.'
+      responses:
+        '201':
+          description: 'The primary category was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned primary category may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The primary category was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a primary category.'
+        '422':
+          description: 'The primary category was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/primary-category-schema-create'
+        required: true
+  '/primary_categories/list':
+    get:
+      tags:
+        - 'primary categories'
+      description: 'Search for primary categories. An empty array is returned if no primary categories are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of primary categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of primary categories matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/primary-category-schema'
+        '403':
+          description: 'User is not authorized to list primary categories.'
+  '/primary_categories/{primary_category_id}':
+    get:
+      tags:
+        - 'primary categories'
+      description: 'Get information about the primary category.'
+      parameters:
+        - description: 'The Invotra UUID of the primary category.'
+          in: path
+          name: primary_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete primary category object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/primary-category-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this primary category.'
+        '404':
+          description: 'The UUID does not correspond to an existing primary category.'
+    put:
+      tags:
+        - 'primary categories'
+      description: 'Update primary category information.'
+      parameters:
+        - description: 'The Invotra UUID of the primary category.'
+          in: path
+          name: primary_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The primary category information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this primary category.'
+        '404':
+          description: 'The UUID does not correspond to an existing primary category.'
+        '422':
+          description: 'The primary category was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/primary-category-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'primary categories'
+      description: 'Delete a primary category.'
+      parameters:
+        - description: 'The Invotra UUID of the primary category.'
+          in: path
+          name: primary_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The primary category was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this primary category.'
+        '404':
+          description: 'The UUID does not correspond to an existing primary category.'
+  '/projects':
+    post:
+      tags:
+        - 'projects'
+      description: 'Provision a new project.'
+      responses:
+        '201':
+          description: 'The project was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned project may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The project was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a project.'
+        '422':
+          description: 'The project was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/project-schema-create'
+        required: true
+  '/projects/list':
+    get:
+      tags:
+        - 'projects'
+      description: 'Search for projects. An empty array is returned if no projects are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of projects on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of projects matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/project-schema'
+        '403':
+          description: 'User is not authorized to list projects.'
+  '/projects/{project_id}':
+    get:
+      tags:
+        - 'projects'
+      description: 'Get information about the project.'
+      parameters:
+        - description: 'The Invotra UUID of the project.'
+          in: path
+          name: project_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete project object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/project-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this project.'
+        '404':
+          description: 'The UUID does not correspond to an existing project.'
+    put:
+      tags:
+        - 'projects'
+      description: 'Update project information.'
+      parameters:
+        - description: 'The Invotra UUID of the project.'
+          in: path
+          name: project_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The project information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this project.'
+        '404':
+          description: 'The UUID does not correspond to an existing project.'
+        '422':
+          description: 'The project was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/project-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'projects'
+      description: 'Delete a project.'
+      parameters:
+        - description: 'The Invotra UUID of the project.'
+          in: path
+          name: project_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The project was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this project.'
+        '404':
+          description: 'The UUID does not correspond to an existing project.'
+  '/query_categories':
+    post:
+      tags:
+        - 'query categories'
+      description: 'Provision a new query category.'
+      responses:
+        '201':
+          description: 'The query category was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned query category may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The query category was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a query category.'
+        '422':
+          description: 'The query category was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query-category-schema-create'
+        required: true
+  '/query_categories/list':
+    get:
+      tags:
+        - 'query categories'
+      description: 'Search for query categories. An empty array is returned if no query categories are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of query categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of query categories matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/query-category-schema'
+        '403':
+          description: 'User is not authorized to list query categories.'
+  '/query_categories/{query_category_id}':
+    get:
+      tags:
+        - 'query categories'
+      description: 'Get information about the query category.'
+      parameters:
+        - description: 'The Invotra UUID of the query category.'
+          in: path
+          name: query_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete query category object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/query-category-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this query category.'
+        '404':
+          description: 'The UUID does not correspond to an existing query category.'
+    put:
+      tags:
+        - 'query categories'
+      description: 'Update query category information.'
+      parameters:
+        - description: 'The Invotra UUID of the query category.'
+          in: path
+          name: query_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The query category information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this query category.'
+        '404':
+          description: 'The UUID does not correspond to an existing query category.'
+        '422':
+          description: 'The query category was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query-category-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'query categories'
+      description: 'Delete a query category.'
+      parameters:
+        - description: 'The Invotra UUID of the query category.'
+          in: path
+          name: query_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The query category was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this query category.'
+        '404':
+          description: 'The UUID does not correspond to an existing query category.'
+  '/regions':
+    post:
+      tags:
+        - 'regions'
+      description: 'Provision a new region.'
+      responses:
+        '201':
+          description: 'The region was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned region may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The region was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a region.'
+        '422':
+          description: 'The region was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/region-schema-create'
+        required: true
+  '/regions/list':
+    get:
+      tags:
+        - 'regions'
+      description: 'Search for regions. An empty array is returned if no regions are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of regions on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of regions matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/region-schema'
+        '403':
+          description: 'User is not authorized to list regions.'
+  '/regions/{region_id}':
+    get:
+      tags:
+        - 'regions'
+      description: 'Get information about the region.'
+      parameters:
+        - description: 'The Invotra UUID of the region.'
+          in: path
+          name: region_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete region object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/region-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this region.'
+        '404':
+          description: 'The UUID does not correspond to an existing region.'
+    put:
+      tags:
+        - 'regions'
+      description: 'Update region information.'
+      parameters:
+        - description: 'The Invotra UUID of the region.'
+          in: path
+          name: region_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The region information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this region.'
+        '404':
+          description: 'The UUID does not correspond to an existing region.'
+        '422':
+          description: 'The region was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/region-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'regions'
+      description: 'Delete a region.'
+      parameters:
+        - description: 'The Invotra UUID of the region.'
+          in: path
+          name: region_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The region was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this region.'
+        '404':
+          description: 'The UUID does not correspond to an existing region.'
+  '/search_highlights':
+    post:
+      tags:
+        - 'search highlights'
+      description: 'Provision a new search highlight.'
+      responses:
+        '201':
+          description: 'The search highlight was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned search highlight may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The search highlight was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a search highlight.'
+        '422':
+          description: 'The search highlight was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/search-highlight-schema-create'
+        required: true
+  '/search_highlights/list':
+    get:
+      tags:
+        - 'search highlights'
+      description: 'Search for search highlights. An empty array is returned if no search highlights are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of search highlights on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of search highlights matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/search-highlight-schema'
+        '403':
+          description: 'User is not authorized to list search highlights.'
+  '/search_highlights/{search_highlight_id}':
+    get:
+      tags:
+        - 'search highlights'
+      description: 'Get information about the search highlight.'
+      parameters:
+        - description: 'The Invotra UUID of the search highlight.'
+          in: path
+          name: search_highlight_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete search highlight object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/search-highlight-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this search highlight.'
+        '404':
+          description: 'The UUID does not correspond to an existing search highlight.'
+    put:
+      tags:
+        - 'search highlights'
+      description: 'Update search highlight information.'
+      parameters:
+        - description: 'The Invotra UUID of the search highlight.'
+          in: path
+          name: search_highlight_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The search highlight information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this search highlight.'
+        '404':
+          description: 'The UUID does not correspond to an existing search highlight.'
+        '422':
+          description: 'The search highlight was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/search-highlight-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'search highlights'
+      description: 'Delete a search highlight.'
+      parameters:
+        - description: 'The Invotra UUID of the search highlight.'
+          in: path
+          name: search_highlight_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The search highlight was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this search highlight.'
+        '404':
+          description: 'The UUID does not correspond to an existing search highlight.'
+  '/security_classifications':
+    post:
+      tags:
+        - 'security classifications'
+      description: 'Provision a new security classification.'
+      responses:
+        '201':
+          description: 'The security classification was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned security classification may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The security classification was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a security classification.'
+        '422':
+          description: 'The security classification was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/security-classification-schema-create'
+        required: true
+  '/security_classifications/list':
+    get:
+      tags:
+        - 'security classifications'
+      description: 'Search for security classifications. An empty array is returned if no security classifications are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of security classifications on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of security classifications matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/security-classification-schema'
+        '403':
+          description: 'User is not authorized to list security classifications.'
+  '/security_classifications/{security_classification_id}':
+    get:
+      tags:
+        - 'security classifications'
+      description: 'Get information about the security classification.'
+      parameters:
+        - description: 'The Invotra UUID of the security classification.'
+          in: path
+          name: security_classification_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete security classification object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/security-classification-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this security classification.'
+        '404':
+          description: 'The UUID does not correspond to an existing security classification.'
+    put:
+      tags:
+        - 'security classifications'
+      description: 'Update security classification information.'
+      parameters:
+        - description: 'The Invotra UUID of the security classification.'
+          in: path
+          name: security_classification_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The security classification information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this security classification.'
+        '404':
+          description: 'The UUID does not correspond to an existing security classification.'
+        '422':
+          description: 'The security classification was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/security-classification-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'security classifications'
+      description: 'Delete a security classification.'
+      parameters:
+        - description: 'The Invotra UUID of the security classification.'
+          in: path
+          name: security_classification_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The security classification was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this security classification.'
+        '404':
+          description: 'The UUID does not correspond to an existing security classification.'
+  '/titles':
+    post:
+      tags:
+        - 'titles'
+      description: 'Provision a new title.'
+      responses:
+        '201':
+          description: 'The title was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned title may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The title was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a title.'
+        '422':
+          description: 'The title was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/title-schema-create'
+        required: true
+  '/titles/list':
+    get:
+      tags:
+        - 'titles'
+      description: 'Search for titles. An empty array is returned if no titles are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of titles on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of titles matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/title-schema'
+        '403':
+          description: 'User is not authorized to list titles.'
+  '/titles/{title_id}':
+    get:
+      tags:
+        - 'titles'
+      description: 'Get information about the title.'
+      parameters:
+        - description: 'The Invotra UUID of the title.'
+          in: path
+          name: title_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete title object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/title-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this title.'
+        '404':
+          description: 'The UUID does not correspond to an existing title.'
+    put:
+      tags:
+        - 'titles'
+      description: 'Update title information.'
+      parameters:
+        - description: 'The Invotra UUID of the title.'
+          in: path
+          name: title_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The title information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this title.'
+        '404':
+          description: 'The UUID does not correspond to an existing title.'
+        '422':
+          description: 'The title was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/title-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'titles'
+      description: 'Delete a title.'
+      parameters:
+        - description: 'The Invotra UUID of the title.'
+          in: path
+          name: title_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The title was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this title.'
+        '404':
+          description: 'The UUID does not correspond to an existing title.'
+  '/user_categories':
+    post:
+      tags:
+        - 'user categories'
+      description: 'Provision a new user category.'
+      responses:
+        '201':
+          description: 'The user category was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned user category may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The user category was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a user category.'
+        '422':
+          description: 'The user category was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user-category-schema-create'
+        required: true
+  '/user_categories/list':
+    get:
+      tags:
+        - 'user categories'
+      description: 'Search for user categories. An empty array is returned if no user categories are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of user categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of user categories matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/user-category-schema'
+        '403':
+          description: 'User is not authorized to list user categories.'
+  '/user_categories/{user_category_id}':
+    get:
+      tags:
+        - 'user categories'
+      description: 'Get information about the user category.'
+      parameters:
+        - description: 'The Invotra UUID of the user category.'
+          in: path
+          name: user_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'Returns a single complete user category object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-category-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this user category.'
+        '404':
+          description: 'The UUID does not correspond to an existing user category.'
+    put:
+      tags:
+        - 'user categories'
+      description: 'Update user category information.'
+      parameters:
+        - description: 'The Invotra UUID of the user category.'
+          in: path
+          name: user_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The user category information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this user category.'
+        '404':
+          description: 'The UUID does not correspond to an existing user category.'
+        '422':
+          description: 'The user category was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user-category-schema-create'
+        required: true
+    delete:
+      tags:
+        - 'user categories'
+      description: 'Delete a user category.'
+      parameters:
+        - description: 'The Invotra UUID of the user category.'
+          in: path
+          name: user_category_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: 'The user category was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this user category.'
+        '404':
+          description: 'The UUID does not correspond to an existing user category.'
   /notifications:
     get:
       tags:
@@ -3753,6 +7161,1014 @@ components:
               example: 01234567-89ab-cdef-1234-56789abcdef0
           required:
             - uuid
+    badge-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the badge.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this badge has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/badge-schema-create'
+    badge-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the badge.'
+          type: string
+          example: 'Fire Warden'
+        description:
+          description: 'Description of the badge, optional.'
+          type: string
+          example: 'In the event of a fire responsible for evacuation'
+        external_id:
+          description: 'The badge external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent badge, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this badge is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a badge in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    content-category-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the content category.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this content category has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/content-category-schema-create'
+    content-category-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the content category.'
+          type: string
+          example: 'Announcements'
+        description:
+          description: 'Description of the content category, optional.'
+          type: string
+          example: 'Content comprising of staff announcements'
+        external_id:
+          description: 'The content category external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent content category, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this content category is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a content category in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    content-type-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the content type.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this content type has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/content-type-schema-create'
+    content-type-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the content type.'
+          type: string
+          example: 'Manual'
+        description:
+          description: 'Description of the content type, optional.'
+          type: string
+          example: 'Technical communication document'
+        external_id:
+          description: 'The content type external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent content type, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this content type is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a content type in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    country-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the country.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this country has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/country-schema-create'
+    country-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the country.'
+          type: string
+          example: 'England'
+        description:
+          description: 'Description of the country, optional.'
+          type: string
+          example: 'A Green and pleasant land'
+        external_id:
+          description: 'The country external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent country, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this country is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a country in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    event-status-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the event status.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this event status has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/event-status-schema-create'
+    event-status-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the event status.'
+          type: string
+          example: 'Cancelled'
+        description:
+          description: 'Description of the event status, optional.'
+          type: string
+          example: 'Event is cancelled'
+        external_id:
+          description: 'The event status external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent event status, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this event status is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of an event status in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    event-topic-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the event topic.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this event topic has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/event-topic-schema-create'
+    event-topic-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the event topic.'
+          type: string
+          example: 'Luncheon'
+        description:
+          description: 'Description of the event topic, optional.'
+          type: string
+          example: 'Special events that include a meal'
+        external_id:
+          description: 'The event topic external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent event topic, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this event topic is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of an event topic in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    free-skill-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the free skill.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this free skill has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/free-skill-schema-create'
+    free-skill-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the free skill.'
+          type: string
+          example: 'Carpentry'
+        description:
+          description: 'Description of the free skill, optional.'
+          type: string
+          example: 'Making things out of wood'
+        external_id:
+          description: 'The free skill external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent free skill, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this free skill is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a free skill in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    general-topic-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the general topic.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this general topic has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/general-topic-schema-create'
+    general-topic-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the general topic.'
+          type: string
+          example: 'Darts'
+        description:
+          description: 'Description of the general topic, optional.'
+          type: string
+          example: 'Anything on the game of darts'
+        external_id:
+          description: 'The general topic external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent general topic, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this general topic is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a general topic in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    grade-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the grade.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this grade has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/grade-schema-create'
+    grade-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the grade.'
+          type: string
+          example: 'Grade 3'
+        description:
+          description: 'Description of the grade, optional.'
+          type: string
+          example: 'The most middle of the grades'
+        external_id:
+          description: 'The grade external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent grade, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this grade is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a grade in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    group-category-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the group category.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this group category has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/group-category-schema-create'
+    group-category-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the group category.'
+          type: string
+          example: 'Hobbies'
+        description:
+          description: 'Description of the group category, optional.'
+          type: string
+          example: 'Groups discussing hobbies'
+        external_id:
+          description: 'The group category external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent group category, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this group category is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a group category in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    idea-category-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the idea category.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this idea category has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/idea-category-schema-create'
+    idea-category-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the idea category.'
+          type: string
+          example: 'Staff Welfare'
+        description:
+          description: 'Description of the idea category, optional.'
+          type: string
+          example: 'Ideas that may prevent loss of life or injury to staff'
+        external_id:
+          description: 'The idea category external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent idea category, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this idea category is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of an idea category in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    interest-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the interest.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this interest has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/interest-schema-create'
+    interest-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the interest.'
+          type: string
+          example: 'Trainspotting'
+        description:
+          description: 'Description of the interest, optional.'
+          type: string
+          example: 'For those with an amateur interest in railways'
+        external_id:
+          description: 'The interest external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent interest, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this interest is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of an interest in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    message-type-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the message type.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this message type has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/message-type-schema-create'
+    message-type-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the message type.'
+          type: string
+          example: 'Daily update'
+        description:
+          description: 'Description of the message type, optional.'
+          type: string
+          example: 'Details of progress made throughout the day'
+        external_id:
+          description: 'The message type external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent message type, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this message type is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a message type in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    organisational-skill-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the organisational skill.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this organisational skill has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/organisational-skill-schema-create'
+    organisational-skill-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the organisational skill.'
+          type: string
+          example: 'Accountancy'
+        description:
+          description: 'Description of the organisational skill, optional.'
+          type: string
+          example: 'Accountancy can be dull and boring'
+        external_id:
+          description: 'The organisational skill external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent organisational skill, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this organisational skill is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of an organisational skill in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    person-type-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the person type.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this person type has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/person-type-schema-create'
+    person-type-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the person type.'
+          type: string
+          example: 'Part time'
+        description:
+          description: 'Description of the person type, optional.'
+          type: string
+          example: 'Works a half day'
+        external_id:
+          description: 'The person type external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent person type, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this person type is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a person type in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    policy-type-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the policy type.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this policy type has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/policy-type-schema-create'
+    policy-type-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the policy type.'
+          type: string
+          example: 'Constituent'
+        description:
+          description: 'Description of the policy type, optional.'
+          type: string
+          example: 'Creates executive power entities'
+        external_id:
+          description: 'The policy type external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent policy type, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this policy type is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a policy type in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    primary-category-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the primary category.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this primary category has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/primary-category-schema-create'
+    primary-category-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the primary category.'
+          type: string
+          example: 'Training'
+        description:
+          description: 'Description of the primary category, optional.'
+          type: string
+          example: 'Involving  staff training'
+        external_id:
+          description: 'The primary category external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent primary category, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this primary category is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a primary category in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    project-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the project.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this project has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/project-schema-create'
+    project-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the project.'
+          type: string
+          example: 'Office Refurbishment'
+        description:
+          description: 'Description of the project, optional.'
+          type: string
+          example: 'Decorating and reorganising the office'
+        external_id:
+          description: 'The project external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent project, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this project is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a project in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    query-category-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the query category.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this query category has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/query-category-schema-create'
+    query-category-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the query category.'
+          type: string
+          example: 'Prodcuts'
+        description:
+          description: 'Description of the query category, optional.'
+          type: string
+          example: 'Queries on company products'
+        external_id:
+          description: 'The query category external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent query category, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this query category is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a query category in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    region-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the region.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this region has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/region-schema-create'
+    region-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the region.'
+          type: string
+          example: 'Midlands'
+        description:
+          description: 'Description of the region, optional.'
+          type: string
+          example: 'Middle of England'
+        external_id:
+          description: 'The region external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent region, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this region is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a region in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    search-highlight-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the search highlight.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this search highlight has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/search-highlight-schema-create'
+    search-highlight-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the search highlight.'
+          type: string
+          example: 'Skegness'
+        description:
+          description: 'Description of the search highlight, optional.'
+          type: string
+          example: 'Seaside town in Lincolnshire'
+        external_id:
+          description: 'The search highlight external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent search highlight, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this search highlight is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a search highlight in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    security-classification-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the security classification.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this security classification has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/security-classification-schema-create'
+    security-classification-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the security classification.'
+          type: string
+          example: 'Top Secret'
+        description:
+          description: 'Description of the security classification, optional.'
+          type: string
+          example: 'Strictly only authorised access'
+        external_id:
+          description: 'The security classification external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent security classification, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this security classification is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a security classification in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    title-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the title.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this title has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/title-schema-create'
+    title-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the title.'
+          type: string
+          example: 'Dr'
+        description:
+          description: 'Description of the title, optional.'
+          type: string
+          example: 'Qualified doctor'
+        external_id:
+          description: 'The title external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent title, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this title is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a title in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    user-category-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the user category.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this user category has children.'
+              type: boolean
+              readOnly: true
+        - $ref: '#/components/schemas/user-category-schema-create'
+    user-category-schema-create:
+      type: object
+      properties:
+        name:
+          description: 'Name of the user category.'
+          type: string
+          example: 'Volunteer'
+        description:
+          description: 'Description of the user category, optional.'
+          type: string
+          example: 'User who performs volunteering role'
+        external_id:
+          description: 'The user category external reference id, optional.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent user category, optional.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this user category is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a user category in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
     title-uuid-list-common-schema:
       type: array
       items:
