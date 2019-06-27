@@ -3008,6 +3008,10 @@ components:
           description: The user's job roles. An array of job role names and UUIDs.
           allOf:
             - $ref: '#/components/schemas/title-uuid-list-common-schema'
+        role_grades:
+          description: The user's role grades. An array of role grade names and UUIDs.
+          allOf:
+            - $ref: '#/components/schemas/title-uuid-list-common-schema'
         user_uuid:
           description: The UUID of the user
           type: string
