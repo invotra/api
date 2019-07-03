@@ -437,6 +437,20 @@ paths:
         '403':
           description: 'User is not authorized to view this.'
       description: Returns a count of users who accessed the site on 4 or more days within a given calendar month.
+  /users/metrics/profiles:
+    get:
+      tags:
+        - users
+      responses:
+        '200':
+          description: 'Counts of user profiles matching various conditions.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-metrics-profiles-schema'
+        '403':
+          description: 'User is not authorized to view this.'
+      description: Returns the total count of active users (i.e. not blocked) profiles matching various conditions.
   /users/search:
     get:
       tags:
@@ -1272,7 +1286,7 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
-  '/groups/{group_id}/my_membership':  
+  '/groups/{group_id}/my_membership':
     get:
       tags:
         - groups
@@ -1650,7 +1664,7 @@ paths:
         '400':
           description: The UUID was malformed.
         '404':
-          description: The post does not exist. 
+          description: The post does not exist.
       description: Check if the current user has liked a post.
     put:
       tags:
@@ -2727,7 +2741,7 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'  
+           - $ref: '#/components/schemas/file-schema'
         timestamp:
           description: This is the timestamp (in seconds) of when the feed message was created
           type: integer
@@ -3033,7 +3047,22 @@ components:
       type: object
       properties:
         access_threshold_users:
-          description: 'users who accessed the site on 4 or more days within a month'
+          description: 'Users who accessed the site on 4 or more days within a month'
+          type: integer
+          example: 500
+    user-metrics-profiles-schema:
+      type: object
+      properties:
+        user_count:
+          description: 'The total number of active users (i.e. not blocked)'
+          type: integer
+          example: 500
+        users_with_profile_photos:
+          description: 'Number of active user (i.e. not blocked) profiles with a profile photo'
+          type: integer
+          example: 500
+        users_with_descriptions:
+          description: 'Number of active user (i.e. not blocked) profiles with text in the description field'
           type: integer
           example: 500
     user-search-schema:
@@ -3245,7 +3274,7 @@ components:
         category:
           description: The category of a post
           type: string
-          enum: 
+          enum:
             - Comment
             - Note
             - Done
@@ -3264,7 +3293,7 @@ components:
         attachments:
           description: A list of attachments for the post
           type: array
-          items: 
+          items:
             allOf:
               - $ref: '#/components/schemas/file-schema'
       type: object
@@ -3278,7 +3307,7 @@ components:
         - reason
     post-category-schema:
       properties:
-        name: 
+        name:
           description: 'Category name'
           type: string
           example: Note
