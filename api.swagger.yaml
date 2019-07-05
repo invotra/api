@@ -7333,7 +7333,7 @@ components:
           description: 'Indicates that this content type has a five star rating.'
           type: boolean
           example: true
-        author_uuid_uuid:
+        author_uuid:
           description: 'Invotra UUID of the author.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
@@ -8052,7 +8052,7 @@ components:
           type: integer
           example: 3
         facet:
-          description: 'Facet of the iquery category.'
+          description: 'Facet of the query category.'
           type: string
           example: 'Query category facet'
         colour:
