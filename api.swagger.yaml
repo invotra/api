@@ -6135,7 +6135,7 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'  
+           - $ref: '#/components/schemas/file-schema'
         timestamp:
           description: This is the timestamp (in seconds) of when the feed message was created
           type: integer
@@ -6653,7 +6653,7 @@ components:
         category:
           description: The category of a post
           type: string
-          enum: 
+          enum:
             - Comment
             - Note
             - Done
@@ -6672,7 +6672,7 @@ components:
         attachments:
           description: A list of attachments for the post
           type: array
-          items: 
+          items:
             allOf:
               - $ref: '#/components/schemas/file-schema'
       type: object
@@ -6686,7 +6686,7 @@ components:
         - reason
     post-category-schema:
       properties:
-        name: 
+        name:
           description: 'Category name'
           type: string
           example: Note
