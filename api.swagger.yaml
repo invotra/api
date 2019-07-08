@@ -6395,6 +6395,11 @@ components:
             - Ms
           type: string
           example: Mr
+        person_type:
+          description: This is the Invotra UUID of the user's person type.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         team:
           description: This is the Invotra UUID of the user's team.
           type: string
@@ -6423,6 +6428,10 @@ components:
             - $ref: '#/components/schemas/title-uuid-list-common-schema'
         job_roles:
           description: The user's job roles. An array of job role names and UUIDs.
+          allOf:
+            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+        role_grades:
+          description: The user's role grades. An array of role grade names and UUIDs.
           allOf:
             - $ref: '#/components/schemas/title-uuid-list-common-schema'
         user_uuid:
@@ -6455,7 +6464,22 @@ components:
       type: object
       properties:
         access_threshold_users:
-          description: 'users who accessed the site on 4 or more days within a month'
+          description: 'Users who accessed the site on 4 or more days within a month'
+          type: integer
+          example: 500
+    user-metrics-profiles-schema:
+      type: object
+      properties:
+        user_count:
+          description: 'The total number of active users (i.e. not blocked)'
+          type: integer
+          example: 500
+        users_with_profile_photos:
+          description: 'Number of active user (i.e. not blocked) profiles with a profile photo'
+          type: integer
+          example: 500
+        users_with_descriptions:
+          description: 'Number of active user (i.e. not blocked) profiles with text in the description field'
           type: integer
           example: 500
     user-search-schema:
