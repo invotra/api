@@ -437,6 +437,20 @@ paths:
         '403':
           description: 'User is not authorized to view this.'
       description: Returns a count of users who accessed the site on 4 or more days within a given calendar month.
+  /users/metrics/profiles:
+    get:
+      tags:
+        - users
+      responses:
+        '200':
+          description: 'Counts of user profiles matching various conditions.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user-metrics-profiles-schema'
+        '403':
+          description: 'User is not authorized to view this.'
+      description: Returns the total count of active users (i.e. not blocked) profiles matching various conditions.
   /users/search:
     get:
       tags:
