@@ -7192,6 +7192,9 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - name
+            - image_uuid
     badge-schema-common:
       type: object
       properties:
@@ -7200,15 +7203,15 @@ components:
           type: string
           example: 'Fire Warden'
         description:
-          description: 'Description of the badge, optional.'
+          description: 'Description of the badge.'
           type: string
           example: 'In the event of a fire responsible for evacuation'
         external_id:
-          description: 'The badge external reference id, optional.'
+          description: 'The badge external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent badge, optional.'
+          description: 'Invotra UUID of the parent badge.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7242,15 +7245,15 @@ components:
           type: string
           example: 'Announcements'
         description:
-          description: 'Description of the content category, optional.'
+          description: 'Description of the content category.'
           type: string
           example: 'Content comprising of staff announcements'
         external_id:
-          description: 'The content category external reference id, optional.'
+          description: 'The content category external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent content category, optional.'
+          description: 'Invotra UUID of the parent content category.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7262,6 +7265,8 @@ components:
           description: 'Determines the position of a content category in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     content-type-schema:
       allOf:
         - type: object
@@ -7293,6 +7298,12 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - name
+            - description
+            - comment_option
+            - author_uuid
+            - created
     content-type-schema-common:
       type: object
       properties:
@@ -7301,15 +7312,15 @@ components:
           type: string
           example: 'Manual'
         description:
-          description: 'Description of the content type, optional.'
+          description: 'Description of the content type.'
           type: string
           example: 'Technical communication document'
         external_id:
-          description: 'The content type external reference id, optional.'
+          description: 'The content type external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent content type, optional.'
+          description: 'Invotra UUID of the parent content type.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7364,15 +7375,15 @@ components:
           type: string
           example: 'England'
         description:
-          description: 'Description of the country, optional.'
+          description: 'Description of the country.'
           type: string
           example: 'A Green and pleasant land'
         external_id:
-          description: 'The country external reference id, optional.'
+          description: 'The country external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent country, optional.'
+          description: 'Invotra UUID of the parent country.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7384,6 +7395,8 @@ components:
           description: 'Determines the position of a country in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     event-status-schema:
       allOf:
         - type: object
@@ -7406,15 +7419,15 @@ components:
           type: string
           example: 'Cancelled'
         description:
-          description: 'Description of the event status, optional.'
+          description: 'Description of the event status.'
           type: string
           example: 'Event is cancelled'
         external_id:
-          description: 'The event status external reference id, optional.'
+          description: 'The event status external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent event status, optional.'
+          description: 'Invotra UUID of the parent event status.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7426,6 +7439,8 @@ components:
           description: 'Determines the position of an event status in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     event-topic-schema:
       allOf:
         - type: object
@@ -7448,15 +7463,15 @@ components:
           type: string
           example: 'Luncheon'
         description:
-          description: 'Description of the event topic, optional.'
+          description: 'Description of the event topic.'
           type: string
           example: 'Special events that include a meal'
         external_id:
-          description: 'The event topic external reference id, optional.'
+          description: 'The event topic external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent event topic, optional.'
+          description: 'Invotra UUID of the parent event topic.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7468,6 +7483,8 @@ components:
           description: 'Determines the position of an event topic in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     free-skill-schema:
       allOf:
         - type: object
@@ -7490,15 +7507,15 @@ components:
           type: string
           example: 'Carpentry'
         description:
-          description: 'Description of the free skill, optional.'
+          description: 'Description of the free skill.'
           type: string
           example: 'Making things out of wood'
         external_id:
-          description: 'The free skill external reference id, optional.'
+          description: 'The free skill external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent free skill, optional.'
+          description: 'Invotra UUID of the parent free skill.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7510,6 +7527,8 @@ components:
           description: 'Determines the position of a free skill in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     general-topic-schema:
       allOf:
         - type: object
@@ -7532,15 +7551,15 @@ components:
           type: string
           example: 'Darts'
         description:
-          description: 'Description of the general topic, optional.'
+          description: 'Description of the general topic.'
           type: string
           example: 'Anything on the game of darts'
         external_id:
-          description: 'The general topic external reference id, optional.'
+          description: 'The general topic external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent general topic, optional.'
+          description: 'Invotra UUID of the parent general topic.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7552,6 +7571,8 @@ components:
           description: 'Determines the position of a general topic in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     grade-schema:
       allOf:
         - type: object
@@ -7574,15 +7595,15 @@ components:
           type: string
           example: 'Grade 3'
         description:
-          description: 'Description of the grade, optional.'
+          description: 'Description of the grade.'
           type: string
           example: 'The most middle of the grades'
         external_id:
-          description: 'The grade external reference id, optional.'
+          description: 'The grade external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent grade, optional.'
+          description: 'Invotra UUID of the parent grade.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7594,6 +7615,8 @@ components:
           description: 'Determines the position of a grade in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     group-category-schema:
       allOf:
         - type: object
@@ -7616,15 +7639,15 @@ components:
           type: string
           example: 'Hobbies'
         description:
-          description: 'Description of the group category, optional.'
+          description: 'Description of the group category.'
           type: string
           example: 'Groups discussing hobbies'
         external_id:
-          description: 'The group category external reference id, optional.'
+          description: 'The group category external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent group category, optional.'
+          description: 'Invotra UUID of the parent group category.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7636,6 +7659,8 @@ components:
           description: 'Determines the position of a group category in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     idea-category-schema:
       allOf:
         - type: object
@@ -7658,15 +7683,15 @@ components:
           type: string
           example: 'Staff Welfare'
         description:
-          description: 'Description of the idea category, optional.'
+          description: 'Description of the idea category.'
           type: string
           example: 'Ideas that may prevent loss of life or injury to staff'
         external_id:
-          description: 'The idea category external reference id, optional.'
+          description: 'The idea category external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent idea category, optional.'
+          description: 'Invotra UUID of the parent idea category.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7686,6 +7711,9 @@ components:
           description: 'Colour of the idea category. Any CSS colour allowed.'
           type: string
           example: '#4BB88B'
+      required:
+        - name
+        - colour
     interest-schema:
       allOf:
         - type: object
@@ -7708,15 +7736,15 @@ components:
           type: string
           example: 'Trainspotting'
         description:
-          description: 'Description of the interest, optional.'
+          description: 'Description of the interest.'
           type: string
           example: 'For those with an amateur interest in railways'
         external_id:
-          description: 'The interest external reference id, optional.'
+          description: 'The interest external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent interest, optional.'
+          description: 'Invotra UUID of the parent interest.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7728,6 +7756,8 @@ components:
           description: 'Determines the position of an interest in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     message-type-schema:
       allOf:
         - type: object
@@ -7759,6 +7789,8 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - name
     message-type-schema-common:
       type: object
       properties:
@@ -7767,15 +7799,15 @@ components:
           type: string
           example: 'Daily update'
         description:
-          description: 'Description of the message type, optional.'
+          description: 'Description of the message type.'
           type: string
           example: 'Details of progress made throughout the day'
         external_id:
-          description: 'The message type external reference id, optional.'
+          description: 'The message type external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent message type, optional.'
+          description: 'Invotra UUID of the parent message type.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7821,15 +7853,15 @@ components:
           type: string
           example: 'Accountancy'
         description:
-          description: 'Description of the organisational skill, optional.'
+          description: 'Description of the organisational skill.'
           type: string
           example: 'Accountancy can be dull and boring'
         external_id:
-          description: 'The organisational skill external reference id, optional.'
+          description: 'The organisational skill external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent organisational skill, optional.'
+          description: 'Invotra UUID of the parent organisational skill.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7841,6 +7873,8 @@ components:
           description: 'Determines the position of an organisational skill in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     person-type-schema:
       allOf:
         - type: object
@@ -7863,15 +7897,15 @@ components:
           type: string
           example: 'Part time'
         description:
-          description: 'Description of the person type, optional.'
+          description: 'Description of the person type.'
           type: string
           example: 'Works a half day'
         external_id:
-          description: 'The person type external reference id, optional.'
+          description: 'The person type external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent person type, optional.'
+          description: 'Invotra UUID of the parent person type.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7883,6 +7917,8 @@ components:
           description: 'Determines the position of a person type in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     policy-type-schema:
       allOf:
         - type: object
@@ -7905,15 +7941,15 @@ components:
           type: string
           example: 'Constituent'
         description:
-          description: 'Description of the policy type, optional.'
+          description: 'Description of the policy type.'
           type: string
           example: 'Creates executive power entities'
         external_id:
-          description: 'The policy type external reference id, optional.'
+          description: 'The policy type external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent policy type, optional.'
+          description: 'Invotra UUID of the parent policy type.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7925,6 +7961,8 @@ components:
           description: 'Determines the position of a policy type in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     primary-category-schema:
       allOf:
         - type: object
@@ -7947,15 +7985,15 @@ components:
           type: string
           example: 'Training'
         description:
-          description: 'Description of the primary category, optional.'
+          description: 'Description of the primary category.'
           type: string
           example: 'Involving  staff training'
         external_id:
-          description: 'The primary category external reference id, optional.'
+          description: 'The primary category external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent primary category, optional.'
+          description: 'Invotra UUID of the parent primary category.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -7967,6 +8005,8 @@ components:
           description: 'Determines the position of a primary category in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     project-schema:
       allOf:
         - type: object
@@ -7989,15 +8029,15 @@ components:
           type: string
           example: 'Office Refurbishment'
         description:
-          description: 'Description of the project, optional.'
+          description: 'Description of the project.'
           type: string
           example: 'Decorating and reorganising the office'
         external_id:
-          description: 'The project external reference id, optional.'
+          description: 'The project external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent project, optional.'
+          description: 'Invotra UUID of the parent project.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -8009,6 +8049,8 @@ components:
           description: 'Determines the position of a project in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     query-category-schema:
       allOf:
         - type: object
@@ -8031,15 +8073,15 @@ components:
           type: string
           example: 'Prodcuts'
         description:
-          description: 'Description of the query category, optional.'
+          description: 'Description of the query category.'
           type: string
           example: 'Queries on company products'
         external_id:
-          description: 'The query category external reference id, optional.'
+          description: 'The query category external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent query category, optional.'
+          description: 'Invotra UUID of the parent query category.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -8059,6 +8101,9 @@ components:
           description: 'Colour of the query category. Any CSS colour allowed.'
           type: string
           example: '#4BB88B'
+      required:
+        - name
+        - colour
     region-schema:
       allOf:
         - type: object
@@ -8081,15 +8126,15 @@ components:
           type: string
           example: 'Midlands'
         description:
-          description: 'Description of the region, optional.'
+          description: 'Description of the region.'
           type: string
           example: 'Middle of England'
         external_id:
-          description: 'The region external reference id, optional.'
+          description: 'The region external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent region, optional.'
+          description: 'Invotra UUID of the parent region.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -8101,6 +8146,8 @@ components:
           description: 'Determines the position of a region in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     search-highlight-schema:
       allOf:
         - type: object
@@ -8123,15 +8170,15 @@ components:
           type: string
           example: 'Skegness'
         description:
-          description: 'Description of the search highlight, optional.'
+          description: 'Description of the search highlight.'
           type: string
           example: 'Seaside town in Lincolnshire'
         external_id:
-          description: 'The search highlight external reference id, optional.'
+          description: 'The search highlight external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent search highlight, optional.'
+          description: 'Invotra UUID of the parent search highlight.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -8143,6 +8190,8 @@ components:
           description: 'Determines the position of a search highlight in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     security-classification-schema:
       allOf:
         - type: object
@@ -8165,15 +8214,15 @@ components:
           type: string
           example: 'Top Secret'
         description:
-          description: 'Description of the security classification, optional.'
+          description: 'Description of the security classification.'
           type: string
           example: 'Strictly only authorised access'
         external_id:
-          description: 'The security classification external reference id, optional.'
+          description: 'The security classification external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent security classification, optional.'
+          description: 'Invotra UUID of the parent security classification.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -8185,6 +8234,8 @@ components:
           description: 'Determines the position of a security classification in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     title-schema:
       allOf:
         - type: object
@@ -8207,15 +8258,15 @@ components:
           type: string
           example: 'Dr'
         description:
-          description: 'Description of the title, optional.'
+          description: 'Description of the title.'
           type: string
           example: 'Qualified doctor'
         external_id:
-          description: 'The title external reference id, optional.'
+          description: 'The title external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent title, optional.'
+          description: 'Invotra UUID of the parent title.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -8227,6 +8278,8 @@ components:
           description: 'Determines the position of a title in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     user-category-schema:
       allOf:
         - type: object
@@ -8249,15 +8302,15 @@ components:
           type: string
           example: 'Volunteer'
         description:
-          description: 'Description of the user category, optional.'
+          description: 'Description of the user category.'
           type: string
           example: 'User who performs volunteering role'
         external_id:
-          description: 'The user category external reference id, optional.'
+          description: 'The user category external reference id.'
           type: string
           example: 'ABC123'
         parent_uuid:
-          description: 'Invotra UUID of the parent user category, optional.'
+          description: 'Invotra UUID of the parent user category.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
@@ -8269,6 +8322,8 @@ components:
           description: 'Determines the position of a user category in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+      required:
+        - name
     title-uuid-list-common-schema:
       type: array
       items:
