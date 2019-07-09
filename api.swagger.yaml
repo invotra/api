@@ -2511,7 +2511,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/badge-schema-create'
+              $ref: '#/components/schemas/badge-schema-update'
         required: true
     delete:
       tags:
@@ -2653,7 +2653,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/content-category-schema-create'
+              $ref: '#/components/schemas/content-category-schema-common'
         required: true
     delete:
       tags:
@@ -2795,7 +2795,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/content-type-schema-create'
+              $ref: '#/components/schemas/content-type-schema-update'
         required: true
     delete:
       tags:
@@ -2937,7 +2937,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/country-schema-create'
+              $ref: '#/components/schemas/country-schema-common'
         required: true
     delete:
       tags:
@@ -3079,7 +3079,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/event-status-schema-create'
+              $ref: '#/components/schemas/event-status-schema-common'
         required: true
     delete:
       tags:
@@ -3221,7 +3221,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/event-topic-schema-create'
+              $ref: '#/components/schemas/event-topic-schema-common'
         required: true
     delete:
       tags:
@@ -3363,7 +3363,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/free-skill-schema-create'
+              $ref: '#/components/schemas/free-skill-schema-common'
         required: true
     delete:
       tags:
@@ -3505,7 +3505,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/general-topic-schema-create'
+              $ref: '#/components/schemas/general-topic-schema-common'
         required: true
     delete:
       tags:
@@ -3647,7 +3647,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/grade-schema-create'
+              $ref: '#/components/schemas/grade-schema-common'
         required: true
     delete:
       tags:
@@ -3789,7 +3789,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/group-category-schema-create'
+              $ref: '#/components/schemas/group-category-schema-common'
         required: true
     delete:
       tags:
@@ -3931,7 +3931,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/idea-category-schema-create'
+              $ref: '#/components/schemas/idea-category-schema-common'
         required: true
     delete:
       tags:
@@ -4073,7 +4073,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/interest-schema-create'
+              $ref: '#/components/schemas/interest-schema-common'
         required: true
     delete:
       tags:
@@ -4215,7 +4215,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/message-type-schema-create'
+              $ref: '#/components/schemas/message-type-schema-update'
         required: true
     delete:
       tags:
@@ -4357,7 +4357,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/organisational-skill-schema-create'
+              $ref: '#/components/schemas/organisational-skill-schema-common'
         required: true
     delete:
       tags:
@@ -4499,7 +4499,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/person-type-schema-create'
+              $ref: '#/components/schemas/person-type-schema-common'
         required: true
     delete:
       tags:
@@ -4641,7 +4641,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/policy-type-schema-create'
+              $ref: '#/components/schemas/policy-type-schema-common'
         required: true
     delete:
       tags:
@@ -4783,7 +4783,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/primary-category-schema-create'
+              $ref: '#/components/schemas/primary-category-schema-common'
         required: true
     delete:
       tags:
@@ -4925,7 +4925,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/project-schema-create'
+              $ref: '#/components/schemas/project-schema-common'
         required: true
     delete:
       tags:
@@ -5067,7 +5067,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/query-category-schema-create'
+              $ref: '#/components/schemas/query-category-schema-common'
         required: true
     delete:
       tags:
@@ -5209,7 +5209,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/region-schema-create'
+              $ref: '#/components/schemas/region-schema-common'
         required: true
     delete:
       tags:
@@ -5351,7 +5351,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/search-highlight-schema-create'
+              $ref: '#/components/schemas/search-highlight-schema-common'
         required: true
     delete:
       tags:
@@ -5493,7 +5493,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/security-classification-schema-create'
+              $ref: '#/components/schemas/security-classification-schema-common'
         required: true
     delete:
       tags:
@@ -5635,7 +5635,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/title-schema-create'
+              $ref: '#/components/schemas/title-schema-common'
         required: true
     delete:
       tags:
@@ -5777,7 +5777,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/user-category-schema-create'
+              $ref: '#/components/schemas/user-category-schema-common'
         required: true
     delete:
       tags:
@@ -7220,9 +7220,19 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
+    badge-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/badge-schema-common'
+        - type: object
+          properties:
+            image_uuid:
+              description: 'Invotra UUID of the image.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
     badge-schema-create:
       allOf:
-        - $ref: '#/components/schemas/badge-schema-common'  
+        - $ref: '#/components/schemas/badge-schema-common'
         - type: object
           properties:
             image_uuid:
@@ -7274,8 +7284,14 @@ components:
               description: 'Indicates that this content category has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/content-category-schema-create'
+        - $ref: '#/components/schemas/content-category-schema-common'
     content-category-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/content-category-schema-common'
+        - type: object
+          required:
+            - name
+    content-category-schema-common:
       type: object
       properties:
         name:
@@ -7303,8 +7319,6 @@ components:
           description: 'Determines the position of a content category in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     content-type-schema:
       allOf:
         - type: object
@@ -7326,9 +7340,19 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
+    content-type-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/content-type-schema-common'
+        - type: object
+          properties:
+            image_uuid:
+              description: 'Invotra UUID of the image.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
     content-type-schema-create:
       allOf:
-        - $ref: '#/components/schemas/content-type-schema-common'  
+        - $ref: '#/components/schemas/content-type-schema-common'
         - type: object
           properties:
             image_uuid:
@@ -7404,8 +7428,14 @@ components:
               description: 'Indicates that this country has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/country-schema-create'
+        - $ref: '#/components/schemas/country-schema-common'
     country-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/country-schema-common'
+        - type: object
+          required:
+            - name
+    country-schema-common:
       type: object
       properties:
         name:
@@ -7433,8 +7463,6 @@ components:
           description: 'Determines the position of a country in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     event-status-schema:
       allOf:
         - type: object
@@ -7448,8 +7476,14 @@ components:
               description: 'Indicates that this event status has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/event-status-schema-create'
+        - $ref: '#/components/schemas/event-status-schema-common'
     event-status-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/event-status-schema-common'
+        - type: object
+          required:
+            - name
+    event-status-schema-common:
       type: object
       properties:
         name:
@@ -7477,8 +7511,6 @@ components:
           description: 'Determines the position of an event status in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     event-topic-schema:
       allOf:
         - type: object
@@ -7492,8 +7524,14 @@ components:
               description: 'Indicates that this event topic has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/event-topic-schema-create'
+        - $ref: '#/components/schemas/event-topic-schema-common'
     event-topic-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/event-topic-schema-common'
+        - type: object
+          required:
+            - name
+    event-topic-schema-common:
       type: object
       properties:
         name:
@@ -7521,8 +7559,6 @@ components:
           description: 'Determines the position of an event topic in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     free-skill-schema:
       allOf:
         - type: object
@@ -7536,8 +7572,14 @@ components:
               description: 'Indicates that this free skill has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/free-skill-schema-create'
+        - $ref: '#/components/schemas/free-skill-schema-common'
     free-skill-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/free-skill-schema-common'
+        - type: object
+          required:
+            - name
+    free-skill-schema-common:
       type: object
       properties:
         name:
@@ -7565,8 +7607,6 @@ components:
           description: 'Determines the position of a free skill in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     general-topic-schema:
       allOf:
         - type: object
@@ -7580,8 +7620,14 @@ components:
               description: 'Indicates that this general topic has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/general-topic-schema-create'
+        - $ref: '#/components/schemas/general-topic-schema-common'
     general-topic-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/general-topic-schema-common'
+        - type: object
+          required:
+            - name
+    general-topic-schema-common:
       type: object
       properties:
         name:
@@ -7609,8 +7655,6 @@ components:
           description: 'Determines the position of a general topic in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     grade-schema:
       allOf:
         - type: object
@@ -7624,8 +7668,14 @@ components:
               description: 'Indicates that this grade has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/grade-schema-create'
+        - $ref: '#/components/schemas/grade-schema-common'
     grade-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/grade-schema-common'
+        - type: object
+          required:
+            - name
+    grade-schema-common:
       type: object
       properties:
         name:
@@ -7653,8 +7703,6 @@ components:
           description: 'Determines the position of a grade in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     group-category-schema:
       allOf:
         - type: object
@@ -7668,8 +7716,14 @@ components:
               description: 'Indicates that this group category has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/group-category-schema-create'
+        - $ref: '#/components/schemas/group-category-schema-common'
     group-category-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/group-category-schema-common'
+        - type: object
+          required:
+            - name
+    group-category-schema-common:
       type: object
       properties:
         name:
@@ -7697,8 +7751,6 @@ components:
           description: 'Determines the position of a group category in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     idea-category-schema:
       allOf:
         - type: object
@@ -7712,8 +7764,15 @@ components:
               description: 'Indicates that this idea category has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/idea-category-schema-create'
+        - $ref: '#/components/schemas/idea-category-schema-common'
     idea-category-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/idea-category-schema-common'
+        - type: object
+          required:
+            - name
+            - colour
+    idea-category-schema-common:
       type: object
       properties:
         name:
@@ -7749,9 +7808,6 @@ components:
           description: 'Colour of the idea category. Any CSS colour allowed.'
           type: string
           example: '#4BB88B'
-      required:
-        - name
-        - colour
     interest-schema:
       allOf:
         - type: object
@@ -7765,8 +7821,14 @@ components:
               description: 'Indicates that this interest has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/interest-schema-create'
+        - $ref: '#/components/schemas/interest-schema-common'
     interest-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/interest-schema-common'
+        - type: object
+          required:
+            - name
+    interest-schema-common:
       type: object
       properties:
         name:
@@ -7794,8 +7856,6 @@ components:
           description: 'Determines the position of an interest in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     message-type-schema:
       allOf:
         - type: object
@@ -7817,9 +7877,19 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
+    message-type-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/message-type-schema-common'
+        - type: object
+          properties:
+            image_uuid:
+              description: 'Invotra UUID of the image.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
     message-type-schema-create:
       allOf:
-        - $ref: '#/components/schemas/message-type-schema-common'  
+        - $ref: '#/components/schemas/message-type-schema-common'
         - type: object
           properties:
             image_uuid:
@@ -7882,8 +7952,14 @@ components:
               description: 'Indicates that this organisational skill has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/organisational-skill-schema-create'
+        - $ref: '#/components/schemas/organisational-skill-schema-common'
     organisational-skill-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/organisational-skill-schema-common'
+        - type: object
+          required:
+            - name
+    organisational-skill-schema-common:
       type: object
       properties:
         name:
@@ -7911,8 +7987,6 @@ components:
           description: 'Determines the position of an organisational skill in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     person-type-schema:
       allOf:
         - type: object
@@ -7926,8 +8000,14 @@ components:
               description: 'Indicates that this person type has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/person-type-schema-create'
+        - $ref: '#/components/schemas/person-type-schema-common'
     person-type-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/person-type-schema-common'
+        - type: object
+          required:
+            - name
+    person-type-schema-common:
       type: object
       properties:
         name:
@@ -7955,8 +8035,6 @@ components:
           description: 'Determines the position of a person type in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     policy-type-schema:
       allOf:
         - type: object
@@ -7970,8 +8048,14 @@ components:
               description: 'Indicates that this policy type has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/policy-type-schema-create'
+        - $ref: '#/components/schemas/policy-type-schema-common'
     policy-type-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/policy-type-schema-common'
+        - type: object
+          required:
+            - name
+    policy-type-schema-common:
       type: object
       properties:
         name:
@@ -7999,8 +8083,6 @@ components:
           description: 'Determines the position of a policy type in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     primary-category-schema:
       allOf:
         - type: object
@@ -8014,8 +8096,14 @@ components:
               description: 'Indicates that this primary category has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/primary-category-schema-create'
+        - $ref: '#/components/schemas/primary-category-schema-common'
     primary-category-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/primary-category-schema-common'
+        - type: object
+          required:
+            - name
+    primary-category-schema-common:
       type: object
       properties:
         name:
@@ -8043,8 +8131,6 @@ components:
           description: 'Determines the position of a primary category in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     project-schema:
       allOf:
         - type: object
@@ -8058,8 +8144,14 @@ components:
               description: 'Indicates that this project has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/project-schema-create'
+        - $ref: '#/components/schemas/project-schema-common'
     project-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/project-schema-common'
+        - type: object
+          required:
+            - name
+    project-schema-common:
       type: object
       properties:
         name:
@@ -8087,8 +8179,6 @@ components:
           description: 'Determines the position of a project in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     query-category-schema:
       allOf:
         - type: object
@@ -8102,8 +8192,15 @@ components:
               description: 'Indicates that this query category has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/query-category-schema-create'
+        - $ref: '#/components/schemas/query-category-schema-common'
     query-category-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/query-category-schema-common'
+        - type: object
+          required:
+            - name
+            - colour
+    query-category-schema-common:
       type: object
       properties:
         name:
@@ -8139,9 +8236,6 @@ components:
           description: 'Colour of the query category. Any CSS colour allowed.'
           type: string
           example: '#4BB88B'
-      required:
-        - name
-        - colour
     region-schema:
       allOf:
         - type: object
@@ -8155,8 +8249,14 @@ components:
               description: 'Indicates that this region has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/region-schema-create'
+        - $ref: '#/components/schemas/region-schema-common'
     region-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/region-schema-common'
+        - type: object
+          required:
+            - name
+    region-schema-common:
       type: object
       properties:
         name:
@@ -8184,8 +8284,6 @@ components:
           description: 'Determines the position of a region in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     search-highlight-schema:
       allOf:
         - type: object
@@ -8199,8 +8297,14 @@ components:
               description: 'Indicates that this search highlight has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/search-highlight-schema-create'
+        - $ref: '#/components/schemas/search-highlight-schema-common'
     search-highlight-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/search-highlight-schema-common'
+        - type: object
+          required:
+            - name
+    search-highlight-schema-common:
       type: object
       properties:
         name:
@@ -8228,8 +8332,6 @@ components:
           description: 'Determines the position of a search highlight in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     security-classification-schema:
       allOf:
         - type: object
@@ -8243,8 +8345,14 @@ components:
               description: 'Indicates that this security classification has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/security-classification-schema-create'
+        - $ref: '#/components/schemas/security-classification-schema-common'
     security-classification-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/security-classification-schema-common'
+        - type: object
+          required:
+            - name
+    security-classification-schema-common:
       type: object
       properties:
         name:
@@ -8272,8 +8380,6 @@ components:
           description: 'Determines the position of a security classification in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     title-schema:
       allOf:
         - type: object
@@ -8287,8 +8393,14 @@ components:
               description: 'Indicates that this title has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/title-schema-create'
+        - $ref: '#/components/schemas/title-schema-common'
     title-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/title-schema-common'
+        - type: object
+          required:
+            - name
+    title-schema-common:
       type: object
       properties:
         name:
@@ -8316,8 +8428,6 @@ components:
           description: 'Determines the position of a title in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     user-category-schema:
       allOf:
         - type: object
@@ -8331,8 +8441,14 @@ components:
               description: 'Indicates that this user category has children.'
               type: boolean
               readOnly: true
-        - $ref: '#/components/schemas/user-category-schema-create'
+        - $ref: '#/components/schemas/user-category-schema-common'
     user-category-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/user-category-schema-common'
+        - type: object
+          required:
+            - name
+    user-category-schema-common:
       type: object
       properties:
         name:
@@ -8360,8 +8476,6 @@ components:
           description: 'Determines the position of a user category in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-      required:
-        - name
     title-uuid-list-common-schema:
       type: array
       items:
