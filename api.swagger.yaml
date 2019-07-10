@@ -9,6 +9,23 @@ security:
   - APISessionHeader: []
   - APIKeyHeader: []
 paths:
+  /status:
+    get:
+      tags:
+        - status
+      responses:
+        '200':
+          description: Status returned successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Status of the API
+                    type: string
+                    example: 'Ok'
+      description: Returns the status of the Invotra API. If successful, the API is running as expected.
   /branding:
     get:
       tags:
