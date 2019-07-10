@@ -8323,10 +8323,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-            has_children:
-              description: 'Indicates that this search highlight has children.'
-              type: boolean
-              example: true
         - $ref: '#/components/schemas/search-highlight-schema-common'
     search-highlight-schema-create:
       allOf:
@@ -8352,11 +8348,6 @@ components:
           description: 'The search highlight external reference id.'
           type: string
           example: 'ABC123'
-        parent_uuid:
-          description: 'Invotra UUID of the parent search highlight.'
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-          type: string
-          format: uuid
         published:
           description: 'Indicates that this search highlight is published.'
           type: boolean
