@@ -7266,6 +7266,7 @@ components:
         published:
           description: 'Indicates that this badge is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a badge in the hierarchy in relation to its siblings.'
@@ -7314,6 +7315,7 @@ components:
         published:
           description: 'Indicates that this content category is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a content category in the hierarchy in relation to its siblings.'
@@ -7389,6 +7391,7 @@ components:
         published:
           description: 'Indicates that this content type is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a content type in the hierarchy in relation to its siblings.'
@@ -7405,6 +7408,7 @@ components:
         five_star_rating:
           description: 'Indicates that this content type has a five star rating.'
           type: boolean
+          default: false
           example: true
         author_uuid:
           description: 'Invotra UUID of the author.'
@@ -7458,6 +7462,7 @@ components:
         published:
           description: 'Indicates that this country is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a country in the hierarchy in relation to its siblings.'
@@ -7506,6 +7511,7 @@ components:
         published:
           description: 'Indicates that this event status is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of an event status in the hierarchy in relation to its siblings.'
@@ -7554,6 +7560,7 @@ components:
         published:
           description: 'Indicates that this event topic is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of an event topic in the hierarchy in relation to its siblings.'
@@ -7602,6 +7609,7 @@ components:
         published:
           description: 'Indicates that this free skill is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a free skill in the hierarchy in relation to its siblings.'
@@ -7650,6 +7658,7 @@ components:
         published:
           description: 'Indicates that this general topic is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a general topic in the hierarchy in relation to its siblings.'
@@ -7698,6 +7707,7 @@ components:
         published:
           description: 'Indicates that this grade is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a grade in the hierarchy in relation to its siblings.'
@@ -7746,6 +7756,7 @@ components:
         published:
           description: 'Indicates that this group category is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a group category in the hierarchy in relation to its siblings.'
@@ -7795,6 +7806,7 @@ components:
         published:
           description: 'Indicates that this idea category is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of an idea category in the hierarchy in relation to its siblings.'
@@ -7851,6 +7863,7 @@ components:
         published:
           description: 'Indicates that this interest is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of an interest in the hierarchy in relation to its siblings.'
@@ -7922,6 +7935,7 @@ components:
         published:
           description: 'Indicates that this message type is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a message type in the hierarchy in relation to its siblings.'
@@ -7938,6 +7952,7 @@ components:
         enable_comments:
           description: 'Indicates that this message type has comments enabled.'
           type: boolean
+          default: false
           example: true
     organisational-skill-schema:
       allOf:
@@ -7982,6 +7997,7 @@ components:
         published:
           description: 'Indicates that this organisational skill is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of an organisational skill in the hierarchy in relation to its siblings.'
@@ -8030,6 +8046,7 @@ components:
         published:
           description: 'Indicates that this person type is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a person type in the hierarchy in relation to its siblings.'
@@ -8078,6 +8095,7 @@ components:
         published:
           description: 'Indicates that this policy type is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a policy type in the hierarchy in relation to its siblings.'
@@ -8126,6 +8144,7 @@ components:
         published:
           description: 'Indicates that this primary category is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a primary category in the hierarchy in relation to its siblings.'
@@ -8174,6 +8193,7 @@ components:
         published:
           description: 'Indicates that this project is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a project in the hierarchy in relation to its siblings.'
@@ -8223,6 +8243,7 @@ components:
         published:
           description: 'Indicates that this query category is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a query category in the hierarchy in relation to its siblings.'
@@ -8279,6 +8300,7 @@ components:
         published:
           description: 'Indicates that this region is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a region in the hierarchy in relation to its siblings.'
@@ -8327,6 +8349,7 @@ components:
         published:
           description: 'Indicates that this search highlight is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a search highlight in the hierarchy in relation to its siblings.'
@@ -8375,6 +8398,7 @@ components:
         published:
           description: 'Indicates that this security classification is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a security classification in the hierarchy in relation to its siblings.'
@@ -8423,6 +8447,7 @@ components:
         published:
           description: 'Indicates that this title is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a title in the hierarchy in relation to its siblings.'
@@ -8471,6 +8496,7 @@ components:
         published:
           description: 'Indicates that this user category is published.'
           type: boolean
+          default: true
           example: true
         weight:
           description: 'Determines the position of a user category in the hierarchy in relation to its siblings.'
