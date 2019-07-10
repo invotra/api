@@ -7211,7 +7211,7 @@ components:
             has_children:
               description: 'Indicates that this badge has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/badge-schema-common'
         - type: object
           properties:
@@ -7285,7 +7285,7 @@ components:
             has_children:
               description: 'Indicates that this content category has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/content-category-schema-common'
     content-category-schema-create:
       allOf:
@@ -7336,7 +7336,7 @@ components:
             has_children:
               description: 'Indicates that this content type has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/content-type-schema-common'
         - type: object
           properties:
@@ -7436,7 +7436,7 @@ components:
             has_children:
               description: 'Indicates that this country has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/country-schema-common'
     country-schema-create:
       allOf:
@@ -7487,7 +7487,7 @@ components:
             has_children:
               description: 'Indicates that this event status has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/event-status-schema-common'
     event-status-schema-create:
       allOf:
@@ -7538,7 +7538,7 @@ components:
             has_children:
               description: 'Indicates that this event topic has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/event-topic-schema-common'
     event-topic-schema-create:
       allOf:
@@ -7589,7 +7589,7 @@ components:
             has_children:
               description: 'Indicates that this free skill has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/free-skill-schema-common'
     free-skill-schema-create:
       allOf:
@@ -7640,7 +7640,7 @@ components:
             has_children:
               description: 'Indicates that this general topic has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/general-topic-schema-common'
     general-topic-schema-create:
       allOf:
@@ -7691,7 +7691,7 @@ components:
             has_children:
               description: 'Indicates that this grade has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/grade-schema-common'
     grade-schema-create:
       allOf:
@@ -7742,7 +7742,7 @@ components:
             has_children:
               description: 'Indicates that this group category has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/group-category-schema-common'
     group-category-schema-create:
       allOf:
@@ -7793,7 +7793,7 @@ components:
             has_children:
               description: 'Indicates that this idea category has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/idea-category-schema-common'
     idea-category-schema-create:
       allOf:
@@ -7853,7 +7853,7 @@ components:
             has_children:
               description: 'Indicates that this interest has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/interest-schema-common'
     interest-schema-create:
       allOf:
@@ -7904,7 +7904,7 @@ components:
             has_children:
               description: 'Indicates that this message type has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/message-type-schema-common'
         - type: object
           properties:
@@ -7991,7 +7991,7 @@ components:
             has_children:
               description: 'Indicates that this organisational skill has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/organisational-skill-schema-common'
     organisational-skill-schema-create:
       allOf:
@@ -8042,7 +8042,7 @@ components:
             has_children:
               description: 'Indicates that this person type has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/person-type-schema-common'
     person-type-schema-create:
       allOf:
@@ -8093,7 +8093,7 @@ components:
             has_children:
               description: 'Indicates that this policy type has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/policy-type-schema-common'
     policy-type-schema-create:
       allOf:
@@ -8144,7 +8144,7 @@ components:
             has_children:
               description: 'Indicates that this primary category has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/primary-category-schema-common'
     primary-category-schema-create:
       allOf:
@@ -8195,7 +8195,7 @@ components:
             has_children:
               description: 'Indicates that this project has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/project-schema-common'
     project-schema-create:
       allOf:
@@ -8246,7 +8246,7 @@ components:
             has_children:
               description: 'Indicates that this query category has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/query-category-schema-common'
     query-category-schema-create:
       allOf:
@@ -8306,7 +8306,7 @@ components:
             has_children:
               description: 'Indicates that this region has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/region-schema-common'
     region-schema-create:
       allOf:
@@ -8357,7 +8357,7 @@ components:
             has_children:
               description: 'Indicates that this search highlight has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/search-highlight-schema-common'
     search-highlight-schema-create:
       allOf:
@@ -8408,7 +8408,7 @@ components:
             has_children:
               description: 'Indicates that this security classification has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/security-classification-schema-common'
     security-classification-schema-create:
       allOf:
@@ -8459,7 +8459,7 @@ components:
             has_children:
               description: 'Indicates that this title has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/title-schema-common'
     title-schema-create:
       allOf:
@@ -8510,7 +8510,7 @@ components:
             has_children:
               description: 'Indicates that this user category has children.'
               type: boolean
-              readOnly: true
+              example: true
         - $ref: '#/components/schemas/user-category-schema-common'
     user-category-schema-create:
       allOf:
