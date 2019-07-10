@@ -7333,10 +7333,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-            has_children:
-              description: 'Indicates that this content type has children.'
-              type: boolean
-              example: true
         - $ref: '#/components/schemas/content-type-schema-common'
         - type: object
           properties:
@@ -7390,19 +7386,10 @@ components:
           description: 'The content type external reference id.'
           type: string
           example: 'ABC123'
-        parent_uuid:
-          description: 'Invotra UUID of the parent content type.'
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-          type: string
-          format: uuid
         published:
           description: 'Indicates that this content type is published.'
           type: boolean
           example: true
-        weight:
-          description: 'Determines the position of a content type in the hierarchy in relation to its siblings.'
-          type: integer
-          example: 3
         comment_option:
           description: 'The comments option for this content type.'
           example: 'open'
@@ -7414,7 +7401,7 @@ components:
         five_star_rating:
           description: 'Indicates that this content type has a five star rating.'
           type: boolean
-          example: true
+          example: false
         author_uuid:
           description: 'Invotra UUID of the author.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -7978,7 +7965,7 @@ components:
         enable_comments:
           description: 'Indicates that this message type has comments enabled.'
           type: boolean
-          example: true
+          example: false
     organisational-skill-schema:
       allOf:
         - type: object
