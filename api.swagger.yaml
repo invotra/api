@@ -7777,10 +7777,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-            has_children:
-              description: 'Indicates that this idea category has children.'
-              type: boolean
-              example: true
         - $ref: '#/components/schemas/idea-category-schema-common'
     idea-category-schema-create:
       allOf:
@@ -7807,11 +7803,6 @@ components:
           description: 'The idea category external reference id.'
           type: string
           example: 'ABC123'
-        parent_uuid:
-          description: 'Invotra UUID of the parent idea category.'
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-          type: string
-          format: uuid
         published:
           description: 'Indicates that this idea category is published.'
           type: boolean
