@@ -8515,6 +8515,10 @@ components:
           description: 'Determines the position of a user category in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+        users_uuids:
+          description: 'Invotra UUIDs of users in this user category.'
+          allOf:
+            - $ref: '#/components/schemas/uuid-list-schema'
     title-uuid-list-common-schema:
       type: array
       items:
