@@ -7375,13 +7375,14 @@ components:
               default: true
             five_star_rating:
               default: false
+            machine_name:
+              description: 'The machine name of this content type. If omitted, the machine name will be generated from the name.'
           required:
             - name
             - description
             - comment_option
             - author_uuid
             - created
-            - machine_name
     content-type-schema-common:
       type: object
       properties:
