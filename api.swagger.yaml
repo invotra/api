@@ -7296,6 +7296,7 @@ components:
               default: true
           required:
             - name
+            - content_types
     content-category-schema-common:
       type: object
       properties:
@@ -7324,6 +7325,15 @@ components:
           description: 'Determines the position of a content category in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+        content_types:
+          description: 'The content type machine names within this content category.'
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+          example:
+            - 'manual'
+            - 'manual_page'
     content-type-schema:
       allOf:
         - type: object
