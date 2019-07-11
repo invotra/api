@@ -8253,7 +8253,7 @@ components:
         name:
           description: 'Name of the query category.'
           type: string
-          example: 'Prodcuts'
+          example: 'Products'
         description:
           description: 'Description of the query category.'
           type: string
