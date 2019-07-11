@@ -7381,6 +7381,7 @@ components:
             - comment_option
             - author_uuid
             - created
+            - machine_name
     content-type-schema-common:
       type: object
       properties:
@@ -7421,6 +7422,10 @@ components:
             description: 'The timestamp (in seconds) of when the content type was created'
             type: integer
             example: 1510941596
+        machine_name:
+          description: 'The machine name of this content type.'
+          type: string
+          example: 'guideline'
     country-schema:
       allOf:
         - type: object
