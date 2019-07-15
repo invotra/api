@@ -19,13 +19,11 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    description: Status of the API
-                    type: string
-                    example: 'Ok'
-      description: Returns the status of the Invotra API. If successful, the API is running as expected.
+                type: string
+                description: Status of the API
+                example: "OK"
+                default: "OK"
+      description: 'Returns the status of the Invotra API. If successful, the API is running as expected and will return "OK". (If it is not, an appropriate 5xx error message will be returned).'
   /branding:
     get:
       tags:
