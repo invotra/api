@@ -2646,13 +2646,13 @@ components:
         status:
           description: 'Status of the API.'
           type: string
-          example: 'OK'
+          enum: ['OK']
         timestamp:
           description: 'Time on the server as a timestamp (in seconds).'
           type: integer
           example: 1563357496
         datetime:
-          description: 'Time on the server in a human readable format.'
+          description: 'Time on the server in a human readable format. The format is not guaranteed to be stable; software should read the timestamp field instead.'
           type: string
           example: 'Wed, 17 Jul 2019 09:58:16 GMT'
     product-options-schema:
