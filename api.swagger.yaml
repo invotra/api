@@ -2987,6 +2987,11 @@ components:
             - Ms
           type: string
           example: Mr
+        person_type:
+          description: This is the Invotra UUID of the user's person type.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         team:
           description: This is the Invotra UUID of the user's team.
           type: string
@@ -3015,6 +3020,10 @@ components:
             - $ref: '#/components/schemas/title-uuid-list-common-schema'
         job_roles:
           description: The user's job roles. An array of job role names and UUIDs.
+          allOf:
+            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+        role_grades:
+          description: The user's role grades. An array of role grade names and UUIDs.
           allOf:
             - $ref: '#/components/schemas/title-uuid-list-common-schema'
         user_uuid:
