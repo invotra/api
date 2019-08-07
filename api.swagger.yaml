@@ -2150,7 +2150,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-site-schema'
+              $ref: '#/components/schemas/location-site-schema-update'
         required: true
   /locations/buildings:
     post:
@@ -6978,6 +6978,32 @@ components:
           example: ABC123
     location-site-schema:
       allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'This is the Invotra UUID of the site.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+              type: string
+              format: uuid
+            type:
+              description: 'The type of location.'
+              type: string
+              enum:
+                - site
+            context:
+              allOf:
+                - $ref: '#/components/schemas/location-context-schema'
+        - $ref: '#/components/schemas/location-site-schema-common'
+    location-site-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/location-site-schema-common'
+      required:
+        - title
+    location-site-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-site-schema-common'
+    location-site-schema-common:
+      allOf:
         - $ref: '#/components/schemas/location-common-schema'
         - type: object
           properties:
@@ -7014,11 +7040,6 @@ components:
               description: The location's email address.
               type: string
               format: email
-    location-site-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/location-site-schema'
-      required:
-        - title
     location-building-schema:
       allOf:
         - $ref: '#/components/schemas/location-site-schema'
@@ -7190,6 +7211,39 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/location-uuid-schema'
+    location-context-schema:
+      description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+      type: array
+      items:
+        type: object
+        properties:
+          uuid:
+            description: 'The entity UUID.'
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-12F34-56789abcdef0'
+          title:
+            description: 'The location title.'
+            type: string
+            example: 'Woking'
+          type:
+            description: 'The location type.'
+            type: string
+            enum:
+              - site
+              - building
+              - floor
+              - space
+            example: 'floor'
+          description:
+            description: 'The description of the location.'
+            type: string
+            example: 'Woking head office.'
+          parent_uuid:
+            description: 'The parent UUID.'
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-12F34-56789abcdef0'
     team-membership-common-schema:
       type: object
       properties:
