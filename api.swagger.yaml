@@ -2234,7 +2234,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-building-schema'
+              $ref: '#/components/schemas/location-building-schema-update'
         required: true
   /locations/floors:
     post:
@@ -7042,21 +7042,40 @@ components:
               format: email
     location-building-schema:
       allOf:
-        - $ref: '#/components/schemas/location-site-schema'
+        - type: object
+          properties:
+            uuid:
+              description: 'This is the Invotra UUID of the building.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+              type: string
+              format: uuid
+            type:
+              description: 'The type of location.'
+              type: string
+              enum:
+                - building
+            context:
+              allOf:
+                - $ref: '#/components/schemas/location-context-schema'
+        - $ref: '#/components/schemas/location-building-schema-common'
+    location-building-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/location-building-schema-common'
+      required:
+        - title
+    location-building-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-building-schema-common'
+    location-building-schema-common:
+      allOf:
+        - $ref: '#/components/schemas/location-site-schema-common'
         - type: object
           properties:
             parent_uuid:
-              description: >
-                The Invotra UUID of the parent location. This location must be a
-                site.
+              description: 'The Invotra UUID of the parent location. This location must be a site.'
               type: string
               format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-    location-building-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/location-building-schema'
-      required:
-        - title
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
     location-floor-schema:
       allOf:
         - $ref: '#/components/schemas/location-common-schema'
