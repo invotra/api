@@ -7214,36 +7214,8 @@ components:
             format: uuid
             example: 01234567-89ab-cdef-12F34-56789abcdef0
           context:
-            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
-            type: array
-            items:
-              type: object
-              properties:
-                uuid:
-                  description: The entity UUID.
-                  type: string
-                  format: uuid
-                  example: 01234567-89ab-cdef-12F34-56789abcdef0
-                title:
-                  description: The entity title.
-                  type: string
-                type:
-                  description: The location type.
-                  type: string
-                  enum:
-                    - site
-                    - building
-                    - floor
-                    - space
-                description:
-                  description: 'The description of the location.'
-                  type: string
-                  example: Woking
-                parent_uuid:
-                  description: The parent UUID.
-                  type: string
-                  format: uuid
-                  example: 01234567-89ab-cdef-12F34-56789abcdef0
+            allOf:
+              - $ref: '#/components/schemas/location-context-schema'
       type: array
     location-uuid-schema:
       type: object
