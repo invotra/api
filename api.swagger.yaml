@@ -2318,7 +2318,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-floor-schema'
+              $ref: '#/components/schemas/location-floor-schema-update'
         required: true
   /locations/spaces:
     post:
@@ -7078,21 +7078,40 @@ components:
               example: '01234567-89ab-cdef-1234-56789abcdef0'
     location-floor-schema:
       allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'This is the Invotra UUID of the floor.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+              type: string
+              format: uuid
+            type:
+              description: 'The type of location.'
+              type: string
+              enum:
+                - floor
+            context:
+              allOf:
+                - $ref: '#/components/schemas/location-context-schema'
+        - $ref: '#/components/schemas/location-floor-schema-common'
+    location-floor-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/location-floor-schema-common'
+      required:
+        - title
+    location-floor-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-floor-schema-common'
+    location-floor-schema-common:
+      allOf:
         - $ref: '#/components/schemas/location-common-schema'
         - type: object
           properties:
             parent_uuid:
-              description: >
-                The Invotra UUID of the parent location. This location must be a
-                building.
+              description: 'The Invotra UUID of the parent location. This location must be a building.'
               type: string
               format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
-    location-floor-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/location-floor-schema'
-      required:
-        - title
     location-space-schema:
       allOf:
         - $ref: '#/components/schemas/location-common-schema'
