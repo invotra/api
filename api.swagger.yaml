@@ -2402,7 +2402,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-space-schema'
+              $ref: '#/components/schemas/location-space-schema-update'
         required: true
   '/badges':
     post:
@@ -7114,21 +7114,40 @@ components:
               example: 01234567-89ab-cdef-1234-56789abcdef0
     location-space-schema:
       allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'This is the Invotra UUID of the space.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+              type: string
+              format: uuid
+            type:
+              description: 'The type of location.'
+              type: string
+              enum:
+                - space
+            context:
+              allOf:
+                - $ref: '#/components/schemas/location-context-schema'
+        - $ref: '#/components/schemas/location-space-schema-common'
+    location-space-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/location-space-schema-common'
+      required:
+        - title
+    location-space-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-space-schema-common'
+    location-space-schema-common:
+      allOf:
         - $ref: '#/components/schemas/location-common-schema'
         - type: object
           properties:
             parent_uuid:
-              description: >
-                The Invotra UUID of the parent location. This location must be a
-                floor.
+              description: 'The Invotra UUID of the parent location. This location must be a floor.'
               type: string
               format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
-    location-space-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/location-space-schema'
-      required:
-        - title
     uuid-list-schema:
       items:
         description: An array of UUIDs.
