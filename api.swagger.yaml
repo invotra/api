@@ -6999,6 +6999,7 @@ components:
         - $ref: '#/components/schemas/location-site-schema-common'
       required:
         - title
+        - address1
     location-site-schema-update:
       allOf:
         - $ref: '#/components/schemas/location-site-schema-common'
@@ -7063,6 +7064,7 @@ components:
         - $ref: '#/components/schemas/location-building-schema-common'
       required:
         - title
+        - address1
     location-building-schema-update:
       allOf:
         - $ref: '#/components/schemas/location-building-schema-common'
