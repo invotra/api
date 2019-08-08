@@ -1824,6 +1824,49 @@ paths:
           description: The UUID or request body JSON was malformed.
         '404':
           description: No manual page with that UUID was found.
+  /comments/list:
+    get:
+      tags:
+        - comments
+      description: 'Search for comments. An empty array is returned if no comments are found.'
+      parameters:
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp
+            default: timestamp
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of comments matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/comment-schema'
+        '403':
+          description: 'User is not authorized to list comments.'
   /files:
     post:
       requestBody:
@@ -6863,6 +6906,30 @@ components:
                       description: Title of child manual page
                       type: string
                       example: Appendix A - Acronyms
+    comment-schema:
+      properties:
+        comment_uuid:
+          description: 'Invotra UUID of the comment.'
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        subject:
+          description: 'The subject of the comment.'
+          type: string
+          example: 'How long will this take?'
+        body:
+          description: 'The main body text of the comment.'
+          type: string
+          example: 'How long will this take? I have been waiting ages.'
+        author_uuid:
+          description: 'Invotra UUID of the author.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        created:
+            description: 'The timestamp (in seconds) of when the comment was created'
+            type: integer
+            example: 1510941596
     file-schema:
       type: object
       properties:
