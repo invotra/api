@@ -6908,15 +6908,11 @@ components:
                       example: Appendix A - Acronyms
     comment-schema:
       properties:
-        comment_uuid:
+        uuid:
           description: 'Invotra UUID of the comment.'
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
-        subject:
-          description: 'The subject of the comment.'
-          type: string
-          example: 'How long will this take?'
         body:
           description: 'The main body text of the comment.'
           type: string
@@ -6926,10 +6922,37 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
-        created:
+        timestamp_created:
             description: 'The timestamp (in seconds) of when the comment was created'
             type: integer
             example: 1510941596
+        timestamp_updated:
+            description: 'The timestamp (in seconds) of when the comment was updated'
+            type: integer
+            example: 1510941596
+        parent_uuid:
+          type: string
+          format: uuid
+          description: 'This is the Invotra UUID of the parent of the post.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_type:
+          description: 'The content type machine name of the comment.'
+          type: string
+          example: 'blog'
+        category:
+          description: 'The category of the comment.'
+          type: string
+          example: 'Idea'
+        likes_count:
+          description: 'The total number of likes for the comment.'
+          type: integer
+          example: 33
+        attachments:
+          description: 'List of attachments on the comment.'
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/file-schema'
     file-schema:
       type: object
       properties:
