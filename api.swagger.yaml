@@ -1830,14 +1830,46 @@ paths:
         - comments
       description: 'Search for comments. An empty array is returned if no comments are found.'
       parameters:
+        - name: content_type
+          description: 'Filter on content type.'
+          in: query
+          schema:
+            type: string
+            example: 'blog'
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: category
+          description: 'Filter on category (Only for post comments).'
+          in: query
+          schema:
+            type: string
+            example: 'idea'
         - name: sort
           description: 'Field to sort by.'
           in: query
           schema:
             type: string
             enum:
-              - timestamp
-            default: timestamp
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
         - name: order
           description: 'Sort order.'
           in: query
