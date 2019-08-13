@@ -5890,9 +5890,9 @@ paths:
       summary: Register a token and device id to identify the user with a push notification service.
       responses:
         '200':
-          description: he token and device id was already registered.
+          description: The token and device id was already registered.
         '201':
-          description: he token and device id was registered successfully.
+          description: The token and device id was registered successfully.
         '404':
           description: Unknown service.
     delete:
