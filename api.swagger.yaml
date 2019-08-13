@@ -5864,7 +5864,7 @@ paths:
           description: |
             The notification does not exist.
       description: Mark a notification as read.
-  /notifications/register/{service_id}/{token}:
+  /notifications/register/{service_id}:
     parameters:
       - description: Identifying name of the notification service to be used.
         in: path
@@ -5875,32 +5875,44 @@ paths:
           enum:
             - apns
             - fcm
-      - description: A token identifying the user to the notification service.
-        in: path
-        name: token
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/push-notifications-schema'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/push-notifications-schema'
         required: true
-        schema:
-          type: string
-    put:
       tags:
         - notifications
-      summary: Register a token to identify the user with a push notification service.
+      summary: Register a token and device id to identify the user with a push notification service.
       responses:
         '200':
-          description: The token was already registered.
+          description: he token and device id was already registered.
         '201':
-          description: The token was registered successfully.
+          description: he token and device id was registered successfully.
         '404':
           description: Unknown service.
     delete:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/push-notifications-schema'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/push-notifications-schema'
+        required: true
       tags:
         - notifications
-      summary: Deregister a token identifying the user with a push notification service.
+      summary: Deregister a token and device id identifying the user with a push notification service.
       responses:
         '200':
-          description: The token was deregistered.
+          description: The token and device id were deregistered.
         '404':
-          description: The token was not registered or the service was unknown.
+          description: The token and device id were not registered or the service was unknown.
   /feeds/status:
     get:
       tags:
@@ -6175,7 +6187,7 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'
+            - $ref: '#/components/schemas/file-schema'
         timestamp:
           description: This is the timestamp (in seconds) of when the feed message was created
           type: integer
@@ -6295,9 +6307,9 @@ components:
           description: This is the type of the entity that the notification links to
           type: string
           enum:
-           - node
-           - user
-           - comment
+            - node
+            - user
+            - comment
         target_subtype:
           description: This is the subtype (or "bundle" in Drupal parlance) of the entity that the notification links to
           type: string
@@ -6617,89 +6629,89 @@ components:
           example: 150
     post-schema:
       allOf:
-      - $ref: '#/components/schemas/post-schema-base'
-      - type: object
-        properties:
-          uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the post.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          parent_uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the parent of the post.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          thread_uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          group_uuid:
-            description: This is the Invotra UUID of the group that the post belongs to.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-            type: string
-            format: uuid
-          description:
-            description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
-            type: string
-            example: 'Hey <a href="/users/username" data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John Smith</a>, check out the latest <a href="/apps/groups/chat?hashtag=security">#security</a> news in this group!'
-          pin:
-            description: Whether or not this post is pinned.
-            type: boolean
-          author_uuid:
-            description: The uuid of the author
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          display_name:
-            description: The display name of the author
-            type: string
-            example: Dorothy Whitehead
-          likes_count:
-            description: Count of likes on the post
-            type: integer
-            example: 5
-          comment_count:
-            description: Count of comments on the post
-            type: integer
-            example: 5
-          attachments_count:
-            description: Count of attachments on the post
-            type: integer
-            example: 5
-          timestamp:
-            description: This is the timestamp (in seconds) of when the post was created
-            type: integer
-            example: 1510941596
-          depth:
-            description: The depth of the post in the hierarchy of replies. Top-level posts are 0, their replies are 1, replies to replies are 2 etc.
-            type: integer
-            example: 1
-          current_user_liked:
-            description: A flag to determine if the current user has liked this post
-            type: boolean
-            example: true
+        - $ref: '#/components/schemas/post-schema-base'
+        - type: object
+          properties:
+            uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the post.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            parent_uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the parent of the post.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            thread_uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            group_uuid:
+              description: This is the Invotra UUID of the group that the post belongs to.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+              type: string
+              format: uuid
+            description:
+              description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
+              type: string
+              example: 'Hey <a href="/users/username" data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John Smith</a>, check out the latest <a href="/apps/groups/chat?hashtag=security">#security</a> news in this group!'
+            pin:
+              description: Whether or not this post is pinned.
+              type: boolean
+            author_uuid:
+              description: The uuid of the author
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            display_name:
+              description: The display name of the author
+              type: string
+              example: Dorothy Whitehead
+            likes_count:
+              description: Count of likes on the post
+              type: integer
+              example: 5
+            comment_count:
+              description: Count of comments on the post
+              type: integer
+              example: 5
+            attachments_count:
+              description: Count of attachments on the post
+              type: integer
+              example: 5
+            timestamp:
+              description: This is the timestamp (in seconds) of when the post was created
+              type: integer
+              example: 1510941596
+            depth:
+              description: The depth of the post in the hierarchy of replies. Top-level posts are 0, their replies are 1, replies to replies are 2 etc.
+              type: integer
+              example: 1
+            current_user_liked:
+              description: A flag to determine if the current user has liked this post
+              type: boolean
+              example: true
     post-schema-create:
       allOf:
-      - $ref: '#/components/schemas/post-schema-base'
-      - type: object
-        properties:
-          parent_uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the parent of the post.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          author_uuid:
-            description: The uuid of the author
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          group_uuid:
-            description: This is the Invotra UUID of the group that the post belongs to.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-            type: string
-            format: uuid
+        - $ref: '#/components/schemas/post-schema-base'
+        - type: object
+          properties:
+            parent_uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the parent of the post.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            author_uuid:
+              description: The uuid of the author
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            group_uuid:
+              description: This is the Invotra UUID of the group that the post belongs to.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+              type: string
+              format: uuid
       required:
         - description
         - group_uuid
@@ -6732,7 +6744,7 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'
+            - $ref: '#/components/schemas/file-schema'
         attachments:
           description: A list of attachments for the post
           type: array
@@ -6816,13 +6828,13 @@ components:
           type: string
           example: 'CCM-1'
         timestamp_created:
-            description: This is the timestamp (in seconds) of when the manual page was created
-            type: integer
-            example: 1510941596
+          description: This is the timestamp (in seconds) of when the manual page was created
+          type: integer
+          example: 1510941596
         timestamp_updated:
-            description: This is the timestamp (in seconds) of when the manual page was last updated
-            type: integer
-            example: 1510941696
+          description: This is the timestamp (in seconds) of when the manual page was last updated
+          type: integer
+          example: 1510941696
         attachments:
           description: List of attachments on manual page
           type: array
@@ -7190,6 +7202,19 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/location-uuid-schema'
+    push-notifications-schema:
+      properties:
+        token:
+          description: The type of file.
+          type: string
+        device_id:
+          description: The unique device id of the device the user is using.
+          type: string
+        platform:
+          description: The OS platform of the user's device.
+          type: string
+          example: ios
+      type: object
     team-membership-common-schema:
       type: object
       properties:
@@ -7446,9 +7471,9 @@ components:
           type: string
           format: uuid
         created:
-            description: 'The timestamp (in seconds) of when the content type was created'
-            type: integer
-            example: 1510941596
+          description: 'The timestamp (in seconds) of when the content type was created'
+          type: integer
+          example: 1510941596
         machine_name:
           description: 'The machine name of this content type.'
           type: string
