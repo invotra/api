@@ -2150,7 +2150,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-site-schema'
+              $ref: '#/components/schemas/location-site-schema-update'
         required: true
   /locations/buildings:
     post:
@@ -2234,7 +2234,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-building-schema'
+              $ref: '#/components/schemas/location-building-schema-update'
         required: true
   /locations/floors:
     post:
@@ -2318,7 +2318,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-floor-schema'
+              $ref: '#/components/schemas/location-floor-schema-update'
         required: true
   /locations/spaces:
     post:
@@ -2402,7 +2402,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/location-space-schema'
+              $ref: '#/components/schemas/location-space-schema-update'
         required: true
   '/badges':
     post:
@@ -6978,6 +6978,33 @@ components:
           example: ABC123
     location-site-schema:
       allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'This is the Invotra UUID of the site.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+              type: string
+              format: uuid
+            type:
+              description: 'The type of location.'
+              type: string
+              enum:
+                - site
+            context:
+              allOf:
+                - $ref: '#/components/schemas/location-context-schema'
+        - $ref: '#/components/schemas/location-site-schema-common'
+    location-site-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/location-site-schema-common'
+      required:
+        - title
+        - address1
+    location-site-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-site-schema-common'
+    location-site-schema-common:
+      allOf:
         - $ref: '#/components/schemas/location-common-schema'
         - type: object
           properties:
@@ -7014,62 +7041,115 @@ components:
               description: The location's email address.
               type: string
               format: email
-    location-site-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/location-site-schema'
-      required:
-        - title
     location-building-schema:
       allOf:
-        - $ref: '#/components/schemas/location-site-schema'
         - type: object
           properties:
-            parent_uuid:
-              description: >
-                The Invotra UUID of the parent location. This location must be a
-                site.
+            uuid:
+              description: 'This is the Invotra UUID of the building.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
               type: string
               format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
+            type:
+              description: 'The type of location.'
+              type: string
+              enum:
+                - building
+            context:
+              allOf:
+                - $ref: '#/components/schemas/location-context-schema'
+        - $ref: '#/components/schemas/location-building-schema-common'
     location-building-schema-create:
       allOf:
-        - $ref: '#/components/schemas/location-building-schema'
+        - $ref: '#/components/schemas/location-building-schema-common'
       required:
         - title
+        - address1
+    location-building-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-building-schema-common'
+    location-building-schema-common:
+      allOf:
+        - $ref: '#/components/schemas/location-site-schema-common'
+        - type: object
+          properties:
+            parent_uuid:
+              description: 'The Invotra UUID of the parent location. This location must be a site.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
     location-floor-schema:
       allOf:
-        - $ref: '#/components/schemas/location-common-schema'
         - type: object
           properties:
-            parent_uuid:
-              description: >
-                The Invotra UUID of the parent location. This location must be a
-                building.
+            uuid:
+              description: 'This is the Invotra UUID of the floor.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
               type: string
               format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
+            type:
+              description: 'The type of location.'
+              type: string
+              enum:
+                - floor
+            context:
+              allOf:
+                - $ref: '#/components/schemas/location-context-schema'
+        - $ref: '#/components/schemas/location-floor-schema-common'
     location-floor-schema-create:
       allOf:
-        - $ref: '#/components/schemas/location-floor-schema'
+        - $ref: '#/components/schemas/location-floor-schema-common'
       required:
         - title
-    location-space-schema:
+    location-floor-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-floor-schema-common'
+    location-floor-schema-common:
       allOf:
         - $ref: '#/components/schemas/location-common-schema'
         - type: object
           properties:
             parent_uuid:
-              description: >
-                The Invotra UUID of the parent location. This location must be a
-                floor.
+              description: 'The Invotra UUID of the parent location. This location must be a building.'
               type: string
               format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
+    location-space-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'This is the Invotra UUID of the space.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+              type: string
+              format: uuid
+            type:
+              description: 'The type of location.'
+              type: string
+              enum:
+                - space
+            context:
+              allOf:
+                - $ref: '#/components/schemas/location-context-schema'
+        - $ref: '#/components/schemas/location-space-schema-common'
     location-space-schema-create:
       allOf:
-        - $ref: '#/components/schemas/location-space-schema'
+        - $ref: '#/components/schemas/location-space-schema-common'
       required:
         - title
+    location-space-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/location-space-schema-common'
+    location-space-schema-common:
+      allOf:
+        - $ref: '#/components/schemas/location-common-schema'
+        - type: object
+          properties:
+            parent_uuid:
+              description: 'The Invotra UUID of the parent location. This location must be a floor.'
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
     uuid-list-schema:
       items:
         description: An array of UUIDs.
@@ -7136,36 +7216,8 @@ components:
             format: uuid
             example: 01234567-89ab-cdef-12F34-56789abcdef0
           context:
-            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
-            type: array
-            items:
-              type: object
-              properties:
-                uuid:
-                  description: The entity UUID.
-                  type: string
-                  format: uuid
-                  example: 01234567-89ab-cdef-12F34-56789abcdef0
-                title:
-                  description: The entity title.
-                  type: string
-                type:
-                  description: The location type.
-                  type: string
-                  enum:
-                    - site
-                    - building
-                    - floor
-                    - space
-                description:
-                  description: 'The description of the location.'
-                  type: string
-                  example: Woking
-                parent_uuid:
-                  description: The parent UUID.
-                  type: string
-                  format: uuid
-                  example: 01234567-89ab-cdef-12F34-56789abcdef0
+            allOf:
+              - $ref: '#/components/schemas/location-context-schema'
       type: array
     location-uuid-schema:
       type: object
@@ -7190,6 +7242,39 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/location-uuid-schema'
+    location-context-schema:
+      description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+      type: array
+      items:
+        type: object
+        properties:
+          uuid:
+            description: 'The entity UUID.'
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-12F34-56789abcdef0'
+          title:
+            description: 'The location title.'
+            type: string
+            example: 'Woking'
+          type:
+            description: 'The location type.'
+            type: string
+            enum:
+              - site
+              - building
+              - floor
+              - space
+            example: 'floor'
+          description:
+            description: 'The description of the location.'
+            type: string
+            example: 'Woking head office.'
+          parent_uuid:
+            description: 'The parent UUID.'
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-12F34-56789abcdef0'
     team-membership-common-schema:
       type: object
       properties:
