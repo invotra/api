@@ -2362,6 +2362,27 @@ paths:
             schema:
               $ref: '#/components/schemas/location-floor-schema-update'
         required: true
+    delete:
+      tags:
+      - locations
+      description: Remove location information
+      parameters:
+        - description: The invotra UUID of the location.
+          in: path
+          name: location_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The location information was removed successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '403':
+          description: The user does not have permission to remove this location.
+        '404':
+          description: The UUID does not correspond to an existing location, or the location is not a floor.
   /locations/spaces:
     post:
       tags:
