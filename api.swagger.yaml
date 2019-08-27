@@ -9,6 +9,18 @@ security:
   - APISessionHeader: []
   - APIKeyHeader: []
 paths:
+  /status:
+    get:
+      tags:
+        - status
+      responses:
+        '200':
+          description: Status returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/status-schema'
+      description: 'Returns the status of the Invotra API. If successful, the API is running as expected and will return the "OK" response that includes the server time. (If it is not, an appropriate 5xx error message will be returned).'
   /branding:
     get:
       tags:
@@ -6037,6 +6049,20 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
+    status-schema:
+      properties:
+        status:
+          description: 'Status of the API.'
+          type: string
+          enum: ['OK']
+        timestamp:
+          description: 'Time on the server as a timestamp (in seconds).'
+          type: integer
+          example: 1563357496
+        datetime:
+          description: 'Time on the server in a human readable format. The format is not guaranteed to be stable; software should read the timestamp field instead.'
+          type: string
+          example: 'Wed, 17 Jul 2019 09:58:16 GMT'
     product-options-schema:
       type: object
       additionalProperties:
