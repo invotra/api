@@ -6358,7 +6358,7 @@ components:
         user_avatar:
           description: The user's image
           type: string
-          example: "https://dev.invotra.com/sites/default/files/styles/small_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+          example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
         email:
           description: Users email address
           format: email
