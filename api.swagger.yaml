@@ -141,6 +141,19 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /pdf-export/close-job:
+    post:
+      tags:
+        - pdf export
+      description: PDF export render completion callback.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pdf-export-completion-schema'
+      responses:
+        '200':
+          description: A matching PDF export job was found.
   /teams:
     get:
       tags:
@@ -6116,6 +6129,18 @@ components:
         default: 25
       description: The numbers of items to return.
   schemas:
+    pdf-export-completion-schema:
+      type: object
+      properties:
+        token:
+          type: string
+          example: secret
+        url:
+          type: string
+          example: http://s3.amazon.com/...
+      required:
+        - token
+        - url
     branding-schema:
       properties:
         logo:
