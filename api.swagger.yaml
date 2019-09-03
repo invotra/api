@@ -277,6 +277,27 @@ paths:
             schema:
               $ref: '#/components/schemas/team-schema'
         required: true
+    delete:
+      tags:
+        - teams
+      description: Remove team information
+      parameters:
+        - description: The invotra UUID of the team.
+          in: path
+          name: team_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: The team information was removed successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '403':
+          description: The user does not have permission to remove this team.
+        '404':
+          description: The UUID does not correspond to an existing team.
   '/teams/{team_id}/memberships':
     get:
       tags:
@@ -2008,6 +2029,27 @@ paths:
             schema:
               $ref: '#/components/schemas/job-role-schema'
         required: true
+    delete:
+      tags:
+      - job roles
+      description: Remove job role information.
+      parameters:
+      - description: The Invotra UUID of the job role.
+        in: path
+        name: job_role_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: The job role was removed successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '403':
+          description: The user does not have permission to remove this job role.
+        '404':
+          description: The UUID does not correspond to an existing job role.
   /locations:
     get:
       tags:
