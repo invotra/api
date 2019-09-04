@@ -1845,6 +1845,32 @@ paths:
           description: The UUID or request body JSON was malformed.
         '404':
           description: No manual page with that UUID was found.
+  '/manuals/{manual_page_id}/pdf-export':
+    get:
+      description: Get a manual page in HTML for PDF export.
+      tags:
+        - manuals
+      parameters:
+        - name: manual_page_id
+          description: The Invotra UUID of a manual page.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+      responses:
+        '200':
+          description: Returns a manual page in HTML.
+        '400':
+          description: The UUID or request body JSON was malformed.
+        '404':
+          description: No manual page with that UUID was found.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pdf-export-request-schema'
   /files:
     post:
       requestBody:
@@ -6116,6 +6142,12 @@ components:
         default: 25
       description: The numbers of items to return.
   schemas:
+    pdf-export-request-schema:
+      properties:
+        token:
+          description: The job's secret token.
+          type: string
+          example: secret
     branding-schema:
       properties:
         logo:
