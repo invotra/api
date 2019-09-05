@@ -146,6 +146,14 @@ paths:
       tags:
         - pdf export
       description: PDF export render completion callback.
+      parameters:
+        - name: Authorization
+          description: The job's secret token.
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer [secret token]
       requestBody:
         content:
           application/json:
@@ -154,7 +162,7 @@ paths:
       responses:
         '200':
           description: A matching PDF export job was found.
-        '400':
+        '401':
           description: An incorrect or malformed token was provided.
         '404':
           description: A file was not found at the supplied S3 URL.
@@ -6136,9 +6144,6 @@ components:
     pdf-export-completion-schema:
       type: object
       properties:
-        token:
-          type: string
-          example: secret
         url:
           type: string
           example: http://s3.amazon.com/...
