@@ -1859,13 +1859,6 @@ paths:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - name: Authorization
-          description: The job's secret token.
-          in: header
-          required: true
-          schema:
-            type: string
-            example: Bearer [secret token]
       security:
         - BearerAuth: []
       responses:
