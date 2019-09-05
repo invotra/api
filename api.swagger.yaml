@@ -1849,7 +1849,7 @@ paths:
     get:
       description: Get a node in HTML for PDF export.
       tags:
-        - pdf-export
+        - pdf export
       parameters:
         - name: node_id
           description: The Invotra UUID of a node.
@@ -1859,6 +1859,13 @@ paths:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: Authorization
+          description: The job's secret token.
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer [secret token]
       responses:
         '200':
           description: Returns a node in HTML.
@@ -1870,11 +1877,6 @@ paths:
           description: The UUID or request body JSON was malformed.
         '404':
           description: No node with that UUID was found.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/pdf-export-request-schema'
   /files:
     post:
       requestBody:
@@ -6146,12 +6148,6 @@ components:
         default: 25
       description: The numbers of items to return.
   schemas:
-    pdf-export-request-schema:
-      properties:
-        token:
-          description: The job's secret token.
-          type: string
-          example: secret
     branding-schema:
       properties:
         logo:
