@@ -1845,13 +1845,13 @@ paths:
           description: The UUID or request body JSON was malformed.
         '404':
           description: No manual page with that UUID was found.
-  '/pdf-export/{node_id}':
+  '/pdf-export/{content_id}':
     get:
       description: Get a node in HTML for PDF export.
       tags:
         - pdf export
       parameters:
-        - name: node_id
+        - name: content_id
           description: The Invotra UUID of a node.
           in: path
           required: true
@@ -1866,6 +1866,8 @@ paths:
           schema:
             type: string
             example: Bearer [secret token]
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: Returns a node in HTML.
@@ -6127,6 +6129,9 @@ components:
       type: apiKey
       name: 'SESSS{name}'
       in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
   parameters:
     offsetParam:
       in: query
