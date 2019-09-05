@@ -1845,14 +1845,14 @@ paths:
           description: The UUID or request body JSON was malformed.
         '404':
           description: No manual page with that UUID was found.
-  '/manuals/{manual_page_id}/pdf-export':
+  '/pdf-export/{node_id}':
     get:
-      description: Get a manual page in HTML for PDF export.
+      description: Get a node in HTML for PDF export.
       tags:
-        - manuals
+        - pdf-export
       parameters:
-        - name: manual_page_id
-          description: The Invotra UUID of a manual page.
+        - name: node_id
+          description: The Invotra UUID of a node.
           in: path
           required: true
           schema:
@@ -1861,11 +1861,11 @@ paths:
             example: '01234567-89ab-cdef-1234-56789abcdef0'
       responses:
         '200':
-          description: Returns a manual page in HTML.
+          description: Returns a node in HTML.
         '400':
           description: The UUID or request body JSON was malformed.
         '404':
-          description: No manual page with that UUID was found.
+          description: No node with that UUID was found.
       requestBody:
         content:
           application/json:
