@@ -146,19 +146,13 @@ paths:
       tags:
         - pdf export
       description: PDF export render completion callback.
-      parameters:
-        - name: Authorization
-          description: The job's secret token.
-          in: header
-          required: true
-          schema:
-            type: string
-            example: Bearer [secret token]
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/pdf-export-completion-schema'
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: A matching PDF export job was found.
@@ -6120,6 +6114,9 @@ components:
       type: apiKey
       name: 'SESSS{name}'
       in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
   parameters:
     offsetParam:
       in: query
