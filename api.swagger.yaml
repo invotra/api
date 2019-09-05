@@ -1862,6 +1862,10 @@ paths:
       responses:
         '200':
           description: Returns a node in HTML.
+          content:
+            text/html:
+              schema:
+                $ref: '#/components/schemas/html-response-schema'
         '400':
           description: The UUID or request body JSON was malformed.
         '404':
@@ -8871,3 +8875,10 @@ components:
           description: A token to protect against cross-site request forgery. Clients should treat this as an opaque value.
       required:
         - token
+    html-response-schema:
+      type: string
+      example: |
+        <!DOCTYPE html>
+        <html>
+          ...
+        </html>
