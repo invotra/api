@@ -204,7 +204,7 @@ paths:
         - pdf export
       summary: Create a PDF export job.
       parameters:
-        - name: uuid
+        - name: content_id
           in: path
           type: string
           description: The UUID of the node to export.
