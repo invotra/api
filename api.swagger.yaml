@@ -1879,7 +1879,7 @@ paths:
                     type: integer
                     example: 248
                   results:
-                    description: An array of manuals
+                    description: An array of manual pages
                     type: array
                     items:
                       allOf:
