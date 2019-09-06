@@ -6145,7 +6145,6 @@ components:
           type: string
           example: http://s3.amazon.com/...
       required:
-        - token
         - url
     branding-schema:
       properties:
