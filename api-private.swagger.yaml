@@ -198,7 +198,7 @@ paths:
           description: The JSON was malformed.
         '422':
           description: JSON schema validation failed.
-  '/pdf-export/create-job/{content_uuid}':
+  '/pdf-export/create-job/{content_id}':
     post:
       tags:
         - pdf export
