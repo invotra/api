@@ -1892,6 +1892,8 @@ paths:
                     items:
                       allOf:
                         - $ref: '#/components/schemas/manual-page-listing-schema'
+                  cursor:
+                    description: The cursor to pass back to the endpoint for the next items.
         '400':
           description: The UUID was malformed.
         '403':
