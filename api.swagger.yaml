@@ -1870,8 +1870,6 @@ paths:
           in: query
           schema:
             type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
       security:
         - BearerAuth: []
       responses:
