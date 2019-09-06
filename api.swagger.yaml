@@ -7006,7 +7006,7 @@ components:
           type: string
           example: Code of Conduct
         parent_pages:
-          description: An array of the manual page's parents.
+          description: An array of the manual page's parents, immediate first.
           type: array
           items:
             type: object
