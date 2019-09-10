@@ -5881,9 +5881,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/push-notifications-schema'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/push-notifications-schema'
         required: true
       tags:
         - notifications
@@ -5901,9 +5898,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/push-notifications-schema'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/push-notifications-schema'
         required: true
       tags:
         - notifications
@@ -5912,7 +5906,7 @@ paths:
         '200':
           description: The token and device id were deregistered.
         '404':
-          description: The token and device id were not registered or the service was unknown.
+          description: The token and device id were deregistered or the service was unknown.
   /feeds/status:
     get:
       tags:
