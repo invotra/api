@@ -6967,6 +6967,11 @@ components:
           format: uuid
           description: 'This is the Invotra UUID of the parent of the post.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_uuid:
+          type: string
+          format: uuid
+          description: 'This is the Invotra UUID of the content.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
         content_type:
           description: 'The content type machine name of the comment.'
           type: string
