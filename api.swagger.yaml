@@ -6965,7 +6965,7 @@ components:
         parent_uuid:
           type: string
           format: uuid
-          description: 'This is the Invotra UUID of the parent of the post.'
+          description: 'This is the Invotra UUID of the parent of the comment. Only present on replies.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
         content_uuid:
           type: string
