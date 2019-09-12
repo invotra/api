@@ -6037,6 +6037,9 @@ paths:
           example: 'ios'
           schema:
             type: string
+            enum:
+              - ios
+              - android
       responses:
         '200':
           description: 'The device id was deregistered.'
@@ -7395,6 +7398,9 @@ components:
           description: The OS platform of the user's device.
           type: string
           example: ios
+          enum:
+            - ios
+            - android
       type: object
     location-context-schema:
       description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
