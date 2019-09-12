@@ -6010,7 +6010,7 @@ paths:
         required: true
       tags:
         - notifications
-      summary: Register a token and device id to identify the user with a push notification service.
+      description: Register a token and device id to identify the user with a push notification service.
       responses:
         '200':
           description: The token and device id was already registered.
@@ -6019,20 +6019,29 @@ paths:
         '404':
           description: Unknown service.
     delete:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/push-notifications-schema'
-        required: true
       tags:
         - notifications
-      summary: Deregister a token and device id identifying the user with a push notification service.
+      description: 'Deregister the device the user is using for push notifications.'
+      parameters:
+        - in: query
+          name: device_id
+          required: true
+          description: 'The unique device id of the device the user is using.'
+          example: 'adcd1234'
+          schema:
+            type: string
+        - in: query
+          name: platform
+          required: true
+          description: 'The platform the of the device the user is using.'
+          example: 'ios'
+          schema:
+            type: string
       responses:
         '200':
-          description: The token and device id were deregistered.
+          description: 'The device id was deregistered.'
         '404':
-          description: The token and device id were deregistered or the service was unknown.
+          description: 'The device id was not found or the service was unknown.'
   /feeds/status:
     get:
       tags:
