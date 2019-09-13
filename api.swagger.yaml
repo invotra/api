@@ -1878,7 +1878,7 @@ paths:
         '400':
           description: The UUID or request body JSON was malformed.
         '403':
-           description: The user does not have access to the requested content.
+          description: The user does not have access to the requested content.
         '404':
           description: No content with that UUID was found.
   /files:
