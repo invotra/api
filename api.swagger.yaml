@@ -6955,13 +6955,13 @@ components:
           type: string
           format: uuid
         timestamp_created:
-            description: 'The timestamp (in seconds) of when the comment was created'
-            type: integer
-            example: 1510941596
+          description: 'The timestamp (in seconds) of when the comment was created'
+          type: integer
+          example: 1510941596
         timestamp_updated:
-            description: 'The timestamp (in seconds) of when the comment was updated'
-            type: integer
-            example: 1510941596
+          description: 'The timestamp (in seconds) of when the comment was updated'
+          type: integer
+          example: 1510941596
         parent_uuid:
           type: string
           format: uuid
@@ -6978,8 +6978,18 @@ components:
           example: 'blog'
         category:
           description: 'The category of the comment.'
-          type: string
-          example: 'Idea'
+          type: object
+          properties:
+            name:
+              type: string
+              format: uuid
+              description: 'The name of the comment category.'
+              example: 'Idea'
+            uuid:
+              type: string
+              format: uuid
+              description: 'This is the Invotra UUID of the comment category.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         likes_count:
           description: 'The total number of likes for the comment.'
           type: integer
