@@ -141,6 +141,25 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /pdf-export/close-job:
+    post:
+      tags:
+        - pdf export
+      description: PDF export render completion callback.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pdf-export-completion-schema'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: A matching PDF export job was found.
+        '401':
+          description: An incorrect or malformed token was provided.
+        '404':
+          description: A file was not found at the supplied S3 URL.
   /teams:
     get:
       tags:
@@ -6209,6 +6228,14 @@ components:
         default: 25
       description: The numbers of items to return.
   schemas:
+    pdf-export-completion-schema:
+      type: object
+      properties:
+        url:
+          type: string
+          example: http://s3.amazon.com/...
+      required:
+        - url
     branding-schema:
       properties:
         logo:
