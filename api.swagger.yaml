@@ -1901,23 +1901,30 @@ paths:
           description: No manual page with that UUID was found.
   '/pdf-export/{content_id}':
     get:
-      description: Get a node in HTML for PDF export.
+      description: Get content in HTML for PDF export.
       tags:
         - pdf export
       parameters:
         - name: content_id
-          description: The Invotra UUID of a node.
+          description: The Invotra UUID of content.
           in: path
           required: true
           schema:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: latest
+          description: Whether to return the latest revision of the content.
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
       security:
         - BearerAuth: []
       responses:
         '200':
-          description: Returns a node in HTML.
+          description: Returns content in HTML.
           content:
             text/html:
               schema:
@@ -1925,9 +1932,9 @@ paths:
         '400':
           description: The UUID or request body JSON was malformed.
         '403':
-          description: The user does not have access to the requested node.
+          description: The user does not have access to the requested content.
         '404':
-          description: No node with that UUID was found.
+          description: No content with that UUID was found.
   /files:
     post:
       requestBody:
