@@ -25,6 +25,10 @@ paths:
   '/sessions/{session_hash}':
     parameters:
       - name: session_hash
+        #description: >-
+        #  The SHA-256 hash of the session ID. This is hashed to prevent it being
+        #  useful if leaked, for example via web server logs. Hexadecimal
+        #  encoded, lowercase.
         description: The session ID.
         in: path
         type: string
