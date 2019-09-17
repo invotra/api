@@ -663,6 +663,7 @@ paths:
         required: true
   '/users/{user_id}/activity':
     get:
+      deprecated: true
       tags:
         - users
       description: Return the user's activity feed.
@@ -694,6 +695,43 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/feed-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+  '/users/{user_id}/activities':
+    get:
+      tags:
+        - users
+      description: Return the user's activity feed.
+      parameters:
+        - in: path
+          name: user_id
+          description: The Invotra UUID of the user.
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: >
+            Activity feed returned successfully. An empty array is returned if
+            there are no results.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Activity'
         '400':
           description: The supplied UUID was malformed.
         '404':
