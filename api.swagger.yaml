@@ -6447,89 +6447,22 @@ components:
       type: object
     Activity:
       required:
-        - user_uuid
-        - user_image
-        - display_name
-        - entity_uuid
-        - entity_title
-        - entity_body
+        - user
+        - entity
         - timestamp
+        - likes
+        - comments
         - link
         - short_text
         - topic
-        - category
-        - category_colour
-        - likes
-        - comment_count
-        - current_user_liked
       properties:
-        user_uuid:
-          description: This is the uuid of the user who triggered the feed message
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-        user_image:
-          description: This is image of the user who triggered the feed message
-          type: string
-          example: >-
-            https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
-        username:
-          description: The username of the user who triggered the feed message
-          type: string
-          example: Dorothy.Whitehead@akagera.com
-        display_name:
-          description: The display name of the user who triggered the feed message
-          type: string
-          example: Dorothy Whitehead
-        teams:
-          description: The user's teams. An array of team names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
-        locations:
-          description: The user's locations. An array of location names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
-        job_roles:
-          description: The user's job roles. An array of job role names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
-        entity_uuid:
-          description: The UUID of the entity that the feed message is about
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-        entity_title:
-          description: The title of the entity that the feed message is about
-          type: string
-          example: A post about annual leave
-        entity_body:
-          description: The main body text of the entity
-          type: string
-          example: I'm taking annual leave next Thursday. Cover to be announced shortly
-        entity_type:
-          description: The type of entity that the feed message is about
-          type: string
-          enum:
-            - node
-            - comment
-            - user
-        entity_image:
-          description: The featured image for this post
-          type: object
-          allOf:
-            - $ref: '#/components/schemas/file-schema'
         timestamp:
-          description: This is the timestamp (in seconds) of when the feed message was created
+          description: This is the timestamp (in seconds) of when the activity was created.
           type: integer
           example: 1510941596
-        link:
-          description: This is link to the entity that the feed message is about
-          type: string
-          example: >-
-            https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
         short_text:
           description: >-
-            Contextual text for the feed message, with placeholders @user for the user's name and optionally @group for the group name.
+            Contextual text for the activity, with placeholders @user for the user's name and optionally @group for the group name.
           type: string
           example: "@user created the following within @group"
         topic:
@@ -6539,45 +6472,155 @@ components:
             - people
             - groups
             - content
+        user:
+          type: object
+          required:
+            - uuid
+            - user_avatar
+            - display_name
+          description: The user who triggered the activity.
+          properties:
+            uuid:
+              description: The UUID of the user.
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            image:
+              type: object
+              description: Avatar image of the user.
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  example: >-
+                    https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
+            username:
+              description: The username of the user.
+              type: string
+              example: Dorothy.Whitehead@akagera.com
+            display_name:
+              description: The display name of the user.
+              type: string
+              example: Dorothy Whitehead
+            teams:
+              description: The user's teams. An array of team names and UUIDs.
+              allOf:
+                - $ref: '#/components/schemas/title-uuid-list-common-schema'
+            locations:
+              description: The user's locations. An array of location names and UUIDs.
+              allOf:
+                - $ref: '#/components/schemas/title-uuid-list-common-schema'
+            job_roles:
+              description: The user's job roles. An array of job role names and UUIDs.
+              allOf:
+                - $ref: '#/components/schemas/title-uuid-list-common-schema'
+        entity:
+          type: object
+          description: The entity that the activity is about.
+          required:
+            - uuid
+            - title
+            - body
+            - type
+          properties:
+            uuid:
+              description: The UUID of the entity.
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            title:
+              description: The title of the entity.
+              type: string
+              example: A post about annual leave
+            body:
+              description: The main body text of the entity.
+              type: string
+              example: I'm taking annual leave next Thursday. Cover to be announced shortly
+            type:
+              description: The entity type.
+              type: string
+              enum:
+                - node
+                - comment
+                - user
+            image:
+              description: The featured image for this entity.
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            link:
+              description: A link to the entity.
+              type: string
+              format: uri
+              example: >-
+                https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
+            parent:
+              allOf:
+                - description: The parent of the post, if the entity is a post reply (comment)
+                - $ref: '#/components/schemas/post-schema'
         category:
-          description: The category of a post
-          type: string
-          enum:
-            - Comment
-            - Note
-            - Done
-            - News / Event
-            - Suggestion
-            - Question
-            - To Do
-            - Problem / Risk
-            - Agreed
-            - Decision
-        category_colour:
-          description: Colour for the category. Any CSS colour allowed.
-          type: string
-          example: '#FFFFFF'
+          description: The category of a post.
+          type: object
+          required:
+            - name
+            - uuid
+            - colour
+          properties:
+            name:
+              description: This is the name of the category
+              type: string
+              example: Operations
+            uuid:
+              description: This is the uuid of the category
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            colour:
+              description: Colour for the category. Any CSS colour allowed.
+              type: string
+              example: '#FFFFFF'
         likes:
-          description: Count of the likes for this feed message
-          type: integer
-          example: 5
-        comment_count:
-          description: Count of the comments for this feed message
-          type: integer
-          example: 5
-        current_user_liked:
-          description: A flag to determine if the current user has liked this post
-          type: boolean
-          example: true
-        group_name:
-          description: This is the name of the group
-          type: string
-          example: Operations
-        group_uuid:
-          description: This is the uuid of the group
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-1234-56789abcdef0
+          type: object
+          required:
+            - count
+            - current_user_liked
+          properties:
+            count:
+              description: Count of the likes for this feed message
+              type: integer
+              example: 5
+            current_user_liked:
+              description: A flag to determine if the current user has liked this post
+              type: boolean
+              example: true
+        comments:
+          type: object
+          required:
+            - count
+          properties:
+            count:
+              description: Count of the comments for this feed message
+              type: integer
+              example: 5
+        group:
+          type: object
+          required:
+            - name
+            - uuid
+            - is_member
+          properties:
+            name:
+              description: This is the name of the group
+              type: string
+              example: Operations
+            uuid:
+              description: This is the uuid of the group
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            is_member:
+              description: Boolean indicating if the current user is a member of the group.
+              type: boolean
       type: object
     feed-status-schema:
       required:
