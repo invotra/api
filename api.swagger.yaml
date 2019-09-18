@@ -674,6 +674,7 @@ paths:
           required: true
           schema:
             type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -707,6 +708,7 @@ paths:
         required: true
         schema:
           type: string
+          format: uuid
     get:
       tags:
         - users
