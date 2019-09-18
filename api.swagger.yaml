@@ -6448,6 +6448,41 @@ components:
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
+    PostCategoryReference:
+      type: object
+      description: The category of a post.
+      required:
+        - uuid
+        - name
+        - colour
+      properties:
+        uuid:
+          description: This is the uuid of the category
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        name:
+          description: This is the name of the category
+          type: string
+          example: Operations
+          readOnly: true
+        colour:
+          description: Colour for the category. Any CSS colour allowed.
+          type: string
+          example: '#FFFFFF'
+          readOnly: true
+    Likes:
+      type: object
+      properties:
+        count:
+          description: Count of likes.
+          type: integer
+          example: 5
+        current_user_liked:
+          description: A flag to determine if the current user has liked this.
+          type: boolean
+          example: true
+      readOnly: true
     Activity:
       required:
         - user
@@ -6560,51 +6595,20 @@ components:
             parent:
               allOf:
                 - description: The parent of the post, if the entity is a post reply (comment)
-                - $ref: '#/components/schemas/post-schema'
-        category:
-          description: The category of a post.
-          type: object
-          required:
-            - name
-            - uuid
-            - colour
-          properties:
-            name:
-              description: This is the name of the category
-              type: string
-              example: Operations
-            uuid:
-              description: This is the uuid of the category
-              type: string
-              format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-            colour:
-              description: Colour for the category. Any CSS colour allowed.
-              type: string
-              example: '#FFFFFF'
-        likes:
-          type: object
-          required:
-            - count
-            - current_user_liked
-          properties:
-            count:
-              description: Count of the likes for this feed message
-              type: integer
-              example: 5
-            current_user_liked:
-              description: A flag to determine if the current user has liked this post
-              type: boolean
-              example: true
-        comments:
-          type: object
-          required:
-            - count
-          properties:
-            count:
-              description: Count of the comments for this feed message
-              type: integer
-              example: 5
+                - $ref: '#/components/schemas/Post'
+            category:
+              $ref: '#/components/schemas/PostCategoryReference'
+            likes:
+              $ref: '#/components/schemas/Likes'
+            comments:
+              type: object
+              required:
+                - count
+              properties:
+                count:
+                  description: Count of the comments for this feed message
+                  type: integer
+                  example: 5
         group:
           type: object
           required:
@@ -7003,6 +7007,108 @@ components:
           description: Total number of users that are a member of at least one group.
           type: integer
           example: 150
+    Post:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: This is the Invotra UUID of the post.
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        parent:
+          type: object
+          properties:
+            uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the parent of the post.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+        thread:
+          type: object
+          properties:
+            uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+          readOnly: true
+        group:
+          type: object
+          properties:
+            uuid:
+              description: This is the Invotra UUID of the group that the post belongs to.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+              type: string
+              format: uuid
+        description:
+          description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
+          type: string
+          example: 'Hey <a href="/users/username" data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John Smith</a>, check out the latest <a href="/apps/groups/chat?hashtag=security">#security</a> news in this group!'
+          readOnly: true
+        pin:
+          description: Whether or not this post is pinned.
+          type: boolean
+        author:
+          type: object
+          properties:
+            uuid:
+              description: The uuid of the author
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            display_name:
+              description: The display name of the author
+              type: string
+              example: Dorothy Whitehead
+              readOnly: true
+        likes:
+          $ref: '#/components/schemas/Likes'
+        comments:
+          type: object
+          properties:
+            count:
+              description: Count of comments on the post
+              type: integer
+              example: 5
+          readOnly: true
+        attachments:
+          type: object
+          properties:
+            count:
+              description: Count of attachments on the post
+              type: integer
+              example: 5
+              readOnly: true
+            results:
+              description: A list of attachments for the post
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/file-schema'
+        timestamp:
+          description: This is the timestamp (in seconds) of when the post was created
+          type: integer
+          example: 1510941596
+        depth:
+          description: The depth of the post in the hierarchy of replies. Top-level posts are 0, their replies are 1, replies to replies are 2 etc.
+          type: integer
+          example: 1
+          readOnly: true
+        source:
+          description: The unrendered main body for the post. This value should be used only for editing and is *NOT* safe to display as-is in any HTML context.
+          type: string
+          example: 'Hey [@username], check out the latest #security news in this group!'
+        external_id:
+          description: This is used to store the post's external reference id
+          type: string
+          example: ABC123
+        category:
+          $ref: '#/components/schemas/PostCategoryReference'
+        featured_image:
+          description: The featured image for this post
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/file-schema'
     post-schema:
       allOf:
         - $ref: '#/components/schemas/post-schema-base'
