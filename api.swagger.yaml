@@ -150,7 +150,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/pdf-export-completion-schema'
+              oneOf:
+               - $ref: '#/components/schemas/pdf-export-completion-schema'
+               - $ref: '#/components/schemas/pdf-export-error-schema'
       security:
         - BearerAuth: []
       responses:
@@ -6232,10 +6234,19 @@ components:
       type: object
       properties:
         url:
+          description: The S3 URL of resulting PDF.
           type: string
           example: http://s3.amazon.com/...
       required:
         - url
+    pdf-export-error-schema:
+      type: object
+      properties:
+        error:
+          description: The error response.
+          type: string
+      required:
+        - error
     branding-schema:
       properties:
         logo:
