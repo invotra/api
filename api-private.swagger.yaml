@@ -214,6 +214,12 @@ paths:
           description: The UUID of the node to export.
           pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           required: true
+        - name: user_uuid
+          in: query
+          type: string
+          description: The UUID of the user submitting the PDF export request.
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+          required: true
         - name: latest
           in: query
           type: boolean
