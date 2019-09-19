@@ -1869,7 +1869,7 @@ paths:
           description: The paging cursor.
           in: query
           schema:
-            type: string
+            type: object
       security:
         - BearerAuth: []
       responses:
@@ -7002,7 +7002,7 @@ components:
           type: string
           example: Code of Conduct
         parent_pages:
-          description: An array of the manual page's parents, immediate first.
+          description: An array of the manual page's parents, starting with the given root page.
           type: array
           items:
             type: object
