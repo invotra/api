@@ -1845,6 +1845,81 @@ paths:
           description: The UUID or request body JSON was malformed.
         '404':
           description: No manual page with that UUID was found.
+  /comments/list:
+    get:
+      tags:
+        - comments
+      description: 'Search for comments. An empty array is returned if no comments are found.'
+      parameters:
+        - name: content_type
+          description: 'Filter on content type.'
+          in: query
+          schema:
+            type: string
+            example: 'blog'
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: category
+          description: 'Filter on category (Only for post comments).'
+          in: query
+          schema:
+            type: string
+            example: 'idea'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of comments matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/comment-schema'
+        '403':
+          description: 'User is not authorized to list comments.'
   /files:
     post:
       requestBody:
@@ -7007,6 +7082,68 @@ components:
                       description: Title of child manual page
                       type: string
                       example: Appendix A - Acronyms
+    comment-schema:
+      properties:
+        uuid:
+          description: 'Invotra UUID of the comment.'
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        body:
+          description: 'The main body text of the comment.'
+          type: string
+          example: 'How long will this take? I have been waiting ages.'
+        author_uuid:
+          description: 'Invotra UUID of the author.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        timestamp_created:
+          description: 'The timestamp (in seconds) of when the comment was created'
+          type: integer
+          example: 1510941596
+        timestamp_updated:
+          description: 'The timestamp (in seconds) of when the comment was updated'
+          type: integer
+          example: 1510941596
+        parent_uuid:
+          type: string
+          format: uuid
+          description: 'This is the Invotra UUID of the parent of the comment. Only present on replies.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_uuid:
+          type: string
+          format: uuid
+          description: 'This is the Invotra UUID of the content.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_type:
+          description: 'The content type machine name of the comment.'
+          type: string
+          example: 'blog'
+        category:
+          description: 'The category of the comment.'
+          type: object
+          properties:
+            name:
+              type: string
+              format: uuid
+              description: 'The name of the comment category.'
+              example: 'Idea'
+            uuid:
+              type: string
+              format: uuid
+              description: 'This is the Invotra UUID of the comment category.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        likes_count:
+          description: 'The total number of likes for the comment.'
+          type: integer
+          example: 33
+        attachments:
+          description: 'List of attachments on the comment.'
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/file-schema'
     file-schema:
       type: object
       properties:
