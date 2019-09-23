@@ -6592,10 +6592,25 @@ components:
               format: uri
               example: >-
                 https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
+            parent:
+              description: The parent of the entity, if the entity is comment or post reply. This is the immediate parent, which may be a comment or a node.
+              type: object
+              properties:
+                uuid:
+                  type: string
+                  format: uuid
+                  description: The UUID of the parent entity.
+                  example: "01234567-89ab-cdef-1234-56789abcdef0"
+                title:
+                  type: string
+                  description: The title of the parent entity.
+              required:
+                - uuid
             thread:
               allOf:
+                - $ref: '#/components/schemas/Post'
                 - description: The top-level parent post, if the entity is a post reply (comment). In Drupal terms this is the node, not the parent comment.
-                - example:
+                  example:
                     uuid: "01234567-89ab-cdef-1234-56789abcdef0"
                     thread:
                       uuid: "01234567-89ab-cdef-1234-56789abcdef0"
@@ -6639,7 +6654,6 @@ components:
                       alt_text: "string"
                       image_height: 200
                       image_width: 200
-                - $ref: '#/components/schemas/Post'
             category:
               $ref: '#/components/schemas/PostCategoryReference'
             likes:
