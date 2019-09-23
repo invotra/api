@@ -6592,9 +6592,9 @@ components:
               format: uri
               example: >-
                 https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
-            parent:
+            thread:
               allOf:
-                - description: The parent of the post, if the entity is a post reply (comment)
+                - description: The top-level parent of the post, if the entity is a post reply (comment). In Drupal terms this is the node, not the parent comment.
                 - $ref: '#/components/schemas/Post'
             category:
               $ref: '#/components/schemas/PostCategoryReference'
