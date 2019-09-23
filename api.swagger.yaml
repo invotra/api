@@ -6594,7 +6594,51 @@ components:
                 https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
             thread:
               allOf:
-                - description: The top-level parent of the post, if the entity is a post reply (comment). In Drupal terms this is the node, not the parent comment.
+                - description: The top-level parent post, if the entity is a post reply (comment). In Drupal terms this is the node, not the parent comment.
+                - example:
+                    uuid: "01234567-89ab-cdef-1234-56789abcdef0"
+                    thread:
+                      uuid: "01234567-89ab-cdef-1234-56789abcdef0"
+                    group:
+                      uuid: "01234567-89ab-cdef-1234-56789abcdef0"
+                    description: "Hey <a href=\"/users/username\" data-mentioned-uuid=\"1f1397e1-c263-4477-84a0-ca6c1c1560fe\">@John Smith</a>, check out the latest <a href=\"/apps/groups/chat?hashtag=security\">#security</a> news in this group!"
+                    pin: true
+                    author:
+                      uuid: "01234567-89ab-cdef-1234-56789abcdef0"
+                      display_name: "Dorothy Whitehead"
+                    likes:
+                      count: 5,
+                      current_user_liked: true
+                    comments:
+                      count: 6
+                    attachments:
+                      count: 5
+                      results:
+                        - uuid: "01234567-89ab-cdef-1234-56789abcdef0"
+                          filename: "wallpaper.jpeg"
+                          file_download: "https://dev.invotra.com/file/1234/download"
+                          type: "image"
+                          filemime: "image/jpeg"
+                          alt_text: "string"
+                          image_height: 200
+                          image_width: 200
+                    timestamp: 1510941596
+                    depth: 0
+                    source: "Hey [@username], check out the latest #security news in this group!"
+                    external_id: "ABC123"
+                    category:
+                      uuid: "01234567-89ab-cdef-1234-56789abcdef0"
+                      name: "Operations"
+                      colour: "#FFFFFF"
+                    featured_image:
+                      uuid: "01234567-89ab-cdef-1234-56789abcdef0"
+                      filename: "wallpaper.jpeg"
+                      file_download: "https://dev.invotra.com/file/1234/download"
+                      type: "image"
+                      filemime: "image/jpeg"
+                      alt_text: "string"
+                      image_height: 200
+                      image_width: 200
                 - $ref: '#/components/schemas/Post'
             category:
               $ref: '#/components/schemas/PostCategoryReference'
