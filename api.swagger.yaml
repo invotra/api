@@ -6243,7 +6243,7 @@ components:
       type: object
       properties:
         error:
-          description: The error response.
+          description: The human-readable error response.
           type: string
       required:
         - error
