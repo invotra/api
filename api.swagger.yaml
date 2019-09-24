@@ -6608,7 +6608,7 @@ components:
                 - uuid
             thread:
               allOf:
-                - $ref: '#/components/schemas/PostBase'
+                - $ref: '#/components/schemas/PostTopLevel'
                 - description: The top-level parent post, if the entity is a post reply (comment). In Drupal terms this is the node, not the parent comment.
             category:
               $ref: '#/components/schemas/PostCategoryReference'
@@ -7022,10 +7022,14 @@ components:
           type: integer
           example: 150
     Post:
+      oneOf:
+        - $ref: '#/components/schemas/PostTopLevel'
+        - $ref: '#/components/schemas/PostReply'
+    PostReply:
       allOf:
-        - $ref: '#/components/schemas/PostBase'
+        - $ref: '#/components/schemas/PostTopLevel'
         - type: object
-          description: This is a post which is a reply to another post. In Drupal terms, it is a comment. For top-level posts, see PostBase.
+          description: This is a post which is a reply to another post. In Drupal terms, it is a comment.
           properties:
             parent:
               type: object
@@ -7049,9 +7053,13 @@ components:
               type: integer
               example: 1
               readOnly: true
-    PostBase:
+          required:
+            - parent
+            - thread
+            - depth
+    PostTopLevel:
       type: object
-      description: This is a top-level post. In Drupal terms, it is a node. For replies, see Post.
+      description: This is a top-level post. In Drupal terms, it is a node.
       properties:
         uuid:
           type: string
