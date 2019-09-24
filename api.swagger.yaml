@@ -6608,52 +6608,8 @@ components:
                 - uuid
             thread:
               allOf:
-                - $ref: '#/components/schemas/Post'
+                - $ref: '#/components/schemas/PostBase'
                 - description: The top-level parent post, if the entity is a post reply (comment). In Drupal terms this is the node, not the parent comment.
-                  example:
-                    uuid: "01234567-89ab-cdef-1234-56789abcdef0"
-                    thread:
-                      uuid: "01234567-89ab-cdef-1234-56789abcdef0"
-                    group:
-                      uuid: "01234567-89ab-cdef-1234-56789abcdef0"
-                    description: "Hey <a href=\"/users/username\" data-mentioned-uuid=\"1f1397e1-c263-4477-84a0-ca6c1c1560fe\">@John Smith</a>, check out the latest <a href=\"/apps/groups/chat?hashtag=security\">#security</a> news in this group!"
-                    pin: true
-                    author:
-                      uuid: "01234567-89ab-cdef-1234-56789abcdef0"
-                      display_name: "Dorothy Whitehead"
-                    likes:
-                      count: 5,
-                      current_user_liked: true
-                    comments:
-                      count: 6
-                    attachments:
-                      count: 5
-                      results:
-                        - uuid: "01234567-89ab-cdef-1234-56789abcdef0"
-                          filename: "wallpaper.jpeg"
-                          file_download: "https://dev.invotra.com/file/1234/download"
-                          type: "image"
-                          filemime: "image/jpeg"
-                          alt_text: "string"
-                          image_height: 200
-                          image_width: 200
-                    timestamp: 1510941596
-                    depth: 0
-                    source: "Hey [@username], check out the latest #security news in this group!"
-                    external_id: "ABC123"
-                    category:
-                      uuid: "01234567-89ab-cdef-1234-56789abcdef0"
-                      name: "Operations"
-                      colour: "#FFFFFF"
-                    featured_image:
-                      uuid: "01234567-89ab-cdef-1234-56789abcdef0"
-                      filename: "wallpaper.jpeg"
-                      file_download: "https://dev.invotra.com/file/1234/download"
-                      type: "image"
-                      filemime: "image/jpeg"
-                      alt_text: "string"
-                      image_height: 200
-                      image_width: 200
             category:
               $ref: '#/components/schemas/PostCategoryReference'
             likes:
@@ -7066,30 +7022,42 @@ components:
           type: integer
           example: 150
     Post:
+      allOf:
+        - $ref: '#/components/schemas/PostBase'
+        - type: object
+          description: This is a post which is a reply to another post. In Drupal terms, it is a comment. For top-level posts, see PostBase.
+          properties:
+            parent:
+              type: object
+              properties:
+                uuid:
+                  type: string
+                  format: uuid
+                  description: This is the Invotra UUID of the parent of the post.
+                  example: 01234567-89ab-cdef-1234-56789abcdef0
+            thread:
+              type: object
+              properties:
+                uuid:
+                  type: string
+                  format: uuid
+                  description: This is the Invotra UUID of the root post of this thread.
+                  example: 01234567-89ab-cdef-1234-56789abcdef0
+              readOnly: true
+            depth:
+              description: The depth of the post in the hierarchy of replies. Replies to the top-level post are depth 1, replies to replies are 2 etc. The top-level post itself does not have a depth (it is implicitly depth 0).
+              type: integer
+              example: 1
+              readOnly: true
+    PostBase:
       type: object
+      description: This is a top-level post. In Drupal terms, it is a node. For replies, see Post.
       properties:
         uuid:
           type: string
           format: uuid
           description: This is the Invotra UUID of the post.
           example: 01234567-89ab-cdef-1234-56789abcdef0
-        parent:
-          type: object
-          properties:
-            uuid:
-              type: string
-              format: uuid
-              description: This is the Invotra UUID of the parent of the post.
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-        thread:
-          type: object
-          properties:
-            uuid:
-              type: string
-              format: uuid
-              description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-          readOnly: true
         group:
           type: object
           properties:
@@ -7147,11 +7115,6 @@ components:
           description: This is the timestamp (in seconds) of when the post was created
           type: integer
           example: 1510941596
-        depth:
-          description: The depth of the post in the hierarchy of replies. Top-level posts are 0, their replies are 1, replies to replies are 2 etc.
-          type: integer
-          example: 1
-          readOnly: true
         source:
           description: The unrendered main body for the post. This value should be used only for editing and is *NOT* safe to display as-is in any HTML context.
           type: string
