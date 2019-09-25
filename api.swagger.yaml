@@ -6025,7 +6025,7 @@ paths:
         required: true
       tags:
         - notifications
-      summary: Register a token and device id to identify the user with a push notification service.
+      description: Register a token and device id to identify the user with a push notification service.
       responses:
         '200':
           description: The token and device id was already registered.
@@ -6034,20 +6034,32 @@ paths:
         '404':
           description: Unknown service.
     delete:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/push-notifications-schema'
-        required: true
       tags:
         - notifications
-      summary: Deregister a token and device id identifying the user with a push notification service.
+      description: 'Deregister the device the user is using for push notifications.'
+      parameters:
+        - in: query
+          name: device_id
+          required: true
+          description: 'The unique device id of the device the user is using.'
+          example: 'adcd1234'
+          schema:
+            type: string
+        - in: query
+          name: platform
+          required: true
+          description: 'The platform the of the device the user is using.'
+          example: 'ios'
+          schema:
+            type: string
+            enum:
+              - ios
+              - android
       responses:
         '200':
-          description: The token and device id were deregistered.
+          description: 'The device id was deregistered.'
         '404':
-          description: The token and device id were deregistered or the service was unknown.
+          description: 'The device id was not found or the service was unknown.'
   /feeds/status:
     get:
       tags:
@@ -6505,7 +6517,7 @@ components:
         user_avatar:
           description: The user's image
           type: string
-          example: "https://dev.invotra.com/sites/default/files/styles/small_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+          example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
         email:
           description: Users email address
           format: email
@@ -7401,6 +7413,9 @@ components:
           description: The OS platform of the user's device.
           type: string
           example: ios
+          enum:
+            - ios
+            - android
       type: object
     location-context-schema:
       description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
