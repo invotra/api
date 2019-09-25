@@ -359,6 +359,7 @@ definitions:
     required:
       - job_uuid
       - user_uuid
+      - node_grants
       - secret_token
   pdf-export-job-response-schema:
     type: object
