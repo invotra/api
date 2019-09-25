@@ -350,6 +350,9 @@ definitions:
         type: string
         pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+      node_grants:
+        description: The content's access grants.
+        type: object
       secret_token:
         description: The export job's secret token.
         type: string
