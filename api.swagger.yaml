@@ -1864,26 +1864,12 @@ paths:
           description: The UUID or request body JSON was malformed.
         '404':
           description: No manual page with that UUID was found.
-  '/manuals/{manual_page_id}/pages':
+  '/manuals/pages':
     get:
       description: Get all pages in a manual or manual page.
       tags:
         - manuals
       parameters:
-        - name: manual_page_id
-          description: Invotra UUID of the manual page.
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - name: latest
-          description: Whether to return the latest unpublished revision of each page.
-          in: query
-          schema:
-            type: boolean
-            default: false
         - name: cursor
           description: The paging cursor.
           in: query
@@ -1899,10 +1885,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  count:
-                    description: Total count of manual pages
-                    type: integer
-                    example: 248
                   results:
                     description: An array of manual pages
                     type: array
@@ -7040,7 +7022,7 @@ components:
           type: string
           example: Code of Conduct
         parent_pages:
-          description: An array of the manual page's parents, immediate first.
+          description: An array of the manual page's parents, starting with the given root page.
           type: array
           items:
             type: object
