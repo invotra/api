@@ -1916,13 +1916,6 @@ paths:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - name: latest
-          description: Whether to return the latest revision of the content.
-          in: query
-          required: false
-          schema:
-            type: boolean
-            default: false
       security:
         - BearerAuth: []
       responses:
