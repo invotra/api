@@ -2507,6 +2507,7 @@ paths:
           description: Page to pull results from.
           schema:
             type: integer
+            minimum: 0
         - in: query
           description: Filter the feed for the mobile app. Returns only group related messages.
           name: app_feeds_only
