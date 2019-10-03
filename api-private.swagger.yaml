@@ -347,7 +347,6 @@ definitions:
       latest:
         description: Whether to use the latest revision of each page.
         type: boolean
-        required: false
         default: false
       node_grants:
         description: The content's access grants.
@@ -358,6 +357,7 @@ definitions:
     required:
       - job_uuid
       - user_uuid
+      - latest
       - node_grants
       - secret_token
   pdf-export-job-response-schema:
