@@ -1916,6 +1916,13 @@ paths:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: workflow
+          description: Include workflow history in HTML.
+          in: query
+          name: workflow
+          schema:
+            type: boolean
+            default: false
       security:
         - BearerAuth: []
       responses:
