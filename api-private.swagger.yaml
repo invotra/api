@@ -230,10 +230,6 @@ paths:
             $ref: '#/definitions/pdf-export-job-response-schema'
         '400':
           description: A malformed UUID was supplied.
-        '403':
-          description: The user is not authorized to access this node.
-        '404':
-          description: The supplied UUID does not correspond to an existing node.
 definitions:
   session-schema:
     properties:
