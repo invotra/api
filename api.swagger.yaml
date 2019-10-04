@@ -5628,17 +5628,13 @@ paths:
         - feeds
       parameters:
         - in: query
-          name: page
-          required: true
-          description: Page to pull results from.
-          schema:
-            type: integer
-        - in: query
           description: Filter the feed for the mobile app. Returns only group related messages.
           name: app_feeds_only
           schema:
             type: boolean
             default: false
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
           description: Returns the feed for a user.
