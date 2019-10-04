@@ -1919,7 +1919,6 @@ paths:
         - name: workflow
           description: Include workflow history in HTML.
           in: query
-          name: workflow
           schema:
             type: boolean
             default: false
