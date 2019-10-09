@@ -677,6 +677,12 @@ paths:
         - users
       description: Return the user's activity feed.
       parameters:
+        - in: query
+          description: Filter the feed for the mobile app. Returns only group related messages.
+          name: app_feeds_only
+          schema:
+            type: boolean
+            default: false
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
