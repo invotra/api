@@ -1898,6 +1898,8 @@ paths:
                     type: string
         '400':
           description: The UUID was malformed.
+        '401':
+          description: A correct secret token was not supplied.
         '403':
           description: The user does not have access to the requested manual page.
         '404':
