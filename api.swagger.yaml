@@ -5471,6 +5471,16 @@ paths:
           description: |
             The notification does not exist.
       description: Mark a notification as read.
+  '/notifications/clear_all':
+    delete:
+      tags:
+        - notifications
+      responses:
+        '200':
+          description: The user marked the notification as read.
+        '400':
+          description: Could not clear all notifications for user.
+      description: Clear all notifications for a particular user.
   /notifications/register/{service_id}:
     parameters:
       - description: Identifying name of the notification service to be used.
