@@ -638,6 +638,12 @@ paths:
       parameters:
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
+        - in: query
+          description: Filter the feed for the mobile app. Returns only group related messages.
+          name: app_feeds_only
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: >
