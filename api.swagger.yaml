@@ -5472,12 +5472,12 @@ paths:
             The notification does not exist.
       description: Mark a notification as read.
   '/notifications/clear_all':
-    delete:
+    put:
       tags:
         - notifications
       responses:
         '200':
-          description: The user marked the notification as read.
+          description: The user marked the notifications as read.
         '400':
           description: Could not clear all notifications for user.
       description: Clear all notifications for a particular user.
