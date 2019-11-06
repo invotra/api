@@ -2447,6 +2447,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the badge.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -2573,6 +2579,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the content category.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -2699,6 +2711,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the content type.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -2825,6 +2843,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the country.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -2951,6 +2975,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the event status.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -3077,6 +3107,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the event topic.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -3203,6 +3239,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the free skill.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -3329,6 +3371,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the general topic.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -3455,6 +3503,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the grade.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -3581,6 +3635,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the group category.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -3707,6 +3767,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the idea category.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -3833,6 +3899,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the interest.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -3959,6 +4031,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the message type.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4085,6 +4163,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the organisational skill.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4211,6 +4295,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the person type.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4337,6 +4427,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the policy type.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4463,6 +4559,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the primary category.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4589,6 +4691,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the project.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4715,6 +4823,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the query category.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4841,6 +4955,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the region.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4967,6 +5087,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the search highlight.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -5093,6 +5219,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the security classification.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -5219,6 +5351,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the title.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -5345,6 +5483,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the user category.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
