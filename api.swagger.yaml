@@ -1678,6 +1678,175 @@ paths:
         '422':
           description: JSON schema validation failure
       description: Report a post as the current user.
+
+  '/custom_content_types':
+    post:
+      tags:
+        - 'custom content type'
+      description: 'Provision a new custom content type.'
+      responses:
+        '201':
+          description: 'The custom content type was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned custom content type may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The custom content type was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a custom content type.'
+        '422':
+          description: 'The custom content type was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/custom-content-type-schema-create'
+        required: true
+  '/custom_content_types/list':
+    get:
+      tags:
+        - 'custom content type'
+      description: 'Search for custom content types. An empty array is returned if no custom content types are found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: custom_content_type
+          description: 'Filter by the custom content type machine name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+            example: 'guideline'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
+        - name: status
+          description: 'Filter the list of custom content types on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of custom content types matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/custom-content-type-schema'
+        '403':
+          description: 'User is not authorized to list custom content types.'
+  '/custom_content_types/{custom_content_type_id}':
+    parameters:
+      - description: 'The Invotra UUID of the custom content type.'
+        in: path
+        name: custom_content_type_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'custom content type'
+      description: 'Get information about the custom content type.'
+      responses:
+        '200':
+          description: 'Returns a single complete custom content type object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/custom-content-type-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this custom content type.'
+        '404':
+          description: 'The UUID does not correspond to an existing custom content type.'
+    put:
+      tags:
+        - 'custom content type'
+      description: 'Update custom content type information.'
+      responses:
+        '200':
+          description: 'The custom content type information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this custom content type.'
+        '404':
+          description: 'The UUID does not correspond to an existing custom content type.'
+        '422':
+          description: 'The custom content type was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/custom-content-type-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'custom content type'
+      description: 'Delete a custom content type.'
+      responses:
+        '200':
+          description: 'The custom content type was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this custom content type.'
+        '404':
+          description: 'The UUID does not correspond to an existing custom content type.'
+
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -6395,6 +6564,57 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
+
+    custom-content-type-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the custom content type.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/custom-content-type-schema-common'
+        - type: object
+          properties:
+            image:
+              description: 'Custom content type Image'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+    custom-content-type-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/custom-content-type-schema-common'
+        - type: object
+          properties:
+            image_uuid:
+              description: 'Invotra UUID of the image.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+    custom-content-type-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/custom-content-type-schema-common'
+        - type: object
+          properties:
+            image_uuid:
+              description: 'Invotra UUID of the image.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            published:
+              default: true
+          required:
+            - name
+            - image_uuid
+    custom-content-type-schema-common:
+      type: object
+      properties:
+        name:
+          description: 'Name of the custom content type.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+
     manual-listing-schema:
       type: object
       properties:
