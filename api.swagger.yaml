@@ -1679,36 +1679,36 @@ paths:
           description: JSON schema validation failure
       description: Report a post as the current user.
 
-  '/custom_content_types':
+  '/custom_content':
     post:
       tags:
-        - 'custom content type'
-      description: 'Provision a new custom content type.'
+        - 'custom content'
+      description: 'Provision a new custom content.'
       responses:
         '201':
-          description: 'The custom content type was created successfully.'
+          description: 'The custom content was created successfully.'
           headers:
             Location:
-              description: 'The URL at which the newly provisioned custom content type may be retrieved.'
+              description: 'The URL at which the newly provisioned custom content may be retrieved.'
               schema:
                 type: string
         '400':
-          description: 'The custom content type was not saved due to malformed JSON.'
+          description: 'The custom content was not saved due to malformed JSON.'
         '403':
-          description: 'User is not authorized to create a custom content type.'
+          description: 'User is not authorized to create a custom content.'
         '422':
-          description: 'The custom content type was not saved due to Drupal validation failure or JSON schema validation failure.'
+          description: 'The custom content was not saved due to Drupal validation failure or JSON schema validation failure.'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/custom-content-type-schema-create'
+              $ref: '#/components/schemas/custom-content-schema-create'
         required: true
-  '/custom_content_types/list':
+  '/custom_content/list':
     get:
       tags:
-        - 'custom content type'
-      description: 'Search for custom content types. An empty array is returned if no custom content types are found.'
+        - 'custom content'
+      description: 'Search for custom content. An empty array is returned if no custom content was found.'
       parameters:
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
@@ -1742,7 +1742,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: status
-          description: 'Filter the list of custom content types on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of custom content on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -1769,7 +1769,7 @@ paths:
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
-          description: 'List of custom content types matching the filter criteria.'
+          description: 'List of custom content matching the filter criteria.'
           content:
             application/json:
               schema:
@@ -1783,69 +1783,69 @@ paths:
                     description: 'The results set.'
                     type: array
                     items:
-                      $ref: '#/components/schemas/custom-content-type-schema'
+                      $ref: '#/components/schemas/custom-content-schema'
         '403':
-          description: 'User is not authorized to list custom content types.'
-  '/custom_content_types/{custom_content_type_id}':
+          description: 'User is not authorized to list custom content.'
+  '/custom_content/{custom_content_id}':
     parameters:
-      - description: 'The Invotra UUID of the custom content type.'
+      - description: 'The Invotra UUID of the custom content.'
         in: path
-        name: custom_content_type_id
+        name: custom_content_id
         required: true
         schema:
           type: string
           format: uuid
     get:
       tags:
-        - 'custom content type'
-      description: 'Get information about the custom content type.'
+        - 'custom content'
+      description: 'Get information about the custom content.'
       responses:
         '200':
-          description: 'Returns a single complete custom content type object.'
+          description: 'Returns a single complete custom content object.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/custom-content-type-schema'
+                $ref: '#/components/schemas/custom-content-schema'
         '400':
           description: 'The supplied UUID was malformed.'
         '403':
-          description: 'User is not authorized to show this custom content type.'
+          description: 'User is not authorized to show this custom content.'
         '404':
-          description: 'The UUID does not correspond to an existing custom content type.'
+          description: 'The UUID does not correspond to an existing custom content.'
     put:
       tags:
-        - 'custom content type'
-      description: 'Update custom content type information.'
+        - 'custom content'
+      description: 'Update custom content information.'
       responses:
         '200':
-          description: 'The custom content type information was updated successfully.'
+          description: 'The custom content information was updated successfully.'
         '400':
           description: 'The supplied UUID or JSON was malformed.'
         '403':
-          description: 'User is not authorized to update this custom content type.'
+          description: 'User is not authorized to update this custom content.'
         '404':
-          description: 'The UUID does not correspond to an existing custom content type.'
+          description: 'The UUID does not correspond to an existing custom content.'
         '422':
-          description: 'The custom content type was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+          description: 'The custom content was not updated due to a Drupal validation failure or a JSON schema validation failure.'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/custom-content-type-schema-update'
+              $ref: '#/components/schemas/custom-content-schema-update'
         required: true
     delete:
       tags:
-        - 'custom content type'
-      description: 'Delete a custom content type.'
+        - 'custom content'
+      description: 'Delete custom content.'
       responses:
         '200':
-          description: 'The custom content type was successfully deleted.'
+          description: 'The custom content was successfully deleted.'
         '400':
           description: 'The supplied UUID was malformed.'
         '403':
-          description: 'User is not authorized to delete this custom content type.'
+          description: 'User is not authorized to delete this custom content.'
         '404':
-          description: 'The UUID does not correspond to an existing custom content type.'
+          description: 'The UUID does not correspond to an existing custom content.'
 
   '/manuals':
     get:
@@ -6565,26 +6565,83 @@ components:
           example: '#FFFFFF'
       type: object
 
-    custom-content-type-schema:
+    custom-content-schema:
       allOf:
         - type: object
           properties:
             uuid:
-              description: 'Invotra UUID of the custom content type.'
+              description: 'Invotra UUID of the custom content.'
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/custom-content-type-schema-common'
+        - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
             image:
-              description: 'Custom content type Image'
+              description: 'Custom content Image'
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
-    custom-content-type-schema-update:
+            author:
+              description: 'The author of the custom content.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-schema'
+            attachments:
+              description: 'List of attachments on the custom content.'
+              type: array
+              items:
+                $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner user of the custom content.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-schema'
+            team:
+              description: 'The team targeting this custom content.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/team-schema'
+            locations:
+              description: 'The locations targeting this custom content.'
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/location-site-schema'
+            grades:
+              description: 'The grades targeting this custom content.'
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/grade-schema'
+            regions:
+              description: 'The regions targeting this custom content.'
+              type: array
+              items:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/region-schema'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the manual page was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the manual page was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the content.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the content.'
+              type: integer
+              example: 5
+    custom-content-schema-update:
       allOf:
-        - $ref: '#/components/schemas/custom-content-type-schema-common'
+        - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
             image_uuid:
@@ -6592,9 +6649,51 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-    custom-content-type-schema-create:
+            author_uuid:
+              description: 'The Invotra UUID of the author. (Will use the authenticated user if not supplied.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachment_uuids:
+              description: 'The Invotra UUIDs of the attatched files.'
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner_uuid:
+              description: 'The Invotra UUID of the owner user.'
+              type: string
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team_uuid:
+              description: 'The Invotra UUID of the team targeting this custom content.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            location_uuids:
+              description: 'The Invotra UUIDs of the locations targeting this custom content.'
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grade_uuids:
+              description: 'The Invotra UUIDs of the grades targeting this custom content.'
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+            region_uuids:
+              description: 'The Invotra UUIDs of the regions targeting this custom content.'
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+    custom-content-schema-create:
       allOf:
-        - $ref: '#/components/schemas/custom-content-type-schema-common'
+        - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
             image_uuid:
@@ -6602,18 +6701,137 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-            published:
-              default: true
+            author_uuid:
+              description: 'The Invotra UUID of the author. (Will use the authenticated user if not supplied.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachment_uuids:
+              description: 'The Invotra UUIDs of the attatched files.'
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner_uuid:
+              description: 'The Invotra UUID of the owner user.'
+              type: string
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team_uuid:
+              description: 'The Invotra UUID of the team targeting this custom content.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            location_uuids:
+              description: 'The Invotra UUIDs of the locations targeting this custom content.'
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grade_uuids:
+              description: 'The Invotra UUIDs of the grades targeting this custom content.'
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+            region_uuids:
+              description: 'The Invotra UUIDs of the regions targeting this custom content.'
+              type: array
+              items:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
+            - custom_content_type
             - name
-            - image_uuid
-    custom-content-type-schema-common:
+            - body
+            - site_section_uuid
+            - published
+            - review_date
+            - owner_uuid
+    custom-content-schema-common:
       type: object
       properties:
+        custom_content_type:
+          description: 'The the custom content type machine name.'
+          type: string
+          example: 'guideline'
         name:
-          description: 'Name of the custom content type.'
+          description: 'Name of the custom content.'
           type: string
           example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the custom content.'
+          type: string
+          example: 'You can create strong passwords using an online random password generator.'
+        site_section_uuid:
+          description: 'The Invotra UUID of the site section. (!!! No EP or schema yet)'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        published:
+          description: 'Indicates that this custom content is published.'
+          type: boolean
+          example: true
+        schedule:
+          description: 'The Schedule for this custom content.'
+          type: object
+          properties:
+            status:
+              description: 'The status of the schedule.'
+              type: string
+              enum:
+                - immediately 
+                - scheduled
+              default: 'immediately'
+            date:
+              description: 'The date of the schedule (in seconds).'
+              type: integer
+              example: 1510941596
+        review_date:
+          description: 'The review date for the custom content (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the custom content'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the custom content'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the content link.'
+                type: string
+                example: 'More information here.'
+              url:
+                description: 'The url for the related content link'
+                type: string
+                example: 'https://dev.invotra.com/uuid/node/01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        featured:
+          description: 'Indicates that this content is featured.'
+          type: boolean
+          default: false
+          example: false
 
     manual-listing-schema:
       type: object
