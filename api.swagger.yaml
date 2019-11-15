@@ -89,6 +89,10 @@ paths:
       responses:
         '200':
           description: Returns a CSRF token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/csrf-token-schema'
     post:
       tags:
         - sessions
@@ -653,6 +657,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -692,6 +699,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -888,6 +898,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1055,6 +1068,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1121,6 +1137,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1161,6 +1180,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1233,6 +1255,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1494,6 +1519,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1549,6 +1577,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1793,6 +1824,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: 'Count of results.'
@@ -2035,6 +2069,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -5579,6 +5616,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -5626,10 +5666,12 @@ components:
         logo:
           description: The logo for the site.
           type: string
+          format: url
           example: 'https://dev.invotra.com/sites/default/files/logo.png'
         mobile_logo:
           description: The mobile logo for the site.
           type: string
+          format: url
           example: 'https://dev.invotra.com/sites/default/files/mobile_logo.png'
         navigation_first_level_nav_link:
           description: This is the colour for the main navigation text. Any CSS colour allowed.
@@ -5681,6 +5723,7 @@ components:
           example: '#FFFFFF'
       type: object
     status-schema:
+      type: object
       properties:
         status:
           description: 'Status of the API.'
@@ -5696,8 +5739,14 @@ components:
           example: 'Wed, 17 Jul 2019 09:58:16 GMT'
     product-options-schema:
       type: object
-      additionalProperties:
-        type: boolean
+      required:
+        - invotra_notes
+        - invotra_notifications_page
+      properties:
+        invotra_notes:
+          type: boolean
+        invotra_notifications_page:
+          type: boolean
       example:
         invotra_notes: true
         invotra_notifications_page: false
@@ -5738,7 +5787,7 @@ components:
       required:
         - user_uuid
         - user_image
-        - display_name
+        - username
         - entity_uuid
         - entity_title
         - entity_body
@@ -5760,6 +5809,7 @@ components:
         user_image:
           description: This is image of the user who triggered the feed message
           type: string
+          format: url
           example: >-
             https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
         username:
@@ -5814,6 +5864,7 @@ components:
         link:
           description: This is link to the entity that the feed message is about
           type: string
+          format: url
           example: >-
             https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
         short_text:
@@ -5871,6 +5922,7 @@ components:
     feed-status-schema:
       required:
         - feed
+      type: object
       properties:
         feed:
           description: This is the feed flag
@@ -5943,6 +5995,9 @@ components:
           example: mentioned you in a post
       type: object
     team-schema:
+      required:
+        - uuid
+        - title
       properties:
         uuid:
           description: The UUID of the team
@@ -5975,6 +6030,12 @@ components:
         - title
       type: object
     user-schema:
+      required:
+        - uuid
+        - username
+        - email
+        - roles
+        - status
       properties:
         uuid:
           description: The UUID of the user
@@ -6006,6 +6067,25 @@ components:
             enum:
               - Organisational user
               - Webmaster
+              - Author
+              - Moderator
+              - Editor
+              - Publisher
+              - Content reviewer
+              - Section manager
+              - Previewer
+              - Redacted
+              - Ghostwriter
+              - Brand manager
+              - Blogger
+              - Ideas administrator
+              - OU administrator
+              - Location admin
+              - Content layout manager
+              - External user
+              - Invotra support user
+              - Services API user
+              - Queries administrator
             type: string
           type: array
           example:
@@ -6149,6 +6229,9 @@ components:
               type: string
               example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
     common-status-schema:
+      type: object
+      required:
+        - status
       properties:
         status:
           description: A boolean flag
@@ -6156,6 +6239,8 @@ components:
           example: true
     group-membership-status-schema:
       type: object
+      required:
+        - status
       properties:
         status:
           description: |
@@ -6169,8 +6254,11 @@ components:
       required:
         - title
         - description
+        - group_category
         - group_category_uuid
         - privacy_setting
+        - members_count
+        - likes
         - author_uuid
       properties:
         title:
@@ -6218,6 +6306,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/group-schema'
         - type: object
+          required:
+            - group_uuid
           properties:
             group_uuid:
               description: The UUID of the group.
@@ -6250,6 +6340,13 @@ components:
       allOf:
         - $ref: '#/components/schemas/post-schema-base'
         - type: object
+          required:
+            - uuid
+            - description
+            - author_uuid
+            - likes_count
+            - comment_count
+            - timestamp
           properties:
             uuid:
               type: string
@@ -6353,12 +6450,14 @@ components:
             - Note
             - Done
             - News / Event
-            - Suggestion
+            - Idea
             - Question
             - To Do
             - Problem / Risk
             - Agreed
             - Decision
+            - WY
+            - "\"><script>alert('Name - Note type XSS');</script>"
         featured_image:
           description: The featured image for this post
           type: object
@@ -6495,6 +6594,14 @@ components:
                       type: string
                       example: Appendix A - Acronyms
     comment-schema:
+      required:
+        - uuid
+        - body
+        - timestamp_created
+        - timestamp_updated
+        - content_uuid
+        - content_type
+        - likes_count
       properties:
         uuid:
           description: 'Invotra UUID of the comment.'
@@ -6535,10 +6642,12 @@ components:
         category:
           description: 'The category of the comment.'
           type: object
+          required:
+            - name
+            - uuid
           properties:
             name:
               type: string
-              format: uuid
               description: 'The name of the comment category.'
               example: 'Idea'
             uuid:
@@ -6558,6 +6667,12 @@ components:
               - $ref: '#/components/schemas/file-schema'
     file-schema:
       type: object
+      required:
+        - uuid
+        - filename
+        - file_download
+        - type
+        - filemime
       properties:
         uuid:
           description: The UUID of the entity.
@@ -6571,6 +6686,7 @@ components:
         file_download:
           description: The location of the file
           type: string
+          format: url
           example: 'https://dev.invotra.com/file/1234/download'
         type:
           description: The type of file
@@ -8359,6 +8475,9 @@ components:
       type: array
       items:
         type: object
+        required:
+          - name
+          - uuid
         properties:
           name:
             description: The title of the entity.
