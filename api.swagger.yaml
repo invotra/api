@@ -1637,6 +1637,8 @@ paths:
           description: The user removed their report flag from the post.
         '400':
           description: The UUID was malformed.
+        '403':
+          description: 'Access was denied because the user tried to remove the report flag of their own post, or the post is in a group that is private or secret and the user is not a member.'
         '404':
           description: |
             The user, post or report flag does not exist.
@@ -1654,6 +1656,8 @@ paths:
                 $ref: '#/components/schemas/common-status-schema'
         '400':
           description: The UUID was malformed.
+        '403':
+          description: 'Access was denied because the user tried to view the report status of a post in a group that is private or secret and the user is not a member.'
         '404':
           description: The post does not exist.
       description: Check if the current user has reported a post.
@@ -1672,7 +1676,7 @@ paths:
         '400':
           description: The UUID or request body JSON was malformed.
         '403':
-          description: Access was denied because the user tried to report their own post.
+          description: 'Access was denied because the user tried to report their own post, or the post is in a group that is private or secret and the user is not a member.'
         '404':
           description: The user or post does not exist.
         '422':
