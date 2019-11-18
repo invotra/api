@@ -5492,7 +5492,7 @@ paths:
         '400':
           description: Could not find user to corresponding uuid.
         '403':
-          description: Could not clear all notifications for user.
+          description: User is not authorized to clear all there notifications.
       description: Clear all notifications for a particular user.
   /notifications/register/{service_id}:
     parameters:
