@@ -5479,16 +5479,12 @@ paths:
         schema:
           type: boolean
           default: false
-    put:
+    post:
       tags:
         - notifications
       responses:
-        '200':
+        '204':
           description: The user marked the notifications as read.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/notifications-clear-all-schema'
         '400':
           description: Could not find user to corresponding uuid.
         '403':
@@ -5959,15 +5955,6 @@ components:
           type: string
           example: mentioned you in a post
       type: object
-    notifications-clear-all-schema:
-      required:
-        - notifications
-      properties:
-        result:
-          description: Clear all notifications flag.
-          type: integer
-          enum:
-            - 1
     team-schema:
       properties:
         uuid:
