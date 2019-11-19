@@ -246,17 +246,17 @@ paths:
                       - $ref: '#/components/schemas/uuid-label-context-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
   '/teams/{team_id}':
+    parameters:
+      - description: The Invotra UUID of the team.
+        in: path
+        name: team_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - teams
-      parameters:
-        - description: The Invotra UUID of the team.
-          in: path
-          name: team_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Returns a single complete Team object.
@@ -272,14 +272,6 @@ paths:
     put:
       tags:
         - teams
-      parameters:
-        - description: The Invotra UUID of the team.
-          in: path
-          name: team_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The team information was updated successfully.
@@ -302,14 +294,6 @@ paths:
       tags:
         - teams
       description: Remove team information
-      parameters:
-        - description: The invotra UUID of the team.
-          in: path
-          name: team_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The team information was removed successfully.
@@ -320,17 +304,18 @@ paths:
         '404':
           description: The UUID does not correspond to an existing team.
   '/teams/{team_id}/memberships':
+    parameters:
+      - description: The Invotra UUID of the team.
+        in: path
+        name: team_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - teams
       parameters:
-        - description: The Invotra UUID of the team.
-          in: path
-          name: team_id
-          required: true
-          schema:
-            type: string
-            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -357,24 +342,24 @@ paths:
           description: The UUID does not correspond to an existing team.
       description: Get a list of team members.
   '/teams/{team_id}/memberships/{user_id}':
+    parameters:
+      - description: The Invotra UUID of the team.
+        in: path
+        name: team_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - description: The Invotra UUID of the user.
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     delete:
       tags:
         - teams
-      parameters:
-        - description: The Invotra UUID of the team.
-          in: path
-          name: team_id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - description: The Invotra UUID of the user.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user has been removed from the team.
@@ -388,21 +373,6 @@ paths:
     put:
       tags:
         - teams
-      parameters:
-        - description: The Invotra UUID of the team.
-          in: path
-          name: team_id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - description: The Invotra UUID of the user.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user's membership of this team was updated.
@@ -625,17 +595,17 @@ paths:
           description: Current user was not found.
       description: Get the current user's information.
   '/users/{user_id}':
+    parameters:
+      - description: The Invotra UUID of the user.
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - users
-      parameters:
-        - description: The Invotra UUID of the user.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Returns a single complete user object.
@@ -651,14 +621,6 @@ paths:
     put:
       tags:
         - users
-      parameters:
-        - description: The Invotra UUID of the user.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user's information was updated.
@@ -683,19 +645,26 @@ paths:
               $ref: '#/components/schemas/user-schema-update'
         required: true
   '/users/{user_id}/activity':
+    parameters:
+      - in: path
+        name: user_id
+        description: The Invotra UUID of the user.
+        required: true
+        schema:
+          type: string
     get:
       tags:
         - users
       description: Return the user's activity feed.
       parameters:
-        - in: path
-          name: user_id
-          description: The Invotra UUID of the user.
-          required: true
-          schema:
-            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
+        - in: query
+          description: Filter the feed for the mobile app. Returns only group related messages.
+          name: app_feeds_only
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: >
@@ -720,17 +689,19 @@ paths:
         '404':
           description: The UUID does not correspond to an existing user.
   '/users/{user_id}/job_roles':
+    parameters:
+      - in: path
+        name: user_id
+        description: The Invotra UUID of the user.
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - users
       description: List the user's job roles.
       parameters:
-        - in: path
-          name: user_id
-          description: The Invotra UUID of the user.
-          required: true
-          schema:
-            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -756,25 +727,25 @@ paths:
         '404':
           description: The UUID does not correspond to an existing user.
   '/users/{user_id}/job_roles/{job_role_id}':
+    parameters:
+      - description: The Invotra UUID of the user.
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - description: The Invotra UUID of the job role.
+        in: path
+        name: job_role_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     delete:
       tags:
         - users
       description: Remove a job role from a user.
-      parameters:
-        - description: The Invotra UUID of the user.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - description: The Invotra UUID of the job role.
-          in: path
-          name: job_role_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The job role has been removed from the user.
@@ -788,21 +759,6 @@ paths:
       tags:
         - users
       description: Add a job role to a user.
-      parameters:
-        - description: The Invotra UUID of the user.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - description: The Invotra UUID of the job role.
-          in: path
-          name: job_role_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user already has this job role.
@@ -813,17 +769,18 @@ paths:
         '404':
           description: The user or job role does not exist.
   '/users/{user_id}/locations':
+    parameters:
+      - in: path
+        name: user_id
+        description: The Invotra UUID of the user.
+        required: true
+        schema:
+          type: string
     get:
       tags:
         - users
       description: List the user's locations.
       parameters:
-        - in: path
-          name: user_id
-          description: The Invotra UUID of the user.
-          required: true
-          schema:
-            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -849,25 +806,25 @@ paths:
         '404':
           description: The UUID does not correspond to an existing user.
   '/users/{user_id}/locations/{location_id}':
+    parameters:
+      - description: The Invotra UUID of the user.
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - description: The Invotra UUID of the location.
+        in: path
+        name: location_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     delete:
       tags:
         - users
       description: Remove a location from a user.
-      parameters:
-        - description: The Invotra UUID of the user.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - description: The Invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The location has been removed from the user.
@@ -881,21 +838,6 @@ paths:
       tags:
         - users
       description: Add a location to a user.
-      parameters:
-        - description: The Invotra UUID of the user.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - description: The Invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user already has this location.
@@ -906,17 +848,18 @@ paths:
         '404':
           description: The user or location does not exist.
   '/users/{user_id}/teams':
+    parameters:
+      - in: path
+        name: user_id
+        description: The Invotra UUID of the user.
+        required: true
+        schema:
+          type: string
     get:
       tags:
         - users
       description: List a user's teams
       parameters:
-        - in: path
-          name: user_id
-          description: The Invotra UUID of the user.
-          required: true
-          schema:
-            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -944,17 +887,18 @@ paths:
         '404':
           description: The UUID does not correspond to an existing user.
   '/users/{user_id}/following':
+    parameters:
+      - in: path
+        name: user_id
+        description: The Invotra UUID of the user.
+        required: true
+        schema:
+          type: string
     get:
       tags:
         - users
       description: List of who a user is following.
       parameters:
-        - in: path
-          name: user_id
-          description: The Invotra UUID of the user.
-          required: true
-          schema:
-            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -980,17 +924,18 @@ paths:
         '404':
           description: The UUID does not correspond to an existing user.
   '/users/{user_id}/groups':
+    parameters:
+      - in: path
+        name: user_id
+        description: The Invotra UUID of the user.
+        required: true
+        schema:
+          type: string
     get:
       tags:
         - users
       description: List a user's groups.
       parameters:
-        - in: path
-          name: user_id
-          description: The Invotra UUID of the user.
-          required: true
-          schema:
-            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1016,17 +961,17 @@ paths:
         '404':
           description: The UUID does not correspond to an existing user.
   '/users/{user_id}/follow':
+    parameters:
+      - description: The Invotra UUID of the user.
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     delete:
       tags:
         - users
-      parameters:
-        - description: The Invotra UUID of the user to unfollow.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Follower flag removed.
@@ -1039,14 +984,6 @@ paths:
     get:
       tags:
         - users
-      parameters:
-        - description: The Invotra UUID of the user to check following status against.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: |
@@ -1062,14 +999,6 @@ paths:
     put:
       tags:
         - users
-      parameters:
-        - description: The Invotra UUID of the user to follow.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user is now following the other user.
@@ -1125,17 +1054,18 @@ paths:
               $ref: '#/components/schemas/group-schema'
         required: true
   '/groups/{group_id}/posts':
+    parameters:
+      - description: The Invotra UUID of the group.
+        in: path
+        name: group_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - groups
       parameters:
-        - description: The Invotra UUID of the group.
-          in: path
-          name: group_id
-          required: true
-          schema:
-            type: string
-            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1276,17 +1206,17 @@ paths:
         '403':
           description: The user is not permitted to view metrics.
   '/groups/{group_id}':
+    parameters:
+      - description: The Invotra UUID of the group.
+        in: path
+        name: group_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - groups
-      parameters:
-        - description: The Invotra UUID of the group.
-          in: path
-          name: group_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Returns a single complete group object.
@@ -1302,17 +1232,18 @@ paths:
           description: The UUID does not correspond to an existing group.
       description: Get information about the group.
   '/groups/{group_id}/members':
+    parameters:
+      - description: The Invotra UUID of the group.
+        in: path
+        name: group_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - groups
       parameters:
-        - description: The Invotra UUID of the group.
-          in: path
-          name: group_id
-          required: true
-          schema:
-            type: string
-            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1341,17 +1272,17 @@ paths:
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
   '/groups/{group_id}/my_membership':
+    parameters:
+      - description: The Invotra UUID of the group to check membership status against.
+        in: path
+        name: group_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - groups
-      parameters:
-        - description: The Invotra UUID of the group to check membership status against.
-          in: path
-          name: group_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: |
@@ -1366,24 +1297,24 @@ paths:
           description: The group does not exist.
       description: Check if the current user is a member of a group.
   '/groups/{group_id}/members/{user_id}':
+    parameters:
+      - description: The Invotra UUID of the group.
+        in: path
+        name: group_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - description: The Invotra UUID of the user.
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     delete:
       tags:
         - groups
-      parameters:
-        - description: The Invotra UUID of the group.
-          in: path
-          name: group_id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - description: The Invotra UUID of the user.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user has been removed from the group.
@@ -1399,21 +1330,6 @@ paths:
     put:
       tags:
         - groups
-      parameters:
-        - description: The Invotra UUID of the group.
-          in: path
-          name: group_id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - description: The Invotra UUID of the user.
-          in: path
-          name: user_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user's membership of this group was updated. The new status of their membership is returned in the response body.
@@ -1531,17 +1447,17 @@ paths:
           description: The user does not have permission to view a list of posts.
       description: List of posts. An empty array is returned if no posts are found.
   '/posts/{post_id}':
+    parameters:
+      - description: The Invotra UUID of the post.
+        in: path
+        name: post_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - posts
-      parameters:
-        - description: The Invotra UUID of the post.
-          in: path
-          name: post_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Returns a single complete post object.
@@ -1557,14 +1473,6 @@ paths:
     put:
       tags:
         - posts
-      parameters:
-        - description: The Invotra UUID of the post.
-          in: path
-          name: post_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The post information was updated successfully.
@@ -1584,18 +1492,19 @@ paths:
               $ref: '#/components/schemas/post-schema-base'
         required: true
   '/posts/{post_id}/replies':
+    parameters:
+      - description: The Invotra UUID of the parent post. Currently this must be a top-level post in its group. This restriction may be relaxed in a future API version.
+        in: path
+        name: post_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       summary: Get the replies to a post.
       tags:
         - posts
       parameters:
-        - description: The Invotra UUID of the parent post. Currently this must be a top-level post in its group. This restriction may be relaxed in a future API version.
-          in: path
-          name: post_id
-          required: true
-          schema:
-            type: string
-            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1639,17 +1548,18 @@ paths:
                   $ref: '#/components/schemas/post-category-schema'
       description: List post categories.
   '/posts/{post_id}/likes':
+    parameters:
+      - description: The Invotra UUID of the post.
+        in: path
+        name: post_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - posts
       parameters:
-        - description: The Invotra UUID of the post.
-          in: path
-          name: post_id
-          required: true
-          schema:
-            type: string
-            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1672,26 +1582,30 @@ paths:
                       $ref: '#/components/schemas/user-schema'
         '400':
           description: The supplied UUID was malformed.
+        '403':
+          description: 'Access was denied because the user tried to list the likes of a post in a group that is private or secret and the user is not a member.'
         '404':
           description: The UUID does not correspond to an existing post.
       description: Get a list of users who have liked a post.
   '/posts/{post_id}/like':
+    parameters:
+      - description: The Invotra UUID of the post.
+        in: path
+        name: post_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     delete:
       tags:
         - posts
-      parameters:
-        - description: The Invotra UUID of the post.
-          in: path
-          name: post_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user unliked the post.
         '400':
           description: The UUID was malformed.
+        '403':
+          description: 'Access was denied because the user tried to remove their like from their own post, or the post is in a group that is private or secret and the user is not a member.'
         '404':
           description: |
             The user, post or like does not exist.
@@ -1699,14 +1613,6 @@ paths:
     get:
       tags:
         - posts
-      parameters:
-        - description: The Invotra UUID of the post to check like status against.
-          in: path
-          name: post_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: |
@@ -1717,42 +1623,36 @@ paths:
                 $ref: '#/components/schemas/common-status-schema'
         '400':
           description: The UUID was malformed.
+        '403':
+          description: 'Access was denied because the user tried to check if they liked a post in a group that is private or secret and the user is not a member.'
         '404':
           description: The post does not exist.
       description: Check if the current user has liked a post.
     put:
       tags:
         - posts
-      parameters:
-        - description: The Invotra UUID of the post.
-          in: path
-          name: post_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user liked this post.
         '400':
           description: The UUID was malformed.
         '403':
-          description: Access was denied because the user tried to like their own post.
+          description: 'Access was denied because the user tried to like their own post, or the post is in a group that is private or secret and the user is not a member.'
         '404':
           description: The user or post does not exist.
       description: Like a post as the current user.
   '/posts/{post_id}/report':
+    parameters:
+      - description: The Invotra UUID of the post.
+        in: path
+        name: post_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     delete:
       tags:
         - posts
-      parameters:
-        - description: The Invotra UUID of the post.
-          in: path
-          name: post_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user removed their report flag from the post.
@@ -1765,14 +1665,6 @@ paths:
     get:
       tags:
         - posts
-      parameters:
-        - description: The Invotra UUID of the post to check report status against.
-          in: path
-          name: post_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: |
@@ -1789,14 +1681,6 @@ paths:
     put:
       tags:
         - posts
-      parameters:
-        - description: The Invotra UUID of the post.
-          in: path
-          name: post_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       requestBody:
         content:
           application/json:
@@ -1842,19 +1726,19 @@ paths:
                       allOf:
                         - $ref: '#/components/schemas/manual-listing-schema'
   '/manuals/{manual_page_id}':
+    parameters:
+      - description: The Invotra UUID of a manual page.
+        in: path
+        name: manual_page_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
     get:
       description: Get a manual page, including the root manual page
       tags:
         - manuals
-      parameters:
-        - description: The Invotra UUID of a manual page.
-          in: path
-          name: manual_page_id
-          required: true
-          schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
       responses:
         '200':
           description: Returns a single complete manual page object.
@@ -1941,6 +1825,81 @@ paths:
           description: The user does not have access to the requested content.
         '404':
           description: No content with that UUID was found.
+  /comments/list:
+    get:
+      tags:
+        - comments
+      description: 'Search for comments. An empty array is returned if no comments are found.'
+      parameters:
+        - name: content_type
+          description: 'Filter on content type.'
+          in: query
+          schema:
+            type: string
+            example: 'blog'
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: category
+          description: 'Filter on category (Only for post comments).'
+          in: query
+          schema:
+            type: string
+            example: 'idea'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of comments matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    allOf:
+                      - $ref: '#/components/schemas/comment-schema'
+        '403':
+          description: 'User is not authorized to list comments.'
   /files:
     post:
       requestBody:
@@ -1971,17 +1930,17 @@ paths:
             schema validation failure.
       description: Provision a new file.
   '/files/{file_id}':
+    parameters:
+      - description: The Invotra UUID of the file.
+        in: path
+        name: file_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - files
-      parameters:
-        - description: The Invotra UUID of the file.
-          in: path
-          name: file_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Returns a single complete file object.
@@ -1997,14 +1956,6 @@ paths:
     put:
       tags:
         - files
-      parameters:
-        - description: The Invotra UUID of the file.
-          in: path
-          name: file_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       requestBody:
         content:
           application/json:
@@ -2073,17 +2024,17 @@ paths:
               $ref: '#/components/schemas/job-role-schema-create'
         required: true
   '/job_roles/{job_role_id}':
+    parameters:
+      - description: The Invotra UUID of the job role.
+        in: path
+        name: job_role_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - job roles
-      parameters:
-        - description: The Invotra UUID of the job role.
-          in: path
-          name: job_role_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Returns a single complete job role object.
@@ -2099,14 +2050,6 @@ paths:
     put:
       tags:
         - job roles
-      parameters:
-        - description: The Invotra UUID of the job role.
-          in: path
-          name: job_role_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The job role information was updated successfully.
@@ -2127,16 +2070,8 @@ paths:
         required: true
     delete:
       tags:
-      - job roles
+        - job roles
       description: Remove job role information.
-      parameters:
-      - description: The Invotra UUID of the job role.
-        in: path
-        name: job_role_id
-        required: true
-        schema:
-          type: string
-          format: uuid
       responses:
         '200':
           description: The job role was removed successfully.
@@ -2234,17 +2169,17 @@ paths:
               $ref: '#/components/schemas/location-site-schema-create'
         required: true
   '/locations/sites/{location_id}':
+    parameters:
+      - description: The Invotra UUID of the location.
+        in: path
+        name: location_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - locations
-      parameters:
-        - description: The Invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Returns a single complete location object.
@@ -2262,14 +2197,6 @@ paths:
     put:
       tags:
         - locations
-      parameters:
-        - description: The Invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The location information was updated successfully.
@@ -2294,14 +2221,6 @@ paths:
       tags:
         - locations
       description: Remove location information
-      parameters:
-        - description: The invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The location information was removed successfully.
@@ -2339,17 +2258,17 @@ paths:
               $ref: '#/components/schemas/location-building-schema-create'
         required: true
   '/locations/buildings/{location_id}':
+    parameters:
+      - description: The Invotra UUID of the location.
+        in: path
+        name: location_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - locations
-      parameters:
-        - description: The Invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Returns a single complete location object.
@@ -2367,14 +2286,6 @@ paths:
     put:
       tags:
         - locations
-      parameters:
-        - description: The Invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The location information was updated successfully.
@@ -2399,14 +2310,6 @@ paths:
       tags:
       - locations
       description: Remove location information
-      parameters:
-        - description: The invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The location information was removed successfully.
@@ -2444,17 +2347,17 @@ paths:
               $ref: '#/components/schemas/location-floor-schema-create'
         required: true
   '/locations/floors/{location_id}':
+    parameters:
+      - description: The Invotra UUID of the location.
+        in: path
+        name: location_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - locations
-      parameters:
-        - description: The Invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Returns a single complete location object.
@@ -2472,14 +2375,6 @@ paths:
     put:
       tags:
         - locations
-      parameters:
-        - description: The Invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The location information was updated successfully.
@@ -2504,14 +2399,6 @@ paths:
       tags:
       - locations
       description: Remove location information
-      parameters:
-        - description: The invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The location information was removed successfully.
@@ -2549,17 +2436,17 @@ paths:
               $ref: '#/components/schemas/location-space-schema-create'
         required: true
   '/locations/spaces/{location_id}':
+    parameters:
+      - description: The Invotra UUID of the location.
+        in: path
+        name: location_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - locations
-      parameters:
-        - description: The Invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: Returns a single complete location object.
@@ -2577,14 +2464,6 @@ paths:
     put:
       tags:
         - locations
-      parameters:
-        - description: The Invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The location information was updated successfully.
@@ -2609,14 +2488,6 @@ paths:
       tags:
       - locations
       description: Remove location information
-      parameters:
-        - description: The invotra UUID of the location.
-          in: path
-          name: location_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The location information was removed successfully.
@@ -2693,18 +2564,18 @@ paths:
         '403':
           description: 'User is not authorized to list badges.'
   '/badges/{badge_id}':
+    parameters:
+      - description: 'The Invotra UUID of the badge.'
+        in: path
+        name: badge_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'badges'
       description: 'Get information about the badge.'
-      parameters:
-        - description: 'The Invotra UUID of the badge.'
-          in: path
-          name: badge_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete badge object.'
@@ -2722,14 +2593,6 @@ paths:
       tags:
         - 'badges'
       description: 'Update badge information.'
-      parameters:
-        - description: 'The Invotra UUID of the badge.'
-          in: path
-          name: badge_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The badge information was updated successfully.'
@@ -2751,14 +2614,6 @@ paths:
       tags:
         - 'badges'
       description: 'Delete a badge.'
-      parameters:
-        - description: 'The Invotra UUID of the badge.'
-          in: path
-          name: badge_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The badge was successfully deleted.'
@@ -2835,18 +2690,18 @@ paths:
         '403':
           description: 'User is not authorized to list content categories.'
   '/content_categories/{content_category_id}':
+    parameters:
+      - description: 'The Invotra UUID of the content category.'
+        in: path
+        name: content_category_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'content categories'
       description: 'Get information about the content category.'
-      parameters:
-        - description: 'The Invotra UUID of the content category.'
-          in: path
-          name: content_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete content category object.'
@@ -2864,14 +2719,6 @@ paths:
       tags:
         - 'content categories'
       description: 'Update content category information.'
-      parameters:
-        - description: 'The Invotra UUID of the content category.'
-          in: path
-          name: content_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The content category information was updated successfully.'
@@ -2893,14 +2740,6 @@ paths:
       tags:
         - 'content categories'
       description: 'Delete a content category.'
-      parameters:
-        - description: 'The Invotra UUID of the content category.'
-          in: path
-          name: content_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The content category was successfully deleted.'
@@ -2977,18 +2816,18 @@ paths:
         '403':
           description: 'User is not authorized to list content types.'
   '/content_types/{content_type_id}':
+    parameters:
+      - description: 'The Invotra UUID of the content type.'
+        in: path
+        name: content_type_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'content types'
       description: 'Get information about the content type.'
-      parameters:
-        - description: 'The Invotra UUID of the content type.'
-          in: path
-          name: content_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete content type object.'
@@ -3006,14 +2845,6 @@ paths:
       tags:
         - 'content types'
       description: 'Update content type information.'
-      parameters:
-        - description: 'The Invotra UUID of the content type.'
-          in: path
-          name: content_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The content type information was updated successfully.'
@@ -3035,14 +2866,6 @@ paths:
       tags:
         - 'content types'
       description: 'Delete a content type.'
-      parameters:
-        - description: 'The Invotra UUID of the content type.'
-          in: path
-          name: content_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The content type was successfully deleted.'
@@ -3119,18 +2942,18 @@ paths:
         '403':
           description: 'User is not authorized to list countries.'
   '/countries/{country_id}':
+    parameters:
+      - description: 'The Invotra UUID of the country.'
+        in: path
+        name: country_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'countries'
       description: 'Get information about the country.'
-      parameters:
-        - description: 'The Invotra UUID of the country.'
-          in: path
-          name: country_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete country object.'
@@ -3148,14 +2971,6 @@ paths:
       tags:
         - 'countries'
       description: 'Update country information.'
-      parameters:
-        - description: 'The Invotra UUID of the country.'
-          in: path
-          name: country_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The country information was updated successfully.'
@@ -3177,14 +2992,6 @@ paths:
       tags:
         - 'countries'
       description: 'Delete a country.'
-      parameters:
-        - description: 'The Invotra UUID of the country.'
-          in: path
-          name: country_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The country was successfully deleted.'
@@ -3261,18 +3068,18 @@ paths:
         '403':
           description: 'User is not authorized to list event statuses.'
   '/event_statuses/{event_status_id}':
+    parameters:
+      - description: 'The Invotra UUID of the event status.'
+        in: path
+        name: event_status_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'event statuses'
       description: 'Get information about the event status.'
-      parameters:
-        - description: 'The Invotra UUID of the event status.'
-          in: path
-          name: event_status_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete event status object.'
@@ -3290,14 +3097,6 @@ paths:
       tags:
         - 'event statuses'
       description: 'Update event status information.'
-      parameters:
-        - description: 'The Invotra UUID of the event status.'
-          in: path
-          name: event_status_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The event status information was updated successfully.'
@@ -3319,14 +3118,6 @@ paths:
       tags:
         - 'event statuses'
       description: 'Delete an event status.'
-      parameters:
-        - description: 'The Invotra UUID of the event status.'
-          in: path
-          name: event_status_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The event status was successfully deleted.'
@@ -3403,18 +3194,18 @@ paths:
         '403':
           description: 'User is not authorized to list event topics.'
   '/event_topics/{event_topic_id}':
+    parameters:
+      - description: 'The Invotra UUID of the event topic.'
+        in: path
+        name: event_topic_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'event topics'
       description: 'Get information about the event topic.'
-      parameters:
-        - description: 'The Invotra UUID of the event topic.'
-          in: path
-          name: event_topic_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete event topic object.'
@@ -3432,14 +3223,6 @@ paths:
       tags:
         - 'event topics'
       description: 'Update event topic information.'
-      parameters:
-        - description: 'The Invotra UUID of the event topic.'
-          in: path
-          name: event_topic_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The event topic information was updated successfully.'
@@ -3461,14 +3244,6 @@ paths:
       tags:
         - 'event topics'
       description: 'Delete an event topic.'
-      parameters:
-        - description: 'The Invotra UUID of the event topic.'
-          in: path
-          name: event_topic_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The event topic was successfully deleted.'
@@ -3545,18 +3320,18 @@ paths:
         '403':
           description: 'User is not authorized to list free skills.'
   '/free_skills/{free_skill_id}':
+    parameters:
+      - description: 'The Invotra UUID of the free skill.'
+        in: path
+        name: free_skill_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'free skills'
       description: 'Get information about the free skill.'
-      parameters:
-        - description: 'The Invotra UUID of the free skill.'
-          in: path
-          name: free_skill_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete free skill object.'
@@ -3574,14 +3349,6 @@ paths:
       tags:
         - 'free skills'
       description: 'Update free skill information.'
-      parameters:
-        - description: 'The Invotra UUID of the free skill.'
-          in: path
-          name: free_skill_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The free skill information was updated successfully.'
@@ -3603,14 +3370,6 @@ paths:
       tags:
         - 'free skills'
       description: 'Delete a free skill.'
-      parameters:
-        - description: 'The Invotra UUID of the free skill.'
-          in: path
-          name: free_skill_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The free skill was successfully deleted.'
@@ -3687,18 +3446,18 @@ paths:
         '403':
           description: 'User is not authorized to list general topics.'
   '/general_topics/{general_topic_id}':
+    parameters:
+      - description: 'The Invotra UUID of the general topic.'
+        in: path
+        name: general_topic_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'general topics'
       description: 'Get information about the general topic.'
-      parameters:
-        - description: 'The Invotra UUID of the general topic.'
-          in: path
-          name: general_topic_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete general topic object.'
@@ -3716,14 +3475,6 @@ paths:
       tags:
         - 'general topics'
       description: 'Update general topic information.'
-      parameters:
-        - description: 'The Invotra UUID of the general topic.'
-          in: path
-          name: general_topic_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The general topic information was updated successfully.'
@@ -3745,14 +3496,6 @@ paths:
       tags:
         - 'general topics'
       description: 'Delete a general topic.'
-      parameters:
-        - description: 'The Invotra UUID of the general topic.'
-          in: path
-          name: general_topic_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The general topic was successfully deleted.'
@@ -3829,18 +3572,18 @@ paths:
         '403':
           description: 'User is not authorized to list grades.'
   '/grades/{grade_id}':
+    parameters:
+      - description: 'The Invotra UUID of the grade.'
+        in: path
+        name: grade_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'grades'
       description: 'Get information about the grade.'
-      parameters:
-        - description: 'The Invotra UUID of the grade.'
-          in: path
-          name: grade_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete grade object.'
@@ -3858,14 +3601,6 @@ paths:
       tags:
         - 'grades'
       description: 'Update grade information.'
-      parameters:
-        - description: 'The Invotra UUID of the grade.'
-          in: path
-          name: grade_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The grade information was updated successfully.'
@@ -3887,14 +3622,6 @@ paths:
       tags:
         - 'grades'
       description: 'Delete a grade.'
-      parameters:
-        - description: 'The Invotra UUID of the grade.'
-          in: path
-          name: grade_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The grade was successfully deleted.'
@@ -3971,18 +3698,18 @@ paths:
         '403':
           description: 'User is not authorized to list group categories.'
   '/group_categories/{group_category_id}':
+    parameters:
+      - description: 'The Invotra UUID of the group category.'
+        in: path
+        name: group_category_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'group categories'
       description: 'Get information about the group category.'
-      parameters:
-        - description: 'The Invotra UUID of the group category.'
-          in: path
-          name: group_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete group category object.'
@@ -4000,14 +3727,6 @@ paths:
       tags:
         - 'group categories'
       description: 'Update group category information.'
-      parameters:
-        - description: 'The Invotra UUID of the group category.'
-          in: path
-          name: group_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The group category information was updated successfully.'
@@ -4029,14 +3748,6 @@ paths:
       tags:
         - 'group categories'
       description: 'Delete a group category.'
-      parameters:
-        - description: 'The Invotra UUID of the group category.'
-          in: path
-          name: group_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The group category was successfully deleted.'
@@ -4113,18 +3824,18 @@ paths:
         '403':
           description: 'User is not authorized to list idea categories.'
   '/idea_categories/{idea_category_id}':
+    parameters:
+      - description: 'The Invotra UUID of the idea category.'
+        in: path
+        name: idea_category_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'idea categories'
       description: 'Get information about the idea category.'
-      parameters:
-        - description: 'The Invotra UUID of the idea category.'
-          in: path
-          name: idea_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete idea category object.'
@@ -4142,14 +3853,6 @@ paths:
       tags:
         - 'idea categories'
       description: 'Update idea category information.'
-      parameters:
-        - description: 'The Invotra UUID of the idea category.'
-          in: path
-          name: idea_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The idea category information was updated successfully.'
@@ -4171,14 +3874,6 @@ paths:
       tags:
         - 'idea categories'
       description: 'Delete an idea category.'
-      parameters:
-        - description: 'The Invotra UUID of the idea category.'
-          in: path
-          name: idea_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The idea category was successfully deleted.'
@@ -4255,18 +3950,18 @@ paths:
         '403':
           description: 'User is not authorized to list interests.'
   '/interests/{interest_id}':
+    parameters:
+      - description: 'The Invotra UUID of the interest.'
+        in: path
+        name: interest_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'interests'
       description: 'Get information about the interest.'
-      parameters:
-        - description: 'The Invotra UUID of the interest.'
-          in: path
-          name: interest_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete interest object.'
@@ -4284,14 +3979,6 @@ paths:
       tags:
         - 'interests'
       description: 'Update interest information.'
-      parameters:
-        - description: 'The Invotra UUID of the interest.'
-          in: path
-          name: interest_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The interest information was updated successfully.'
@@ -4313,14 +4000,6 @@ paths:
       tags:
         - 'interests'
       description: 'Delete an interest.'
-      parameters:
-        - description: 'The Invotra UUID of the interest.'
-          in: path
-          name: interest_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The interest was successfully deleted.'
@@ -4397,18 +4076,18 @@ paths:
         '403':
           description: 'User is not authorized to list message types.'
   '/message_types/{message_type_id}':
+    parameters:
+      - description: 'The Invotra UUID of the message type.'
+        in: path
+        name: message_type_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'message types'
       description: 'Get information about the message type.'
-      parameters:
-        - description: 'The Invotra UUID of the message type.'
-          in: path
-          name: message_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete message type object.'
@@ -4426,14 +4105,6 @@ paths:
       tags:
         - 'message types'
       description: 'Update message type information.'
-      parameters:
-        - description: 'The Invotra UUID of the message type.'
-          in: path
-          name: message_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The message type information was updated successfully.'
@@ -4455,14 +4126,6 @@ paths:
       tags:
         - 'message types'
       description: 'Delete a message type.'
-      parameters:
-        - description: 'The Invotra UUID of the message type.'
-          in: path
-          name: message_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The message type was successfully deleted.'
@@ -4539,18 +4202,18 @@ paths:
         '403':
           description: 'User is not authorized to list organisational skills.'
   '/organisational_skills/{organisational_skill_id}':
+    parameters:
+      - description: 'The Invotra UUID of the organisational skill.'
+        in: path
+        name: organisational_skill_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'organisational skills'
       description: 'Get information about the organisational skill.'
-      parameters:
-        - description: 'The Invotra UUID of the organisational skill.'
-          in: path
-          name: organisational_skill_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete organisational skill object.'
@@ -4568,14 +4231,6 @@ paths:
       tags:
         - 'organisational skills'
       description: 'Update organisational skill information.'
-      parameters:
-        - description: 'The Invotra UUID of the organisational skill.'
-          in: path
-          name: organisational_skill_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The organisational skill information was updated successfully.'
@@ -4597,14 +4252,6 @@ paths:
       tags:
         - 'organisational skills'
       description: 'Delete an organisational skill.'
-      parameters:
-        - description: 'The Invotra UUID of the organisational skill.'
-          in: path
-          name: organisational_skill_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The organisational skill was successfully deleted.'
@@ -4681,18 +4328,18 @@ paths:
         '403':
           description: 'User is not authorized to list person types.'
   '/person_types/{person_type_id}':
+    parameters:
+      - description: 'The Invotra UUID of the person type.'
+        in: path
+        name: person_type_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'person types'
       description: 'Get information about the person type.'
-      parameters:
-        - description: 'The Invotra UUID of the person type.'
-          in: path
-          name: person_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete person type object.'
@@ -4710,14 +4357,6 @@ paths:
       tags:
         - 'person types'
       description: 'Update person type information.'
-      parameters:
-        - description: 'The Invotra UUID of the person type.'
-          in: path
-          name: person_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The person type information was updated successfully.'
@@ -4739,14 +4378,6 @@ paths:
       tags:
         - 'person types'
       description: 'Delete a person type.'
-      parameters:
-        - description: 'The Invotra UUID of the person type.'
-          in: path
-          name: person_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The person type was successfully deleted.'
@@ -4823,18 +4454,18 @@ paths:
         '403':
           description: 'User is not authorized to list policy types.'
   '/policy_types/{policy_type_id}':
+    parameters:
+      - description: 'The Invotra UUID of the policy type.'
+        in: path
+        name: policy_type_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'policy types'
       description: 'Get information about the policy type.'
-      parameters:
-        - description: 'The Invotra UUID of the policy type.'
-          in: path
-          name: policy_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete policy type object.'
@@ -4852,14 +4483,6 @@ paths:
       tags:
         - 'policy types'
       description: 'Update policy type information.'
-      parameters:
-        - description: 'The Invotra UUID of the policy type.'
-          in: path
-          name: policy_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The policy type information was updated successfully.'
@@ -4881,14 +4504,6 @@ paths:
       tags:
         - 'policy types'
       description: 'Delete a policy type.'
-      parameters:
-        - description: 'The Invotra UUID of the policy type.'
-          in: path
-          name: policy_type_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The policy type was successfully deleted.'
@@ -4965,18 +4580,18 @@ paths:
         '403':
           description: 'User is not authorized to list primary categories.'
   '/primary_categories/{primary_category_id}':
+    parameters:
+      - description: 'The Invotra UUID of the primary category.'
+        in: path
+        name: primary_category_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'primary categories'
       description: 'Get information about the primary category.'
-      parameters:
-        - description: 'The Invotra UUID of the primary category.'
-          in: path
-          name: primary_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete primary category object.'
@@ -4994,14 +4609,6 @@ paths:
       tags:
         - 'primary categories'
       description: 'Update primary category information.'
-      parameters:
-        - description: 'The Invotra UUID of the primary category.'
-          in: path
-          name: primary_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The primary category information was updated successfully.'
@@ -5023,14 +4630,6 @@ paths:
       tags:
         - 'primary categories'
       description: 'Delete a primary category.'
-      parameters:
-        - description: 'The Invotra UUID of the primary category.'
-          in: path
-          name: primary_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The primary category was successfully deleted.'
@@ -5107,18 +4706,18 @@ paths:
         '403':
           description: 'User is not authorized to list projects.'
   '/projects/{project_id}':
+    parameters:
+      - description: 'The Invotra UUID of the project.'
+        in: path
+        name: project_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'projects'
       description: 'Get information about the project.'
-      parameters:
-        - description: 'The Invotra UUID of the project.'
-          in: path
-          name: project_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete project object.'
@@ -5136,14 +4735,6 @@ paths:
       tags:
         - 'projects'
       description: 'Update project information.'
-      parameters:
-        - description: 'The Invotra UUID of the project.'
-          in: path
-          name: project_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The project information was updated successfully.'
@@ -5165,14 +4756,6 @@ paths:
       tags:
         - 'projects'
       description: 'Delete a project.'
-      parameters:
-        - description: 'The Invotra UUID of the project.'
-          in: path
-          name: project_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The project was successfully deleted.'
@@ -5249,18 +4832,18 @@ paths:
         '403':
           description: 'User is not authorized to list query categories.'
   '/query_categories/{query_category_id}':
+    parameters:
+      - description: 'The Invotra UUID of the query category.'
+        in: path
+        name: query_category_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'query categories'
       description: 'Get information about the query category.'
-      parameters:
-        - description: 'The Invotra UUID of the query category.'
-          in: path
-          name: query_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete query category object.'
@@ -5278,14 +4861,6 @@ paths:
       tags:
         - 'query categories'
       description: 'Update query category information.'
-      parameters:
-        - description: 'The Invotra UUID of the query category.'
-          in: path
-          name: query_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The query category information was updated successfully.'
@@ -5307,14 +4882,6 @@ paths:
       tags:
         - 'query categories'
       description: 'Delete a query category.'
-      parameters:
-        - description: 'The Invotra UUID of the query category.'
-          in: path
-          name: query_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The query category was successfully deleted.'
@@ -5391,18 +4958,18 @@ paths:
         '403':
           description: 'User is not authorized to list regions.'
   '/regions/{region_id}':
+    parameters:
+      - description: 'The Invotra UUID of the region.'
+        in: path
+        name: region_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'regions'
       description: 'Get information about the region.'
-      parameters:
-        - description: 'The Invotra UUID of the region.'
-          in: path
-          name: region_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete region object.'
@@ -5420,14 +4987,6 @@ paths:
       tags:
         - 'regions'
       description: 'Update region information.'
-      parameters:
-        - description: 'The Invotra UUID of the region.'
-          in: path
-          name: region_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The region information was updated successfully.'
@@ -5449,14 +5008,6 @@ paths:
       tags:
         - 'regions'
       description: 'Delete a region.'
-      parameters:
-        - description: 'The Invotra UUID of the region.'
-          in: path
-          name: region_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The region was successfully deleted.'
@@ -5533,18 +5084,18 @@ paths:
         '403':
           description: 'User is not authorized to list search highlights.'
   '/search_highlights/{search_highlight_id}':
+    parameters:
+      - description: 'The Invotra UUID of the search highlight.'
+        in: path
+        name: search_highlight_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'search highlights'
       description: 'Get information about the search highlight.'
-      parameters:
-        - description: 'The Invotra UUID of the search highlight.'
-          in: path
-          name: search_highlight_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete search highlight object.'
@@ -5562,14 +5113,6 @@ paths:
       tags:
         - 'search highlights'
       description: 'Update search highlight information.'
-      parameters:
-        - description: 'The Invotra UUID of the search highlight.'
-          in: path
-          name: search_highlight_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The search highlight information was updated successfully.'
@@ -5591,14 +5134,6 @@ paths:
       tags:
         - 'search highlights'
       description: 'Delete a search highlight.'
-      parameters:
-        - description: 'The Invotra UUID of the search highlight.'
-          in: path
-          name: search_highlight_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The search highlight was successfully deleted.'
@@ -5675,18 +5210,18 @@ paths:
         '403':
           description: 'User is not authorized to list security classifications.'
   '/security_classifications/{security_classification_id}':
+    parameters:
+      - description: 'The Invotra UUID of the security classification.'
+        in: path
+        name: security_classification_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'security classifications'
       description: 'Get information about the security classification.'
-      parameters:
-        - description: 'The Invotra UUID of the security classification.'
-          in: path
-          name: security_classification_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete security classification object.'
@@ -5704,14 +5239,6 @@ paths:
       tags:
         - 'security classifications'
       description: 'Update security classification information.'
-      parameters:
-        - description: 'The Invotra UUID of the security classification.'
-          in: path
-          name: security_classification_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The security classification information was updated successfully.'
@@ -5733,14 +5260,6 @@ paths:
       tags:
         - 'security classifications'
       description: 'Delete a security classification.'
-      parameters:
-        - description: 'The Invotra UUID of the security classification.'
-          in: path
-          name: security_classification_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The security classification was successfully deleted.'
@@ -5817,18 +5336,18 @@ paths:
         '403':
           description: 'User is not authorized to list titles.'
   '/titles/{title_id}':
+    parameters:
+      - description: 'The Invotra UUID of the title.'
+        in: path
+        name: title_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'titles'
       description: 'Get information about the title.'
-      parameters:
-        - description: 'The Invotra UUID of the title.'
-          in: path
-          name: title_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete title object.'
@@ -5846,14 +5365,6 @@ paths:
       tags:
         - 'titles'
       description: 'Update title information.'
-      parameters:
-        - description: 'The Invotra UUID of the title.'
-          in: path
-          name: title_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The title information was updated successfully.'
@@ -5875,14 +5386,6 @@ paths:
       tags:
         - 'titles'
       description: 'Delete a title.'
-      parameters:
-        - description: 'The Invotra UUID of the title.'
-          in: path
-          name: title_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The title was successfully deleted.'
@@ -5959,18 +5462,18 @@ paths:
         '403':
           description: 'User is not authorized to list user categories.'
   '/user_categories/{user_category_id}':
+    parameters:
+      - description: 'The Invotra UUID of the user category.'
+        in: path
+        name: user_category_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       tags:
         - 'user categories'
       description: 'Get information about the user category.'
-      parameters:
-        - description: 'The Invotra UUID of the user category.'
-          in: path
-          name: user_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'Returns a single complete user category object.'
@@ -5988,14 +5491,6 @@ paths:
       tags:
         - 'user categories'
       description: 'Update user category information.'
-      parameters:
-        - description: 'The Invotra UUID of the user category.'
-          in: path
-          name: user_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The user category information was updated successfully.'
@@ -6017,14 +5512,6 @@ paths:
       tags:
         - 'user categories'
       description: 'Delete a user category.'
-      parameters:
-        - description: 'The Invotra UUID of the user category.'
-          in: path
-          name: user_category_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: 'The user category was successfully deleted.'
@@ -6066,17 +5553,17 @@ paths:
                       $ref: '#/components/schemas/notification-item-schema'
       description: Retrieve notifications for a user.
   '/notifications/{notification_id}':
+    parameters:
+      - description: The Invotra UUID of the notification.
+        in: path
+        name: notification_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     put:
       tags:
         - notifications
-      parameters:
-        - description: The Invotra UUID of the notification.
-          in: path
-          name: notification_id
-          required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
           description: The user marked the notification as read.
@@ -6086,7 +5573,7 @@ paths:
           description: |
             The notification does not exist.
       description: Mark a notification as read.
-  /notifications/register/{service_id}/{token}:
+  /notifications/register/{service_id}:
     parameters:
       - description: Identifying name of the notification service to be used.
         in: path
@@ -6097,32 +5584,50 @@ paths:
           enum:
             - apns
             - fcm
-      - description: A token identifying the user to the notification service.
-        in: path
-        name: token
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/push-notifications-schema'
         required: true
-        schema:
-          type: string
-    put:
       tags:
         - notifications
-      summary: Register a token to identify the user with a push notification service.
+      description: Register a token and device id to identify the user with a push notification service.
       responses:
         '200':
-          description: The token was already registered.
+          description: The token and device id was already registered.
         '201':
-          description: The token was registered successfully.
+          description: The token and device id was registered successfully.
         '404':
           description: Unknown service.
     delete:
       tags:
         - notifications
-      summary: Deregister a token identifying the user with a push notification service.
+      description: 'Deregister the device the user is using for push notifications.'
+      parameters:
+        - in: query
+          name: device_id
+          required: true
+          description: 'The unique device id of the device the user is using.'
+          example: 'adcd1234'
+          schema:
+            type: string
+        - in: query
+          name: platform
+          required: true
+          description: 'The platform the of the device the user is using.'
+          example: 'ios'
+          schema:
+            type: string
+            enum:
+              - ios
+              - android
       responses:
         '200':
-          description: The token was deregistered.
+          description: 'The device id was deregistered.'
         '404':
-          description: The token was not registered or the service was unknown.
+          description: 'The device id was not found or the service was unknown.'
   /feeds/status:
     get:
       tags:
@@ -6417,7 +5922,7 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'
+            - $ref: '#/components/schemas/file-schema'
         timestamp:
           description: This is the timestamp (in seconds) of when the feed message was created
           type: integer
@@ -6537,9 +6042,9 @@ components:
           description: This is the type of the entity that the notification links to
           type: string
           enum:
-           - node
-           - user
-           - comment
+            - node
+            - user
+            - comment
         target_subtype:
           description: This is the subtype (or "bundle" in Drupal parlance) of the entity that the notification links to
           type: string
@@ -6600,7 +6105,7 @@ components:
         user_avatar:
           description: The user's image
           type: string
-          example: "https://dev.invotra.com/sites/default/files/styles/small_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+          example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
         email:
           description: Users email address
           format: email
@@ -6859,89 +6364,89 @@ components:
           example: 150
     post-schema:
       allOf:
-      - $ref: '#/components/schemas/post-schema-base'
-      - type: object
-        properties:
-          uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the post.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          parent_uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the parent of the post.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          thread_uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          group_uuid:
-            description: This is the Invotra UUID of the group that the post belongs to.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-            type: string
-            format: uuid
-          description:
-            description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
-            type: string
-            example: 'Hey <a href="/users/username" data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John Smith</a>, check out the latest <a href="/apps/groups/chat?hashtag=security">#security</a> news in this group!'
-          pin:
-            description: Whether or not this post is pinned.
-            type: boolean
-          author_uuid:
-            description: The uuid of the author
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          display_name:
-            description: The display name of the author
-            type: string
-            example: Dorothy Whitehead
-          likes_count:
-            description: Count of likes on the post
-            type: integer
-            example: 5
-          comment_count:
-            description: Count of comments on the post
-            type: integer
-            example: 5
-          attachments_count:
-            description: Count of attachments on the post
-            type: integer
-            example: 5
-          timestamp:
-            description: This is the timestamp (in seconds) of when the post was created
-            type: integer
-            example: 1510941596
-          depth:
-            description: The depth of the post in the hierarchy of replies. Top-level posts are 0, their replies are 1, replies to replies are 2 etc.
-            type: integer
-            example: 1
-          current_user_liked:
-            description: A flag to determine if the current user has liked this post
-            type: boolean
-            example: true
+        - $ref: '#/components/schemas/post-schema-base'
+        - type: object
+          properties:
+            uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the post.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            parent_uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the parent of the post.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            thread_uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            group_uuid:
+              description: This is the Invotra UUID of the group that the post belongs to.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+              type: string
+              format: uuid
+            description:
+              description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
+              type: string
+              example: 'Hey <a href="/users/username" data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John Smith</a>, check out the latest <a href="/apps/groups/chat?hashtag=security">#security</a> news in this group!'
+            pin:
+              description: Whether or not this post is pinned.
+              type: boolean
+            author_uuid:
+              description: The uuid of the author
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            display_name:
+              description: The display name of the author
+              type: string
+              example: Dorothy Whitehead
+            likes_count:
+              description: Count of likes on the post
+              type: integer
+              example: 5
+            comment_count:
+              description: Count of comments on the post
+              type: integer
+              example: 5
+            attachments_count:
+              description: Count of attachments on the post
+              type: integer
+              example: 5
+            timestamp:
+              description: This is the timestamp (in seconds) of when the post was created
+              type: integer
+              example: 1510941596
+            depth:
+              description: The depth of the post in the hierarchy of replies. Top-level posts are 0, their replies are 1, replies to replies are 2 etc.
+              type: integer
+              example: 1
+            current_user_liked:
+              description: A flag to determine if the current user has liked this post
+              type: boolean
+              example: true
     post-schema-create:
       allOf:
-      - $ref: '#/components/schemas/post-schema-base'
-      - type: object
-        properties:
-          parent_uuid:
-            type: string
-            format: uuid
-            description: This is the Invotra UUID of the parent of the post.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          author_uuid:
-            description: The uuid of the author
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-          group_uuid:
-            description: This is the Invotra UUID of the group that the post belongs to.
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-            type: string
-            format: uuid
+        - $ref: '#/components/schemas/post-schema-base'
+        - type: object
+          properties:
+            parent_uuid:
+              type: string
+              format: uuid
+              description: This is the Invotra UUID of the parent of the post.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            author_uuid:
+              description: The uuid of the author
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            group_uuid:
+              description: This is the Invotra UUID of the group that the post belongs to.
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+              type: string
+              format: uuid
       required:
         - description
         - group_uuid
@@ -6974,7 +6479,7 @@ components:
           description: The featured image for this post
           type: object
           allOf:
-           - $ref: '#/components/schemas/file-schema'
+            - $ref: '#/components/schemas/file-schema'
         attachments:
           description: A list of attachments for the post
           type: array
@@ -7085,13 +6590,13 @@ components:
           type: string
           example: 'CCM-1'
         timestamp_created:
-            description: This is the timestamp (in seconds) of when the manual page was created
-            type: integer
-            example: 1510941596
+          description: This is the timestamp (in seconds) of when the manual page was created
+          type: integer
+          example: 1510941596
         timestamp_updated:
-            description: This is the timestamp (in seconds) of when the manual page was last updated
-            type: integer
-            example: 1510941696
+          description: This is the timestamp (in seconds) of when the manual page was last updated
+          type: integer
+          example: 1510941696
         attachments:
           description: List of attachments on manual page
           type: array
@@ -7132,6 +6637,68 @@ components:
                       description: Title of child manual page
                       type: string
                       example: Appendix A - Acronyms
+    comment-schema:
+      properties:
+        uuid:
+          description: 'Invotra UUID of the comment.'
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        body:
+          description: 'The main body text of the comment.'
+          type: string
+          example: 'How long will this take? I have been waiting ages.'
+        author_uuid:
+          description: 'Invotra UUID of the author.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        timestamp_created:
+          description: 'The timestamp (in seconds) of when the comment was created'
+          type: integer
+          example: 1510941596
+        timestamp_updated:
+          description: 'The timestamp (in seconds) of when the comment was updated'
+          type: integer
+          example: 1510941596
+        parent_uuid:
+          type: string
+          format: uuid
+          description: 'This is the Invotra UUID of the parent of the comment. Only present on replies.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_uuid:
+          type: string
+          format: uuid
+          description: 'This is the Invotra UUID of the content.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_type:
+          description: 'The content type machine name of the comment.'
+          type: string
+          example: 'blog'
+        category:
+          description: 'The category of the comment.'
+          type: object
+          properties:
+            name:
+              type: string
+              format: uuid
+              description: 'The name of the comment category.'
+              example: 'Idea'
+            uuid:
+              type: string
+              format: uuid
+              description: 'This is the Invotra UUID of the comment category.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        likes_count:
+          description: 'The total number of likes for the comment.'
+          type: integer
+          example: 33
+        attachments:
+          description: 'List of attachments on the comment.'
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/file-schema'
     file-schema:
       type: object
       properties:
@@ -7511,6 +7078,22 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/location-uuid-schema'
+    push-notifications-schema:
+      properties:
+        token:
+          description: The type of file.
+          type: string
+        device_id:
+          description: The unique device id of the device the user is using.
+          type: string
+        platform:
+          description: The OS platform of the user's device.
+          type: string
+          example: ios
+          enum:
+            - ios
+            - android
+      type: object
     location-context-schema:
       description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
       type: array
@@ -7800,9 +7383,9 @@ components:
           type: string
           format: uuid
         created:
-            description: 'The timestamp (in seconds) of when the content type was created'
-            type: integer
-            example: 1510941596
+          description: 'The timestamp (in seconds) of when the content type was created'
+          type: integer
+          example: 1510941596
         machine_name:
           description: 'The machine name of this content type.'
           type: string
