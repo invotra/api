@@ -5485,10 +5485,10 @@ paths:
       responses:
         '204':
           description: The user marked the notifications as read.
-        '400':
-          description: Could not find user to corresponding uuid.
         '403':
-          description: User is not authorized to clear all there notifications.
+          description: User is not authorized to clear all notifications.
+        '404':
+          description: Could not find user to corresponding uuid.
       description: Clear all notifications for a particular user.
   /notifications/register/{service_id}:
     parameters:
