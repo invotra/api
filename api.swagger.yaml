@@ -653,6 +653,12 @@ paths:
       parameters:
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
+        - in: query
+          description: Filter the feed for the mobile app. Returns only group related messages.
+          name: app_feeds_only
+          schema:
+            type: boolean
+            default: false
       responses:
         '200':
           description: >
@@ -1570,6 +1576,8 @@ paths:
                       $ref: '#/components/schemas/user-schema'
         '400':
           description: The supplied UUID was malformed.
+        '403':
+          description: 'Access was denied because the user tried to list the likes of a post in a group that is private or secret and the user is not a member.'
         '404':
           description: The UUID does not correspond to an existing post.
       description: Get a list of users who have liked a post.
@@ -1590,6 +1598,8 @@ paths:
           description: The user unliked the post.
         '400':
           description: The UUID was malformed.
+        '403':
+          description: 'Access was denied because the user tried to remove their like from their own post, or the post is in a group that is private or secret and the user is not a member.'
         '404':
           description: |
             The user, post or like does not exist.
@@ -1607,6 +1617,8 @@ paths:
                 $ref: '#/components/schemas/common-status-schema'
         '400':
           description: The UUID was malformed.
+        '403':
+          description: 'Access was denied because the user tried to check if they liked a post in a group that is private or secret and the user is not a member.'
         '404':
           description: The post does not exist.
       description: Check if the current user has liked a post.
@@ -1619,7 +1631,7 @@ paths:
         '400':
           description: The UUID was malformed.
         '403':
-          description: Access was denied because the user tried to like their own post.
+          description: 'Access was denied because the user tried to like their own post, or the post is in a group that is private or secret and the user is not a member.'
         '404':
           description: The user or post does not exist.
       description: Like a post as the current user.
