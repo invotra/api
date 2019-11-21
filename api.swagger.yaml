@@ -6745,10 +6745,9 @@ components:
                 example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - custom_content_type
-            - name
+            - title
             - body
             - site_section_uuid
-            - published
             - review_date
             - owner_uuid
     custom-content-schema-common:
@@ -6758,8 +6757,8 @@ components:
           description: 'The the custom content type machine name.'
           type: string
           example: 'guideline'
-        name:
-          description: 'Name of the custom content.'
+        title:
+          description: 'Title of the custom content.'
           type: string
           example: 'Guidelines for creating a strong password'
         body:
@@ -6771,10 +6770,15 @@ components:
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
-        published:
-          description: 'Indicates that this custom content is published.'
-          type: boolean
-          example: true
+        state:
+          description: 'Indicates the workflow state of the custom content.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
         schedule:
           description: 'The Schedule for this custom content.'
           type: object
@@ -6786,12 +6790,12 @@ components:
                 - immediately 
                 - scheduled
               default: 'immediately'
-            date:
-              description: 'The date of the schedule (in seconds).'
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds).'
               type: integer
               example: 1510941596
-        review_date:
-          description: 'The review date for the custom content (in seconds).'
+        review_date_timestamp:
+          description: 'The review date timestamp for the custom content (in seconds).'
           type: integer
           example: 1510941596
         related_external_links:
@@ -6814,14 +6818,22 @@ components:
           items:
             type: object
             properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content' 
+                  - 'site section'
+                  - 'file'
               title:
-                description: 'The title for the content link.'
+                description: 'The title for the related content.'
                 type: string
                 example: 'More information here.'
-              url:
-                description: 'The url for the related content link'
+              uuid:
+                description: 'Invotra UUID of the related content.'
                 type: string
-                example: 'https://dev.invotra.com/uuid/node/01234567-89ab-cdef-1234-56789abcdef0'
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
         enable_comments:
           description: 'Indicates that comments are enabled for this content.'
           type: boolean
