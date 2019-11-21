@@ -6577,16 +6577,61 @@ components:
         - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
+            site_section:
+              description: 'The site section of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the site section.'
+                  type: string
+                  example: 'Operations'
             image:
               description: 'Custom content Image'
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
             author:
-              description: 'The author of the custom content.'
+              description: 'The author of this custom content. (Will use the authenticated user if not supplied.'
               type: object
-              allOf:
-                - $ref: '#/components/schemas/user-schema'
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                username:
+                  description: The user's username
+                  type: string
+                  example: Dorothy Whitehead
+                title:
+                  default: ''
+                  description: The user's title
+                  enum:
+                    - ''
+                    - Dr
+                    - Mr
+                    - Miss
+                    - Mrs
+                    - Ms
+                  type: string
+                  example: Mr
+                firstname:
+                  description: The user's first name
+                  type: string
+                  example: Dorothy
+                surname:
+                  description: The user's surname
+                  type: string
+                  example: Whitehead
+                user_avatar:
+                  description: The user's image
+                  type: string
+                  example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
             attachments:
               description: 'List of attachments on the custom content.'
               type: array
@@ -6595,34 +6640,105 @@ components:
             owner:
               description: 'The owner user of the custom content.'
               type: object
-              allOf:
-                - $ref: '#/components/schemas/user-schema'
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                username:
+                  description: The user's username
+                  type: string
+                  example: Dorothy Whitehead
+                title:
+                  default: ''
+                  description: The user's title
+                  enum:
+                    - ''
+                    - Dr
+                    - Mr
+                    - Miss
+                    - Mrs
+                    - Ms
+                  type: string
+                  example: Mr
+                firstname:
+                  description: The user's first name
+                  type: string
+                  example: Dorothy
+                surname:
+                  description: The user's surname
+                  type: string
+                  example: Whitehead
+                user_avatar:
+                  description: The user's image
+                  type: string
+                  example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
             team:
-              description: 'The team targeting this custom content.'
               type: object
-              allOf:
-                - $ref: '#/components/schemas/team-schema'
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: This is the name of the team
+                  type: string
+                  example: Operations
             locations:
               description: 'The locations targeting this custom content.'
               type: array
               items:
                 type: object
-                allOf:
-                  - $ref: '#/components/schemas/location-site-schema'
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: The name of the location.
+                    type: string
+                    example: Chertsey House
+                  type:
+                    description: The location type.
+                    type: string
+                    enum:
+                      - site
+                      - building
+                      - floor
+                      - space
             grades:
               description: 'The grades targeting this custom content.'
               type: array
               items:
                 type: object
-                allOf:
-                  - $ref: '#/components/schemas/grade-schema'
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
             regions:
               description: 'The regions targeting this custom content.'
               type: array
               items:
                 type: object
-                allOf:
-                  - $ref: '#/components/schemas/region-schema'
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the manual page was created.'
               type: integer
@@ -6644,112 +6760,196 @@ components:
         - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
-            image_uuid:
-              description: 'Invotra UUID of the image.'
-              type: string
-              format: uuid
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-            author_uuid:
-              description: 'The Invotra UUID of the author. (Will use the authenticated user if not supplied.'
-              type: string
-              format: uuid
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-            attachment_uuids:
-              description: 'The Invotra UUIDs of the attatched files.'
+            site_section:
+              description: 'The site section of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this custom content'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this custom content. (Will use the authenticated user if not supplied.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this custom content.'
               type: array
               items:
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
-            owner_uuid:
-              description: 'The Invotra UUID of the owner user.'
-              type: string
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-            team_uuid:
-              description: 'The Invotra UUID of the team targeting this custom content.'
-              type: string
-              format: uuid
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-            location_uuids:
-              description: 'The Invotra UUIDs of the locations targeting this custom content.'
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this custom content.'
               type: array
               items:
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
-            grade_uuids:
-              description: 'The Invotra UUIDs of the grades targeting this custom content.'
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this custom content.'
               type: array
               items:
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
-            region_uuids:
-              description: 'The Invotra UUIDs of the regions targeting this custom content.'
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this custom content.'
               type: array
               items:
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     custom-content-schema-create:
       allOf:
         - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
-            image_uuid:
-              description: 'Invotra UUID of the image.'
-              type: string
-              format: uuid
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-            author_uuid:
-              description: 'The Invotra UUID of the author. (Will use the authenticated user if not supplied.'
-              type: string
-              format: uuid
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-            attachment_uuids:
-              description: 'The Invotra UUIDs of the attatched files.'
+            site_section:
+              description: 'The site section of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this custom content'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this custom content. (Will use the authenticated user if not supplied.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this custom content.'
               type: array
               items:
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
-            owner_uuid:
-              description: 'The Invotra UUID of the owner user.'
-              type: string
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-            team_uuid:
-              description: 'The Invotra UUID of the team targeting this custom content.'
-              type: string
-              format: uuid
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-            location_uuids:
-              description: 'The Invotra UUIDs of the locations targeting this custom content.'
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this custom content.'
               type: array
               items:
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
-            grade_uuids:
-              description: 'The Invotra UUIDs of the grades targeting this custom content.'
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this custom content.'
               type: array
               items:
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
-            region_uuids:
-              description: 'The Invotra UUIDs of the regions targeting this custom content.'
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this custom content.'
               type: array
               items:
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - custom_content_type
             - title
             - body
-            - site_section_uuid
+            - site_section
             - review_date
-            - owner_uuid
+            - owner
     custom-content-schema-common:
       type: object
       properties:
@@ -6765,11 +6965,6 @@ components:
           description: 'The body of the custom content.'
           type: string
           example: 'You can create strong passwords using an online random password generator.'
-        site_section_uuid:
-          description: 'The Invotra UUID of the site section. (!!! No EP or schema yet)'
-          type: string
-          format: uuid
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
         state:
           description: 'Indicates the workflow state of the custom content.'
           type: string
@@ -6779,7 +6974,7 @@ components:
             - 'reviewed'
             - 'published'
             - 'unpublished'
-        schedule_timestamp:
+        schedule_date_timestamp:
           description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
           type: integer
           example: 1510941596
