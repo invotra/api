@@ -5625,6 +5625,23 @@ paths:
           description: |
             The notification does not exist.
       description: Mark a notification as read.
+  '/notifications/clear_all':
+    parameters:
+      - description: Marks all notifications for the mobile app as read. If true, this will mark as read notifications with entity type user, and entity type node and bundle type post only.
+        in: query
+        name: app_notifications_only
+        schema:
+          type: boolean
+          default: false
+    post:
+      tags:
+        - notifications
+      responses:
+        '204':
+          description: The user marked the notifications as read.
+        '403':
+          description: User is not authorized to clear all notifications.
+      description: Clear all notifications for the current user.
   /notifications/register/{service_id}:
     parameters:
       - description: Identifying name of the notification service to be used.
