@@ -6947,6 +6947,7 @@ components:
             - custom_content_type
             - title
             - body
+            - state
             - site_section
             - review_date
             - owner
