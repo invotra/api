@@ -1741,8 +1741,8 @@ paths:
           schema:
             type: string
             example: 'ABC123'
-        - name: status
-          description: 'Filter the list of custom content on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+        - name: state
+          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs review", "reviewed", "published", and "unpublished". You may inlude multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
