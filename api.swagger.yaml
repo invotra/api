@@ -6577,6 +6577,10 @@ components:
         - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
             site_section:
               description: 'The site section of this custom content.'
               type: object
@@ -6760,6 +6764,10 @@ components:
         - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
             site_section:
               description: 'The site section of this custom content.'
               type: object
@@ -6975,10 +6983,6 @@ components:
             - 'reviewed'
             - 'published'
             - 'unpublished'
-        schedule_date_timestamp:
-          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
-          type: integer
-          example: 1510941596
         review_date_timestamp:
           description: 'The review date timestamp for the custom content (in seconds).'
           type: integer
