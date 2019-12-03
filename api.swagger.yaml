@@ -6957,7 +6957,7 @@ components:
             - body
             - state
             - site_section
-            - review_date
+            - review_date_timestamp
             - owner
     custom-content-schema-common:
       type: object
