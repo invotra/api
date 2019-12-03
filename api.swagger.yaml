@@ -5909,7 +5909,7 @@ components:
       type: object
       properties:
         uuid:
-          description: The UUID of the team
+          description: The UUID of the entity
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
@@ -5918,18 +5918,14 @@ components:
         - uuid
     successful-post-response-with-message-schema:
       type: object
-      properties:
-        message:
-          description: The message included in the response.
-          type: string
-          example: The post was created successfully.
-          deprecated: true
-        uuid:
-          description: The UUID of the team
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-          readOnly: true
+      allOf:
+        - $ref: '#/components/schemas/successful-post-response-schema'
+        - properties:
+            message:
+              description: The message included in the response.
+              type: string
+              example: The post was created successfully.
+              deprecated: true
       required:
         - message
         - uuid
