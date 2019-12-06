@@ -1678,7 +1678,6 @@ paths:
         '422':
           description: JSON schema validation failure
       description: Report a post as the current user.
-
   '/custom_content':
     post:
       tags:
@@ -1846,7 +1845,6 @@ paths:
           description: 'User is not authorized to delete this custom content.'
         '404':
           description: 'The UUID does not correspond to an existing custom content.'
-
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -6564,7 +6562,6 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
-
     custom-content-schema:
       allOf:
         - type: object
@@ -6602,40 +6599,8 @@ components:
             author:
               description: 'The author of this custom content. (Will use the authenticated user if not supplied.'
               type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                username:
-                  description: The user's username
-                  type: string
-                  example: Dorothy Whitehead
-                title:
-                  default: ''
-                  description: The user's title
-                  enum:
-                    - ''
-                    - Dr
-                    - Mr
-                    - Miss
-                    - Mrs
-                    - Ms
-                  type: string
-                  example: Mr
-                firstname:
-                  description: The user's first name
-                  type: string
-                  example: Dorothy
-                surname:
-                  description: The user's surname
-                  type: string
-                  example: Whitehead
-                user_avatar:
-                  description: The user's image
-                  type: string
-                  example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
             attachments:
               description: 'List of attachments on the custom content.'
               type: array
@@ -6644,40 +6609,8 @@ components:
             owner:
               description: 'The owner user of the custom content.'
               type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                username:
-                  description: The user's username
-                  type: string
-                  example: Dorothy Whitehead
-                title:
-                  default: ''
-                  description: The user's title
-                  enum:
-                    - ''
-                    - Dr
-                    - Mr
-                    - Miss
-                    - Mrs
-                    - Ms
-                  type: string
-                  example: Mr
-                firstname:
-                  description: The user's first name
-                  type: string
-                  example: Dorothy
-                surname:
-                  description: The user's surname
-                  type: string
-                  example: Whitehead
-                user_avatar:
-                  description: The user's image
-                  type: string
-                  example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
             team:
               type: object
               properties:
@@ -6744,11 +6677,11 @@ components:
                     type: string
                     example: 'Midlands'
             timestamp_created:
-              description: 'This is the timestamp (in seconds) of when the manual page was created.'
+              description: 'This is the timestamp (in seconds) of when the content was created.'
               type: integer
               example: 1510941596
             timestamp_updated:
-              description: 'This is the timestamp (in seconds) of when the manual page was last updated.'
+              description: 'This is the timestamp (in seconds) of when the content was last updated.'
               type: integer
               example: 1510941696
             comment_count:
@@ -7033,7 +6966,45 @@ components:
           type: boolean
           default: false
           example: false
-
+        external_id:
+          description: 'The custom content external reference id.'
+          type: string
+          example: 'ABC123'
+    user-trimmed-schema:
+      properties:
+        uuid:
+          description: 'Invotra UUID of the user.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        username:
+          description: The user's username
+          type: string
+          example: Dorothy Whitehead
+        title:
+          default: ''
+          description: The user's title
+          enum:
+            - ''
+            - Dr
+            - Mr
+            - Miss
+            - Mrs
+            - Ms
+          type: string
+          example: Mr
+        firstname:
+          description: The user's first name
+          type: string
+          example: Dorothy
+        surname:
+          description: The user's surname
+          type: string
+          example: Whitehead
+        user_avatar:
+          description: The user's image
+          type: string
+          example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
     manual-listing-schema:
       type: object
       properties:
