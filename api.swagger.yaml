@@ -6174,16 +6174,17 @@ components:
         - title
       type: object
     team-list-schema:
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/team-schema'
-        - properties:
-            context:
-              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
-              type: array
-              items:
-                allOf:
-                  - $ref: '#/components/schemas/team-schema'
+      type: array
+      items:
+        allOf:
+          - $ref: '#/components/schemas/team-schema'
+          - properties:
+              context:
+                description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/team-schema'
     user-schema:
       required:
         - uuid
