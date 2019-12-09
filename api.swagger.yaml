@@ -226,7 +226,7 @@ paths:
                   results:
                     description: The results set.
                     allOf:
-                      - $ref: '#/components/schemas/uuid-label-context-list-schema'
+                      - $ref: '#/components/schemas/team-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
   '/teams/{team_id}':
     parameters:
@@ -6173,6 +6173,17 @@ components:
       required:
         - title
       type: object
+    team-list-schema:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/team-schema'
+        - properties:
+            context:
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/team-schema'
     user-schema:
       required:
         - uuid
