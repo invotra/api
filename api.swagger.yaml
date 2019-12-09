@@ -6703,7 +6703,6 @@ components:
           properties:
             name:
               type: string
-              format: uuid
               description: 'The name of the comment category.'
               example: 'Idea'
             uuid:
