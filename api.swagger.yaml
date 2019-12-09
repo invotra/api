@@ -2506,8 +2506,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/badge-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/badge-schema'
         '403':
           description: 'User is not authorized to list badges.'
   '/badges/{badge_id}':
@@ -2638,8 +2640,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/content-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/content-category-schema'
         '403':
           description: 'User is not authorized to list content categories.'
   '/content_categories/{content_category_id}':
@@ -2770,8 +2774,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/content-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/content-type-schema'
         '403':
           description: 'User is not authorized to list content types.'
   '/content_types/{content_type_id}':
@@ -2902,8 +2908,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/country-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/country-schema'
         '403':
           description: 'User is not authorized to list countries.'
   '/countries/{country_id}':
@@ -3034,8 +3042,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/event-status-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/event-status-schema'
         '403':
           description: 'User is not authorized to list event statuses.'
   '/event_statuses/{event_status_id}':
@@ -3166,8 +3176,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/event-topic-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/event-topic-schema'
         '403':
           description: 'User is not authorized to list event topics.'
   '/event_topics/{event_topic_id}':
@@ -3298,8 +3310,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/free-skill-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/free-skill-schema'
         '403':
           description: 'User is not authorized to list free skills.'
   '/free_skills/{free_skill_id}':
@@ -3430,8 +3444,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/general-topic-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/general-topic-schema'
         '403':
           description: 'User is not authorized to list general topics.'
   '/general_topics/{general_topic_id}':
@@ -3562,8 +3578,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/grade-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/grade-schema'
         '403':
           description: 'User is not authorized to list grades.'
   '/grades/{grade_id}':
@@ -3694,8 +3712,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/group-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/group-category-schema'
         '403':
           description: 'User is not authorized to list group categories.'
   '/group_categories/{group_category_id}':
@@ -3826,8 +3846,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/idea-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/idea-category-schema'
         '403':
           description: 'User is not authorized to list idea categories.'
   '/idea_categories/{idea_category_id}':
@@ -3958,8 +3980,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/interest-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/interest-schema'
         '403':
           description: 'User is not authorized to list interests.'
   '/interests/{interest_id}':
@@ -4090,8 +4114,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/message-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/message-type-schema'
         '403':
           description: 'User is not authorized to list message types.'
   '/message_types/{message_type_id}':
@@ -4222,8 +4248,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/organisational-skill-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/organisational-skill-schema'
         '403':
           description: 'User is not authorized to list organisational skills.'
   '/organisational_skills/{organisational_skill_id}':
@@ -4354,8 +4382,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/person-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/person-type-schema'
         '403':
           description: 'User is not authorized to list person types.'
   '/person_types/{person_type_id}':
@@ -4486,8 +4516,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/policy-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/policy-type-schema'
         '403':
           description: 'User is not authorized to list policy types.'
   '/policy_types/{policy_type_id}':
@@ -4618,8 +4650,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/primary-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/primary-category-schema'
         '403':
           description: 'User is not authorized to list primary categories.'
   '/primary_categories/{primary_category_id}':
@@ -4750,8 +4784,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/project-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/project-schema'
         '403':
           description: 'User is not authorized to list projects.'
   '/projects/{project_id}':
@@ -4882,8 +4918,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/query-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/query-category-schema'
         '403':
           description: 'User is not authorized to list query categories.'
   '/query_categories/{query_category_id}':
@@ -5014,8 +5052,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/region-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/region-schema'
         '403':
           description: 'User is not authorized to list regions.'
   '/regions/{region_id}':
@@ -5146,8 +5186,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/search-highlight-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/search-highlight-schema'
         '403':
           description: 'User is not authorized to list search highlights.'
   '/search_highlights/{search_highlight_id}':
@@ -5278,8 +5320,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/security-classification-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/security-classification-schema'
         '403':
           description: 'User is not authorized to list security classifications.'
   '/security_classifications/{security_classification_id}':
@@ -5410,8 +5454,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/title-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/title-schema'
         '403':
           description: 'User is not authorized to list titles.'
   '/titles/{title_id}':
@@ -5542,8 +5588,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/user-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/user-category-schema'
         '403':
           description: 'User is not authorized to list user categories.'
   '/user_categories/{user_category_id}':
