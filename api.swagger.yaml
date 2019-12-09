@@ -6654,14 +6654,12 @@ components:
             - Note
             - Done
             - News / Event
-            - Idea
+            - Suggestion
             - Question
             - To Do
             - Problem / Risk
             - Agreed
             - Decision
-            - WY
-            - "\"><script>alert('Name - Note type XSS');</script>"
         featured_image:
           description: The featured image for this post
           type: object
