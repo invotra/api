@@ -350,6 +350,10 @@ definitions:
       secret_token:
         description: The export job's secret token.
         type: string
+      use_export_service:
+        description: Optionally specify an alternative PDF export service to use for testing purposes.
+        type: string
+        example: http://invotra-pdf-render-batch:3000/mock-render
     required:
       - job_uuid
       - user_uuid
