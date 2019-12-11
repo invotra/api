@@ -8375,15 +8375,19 @@ components:
                 description: 'Title of the content or link.'
                 type: string
                 example: 'More information here.'
-              uuid:
-                description: 'Invotra UUID of the content. (This is required for types of "content" and "site section" and should not be provided for the "link" type).'
-                type: string
-                format: uuid
+              content:
+                description: 'Invotra UUID of the content if the type is "content" or "site section", or a URL if type is "link".'
                 example: '01234567-89ab-cdef-1234-56789abcdef0'
-              url:
-                description: 'The URL of the link. (This is required for type of "link" and should not be provided for the "content" and "site section" types)'
-                type: string
-                example: 'https://dev.invotra.com/post/ill-be-annual-leave'
+                oneOf:
+                  - type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  - type: string
+                    example: 'https://dev.invotra.com/post/ill-be-annual-leave'
+            required:
+              - type
+              - title
+              - content
     security-classification-schema:
       allOf:
         - type: object
