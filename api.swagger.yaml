@@ -8358,11 +8358,6 @@ components:
           description: 'Determines the position of a search highlight in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-        highlight_list_uuid:
-          description: 'Invotra UUID of the highlight list.'
-          type: string
-          format: uuid
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
         list:
           description: 'List of content and links in the search highlight.'
           type: array
