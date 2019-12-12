@@ -6806,11 +6806,11 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             general_topic:
-              description: 'The genetal topic of this blog.'
+              description: 'The general topic of this blog.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the genetal topic.'
+                  description: 'Invotra UUID of the general topic.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
