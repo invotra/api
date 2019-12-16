@@ -1682,6 +1682,163 @@ paths:
         '422':
           description: JSON schema validation failure
       description: Report a post as the current user.
+
+  '/promotions':
+    post:
+      tags:
+        - 'promotions'
+      description: 'Provision a new promotion.'
+      responses:
+        '201':
+          description: 'The promotion was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned promotion may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The promotion was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a promotion.'
+        '422':
+          description: 'The promotion was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/promotion-schema-create'
+        required: true
+  '/promotions/list':
+    get:
+      tags:
+        - 'promotions'
+      description: 'Search for promotions. An empty array is returned if no promotions where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: status
+          description: 'Filter the list of promotions on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of promotions matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/promotion-schema'
+        '403':
+          description: 'User is not authorized to list promotions.'
+  '/promotions/{promotion_id}':
+    parameters:
+      - description: 'The Invotra UUID of the promotion.'
+        in: path
+        name: promotion_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'promotions'
+      description: 'Get information about the promotion.'
+      responses:
+        '200':
+          description: 'Returns a single complete promotion object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/promotion-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this promotion.'
+        '404':
+          description: 'The UUID does not correspond to an existing promotion.'
+    put:
+      tags:
+        - 'promotions'
+      description: 'Update promotion information.'
+      responses:
+        '200':
+          description: 'The promotion information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this promotion.'
+        '404':
+          description: 'The UUID does not correspond to an existing promotion.'
+        '422':
+          description: 'The promotion was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/promotion-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'promotions'
+      description: 'Delete a promotion.'
+      responses:
+        '200':
+          description: 'The promotion was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this promotion.'
+        '404':
+          description: 'The UUID does not correspond to an existing promotion.'
+
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -6560,6 +6717,160 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
+
+    promotion-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the promotion.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/promotion-schema-common'
+        - type: object
+          properties:
+            image:
+              description: 'promotion Image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this promotion.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            general_topic:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the general topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the general topic.'
+                  type: string
+                  example: 'Darts'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the promotion was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the promotion was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the promotion.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the promotion.'
+              type: integer
+              example: 5
+    promotion-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/promotion-schema-common'
+        - type: object
+          properties:
+            image:
+              description: 'The image for this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topic:
+              description: 'The general topic of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the genetal topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    promotion-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/promotion-schema-common'
+        - type: object
+          properties:
+            image:
+              description: 'The image for this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topic:
+              description: 'The general topic of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the genetal topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+    promotion-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the promotion.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the promotion.'
+          type: string
+          example: 'You can create strong passwords using an online random password generator.'
+        published:
+          description: 'Indicates that this promotion is published.'
+          type: boolean
+          example: true
+
+
+
+    user-trimmed-schema:
+      properties:
+        uuid:
+          description: 'Invotra UUID of the user.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        username:
+          description: The user's username
+          type: string
+          example: Dorothy Whitehead
+        title:
+          default: ''
+          description: The user's title
+          enum:
+            - ''
+            - Dr
+            - Mr
+            - Miss
+            - Mrs
+            - Ms
+          type: string
+          example: Mr
+        firstname:
+          description: The user's first name
+          type: string
+          example: Dorothy
+        surname:
+          description: The user's surname
+          type: string
+          example: Whitehead
+        user_avatar:
+          description: The user's image
+          type: string
+          example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+
     manual-listing-schema:
       type: object
       properties:
