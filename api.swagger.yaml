@@ -6730,8 +6730,13 @@ components:
         - $ref: '#/components/schemas/group-document-schema-common'
         - type: object
           properties:
+            group:
+              description: 'The group for this group document.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/group-schema'
             image:
-              description: 'group document Image.'
+              description: 'Group document Image.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
@@ -6740,16 +6745,16 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            general_topic:
+            folder:
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the general topic.'
+                  description: 'Invotra UUID of the group document folder.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
                 name:
-                  description: 'This is the name of the general topic.'
+                  description: 'This is the name of the group document folder.'
                   type: string
                   example: 'Darts'
             timestamp_created:
@@ -6773,6 +6778,15 @@ components:
         - $ref: '#/components/schemas/group-document-schema-common'
         - type: object
           properties:
+            group:
+              description: 'The group for this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             image:
               description: 'The image for this group document.'
               type: object
@@ -6782,12 +6796,21 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this group document.'
+            author:
+              description: 'The author of this group document.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the genetal topic.'
+                  description: 'Invotra UUID of the author user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            folder:
+              description: 'The folder of this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group document folder.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -6796,6 +6819,15 @@ components:
         - $ref: '#/components/schemas/group-document-schema-common'
         - type: object
           properties:
+            group:
+              description: 'The group for this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             image:
               description: 'The image for this group document.'
               type: object
@@ -6805,18 +6837,29 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this group document.'
+            author:
+              description: 'The author of this group document.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the genetal topic.'
+                  description: 'Invotra UUID of the author user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            folder:
+              description: 'The folder of this group document. (If not supplied the Root folder will be used)'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group document folder.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - body
+            - group
+            - review_date_timestamp
     group-document-schema-common:
       type: object
       properties:
@@ -6832,8 +6875,14 @@ components:
           description: 'Indicates that this group document is published.'
           type: boolean
           example: true
-
-
+        enable_comments:
+          description: 'Indicates that this group document has comments enabled.'
+          type: boolean
+          example: true
+        review_date_timestamp:
+          description: 'The review date timestamp for the group document (in seconds).'
+          type: integer
+          example: 1510941596
 
     user-trimmed-schema:
       properties:
