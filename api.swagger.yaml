@@ -6832,7 +6832,14 @@ components:
           description: 'Indicates that this group poll is published.'
           type: boolean
           example: true
-
+        enable_comments:
+          description: 'Indicates that this group poll has comments enabled.'
+          type: boolean
+          example: false
+        review_date_timestamp:
+          description: 'The review date timestamp for the group document (in seconds).'
+          type: integer
+          example: 1510941596
 
 
     user-trimmed-schema:
