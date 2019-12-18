@@ -6740,6 +6740,18 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
+            site_section:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the site section.'
+                  type: string
+                  example: 'Finance'
             general_topic:
               type: object
               properties:
@@ -6782,6 +6794,15 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            site_section:
+              description: 'The site section of this news.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             general_topic:
               description: 'The general topic of this page.'
               type: object
@@ -6802,6 +6823,15 @@ components:
               properties:
                 uuid:
                   description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            site_section:
+              description: 'The site section of this news.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
