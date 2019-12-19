@@ -6731,7 +6731,7 @@ components:
         - type: object
           properties:
             image:
-              description: 'policy Image.'
+              description: 'Policy Image.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
@@ -6740,6 +6740,54 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
+            site_section:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the site section.'
+                  type: string
+                  example: 'Finance'
+            policy_type:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the policy type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the policy type.'
+                  type: string
+                  example: 'Constituent'
+            primary_category:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the primary category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the primary category.'
+                  type: string
+                  example: 'Involving staff training'
+            country:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the country.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the country.'
+                  type: string
+                  example: 'Involving staff training'
             general_topic:
               type: object
               properties:
@@ -6752,6 +6800,7 @@ components:
                   description: 'This is the name of the general topic.'
                   type: string
                   example: 'Darts'
+
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the policy was created.'
               type: integer
