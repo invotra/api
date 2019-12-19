@@ -6150,7 +6150,7 @@ components:
               type: object
               properties:
                 saml:
-                  description: 'Use a unique and unchanging value, preferably a GUID.'
+                  description: 'SAML authame. Use a unique and unchanging value, preferably a GUID.'
                   type: string
                   example: 'N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2'
     user-schema-common:
@@ -6298,7 +6298,7 @@ components:
               type: object
               properties:
                 saml:
-                  description: 'Use a unique and unchanging value, preferably a GUID.'
+                  description: 'SAML authame. Use a unique and unchanging value, preferably a GUID.'
                   type: string
                   example: 'N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2'
         - required:
