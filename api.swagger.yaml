@@ -6150,9 +6150,9 @@ components:
               type: object
               properties:
                 saml:
-                  description: 'The SAML containing the authname.'
+                  description: 'Use a unique and unchanging value, preferably a GUID.'
                   type: string
-                  example: '<saml:Assertion ...> ... </saml:Assertion>'
+                  example: 'N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2'
     user-schema-common:
       properties:
         uuid:
@@ -6298,9 +6298,9 @@ components:
               type: object
               properties:
                 saml:
-                  description: 'The SAML containing the authname.'
+                  description: 'Use a unique and unchanging value, preferably a GUID.'
                   type: string
-                  example: '<saml:Assertion ...> ... </saml:Assertion>'
+                  example: 'N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2'
         - required:
             - email
             - username
