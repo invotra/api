@@ -1733,8 +1733,8 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - name: status
-          description: 'Filter the list of blogs on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+        - name: state
+          description: 'Filter the list of blogs on a comma seperated list of states. Valid states are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6817,6 +6817,7 @@ components:
           required:
             - title
             - body
+            - state
     blog-schema-common:
       type: object
       properties:
@@ -6828,10 +6829,12 @@ components:
           description: 'The body of the blog.'
           type: string
           example: 'You can create strong passwords using an online random password generator.'
-        published:
-          description: 'Indicates that this blog is published.'
-          type: boolean
-          example: true
+        state:
+          description: 'Indicates the workflow state of the blog.'
+          type: string
+          enum:
+            - 'published'
+            - 'unpublished'
 
     user-trimmed-schema:
       properties:
