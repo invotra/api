@@ -8573,6 +8573,7 @@ components:
           content:
             type: string
             description: 'The URL of the link.'
+            example: 'https://example.com'
     security-classification-schema:
       allOf:
         - type: object
