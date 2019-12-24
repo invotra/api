@@ -6150,9 +6150,11 @@ components:
               type: object
               properties:
                 saml:
-                  description: 'SAML authame. Use a unique and unchanging value, preferably a GUID.'
-                  type: string
-                  example: 'N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2'
+                  type: array
+                  description: 'SAML authnames. Use unique and unchanging values, preferably GUIDs.'
+                  example: ['N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2']
+                  items:
+                    type: string
     user-schema-common:
       properties:
         uuid:
@@ -6298,9 +6300,11 @@ components:
               type: object
               properties:
                 saml:
-                  description: 'SAML authame. Use a unique and unchanging value, preferably a GUID.'
-                  type: string
-                  example: 'N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2'
+                  type: array
+                  description: 'SAML authnames. Use unique and unchanging values, preferably GUIDs.'
+                  example: ['N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2']
+                  items:
+                    type: string
         - required:
             - email
             - username
