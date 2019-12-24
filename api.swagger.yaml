@@ -8538,6 +8538,8 @@ components:
       - $ref: '#/components/schemas/search-highlight-list-common-schema'
       - type: object
         properties:
+          type:
+            example: 'content'
           content:
             type: object
             properties:
@@ -8551,6 +8553,8 @@ components:
       - $ref: '#/components/schemas/search-highlight-list-common-schema'
       - type: object
         properties:
+          type:
+            example: 'site_section'
           content:
             type: object
             properties:
@@ -8564,6 +8568,8 @@ components:
       - $ref: '#/components/schemas/search-highlight-list-common-schema'
       - type: object
         properties:
+          type:
+            example: 'link'
           content:
             type: string
             description: 'The URL of the link.'
