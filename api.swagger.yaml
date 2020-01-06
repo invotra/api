@@ -424,6 +424,8 @@ paths:
                 type: string
         '400':
           description: The user was not saved due to malformed JSON.
+        '403':
+          description: 'The user was not saved due to a non-webmaster attempting to set an authname value.'
         '409':
           description: |
             The user was not saved because the username or email address is
@@ -6256,6 +6258,20 @@ components:
         - title
       type: object
     user-schema:
+      allOf:
+        - $ref: '#/components/schemas/user-schema-common'
+        - properties:
+            authname:
+              description: 'The authname (SSO unique ID) of the user.'
+              type: object
+              properties:
+                saml:
+                  type: array
+                  description: 'SAML authnames. Use unique and unchanging values, preferably GUIDs.'
+                  example: ['N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2']
+                  items:
+                    type: string
+    user-schema-common:
       properties:
         uuid:
           description: The UUID of the user
@@ -6382,7 +6398,7 @@ components:
       type: object
     user-schema-update:
       allOf:
-        - $ref: '#/components/schemas/user-schema'
+        - $ref: '#/components/schemas/user-schema-common'
         - properties:
             job_roles:
               allOf:
@@ -6395,6 +6411,16 @@ components:
               description: The password that the user logs in with
               type: string
               writeOnly: true
+            authname:
+              description: 'The authname (SSO unique ID) of the user.'
+              type: object
+              properties:
+                saml:
+                  type: array
+                  description: 'SAML authnames. Use unique and unchanging values, preferably GUIDs.'
+                  example: ['N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2']
+                  items:
+                    type: string
         - required:
             - email
             - username
