@@ -6279,7 +6279,6 @@ components:
               - Section manager
               - Previewer
               - Redacted
-              - Ghostwriter
               - Brand manager
               - Blogger
               - Ideas administrator
@@ -6287,8 +6286,6 @@ components:
               - Location admin
               - Content layout manager
               - External user
-              - Invotra support user
-              - Services API user
               - Queries administrator
             type: string
           type: array
