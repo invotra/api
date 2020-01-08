@@ -141,6 +141,27 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /pdf-export/close-job:
+    post:
+      tags:
+        - pdf export
+      description: PDF export render completion callback.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+               - $ref: '#/components/schemas/pdf-export-completion-schema'
+               - $ref: '#/components/schemas/pdf-export-error-schema'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: A matching PDF export job was found.
+        '401':
+          description: An incorrect or malformed token was provided.
+        '404':
+          description: A file was not found at the supplied S3 URL.
   /teams:
     get:
       tags:
@@ -411,6 +432,8 @@ paths:
                 $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: The user was not saved due to malformed JSON.
+        '403':
+          description: 'The user was not saved due to a non-webmaster attempting to set an authname value.'
         '409':
           description: |
             The user was not saved because the username or email address is
@@ -1749,6 +1772,81 @@ paths:
           description: The UUID or request body JSON was malformed.
         '404':
           description: No manual page with that UUID was found.
+  '/manuals/pages':
+    get:
+      description: Get all pages in a manual or manual page.
+      tags:
+        - manuals
+      parameters:
+        - name: cursor
+          description: The paging cursor.
+          in: query
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Returns a list of manual pages.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    description: An array of manual pages
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/manual-page-listing-schema'
+                  cursor:
+                    description: The cursor to pass back to the endpoint for the next items.
+                    type: string
+        '400':
+          description: The UUID was malformed.
+        '401':
+          description: A correct secret token was not supplied.
+        '403':
+          description: The user does not have access to the requested manual page.
+        '404':
+          description: No manual page with that UUID was found.
+  '/pdf-export/{content_id}':
+    get:
+      description: Get content in HTML for PDF export.
+      tags:
+        - pdf export
+      parameters:
+        - name: content_id
+          description: The Invotra UUID of content.
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: workflow
+          description: Include workflow history in HTML.
+          in: query
+          schema:
+            type: boolean
+            default: false
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Returns content in HTML.
+          content:
+            text/html:
+              schema:
+                $ref: '#/components/schemas/html-response-schema'
+        '400':
+          description: The UUID or request body JSON was malformed.
+        '401':
+          description: An incorrect or malformed token was provided.
+        '403':
+          description: The user does not have access to the requested content.
+        '404':
+          description: No content with that UUID was found.
   /comments/list:
     get:
       tags:
@@ -5761,6 +5859,23 @@ paths:
           description: |
             The notification does not exist.
       description: Mark a notification as read.
+  '/notifications/clear_all':
+    parameters:
+      - description: Marks all notifications for the mobile app as read. If true, this will mark as read notifications with entity type user, and entity type node and bundle type post only.
+        in: query
+        name: app_notifications_only
+        schema:
+          type: boolean
+          default: false
+    post:
+      tags:
+        - notifications
+      responses:
+        '204':
+          description: The user marked the notifications as read.
+        '403':
+          description: User is not authorized to clear all notifications.
+      description: Clear all notifications for the current user.
   /notifications/register/{service_id}:
     parameters:
       - description: Identifying name of the notification service to be used.
@@ -5884,6 +5999,9 @@ components:
       type: apiKey
       name: 'SESSS{name}'
       in: header
+    BearerAuth:
+      type: http
+      scheme: bearer
   parameters:
     offsetParam:
       in: query
@@ -5929,6 +6047,23 @@ components:
       required:
         - message
         - uuid
+    pdf-export-completion-schema:
+      type: object
+      properties:
+        url:
+          description: The S3 URL of resulting PDF.
+          type: string
+          example: http://s3.amazon.com/...
+      required:
+        - url
+    pdf-export-error-schema:
+      type: object
+      properties:
+        error:
+          description: The human-readable error response.
+          type: string
+      required:
+        - error
     branding-schema:
       properties:
         logo:
@@ -6283,6 +6418,20 @@ components:
         - title
       type: object
     user-schema:
+      allOf:
+        - $ref: '#/components/schemas/user-schema-common'
+        - properties:
+            authname:
+              description: 'The authname (SSO unique ID) of the user.'
+              type: object
+              properties:
+                saml:
+                  type: array
+                  description: 'SAML authnames. Use unique and unchanging values, preferably GUIDs.'
+                  example: ['N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2']
+                  items:
+                    type: string
+    user-schema-common:
       properties:
         uuid:
           description: The UUID of the user
@@ -6409,7 +6558,7 @@ components:
       type: object
     user-schema-update:
       allOf:
-        - $ref: '#/components/schemas/user-schema'
+        - $ref: '#/components/schemas/user-schema-common'
         - properties:
             job_roles:
               allOf:
@@ -6422,6 +6571,16 @@ components:
               description: The password that the user logs in with
               type: string
               writeOnly: true
+            authname:
+              description: 'The authname (SSO unique ID) of the user.'
+              type: object
+              properties:
+                saml:
+                  type: array
+                  description: 'SAML authnames. Use unique and unchanging values, preferably GUIDs.'
+                  example: ['N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2']
+                  items:
+                    type: string
         - required:
             - email
             - username
@@ -6720,6 +6879,33 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/file-schema'
+    manual-page-listing-schema:
+      type: object
+      properties:
+        uuid:
+          description: Invotra UUID of the manual page.
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        title:
+          description: Title of the manual page.
+          type: string
+          example: Code of Conduct
+        parent_pages:
+          description: An array of the manual page's parents, starting with the given root page.
+          type: array
+          items:
+            type: object
+            properties:
+              uuid:
+                description: Invotra UUID of the manual page.
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+              title:
+                description: Title of the manual page.
+                type: string
+                example: Code of Conduct
     manual-page-schema:
       type: object
       properties:
@@ -8730,3 +8916,10 @@ components:
           description: A token to protect against cross-site request forgery. Clients should treat this as an opaque value.
       required:
         - token
+    html-response-schema:
+      type: string
+      example: |
+        <!DOCTYPE html>
+        <html>
+          ...
+        </html>
