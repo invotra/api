@@ -6271,6 +6271,12 @@ components:
                   example: ['N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2']
                   items:
                     type: string
+                cognito:
+                  type: array
+                  description: 'Cognito authnames. The authname format is ALB instance name and Cognito sub joined with colon.'
+                  example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
+                  items:
+                    type: string
     user-schema-common:
       properties:
         uuid:
@@ -6419,6 +6425,12 @@ components:
                   type: array
                   description: 'SAML authnames. Use unique and unchanging values, preferably GUIDs.'
                   example: ['N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2']
+                  items:
+                    type: string
+                cognito:
+                  type: array
+                  description: 'Cognito authnames. The authname format is ALB instance name and Cognito sub joined with colon.'
+                  example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
         - required:
