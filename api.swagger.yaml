@@ -5883,7 +5883,7 @@ components:
       schema:
         type: integer
         minimum: 1
-        maximum: 25
+        maximum: 100
         default: 25
       description: The numbers of items to return.
   schemas:
