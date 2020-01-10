@@ -89,6 +89,10 @@ paths:
       responses:
         '200':
           description: Returns a CSRF token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/csrf-token-schema'
     post:
       tags:
         - sessions
@@ -243,7 +247,7 @@ paths:
                   results:
                     description: The results set.
                     allOf:
-                      - $ref: '#/components/schemas/uuid-label-context-list-schema'
+                      - $ref: '#/components/schemas/team-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
   '/teams/{team_id}':
     parameters:
@@ -676,6 +680,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -715,6 +722,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -911,6 +921,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1078,6 +1091,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1144,6 +1160,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1184,6 +1203,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1256,6 +1278,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1517,6 +1542,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1572,6 +1600,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1895,6 +1926,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: 'Count of results.'
@@ -2137,6 +2171,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -2571,8 +2608,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/badge-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/badge-schema'
         '403':
           description: 'User is not authorized to list badges.'
   '/badges/{badge_id}':
@@ -2703,8 +2742,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/content-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/content-category-schema'
         '403':
           description: 'User is not authorized to list content categories.'
   '/content_categories/{content_category_id}':
@@ -2835,8 +2876,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/content-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/content-type-schema'
         '403':
           description: 'User is not authorized to list content types.'
   '/content_types/{content_type_id}':
@@ -2967,8 +3010,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/country-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/country-schema'
         '403':
           description: 'User is not authorized to list countries.'
   '/countries/{country_id}':
@@ -3099,8 +3144,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/event-status-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/event-status-schema'
         '403':
           description: 'User is not authorized to list event statuses.'
   '/event_statuses/{event_status_id}':
@@ -3231,8 +3278,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/event-topic-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/event-topic-schema'
         '403':
           description: 'User is not authorized to list event topics.'
   '/event_topics/{event_topic_id}':
@@ -3363,8 +3412,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/free-skill-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/free-skill-schema'
         '403':
           description: 'User is not authorized to list free skills.'
   '/free_skills/{free_skill_id}':
@@ -3495,8 +3546,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/general-topic-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/general-topic-schema'
         '403':
           description: 'User is not authorized to list general topics.'
   '/general_topics/{general_topic_id}':
@@ -3627,8 +3680,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/grade-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/grade-schema'
         '403':
           description: 'User is not authorized to list grades.'
   '/grades/{grade_id}':
@@ -3759,8 +3814,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/group-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/group-category-schema'
         '403':
           description: 'User is not authorized to list group categories.'
   '/group_categories/{group_category_id}':
@@ -3891,8 +3948,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/idea-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/idea-category-schema'
         '403':
           description: 'User is not authorized to list idea categories.'
   '/idea_categories/{idea_category_id}':
@@ -4023,8 +4082,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/interest-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/interest-schema'
         '403':
           description: 'User is not authorized to list interests.'
   '/interests/{interest_id}':
@@ -4155,8 +4216,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/message-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/message-type-schema'
         '403':
           description: 'User is not authorized to list message types.'
   '/message_types/{message_type_id}':
@@ -4287,8 +4350,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/organisational-skill-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/organisational-skill-schema'
         '403':
           description: 'User is not authorized to list organisational skills.'
   '/organisational_skills/{organisational_skill_id}':
@@ -4419,8 +4484,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/person-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/person-type-schema'
         '403':
           description: 'User is not authorized to list person types.'
   '/person_types/{person_type_id}':
@@ -4551,8 +4618,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/policy-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/policy-type-schema'
         '403':
           description: 'User is not authorized to list policy types.'
   '/policy_types/{policy_type_id}':
@@ -4683,8 +4752,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/primary-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/primary-category-schema'
         '403':
           description: 'User is not authorized to list primary categories.'
   '/primary_categories/{primary_category_id}':
@@ -4815,8 +4886,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/project-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/project-schema'
         '403':
           description: 'User is not authorized to list projects.'
   '/projects/{project_id}':
@@ -4947,8 +5020,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/query-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/query-category-schema'
         '403':
           description: 'User is not authorized to list query categories.'
   '/query_categories/{query_category_id}':
@@ -5079,8 +5154,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/region-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/region-schema'
         '403':
           description: 'User is not authorized to list regions.'
   '/regions/{region_id}':
@@ -5211,8 +5288,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/search-highlight-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/search-highlight-schema'
         '403':
           description: 'User is not authorized to list search highlights.'
   '/search_highlights/{search_highlight_id}':
@@ -5343,8 +5422,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/security-classification-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/security-classification-schema'
         '403':
           description: 'User is not authorized to list security classifications.'
   '/security_classifications/{security_classification_id}':
@@ -5475,8 +5556,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/title-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/title-schema'
         '403':
           description: 'User is not authorized to list titles.'
   '/titles/{title_id}':
@@ -5607,8 +5690,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/user-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/user-category-schema'
         '403':
           description: 'User is not authorized to list user categories.'
   '/user_categories/{user_category_id}':
@@ -5842,6 +5927,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -5909,10 +5997,12 @@ components:
         logo:
           description: The logo for the site.
           type: string
+          format: url
           example: 'https://dev.invotra.com/sites/default/files/logo.png'
         mobile_logo:
           description: The mobile logo for the site.
           type: string
+          format: url
           example: 'https://dev.invotra.com/sites/default/files/mobile_logo.png'
         navigation_first_level_nav_link:
           description: This is the colour for the main navigation text. Any CSS colour allowed.
@@ -5964,6 +6054,7 @@ components:
           example: '#FFFFFF'
       type: object
     status-schema:
+      type: object
       properties:
         status:
           description: 'Status of the API.'
@@ -5979,8 +6070,14 @@ components:
           example: 'Wed, 17 Jul 2019 09:58:16 GMT'
     product-options-schema:
       type: object
-      additionalProperties:
-        type: boolean
+      required:
+        - invotra_notes
+        - invotra_notifications_page
+      properties:
+        invotra_notes:
+          type: boolean
+        invotra_notifications_page:
+          type: boolean
       example:
         invotra_notes: true
         invotra_notifications_page: false
@@ -6021,7 +6118,7 @@ components:
       required:
         - user_uuid
         - user_image
-        - display_name
+        - username
         - entity_uuid
         - entity_title
         - entity_body
@@ -6043,6 +6140,7 @@ components:
         user_image:
           description: This is image of the user who triggered the feed message
           type: string
+          format: url
           example: >-
             https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
         username:
@@ -6097,6 +6195,7 @@ components:
         link:
           description: This is link to the entity that the feed message is about
           type: string
+          format: url
           example: >-
             https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
         short_text:
@@ -6154,6 +6253,7 @@ components:
     feed-status-schema:
       required:
         - feed
+      type: object
       properties:
         feed:
           description: This is the feed flag
@@ -6226,6 +6326,9 @@ components:
           example: mentioned you in a post
       type: object
     team-schema:
+      required:
+        - uuid
+        - title
       properties:
         uuid:
           description: The UUID of the team
@@ -6257,6 +6360,18 @@ components:
       required:
         - title
       type: object
+    team-list-schema:
+      type: array
+      items:
+        allOf:
+          - $ref: '#/components/schemas/team-schema'
+          - properties:
+              context:
+                description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/team-schema'
     user-schema:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
@@ -6303,6 +6418,22 @@ components:
             enum:
               - Organisational user
               - Webmaster
+              - Author
+              - Moderator
+              - Editor
+              - Publisher
+              - Content reviewer
+              - Section manager
+              - Previewer
+              - Redacted
+              - Brand manager
+              - Blogger
+              - Ideas administrator
+              - OU administrator
+              - Location admin
+              - Content layout manager
+              - External user
+              - Queries administrator
             type: string
           type: array
           example:
@@ -6456,6 +6587,9 @@ components:
               type: string
               example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
     common-status-schema:
+      type: object
+      required:
+        - status
       properties:
         status:
           description: A boolean flag
@@ -6463,6 +6597,8 @@ components:
           example: true
     group-membership-status-schema:
       type: object
+      required:
+        - status
       properties:
         status:
           description: |
@@ -6476,8 +6612,11 @@ components:
       required:
         - title
         - description
+        - group_category
         - group_category_uuid
         - privacy_setting
+        - members_count
+        - likes
         - author_uuid
       properties:
         title:
@@ -6525,6 +6664,8 @@ components:
       allOf:
         - $ref: '#/components/schemas/group-schema'
         - type: object
+          required:
+            - group_uuid
           properties:
             group_uuid:
               description: The UUID of the group.
@@ -6557,6 +6698,13 @@ components:
       allOf:
         - $ref: '#/components/schemas/post-schema-base'
         - type: object
+          required:
+            - uuid
+            - description
+            - author_uuid
+            - likes_count
+            - comment_count
+            - timestamp
           properties:
             uuid:
               type: string
@@ -6829,6 +6977,14 @@ components:
                       type: string
                       example: Appendix A - Acronyms
     comment-schema:
+      required:
+        - uuid
+        - body
+        - timestamp_created
+        - timestamp_updated
+        - content_uuid
+        - content_type
+        - likes_count
       properties:
         uuid:
           description: 'Invotra UUID of the comment.'
@@ -6869,10 +7025,12 @@ components:
         category:
           description: 'The category of the comment.'
           type: object
+          required:
+            - name
+            - uuid
           properties:
             name:
               type: string
-              format: uuid
               description: 'The name of the comment category.'
               example: 'Idea'
             uuid:
@@ -6892,6 +7050,12 @@ components:
               - $ref: '#/components/schemas/file-schema'
     file-schema:
       type: object
+      required:
+        - uuid
+        - filename
+        - file_download
+        - type
+        - filemime
       properties:
         uuid:
           description: The UUID of the entity.
@@ -6905,6 +7069,7 @@ components:
         file_download:
           description: The location of the file
           type: string
+          format: url
           example: 'https://dev.invotra.com/file/1234/download'
         type:
           description: The type of file
@@ -8693,6 +8858,9 @@ components:
       type: array
       items:
         type: object
+        required:
+          - name
+          - uuid
         properties:
           name:
             description: The title of the entity.
