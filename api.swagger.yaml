@@ -6768,6 +6768,10 @@ components:
               description: 'Count of likes on the blog.'
               type: integer
               example: 5
+            published:
+              description: 'Indicates that this blog is published.'
+              type: boolean
+              example: true
     blog-schema-update:
       allOf:
         - $ref: '#/components/schemas/blog-schema-common'
