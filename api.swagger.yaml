@@ -6769,7 +6769,7 @@ components:
               type: integer
               example: 5
             published:
-              description: 'Indicates that this blog is published.'
+              description: 'Published status of the blog.'
               type: boolean
               example: true
     blog-schema-update:
