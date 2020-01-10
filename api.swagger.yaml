@@ -1741,7 +1741,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: state
-          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6692,6 +6692,10 @@ components:
               description: 'Count of likes on the content.'
               type: integer
               example: 5
+            published:
+              description: 'Published status for the custom content.'
+              type: boolean
+              example: true
     custom-content-schema-update:
       allOf:
         - $ref: '#/components/schemas/custom-content-schema-common'
@@ -6912,7 +6916,7 @@ components:
           type: string
           enum:
             - 'draft'
-            - 'needs review'
+            - 'needs_review'
             - 'reviewed'
             - 'published'
             - 'unpublished'
