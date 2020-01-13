@@ -1733,8 +1733,8 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - name: status
-          description: 'Filter the list of lists on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+        - name: state
+          description: 'Filter the list of lists on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6730,17 +6730,26 @@ components:
         - $ref: '#/components/schemas/list-schema-common'
         - type: object
           properties:
-            image:
-              description: 'list Image.'
+            site_section:
+              description: 'The site section of this list.'
               type: object
-              allOf:
-                - $ref: '#/components/schemas/file-schema'
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the site section.'
+                  type: string
+                  example: 'Operations'
             author:
               description: 'The author of this list.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
             general_topic:
+              description: 'The general topic of this list.'
               type: object
               properties:
                 uuid:
@@ -6752,6 +6761,72 @@ components:
                   description: 'This is the name of the general topic.'
                   type: string
                   example: 'Darts'
+            team:
+              description: 'The team targeting this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: This is the name of the team
+                  type: string
+                  example: Operations
+            locations:
+              description: 'The locations targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: The name of the location.
+                    type: string
+                    example: Chertsey House
+                  type:
+                    description: The location type.
+                    type: string
+                    enum:
+                      - site
+                      - building
+                      - floor
+                      - space
+            grades:
+              description: 'The grades targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the list was created.'
               type: integer
@@ -6768,17 +6843,30 @@ components:
               description: 'Count of likes on the list.'
               type: integer
               example: 5
+            published:
+              description: 'Published status of the list.'
+              type: boolean
+              example: true
     list-schema-update:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
         - type: object
           properties:
-            image:
-              description: 'The image for this list.'
+            site_section:
+              description: 'The site section of this list.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the image.'
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -6791,17 +6879,68 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     list-schema-create:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
         - type: object
           properties:
-            image:
-              description: 'The image for this list.'
+            site_section:
+              description: 'The site section of this custom content.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the image.'
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this list. (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -6814,6 +6953,48 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - body
@@ -6828,10 +7009,15 @@ components:
           description: 'The body of the list.'
           type: string
           example: 'You can create strong passwords using an online random password generator.'
-        published:
-          description: 'Indicates that this list is published.'
-          type: boolean
-          example: true
+        state:
+          description: 'Indicates the workflow state of the list.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
 
 
 
