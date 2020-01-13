@@ -6832,7 +6832,7 @@ components:
         body:
           description: 'The body of the blog.'
           type: string
-          example: 'You can create strong passwords using an online random password generator.'
+          example: 'You can create strong passwords using an offline random password generator.'
         state:
           description: 'Indicates the workflow state of the blog.'
           type: string
