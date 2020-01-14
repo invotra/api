@@ -1733,8 +1733,8 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - name: status
-          description: 'Filter the list of policies on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+        - name: state
+          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6730,18 +6730,9 @@ components:
         - $ref: '#/components/schemas/policy-schema-common'
         - type: object
           properties:
-            image:
-              description: 'Policy Image.'
-              type: object
-              allOf:
-                - $ref: '#/components/schemas/file-schema'
-            author:
-              description: 'The author of this policy.'
-              type: object
-              allOf:
-                - $ref: '#/components/schemas/user-trimmed-schema'
             site_section:
               type: object
+              description: 'The site section of this policy.'
               properties:
                 uuid:
                   description: 'Invotra UUID of the site section.'
@@ -6753,6 +6744,7 @@ components:
                   type: string
                   example: 'Finance'
             policy_type:
+              description: 'The policy type of this policy.'
               type: object
               properties:
                 uuid:
@@ -6765,6 +6757,7 @@ components:
                   type: string
                   example: 'Constituent'
             primary_category:
+              description: 'The primary category of this policy.'
               type: object
               properties:
                 uuid:
@@ -6776,19 +6769,8 @@ components:
                   description: 'This is the name of the primary category.'
                   type: string
                   example: 'Involving staff training'
-            country:
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the country.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'This is the name of the country.'
-                  type: string
-                  example: 'Involving staff training'
             general_topic:
+              description: 'The general topic of this policy.'
               type: object
               properties:
                 uuid:
@@ -6800,7 +6782,95 @@ components:
                   description: 'This is the name of the general topic.'
                   type: string
                   example: 'Darts'
-
+            country:
+              description: 'The country of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the country.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the country.'
+                  type: string
+                  example: 'Involving staff training'
+            team:
+              description: 'The team targeting this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: This is the name of the team
+                  type: string
+                  example: Operations
+            locations:
+              description: 'The locations targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: The name of the location.
+                    type: string
+                    example: Chertsey House
+                  type:
+                    description: The location type.
+                    type: string
+                    enum:
+                      - site
+                      - building
+                      - floor
+                      - space
+            grades:
+              description: 'The grades targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            attachments:
+              description: 'List of attachments on the policy.'
+              type: array
+              items:
+                $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner user of the policy.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the policy was created.'
               type: integer
@@ -6817,17 +6887,39 @@ components:
               description: 'Count of likes on the policy.'
               type: integer
               example: 5
+            published:
+              description: 'Published status for the policy.'
+              type: boolean
+              example: true
     policy-schema-update:
       allOf:
         - $ref: '#/components/schemas/policy-schema-common'
         - type: object
           properties:
-            image:
-              description: 'The image for this policy.'
+            site_section:
+              description: 'The site section of this policy.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the image.'
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            policy_type:
+              description: 'The policy type of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the policy type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            primary_category:
+              description: 'The primary category of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the primary category.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -6837,6 +6929,77 @@ components:
               properties:
                 uuid:
                   description: 'Invotra UUID of the genetal topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            country:
+              description: 'The country of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the country.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -6845,12 +7008,30 @@ components:
         - $ref: '#/components/schemas/policy-schema-common'
         - type: object
           properties:
-            image:
-              description: 'The image for this policy.'
+            site_section:
+              description: 'The site section of this policy.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the image.'
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            policy_type:
+              description: 'The policy type of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the policy type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            primary_category:
+              description: 'The primary category of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the primary category.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -6863,9 +7044,84 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            country:
+              description: 'The country of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the country.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
     policy-schema-common:
       type: object
       properties:
@@ -6877,11 +7133,77 @@ components:
           description: 'The body of the policy.'
           type: string
           example: 'You can create strong passwords using an online random password generator.'
-        published:
-          description: 'Indicates that this policy is published.'
+        state:
+          description: 'Indicates the workflow state of the policy.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        implementation_start_timestamp:
+          description: 'This is the timestamp (in seconds) of when the policy will start being implementated.'
+          type: integer
+          example: 1510941596
+        implementation_end_timestamp:
+          description: 'This is the timestamp (in seconds) of when the policy will end being implementated.'
+          type: integer
+          example: 1510941696
+        review_date_timestamp:
+          description: 'The review date timestamp for the policy (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the policy.'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the policy.'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content' 
+                  - 'site section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
           type: boolean
+          default: true
           example: true
-
+        featured:
+          description: 'Indicates that this content is featured.'
+          type: boolean
+          default: false
+          example: false
+        external_id:
+          description: 'The policy external reference id.'
+          type: string
+          example: 'ABC123'
 
 
     user-trimmed-schema:
