@@ -6730,17 +6730,8 @@ components:
         - $ref: '#/components/schemas/page-schema-common'
         - type: object
           properties:
-            image:
-              description: 'Page Image.'
-              type: object
-              allOf:
-                - $ref: '#/components/schemas/file-schema'
-            author:
-              description: 'The author of this page.'
-              type: object
-              allOf:
-                - $ref: '#/components/schemas/user-trimmed-schema'
             site_section:
+              description: 'The site section of this page.'
               type: object
               properties:
                 uuid:
@@ -6752,13 +6743,29 @@ components:
                   description: 'This is the name of the site section.'
                   type: string
                   example: 'Finance'
+            image:
+              description: 'Page Image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this page.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
             attachments:
               description: 'A list of attachments for the page.'
               type: array
               items:
                 allOf:
                   - $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner user of the page.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
             team:
+              description: 'The team targeting this page.'
               type: object
               properties:
                 uuid:
@@ -6771,13 +6778,13 @@ components:
                   type: string
                   example: 'Operations'
             locations:
-              description: 'The locations targeting this news item.'
+              description: 'The locations targeting this page.'
               type: array
               items:
                 allOf:
                   - $ref: '#/components/schemas/location-trimmed-schema'
             grades:
-              description: 'The grades targeting this news item.'
+              description: 'The grades targeting this page.'
               type: array
               items:
                 type: object
@@ -6792,7 +6799,7 @@ components:
                     type: string
                     example: 'Grade 3'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this page.'
               type: array
               items:
                 type: object
@@ -6822,11 +6829,24 @@ components:
               description: 'Count of likes on the page.'
               type: integer
               example: 5
+            published:
+              description: 'Published status for the page.'
+              type: boolean
+              example: true
     page-schema-update:
       allOf:
         - $ref: '#/components/schemas/page-schema-common'
         - type: object
           properties:
+            site_section:
+              description: 'The site section of this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             image:
               description: 'The image for this page.'
               type: object
@@ -6836,12 +6856,12 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            site_section:
-              description: 'The site section of this news.'
+            author:
+              description: 'The author of this page.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the site section.'
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -6856,8 +6876,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
-              description: 'The team of this news item.'
+              description: 'The team targeting this page.'
               type: object
               properties:
                 uuid:
@@ -6866,7 +6895,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             locations:
-              description: 'The locations targeting this news item.'
+              description: 'The locations targeting this page.'
               type: array
               items:
                 type: object
@@ -6877,7 +6906,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             grades:
-              description: 'The grades targeting this custom content.'
+              description: 'The grades targeting this page.'
               type: array
               items:
                 type: object
@@ -6888,7 +6917,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this page.'
               type: array
               items:
                 type: object
@@ -6903,6 +6932,15 @@ components:
         - $ref: '#/components/schemas/page-schema-common'
         - type: object
           properties:
+            site_section:
+              description: 'The site section of this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             image:
               description: 'The image for this page.'
               type: object
@@ -6912,12 +6950,12 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            site_section:
-              description: 'The site section of this news.'
+            author:
+              description: 'The author of this page. (Will use the authenticated user if not supplied).'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the site section.'
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -6932,8 +6970,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
-              description: 'The team of this news item.'
+              description: 'The team targeting this news page.'
               type: object
               properties:
                 uuid:
@@ -6942,7 +6989,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             locations:
-              description: 'The locations targeting this news item.'
+              description: 'The locations targeting this page.'
               type: array
               items:
                 type: object
@@ -6953,7 +7000,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             grades:
-              description: 'The grades targeting this custom content.'
+              description: 'The grades targeting this page.'
               type: array
               items:
                 type: object
@@ -6964,7 +7011,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this page.'
               type: array
               items:
                 type: object
@@ -6977,6 +7024,10 @@ components:
           required:
             - title
             - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
     page-schema-common:
       type: object
       properties:
@@ -6988,10 +7039,15 @@ components:
           description: 'The body of the page.'
           type: string
           example: 'You can create strong passwords using an online random password generator.'
-        published:
-          description: 'Indicates that this page is published.'
-          type: boolean
-          example: true
+        state:
+          description: 'Indicates the workflow state of the page.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
         schedule_date_timestamp:
           description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
           type: integer
