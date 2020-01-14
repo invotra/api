@@ -6730,28 +6730,100 @@ components:
         - $ref: '#/components/schemas/promotion-schema-common'
         - type: object
           properties:
+            site_section:
+              description: 'The site section of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the site section.'
+                  type: string
+                  example: 'Operations'
             image:
               description: 'promotion Image.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner user of the promotion.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
             author:
               description: 'The author of this promotion.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            general_topic:
+            team:
+              description: 'The team targeting this promotion.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the general topic.'
+                  description: 'Invotra UUID of the team.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
                 name:
-                  description: 'This is the name of the general topic.'
+                  description: This is the name of the team
                   type: string
-                  example: 'Darts'
+                  example: Operations
+            locations:
+              description: 'The locations targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: The name of the location.
+                    type: string
+                    example: Chertsey House
+                  type:
+                    description: The location type.
+                    type: string
+                    enum:
+                      - site
+                      - building
+                      - floor
+                      - space
+            grades:
+              description: 'The grades targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the promotion was created.'
               type: integer
@@ -6768,11 +6840,24 @@ components:
               description: 'Count of likes on the promotion.'
               type: integer
               example: 5
+            published:
+              description: 'Published status for the promotion.'
+              type: boolean
+              example: true
     promotion-schema-update:
       allOf:
         - $ref: '#/components/schemas/promotion-schema-common'
         - type: object
           properties:
+            site_section:
+              description: 'The site section of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             image:
               description: 'The image for this promotion.'
               type: object
@@ -6782,20 +6867,84 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this promotion.'
+            owner:
+              description: 'The owner of this promotion.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the genetal topic.'
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
     promotion-schema-create:
       allOf:
         - $ref: '#/components/schemas/promotion-schema-common'
         - type: object
           properties:
+            site_section:
+              description: 'The site section of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             image:
               description: 'The image for this promotion.'
               type: object
@@ -6805,18 +6954,73 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this promotion.'
+            owner:
+              description: 'The owner of this promotion.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the genetal topic.'
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this promotion. (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
     promotion-schema-common:
       type: object
       properties:
@@ -6828,12 +7032,28 @@ components:
           description: 'The body of the promotion.'
           type: string
           example: 'You can create strong passwords using an online random password generator.'
-        published:
-          description: 'Indicates that this promotion is published.'
+        state:
+          description: 'Indicates the workflow state of the promotion.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        link:
+          description: 'The link for this promotion.'
+          type: string
+          example: 'https://dev.invotra.com/post/ill-be-annual-leave'
+        review_date_timestamp:
+          description: 'The review date timestamp for the promotion (in seconds).'
+          type: integer
+          example: 1510941596
+        featured:
+          description: 'Indicates that this content is featured.'
           type: boolean
-          example: true
-
-
+          default: false
+          example: false
 
     user-trimmed-schema:
       properties:
