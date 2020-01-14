@@ -6730,17 +6730,8 @@ components:
         - $ref: '#/components/schemas/news-schema-common'
         - type: object
           properties:
-            image:
-              description: 'news Image.'
-              type: object
-              allOf:
-                - $ref: '#/components/schemas/file-schema'
-            author:
-              description: 'The author of this news.'
-              type: object
-              allOf:
-                - $ref: '#/components/schemas/user-trimmed-schema'
             site_section:
+              description: 'The site section of this news.'
               type: object
               properties:
                 uuid:
@@ -6752,6 +6743,16 @@ components:
                   description: 'This is the name of the site section.'
                   type: string
                   example: 'Finance'
+            image:
+              description: 'news Image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this news.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
             attachments:
               description: 'A list of attachments for the news.'
               type: array
@@ -6811,18 +6812,6 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
-            general_topic:
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'This is the name of the general topic.'
-                  type: string
-                  example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the news was created.'
               type: integer
@@ -6839,11 +6828,24 @@ components:
               description: 'Count of likes on the news.'
               type: integer
               example: 5
+            published:
+              description: 'Published status for the news.'
+              type: boolean
+              example: true
     news-schema-update:
       allOf:
         - $ref: '#/components/schemas/news-schema-common'
         - type: object
           properties:
+            site_section:
+              description: 'The site section of this news.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             image:
               description: 'The image for this news.'
               type: object
@@ -6853,12 +6855,12 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            site_section:
-              description: 'The site section of this news.'
+            author:
+              description: 'The author of this news. (Will use the authenticated user if not supplied).'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the site section.'
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -6924,16 +6926,6 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this news.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-
 
 
     news-schema-create:
@@ -6941,21 +6933,21 @@ components:
         - $ref: '#/components/schemas/news-schema-common'
         - type: object
           properties:
-            image:
-              description: 'The image for this news.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the image.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             site_section:
               description: 'The site section of this news.'
               type: object
               properties:
                 uuid:
                   description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this news.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -7021,18 +7013,13 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this news.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
     news-schema-common:
       type: object
       properties:
