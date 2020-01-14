@@ -1733,8 +1733,8 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - name: status
-          description: 'Filter the list of polls on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+        - name: state
+          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6730,28 +6730,18 @@ components:
         - $ref: '#/components/schemas/poll-schema-common'
         - type: object
           properties:
-            image:
-              description: 'poll Image.'
-              type: object
-              allOf:
-                - $ref: '#/components/schemas/file-schema'
             author:
               description: 'The author of this poll.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            general_topic:
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'This is the name of the general topic.'
-                  type: string
-                  example: 'Darts'
+            choices:
+              description: 'The choices for this poll.'
+              type: array
+              minItems: 2
+              items:
+                type: string
+              example: ['Chicken', 'Beef', 'Mutton']
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the poll was created.'
               type: integer
@@ -6768,26 +6758,21 @@ components:
               description: 'Count of likes on the poll.'
               type: integer
               example: 5
+            published:
+              description: 'Published status for the poll.'
+              type: boolean
+              example: true
     poll-schema-update:
       allOf:
         - $ref: '#/components/schemas/poll-schema-common'
         - type: object
           properties:
-            image:
-              description: 'The image for this poll.'
+            author:
+              description: 'The author of this poll.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the image.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this poll.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -6796,43 +6781,63 @@ components:
         - $ref: '#/components/schemas/poll-schema-common'
         - type: object
           properties:
-            image:
-              description: 'The image for this poll.'
+            author:
+              description: 'The author of this poll. (Will use the authenticated user if not supplied).'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the image.'
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this poll.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            choices:
+              description: 'The choices for this poll.'
+              type: array
+              minItems: 2
+              items:
+                type: string
+              example: ['Chicken', 'Beef', 'Mutton']
           required:
-            - title
-            - body
+            - question
+            - choices
     poll-schema-common:
       type: object
       properties:
-        title:
-          description: 'Title of the poll.'
+        question:
+          description: 'The question the poll is asking.'
           type: string
-          example: 'Guidelines for creating a strong password'
-        body:
-          description: 'The body of the poll.'
+          example: 'What is your favorite food?'
+        state:
+          description: 'Indicates the workflow state of the poll.'
           type: string
-          example: 'You can create strong passwords using an online random password generator.'
-        published:
-          description: 'Indicates that this poll is published.'
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the poll (in seconds).'
+          type: integer
+          example: 1510941596
+        poll_duration:
+          description: 'The duration this poll will remain open (in seconds from the create date).'
+          type: integer
+          example: 1510941596
+        poll_open:
+          description: 'Indicates that poll is open.'
           type: boolean
+          default: true
           example: true
-
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        external_id:
+          description: 'The poll external reference id.'
+          type: string
+          example: 'ABC123'
 
 
     user-trimmed-schema:
