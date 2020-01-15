@@ -1736,6 +1736,161 @@ paths:
         '422':
           description: JSON schema validation failure
       description: Report a post as the current user.
+  '/messages':
+    post:
+      tags:
+        - 'messages'
+      description: 'Provision a new message.'
+      responses:
+        '201':
+          description: 'The message was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned message may be retrieved.'
+              schema:
+                type: string
+        '400':
+          description: 'The message was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a message.'
+        '422':
+          description: 'The message was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/message-schema-create'
+        required: true
+  '/messages/list':
+    get:
+      tags:
+        - 'messages'
+      description: 'Search for messages. An empty array is returned if no messages where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: status
+          description: 'Filter the list of messages on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of messages matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/message-schema'
+        '403':
+          description: 'User is not authorized to list messages.'
+  '/messages/{message_id}':
+    parameters:
+      - description: 'The Invotra UUID of the message.'
+        in: path
+        name: message_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'messages'
+      description: 'Get information about the message.'
+      responses:
+        '200':
+          description: 'Returns a single complete message object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this message.'
+        '404':
+          description: 'The UUID does not correspond to an existing message.'
+    put:
+      tags:
+        - 'messages'
+      description: 'Update message information.'
+      responses:
+        '200':
+          description: 'The message information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this message.'
+        '404':
+          description: 'The UUID does not correspond to an existing message.'
+        '422':
+          description: 'The message was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/message-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'messages'
+      description: 'Delete a message.'
+      responses:
+        '200':
+          description: 'The message was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this message.'
+        '404':
+          description: 'The UUID does not correspond to an existing message.'
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -6850,6 +7005,136 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
+    message-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the message.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/message-schema-common'
+        - type: object
+          properties:
+            author:
+              description: 'The author of this message.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            message_type:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the message type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the message type.'
+                  type: string
+                  example: 'Empowering'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the message was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the message was last updated.'
+              type: integer
+              example: 1510941696
+            likes_count:
+              description: 'Count of likes on the message.'
+              type: integer
+              example: 5
+    message-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/message-schema-common'
+        - type: object
+          properties:
+            message_type:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the message type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    message-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/message-schema-common'
+        - type: object
+          properties:
+            message_type:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the message type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this custom content (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - message_type
+            - body
+    message-schema-common:
+      type: object
+      properties:
+        body:
+          description: 'The body of the message.'
+          type: string
+          example: 'You can create strong passwords using an online random password generator.'
+    user-trimmed-schema:
+      properties:
+        uuid:
+          description: 'Invotra UUID of the user.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        username:
+          description: The user's username
+          type: string
+          example: Dorothy Whitehead
+        title:
+          default: ''
+          description: The user's title
+          enum:
+            - ''
+            - Dr
+            - Mr
+            - Miss
+            - Mrs
+            - Ms
+          type: string
+          example: Mr
+        firstname:
+          description: The user's first name
+          type: string
+          example: Dorothy
+        surname:
+          description: The user's surname
+          type: string
+          example: Whitehead
+        user_avatar:
+          description: The user's image
+          type: string
+          example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
     manual-listing-schema:
       type: object
       properties:
