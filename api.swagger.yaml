@@ -1682,7 +1682,6 @@ paths:
         '422':
           description: JSON schema validation failure
       description: Report a post as the current user.
-
   '/pages':
     post:
       tags:
@@ -1838,7 +1837,6 @@ paths:
           description: 'User is not authorized to delete this page.'
         '404':
           description: 'The UUID does not correspond to an existing page.'
-
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -6717,7 +6715,6 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
-
     page-schema:
       allOf:
         - type: object
@@ -7106,7 +7103,6 @@ components:
           description: 'The page external reference id.'
           type: string
           example: 'ABC123'
-
     user-trimmed-schema:
       properties:
         uuid:
@@ -7142,7 +7138,6 @@ components:
           description: The user's image
           type: string
           example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
-
     location-trimmed-schema:
       properties:
         uuid:
@@ -7162,7 +7157,6 @@ components:
             - building
             - floor
             - space
-
     manual-listing-schema:
       type: object
       properties:
