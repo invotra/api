@@ -1695,6 +1695,10 @@ paths:
               description: 'The URL at which the newly provisioned list may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The list was not saved due to malformed JSON.'
         '403':
@@ -5941,6 +5945,17 @@ components:
         default: 25
       description: The numbers of items to return.
   schemas:
+    successful-post-response-schema:
+      type: object
+      properties:
+        uuid:
+          description: The UUID of the entity
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          readOnly: true
+      required:
+        - uuid
     branding-schema:
       properties:
         logo:
