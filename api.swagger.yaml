@@ -1682,7 +1682,6 @@ paths:
         '422':
           description: JSON schema validation failure
       description: Report a post as the current user.
-
   '/lists':
     post:
       tags:
@@ -1838,7 +1837,6 @@ paths:
           description: 'User is not authorized to delete this list.'
         '404':
           description: 'The UUID does not correspond to an existing list.'
-
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -6717,7 +6715,6 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
-
     list-schema:
       allOf:
         - type: object
@@ -6997,7 +6994,6 @@ components:
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
-            - body
             - state
             - site_section
             - review_date_timestamp
@@ -7056,7 +7052,6 @@ components:
           example: 'More information here.'
       required:
       - type
-      - title
       - content
     list-list-content-schema:
       allOf:
@@ -7099,7 +7094,6 @@ components:
             type: string
             description: 'The URL of the link.'
             example: 'https://example.com'
-
     user-trimmed-schema:
       properties:
         uuid:
@@ -7135,7 +7129,6 @@ components:
           description: The user's image
           type: string
           example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
-
     manual-listing-schema:
       type: object
       properties:
