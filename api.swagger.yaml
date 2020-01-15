@@ -6354,6 +6354,14 @@ components:
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
+    team-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/team-schema'
+        - properties:
+            context:
+              type: array
+              items:
+                $ref: '#/components/schemas/team-schema'
     team-schema-create:
       allOf:
         - $ref: '#/components/schemas/team-schema'
@@ -7348,34 +7356,6 @@ components:
         type: string
         format: uuid
         example: 01234567-89ab-cdef-12F34-56789abcdef0
-      type: array
-    uuid-label-context-list-schema:
-      items:
-        type: object
-        properties:
-          uuid:
-            description: The entity UUID.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-12F34-56789abcdef0
-          label:
-            description: The entity label.
-            type: string
-            example: Security
-          context:
-            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
-            type: array
-            items:
-              type: object
-              properties:
-                label:
-                  description: The entity label.
-                  type: string
-                uuid:
-                  description: The entity UUID.
-                  type: string
-                  format: uuid
-                  example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
     location-uuid-title-context-list-schema:
       items:
