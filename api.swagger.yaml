@@ -89,6 +89,10 @@ paths:
       responses:
         '200':
           description: Returns a CSRF token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/csrf-token-schema'
     post:
       tags:
         - sessions
@@ -193,6 +197,10 @@ paths:
                 The URL at which the newly provisioned team may be retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The team was not saved due to malformed JSON.
         '422':
@@ -243,7 +251,7 @@ paths:
                   results:
                     description: The results set.
                     allOf:
-                      - $ref: '#/components/schemas/uuid-label-context-list-schema'
+                      - $ref: '#/components/schemas/team-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
   '/teams/{team_id}':
     parameters:
@@ -422,6 +430,10 @@ paths:
                 The URL at which the newly provisioned user may be retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: The user was not saved due to malformed JSON.
         '403':
@@ -676,6 +688,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -715,6 +730,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -911,6 +929,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1040,6 +1061,10 @@ paths:
                 The URL at which the newly created group may be retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: The group was not saved due to malformed JSON.
         '403':
@@ -1078,6 +1103,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1144,6 +1172,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1184,6 +1215,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1233,6 +1267,29 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get information about the group.
+    put:
+      tags:
+        - groups
+      responses:
+        '201':
+          description: The group was updated successfully.
+        '400':
+          description: The group was not saved due to malformed JSON.
+        '403':
+          description: The user does not have permission to update the group.
+        '404':
+          description: The UUID does not correspond to an existing group.
+        '422':
+          description: |
+            The group was not saved due to Drupal validation failure or JSON schema validation
+            failure.
+      description: Update a group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-schema'
+        required: true
   '/groups/{group_id}/members':
     parameters:
       - description: The Invotra UUID of the group.
@@ -1256,6 +1313,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1386,6 +1446,10 @@ paths:
                 The URL at which the newly provisioned post may be retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: The post was not saved due to malformed JSON.
         '422':
@@ -1517,6 +1581,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1572,6 +1639,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -1895,6 +1965,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: 'Count of results.'
@@ -1928,6 +2001,10 @@ paths:
                 The URL at which the file entity may be retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The file was not saved due to malformed JSON.
         '422':
@@ -2016,6 +2093,10 @@ paths:
                 retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The job role was not saved due to malformed JSON.
         '422':
@@ -2137,6 +2218,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -2161,6 +2245,10 @@ paths:
                 retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -2250,6 +2338,10 @@ paths:
                 retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -2339,6 +2431,10 @@ paths:
                 retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -2428,6 +2524,10 @@ paths:
                 retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -2516,6 +2616,10 @@ paths:
               description: 'The URL at which the newly provisioned badge may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The badge was not saved due to malformed JSON.'
         '403':
@@ -2571,8 +2675,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/badge-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/badge-schema'
         '403':
           description: 'User is not authorized to list badges.'
   '/badges/{badge_id}':
@@ -2648,6 +2754,10 @@ paths:
               description: 'The URL at which the newly provisioned content category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The content category was not saved due to malformed JSON.'
         '403':
@@ -2703,8 +2813,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/content-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/content-category-schema'
         '403':
           description: 'User is not authorized to list content categories.'
   '/content_categories/{content_category_id}':
@@ -2780,6 +2892,10 @@ paths:
               description: 'The URL at which the newly provisioned content type may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The content type was not saved due to malformed JSON.'
         '403':
@@ -2835,8 +2951,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/content-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/content-type-schema'
         '403':
           description: 'User is not authorized to list content types.'
   '/content_types/{content_type_id}':
@@ -2912,6 +3030,10 @@ paths:
               description: 'The URL at which the newly provisioned country may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The country was not saved due to malformed JSON.'
         '403':
@@ -2967,8 +3089,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/country-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/country-schema'
         '403':
           description: 'User is not authorized to list countries.'
   '/countries/{country_id}':
@@ -3044,6 +3168,10 @@ paths:
               description: 'The URL at which the newly provisioned event status may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The event status was not saved due to malformed JSON.'
         '403':
@@ -3099,8 +3227,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/event-status-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/event-status-schema'
         '403':
           description: 'User is not authorized to list event statuses.'
   '/event_statuses/{event_status_id}':
@@ -3176,6 +3306,10 @@ paths:
               description: 'The URL at which the newly provisioned event topic may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The event topic was not saved due to malformed JSON.'
         '403':
@@ -3231,8 +3365,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/event-topic-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/event-topic-schema'
         '403':
           description: 'User is not authorized to list event topics.'
   '/event_topics/{event_topic_id}':
@@ -3308,6 +3444,10 @@ paths:
               description: 'The URL at which the newly provisioned free skill may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The free skill was not saved due to malformed JSON.'
         '403':
@@ -3363,8 +3503,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/free-skill-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/free-skill-schema'
         '403':
           description: 'User is not authorized to list free skills.'
   '/free_skills/{free_skill_id}':
@@ -3440,6 +3582,10 @@ paths:
               description: 'The URL at which the newly provisioned general topic may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The general topic was not saved due to malformed JSON.'
         '403':
@@ -3495,8 +3641,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/general-topic-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/general-topic-schema'
         '403':
           description: 'User is not authorized to list general topics.'
   '/general_topics/{general_topic_id}':
@@ -3572,6 +3720,10 @@ paths:
               description: 'The URL at which the newly provisioned grade may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The grade was not saved due to malformed JSON.'
         '403':
@@ -3627,8 +3779,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/grade-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/grade-schema'
         '403':
           description: 'User is not authorized to list grades.'
   '/grades/{grade_id}':
@@ -3704,6 +3858,10 @@ paths:
               description: 'The URL at which the newly provisioned group category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The group category was not saved due to malformed JSON.'
         '403':
@@ -3759,8 +3917,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/group-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/group-category-schema'
         '403':
           description: 'User is not authorized to list group categories.'
   '/group_categories/{group_category_id}':
@@ -3836,6 +3996,10 @@ paths:
               description: 'The URL at which the newly provisioned idea category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The idea category was not saved due to malformed JSON.'
         '403':
@@ -3891,8 +4055,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/idea-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/idea-category-schema'
         '403':
           description: 'User is not authorized to list idea categories.'
   '/idea_categories/{idea_category_id}':
@@ -3968,6 +4134,10 @@ paths:
               description: 'The URL at which the newly provisioned interest may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The interest was not saved due to malformed JSON.'
         '403':
@@ -4023,8 +4193,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/interest-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/interest-schema'
         '403':
           description: 'User is not authorized to list interests.'
   '/interests/{interest_id}':
@@ -4100,6 +4272,10 @@ paths:
               description: 'The URL at which the newly provisioned message type may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The message type was not saved due to malformed JSON.'
         '403':
@@ -4155,8 +4331,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/message-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/message-type-schema'
         '403':
           description: 'User is not authorized to list message types.'
   '/message_types/{message_type_id}':
@@ -4232,6 +4410,10 @@ paths:
               description: 'The URL at which the newly provisioned organisational skill may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The organisational skill was not saved due to malformed JSON.'
         '403':
@@ -4287,8 +4469,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/organisational-skill-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/organisational-skill-schema'
         '403':
           description: 'User is not authorized to list organisational skills.'
   '/organisational_skills/{organisational_skill_id}':
@@ -4364,6 +4548,10 @@ paths:
               description: 'The URL at which the newly provisioned person type may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The person type was not saved due to malformed JSON.'
         '403':
@@ -4419,8 +4607,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/person-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/person-type-schema'
         '403':
           description: 'User is not authorized to list person types.'
   '/person_types/{person_type_id}':
@@ -4496,6 +4686,10 @@ paths:
               description: 'The URL at which the newly provisioned policy type may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The policy type was not saved due to malformed JSON.'
         '403':
@@ -4551,8 +4745,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/policy-type-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/policy-type-schema'
         '403':
           description: 'User is not authorized to list policy types.'
   '/policy_types/{policy_type_id}':
@@ -4628,6 +4824,10 @@ paths:
               description: 'The URL at which the newly provisioned primary category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The primary category was not saved due to malformed JSON.'
         '403':
@@ -4683,8 +4883,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/primary-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/primary-category-schema'
         '403':
           description: 'User is not authorized to list primary categories.'
   '/primary_categories/{primary_category_id}':
@@ -4760,6 +4962,10 @@ paths:
               description: 'The URL at which the newly provisioned project may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The project was not saved due to malformed JSON.'
         '403':
@@ -4815,8 +5021,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/project-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/project-schema'
         '403':
           description: 'User is not authorized to list projects.'
   '/projects/{project_id}':
@@ -4892,6 +5100,10 @@ paths:
               description: 'The URL at which the newly provisioned query category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The query category was not saved due to malformed JSON.'
         '403':
@@ -4947,8 +5159,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/query-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/query-category-schema'
         '403':
           description: 'User is not authorized to list query categories.'
   '/query_categories/{query_category_id}':
@@ -5024,6 +5238,10 @@ paths:
               description: 'The URL at which the newly provisioned region may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The region was not saved due to malformed JSON.'
         '403':
@@ -5079,8 +5297,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/region-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/region-schema'
         '403':
           description: 'User is not authorized to list regions.'
   '/regions/{region_id}':
@@ -5156,6 +5376,10 @@ paths:
               description: 'The URL at which the newly provisioned search highlight may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The search highlight was not saved due to malformed JSON.'
         '403':
@@ -5211,8 +5435,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/search-highlight-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/search-highlight-schema'
         '403':
           description: 'User is not authorized to list search highlights.'
   '/search_highlights/{search_highlight_id}':
@@ -5288,6 +5514,10 @@ paths:
               description: 'The URL at which the newly provisioned security classification may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The security classification was not saved due to malformed JSON.'
         '403':
@@ -5343,8 +5573,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/security-classification-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/security-classification-schema'
         '403':
           description: 'User is not authorized to list security classifications.'
   '/security_classifications/{security_classification_id}':
@@ -5420,6 +5652,10 @@ paths:
               description: 'The URL at which the newly provisioned title may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The title was not saved due to malformed JSON.'
         '403':
@@ -5475,8 +5711,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/title-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/title-schema'
         '403':
           description: 'User is not authorized to list titles.'
   '/titles/{title_id}':
@@ -5552,6 +5790,10 @@ paths:
               description: 'The URL at which the newly provisioned user category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The user category was not saved due to malformed JSON.'
         '403':
@@ -5607,8 +5849,10 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
-                      - $ref: '#/components/schemas/user-category-schema'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/user-category-schema'
         '403':
           description: 'User is not authorized to list user categories.'
   '/user_categories/{user_category_id}':
@@ -5842,6 +6086,9 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - count
+                  - results
                 properties:
                   count:
                     description: Count of results.
@@ -5883,10 +6130,34 @@ components:
       schema:
         type: integer
         minimum: 1
-        maximum: 25
+        maximum: 100
         default: 25
       description: The numbers of items to return.
   schemas:
+    successful-post-response-schema:
+      type: object
+      properties:
+        uuid:
+          description: The UUID of the entity
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          readOnly: true
+      required:
+        - uuid
+    successful-post-response-with-message-schema:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/successful-post-response-schema'
+        - properties:
+            message:
+              description: The message included in the response.
+              type: string
+              example: The post was created successfully.
+              deprecated: true
+      required:
+        - message
+        - uuid
     pdf-export-completion-schema:
       type: object
       properties:
@@ -5909,10 +6180,12 @@ components:
         logo:
           description: The logo for the site.
           type: string
+          format: url
           example: 'https://dev.invotra.com/sites/default/files/logo.png'
         mobile_logo:
           description: The mobile logo for the site.
           type: string
+          format: url
           example: 'https://dev.invotra.com/sites/default/files/mobile_logo.png'
         navigation_first_level_nav_link:
           description: This is the colour for the main navigation text. Any CSS colour allowed.
@@ -5964,6 +6237,7 @@ components:
           example: '#FFFFFF'
       type: object
     status-schema:
+      type: object
       properties:
         status:
           description: 'Status of the API.'
@@ -5979,8 +6253,14 @@ components:
           example: 'Wed, 17 Jul 2019 09:58:16 GMT'
     product-options-schema:
       type: object
-      additionalProperties:
-        type: boolean
+      required:
+        - invotra_notes
+        - invotra_notifications_page
+      properties:
+        invotra_notes:
+          type: boolean
+        invotra_notifications_page:
+          type: boolean
       example:
         invotra_notes: true
         invotra_notifications_page: false
@@ -6021,7 +6301,7 @@ components:
       required:
         - user_uuid
         - user_image
-        - display_name
+        - username
         - entity_uuid
         - entity_title
         - entity_body
@@ -6043,6 +6323,7 @@ components:
         user_image:
           description: This is image of the user who triggered the feed message
           type: string
+          format: url
           example: >-
             https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
         username:
@@ -6097,6 +6378,7 @@ components:
         link:
           description: This is link to the entity that the feed message is about
           type: string
+          format: url
           example: >-
             https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26
         short_text:
@@ -6154,6 +6436,7 @@ components:
     feed-status-schema:
       required:
         - feed
+      type: object
       properties:
         feed:
           description: This is the feed flag
@@ -6226,6 +6509,9 @@ components:
           example: mentioned you in a post
       type: object
     team-schema:
+      required:
+        - uuid
+        - title
       properties:
         uuid:
           description: The UUID of the team
@@ -6251,6 +6537,14 @@ components:
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
+    team-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/team-schema'
+        - properties:
+            context:
+              type: array
+              items:
+                $ref: '#/components/schemas/team-schema'
     team-schema-create:
       allOf:
         - $ref: '#/components/schemas/team-schema'
@@ -6303,6 +6597,22 @@ components:
             enum:
               - Organisational user
               - Webmaster
+              - Author
+              - Moderator
+              - Editor
+              - Publisher
+              - Content reviewer
+              - Section manager
+              - Previewer
+              - Redacted
+              - Brand manager
+              - Blogger
+              - Ideas administrator
+              - OU administrator
+              - Location admin
+              - Content layout manager
+              - External user
+              - Queries administrator
             type: string
           type: array
           example:
@@ -6456,6 +6766,9 @@ components:
               type: string
               example: 1f0c6cb5-a3c3-4197-bebc-b3e44462dc23
     common-status-schema:
+      type: object
+      required:
+        - status
       properties:
         status:
           description: A boolean flag
@@ -6463,6 +6776,8 @@ components:
           example: true
     group-membership-status-schema:
       type: object
+      required:
+        - status
       properties:
         status:
           description: |
@@ -6476,8 +6791,11 @@ components:
       required:
         - title
         - description
+        - group_category
         - group_category_uuid
         - privacy_setting
+        - members_count
+        - likes
         - author_uuid
       properties:
         title:
@@ -6520,11 +6838,18 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
+          readOnly: true
+        external_id:
+          description: This is used to store the group's external reference ID.
+          type: string
+          example: ABC123
       type: object
     group-search-schema:
       allOf:
         - $ref: '#/components/schemas/group-schema'
         - type: object
+          required:
+            - group_uuid
           properties:
             group_uuid:
               description: The UUID of the group.
@@ -6557,6 +6882,13 @@ components:
       allOf:
         - $ref: '#/components/schemas/post-schema-base'
         - type: object
+          required:
+            - uuid
+            - description
+            - author_uuid
+            - likes_count
+            - comment_count
+            - timestamp
           properties:
             uuid:
               type: string
@@ -6829,6 +7161,14 @@ components:
                       type: string
                       example: Appendix A - Acronyms
     comment-schema:
+      required:
+        - uuid
+        - body
+        - timestamp_created
+        - timestamp_updated
+        - content_uuid
+        - content_type
+        - likes_count
       properties:
         uuid:
           description: 'Invotra UUID of the comment.'
@@ -6869,10 +7209,12 @@ components:
         category:
           description: 'The category of the comment.'
           type: object
+          required:
+            - name
+            - uuid
           properties:
             name:
               type: string
-              format: uuid
               description: 'The name of the comment category.'
               example: 'Idea'
             uuid:
@@ -6892,6 +7234,12 @@ components:
               - $ref: '#/components/schemas/file-schema'
     file-schema:
       type: object
+      required:
+        - uuid
+        - filename
+        - file_download
+        - type
+        - filemime
       properties:
         uuid:
           description: The UUID of the entity.
@@ -6905,6 +7253,7 @@ components:
         file_download:
           description: The location of the file
           type: string
+          format: url
           example: 'https://dev.invotra.com/file/1234/download'
         type:
           description: The type of file
@@ -7183,34 +7532,6 @@ components:
         type: string
         format: uuid
         example: 01234567-89ab-cdef-12F34-56789abcdef0
-      type: array
-    uuid-label-context-list-schema:
-      items:
-        type: object
-        properties:
-          uuid:
-            description: The entity UUID.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-12F34-56789abcdef0
-          label:
-            description: The entity label.
-            type: string
-            example: Security
-          context:
-            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
-            type: array
-            items:
-              type: object
-              properties:
-                label:
-                  description: The entity label.
-                  type: string
-                uuid:
-                  description: The entity UUID.
-                  type: string
-                  format: uuid
-                  example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
     location-uuid-title-context-list-schema:
       items:
@@ -8503,7 +8824,7 @@ components:
               default: true
           required:
             - name
-            - highlight_list_uuid
+            - list
     search-highlight-schema-common:
       type: object
       properties:
@@ -8527,11 +8848,79 @@ components:
           description: 'Determines the position of a search highlight in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-        highlight_list_uuid:
-          description: 'Invotra UUID of the highlight list.'
+        list:
+          description: 'List of content and links in the search highlight.'
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/search-highlight-list-content-schema'
+              - $ref: '#/components/schemas/search-highlight-list-site_section-schema'
+              - $ref: '#/components/schemas/search-highlight-list-link-schema'
+            discriminator:
+              propertyName: type
+              mapping:
+                content: '#/components/schemas/search-highlight-list-content-schema'
+                site_section: '#/components/schemas/search-highlight-list-site_section-schema'
+                link: '#/components/schemas/search-highlight-list-link-schema'
+    search-highlight-list-common-schema:
+      type: object
+      properties:
+        type:
+          description: 'The type of content in the search highlight.'
           type: string
-          format: uuid
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          enum:
+            - 'content'
+            - 'site_section'
+            - 'link'
+        title:
+          description: 'Title of the content or link.'
+          type: string
+          example: 'More information here.'
+      required:
+      - type
+      - title
+      - content
+    search-highlight-list-content-schema:
+      allOf:
+      - $ref: '#/components/schemas/search-highlight-list-common-schema'
+      - type: object
+        properties:
+          type:
+            example: 'content'
+          content:
+            type: object
+            properties:
+              uuid:
+                description: 'Invotra UUID of the content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+    search-highlight-list-site_section-schema:
+      allOf:
+      - $ref: '#/components/schemas/search-highlight-list-common-schema'
+      - type: object
+        properties:
+          type:
+            example: 'site_section'
+          content:
+            type: object
+            properties:
+              uuid:
+                description: 'Invotra UUID of the site section.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+    search-highlight-list-link-schema:
+      allOf:
+      - $ref: '#/components/schemas/search-highlight-list-common-schema'
+      - type: object
+        properties:
+          type:
+            example: 'link'
+          content:
+            type: string
+            description: 'The URL of the link.'
+            example: 'https://example.com'
     security-classification-schema:
       allOf:
         - type: object
@@ -8693,6 +9082,9 @@ components:
       type: array
       items:
         type: object
+        required:
+          - name
+          - uuid
         properties:
           name:
             description: The title of the entity.
