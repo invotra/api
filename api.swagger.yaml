@@ -7028,7 +7028,7 @@ components:
           items:
             oneOf:
               - $ref: '#/components/schemas/list-list-content-schema'
-              - $ref: '#/components/schemas/list-list-site_section-schema'
+              - $ref: '#/components/schemas/list-list-site-section-schema'
               - $ref: '#/components/schemas/list-list-link-schema'
             discriminator:
               propertyName: type
