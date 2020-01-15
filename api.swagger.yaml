@@ -7116,7 +7116,7 @@ components:
             - Mrs
             - Ms
           type: string
-          example: Mr
+          example: Ms
         firstname:
           description: The user's first name
           type: string
