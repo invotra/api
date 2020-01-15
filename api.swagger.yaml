@@ -1682,7 +1682,6 @@ paths:
         '422':
           description: JSON schema validation failure
       description: Report a post as the current user.
-
   '/news':
     post:
       tags:
@@ -1838,7 +1837,6 @@ paths:
           description: 'User is not authorized to delete this news.'
         '404':
           description: 'The UUID does not correspond to an existing news.'
-
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -6717,7 +6715,6 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
-
     news-schema:
       allOf:
         - type: object
@@ -6926,8 +6923,6 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
-
-
     news-schema-create:
       allOf:
         - $ref: '#/components/schemas/news-schema-common'
@@ -7098,8 +7093,6 @@ components:
           description: 'The news item external reference id.'
           type: string
           example: 'ABC123'
-
-
     user-trimmed-schema:
       properties:
         uuid:
@@ -7135,7 +7128,6 @@ components:
           description: The user's image
           type: string
           example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
-
     location-trimmed-schema:
       properties:
         uuid:
@@ -7155,7 +7147,6 @@ components:
             - building
             - floor
             - space
-
     manual-listing-schema:
       type: object
       properties:
