@@ -7034,7 +7034,7 @@ components:
               propertyName: type
               mapping:
                 content: '#/components/schemas/list-list-content-schema'
-                site_section: '#/components/schemas/list-list-site_section-schema'
+                site_section: '#/components/schemas/list-list-site-section-schema'
                 link: '#/components/schemas/list-list-link-schema'
     list-list-common-schema:
       type: object
