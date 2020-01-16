@@ -1695,6 +1695,10 @@ paths:
               description: 'The URL at which the newly provisioned poll may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The poll was not saved due to malformed JSON.'
         '403':
@@ -5941,6 +5945,17 @@ components:
         default: 25
       description: The numbers of items to return.
   schemas:
+    successful-post-response-schema:
+      type: object
+      properties:
+        uuid:
+          description: The UUID of the entity
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          readOnly: true
+      required:
+        - uuid
     branding-schema:
       properties:
         logo:
@@ -6732,13 +6747,13 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            choices:
-              description: 'The choices for this poll.'
+            options:
+              description: 'The options for this poll.'
               type: array
               minItems: 2
               items:
                 type: string
-              example: ['Chicken', 'Beef', 'Mutton']
+              example: ['Pork', 'Beef', 'Mutton']
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the poll was created.'
               type: integer
@@ -6795,12 +6810,12 @@ components:
                 type: string
               example: ['Chicken', 'Beef', 'Mutton']
           required:
-            - question
+            - title
             - choices
     poll-schema-common:
       type: object
       properties:
-        question:
+        title:
           description: 'The question the poll is asking.'
           type: string
           example: 'What is your favorite food?'
@@ -6857,7 +6872,7 @@ components:
             - Mrs
             - Ms
           type: string
-          example: Mr
+          example: Ms
         firstname:
           description: The user's first name
           type: string
