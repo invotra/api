@@ -19,6 +19,8 @@ tags:
     description: Notification messages
   - name: feeds
     description: Feed update status
+  - name: pdf export
+    description: PDF export
 paths:
   '/sessions/{session_hash}':
     parameters:
@@ -70,8 +72,7 @@ paths:
         in: path
         type: string
         description: The Invotra UUID of the user.
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         required: true
     delete:
       tags:
@@ -90,8 +91,7 @@ paths:
         in: path
         type: string
         description: The Invotra UUID of the notification recipient user.
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         required: true
     get:
       tags:
@@ -99,9 +99,7 @@ paths:
       summary: Get all notifications for a user.
       responses:
         '200':
-          description: >-
-            A list of the user's notifications, or an empty array if there are
-            none.
+          description: 'A list of the user''s notifications, or an empty array if there are none.'
           schema:
             $ref: '#/definitions/notification-list-schema'
         '400':
@@ -124,9 +122,8 @@ paths:
           headers:
             Location:
               type: string
-              description: >
-                The URL of the newly added notification
-                (.../notifications/{user_id}/{notification_id}).
+              description: |
+                The URL of the newly added notification (.../notifications/{user_id}/{notification_id}).
         '400':
           description: The UUID or JSON was malformed.
         '404':
@@ -153,15 +150,13 @@ paths:
         - name: user_id
           in: path
           type: string
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           description: The Invotra UUID of the user.
           required: true
         - name: notification_id
           in: path
           type: string
-          pattern: >-
-            ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
           description: The UUID of the notification message.
           required: true
       responses:
@@ -177,8 +172,7 @@ paths:
         in: path
         type: string
         description: The Invotra UUID of the feed owner.
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         required: true
     get:
       tags:
@@ -208,14 +202,41 @@ paths:
           description: The JSON was malformed.
         '422':
           description: JSON schema validation failed.
+  '/pdf-export/create-job/{content_id}':
+    post:
+      tags:
+        - pdf export
+      summary: Create a PDF export job.
+      parameters:
+        - name: content_id
+          in: path
+          type: string
+          description: The UUID of the node to export.
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+          required: true
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/pdf-export-job-submission-schema'
+          required: true
+      responses:
+        '200':
+          description: An existing PDF export job was found and returned to the client.
+          schema:
+            $ref: '#/definitions/pdf-export-job-response-schema'
+        '201':
+          description: A new PDF export job was created.
+          schema:
+            $ref: '#/definitions/pdf-export-job-response-schema'
+        '400':
+          description: A malformed UUID was supplied.
 definitions:
   session-schema:
     properties:
       user_id:
         description: The Invotra UUID of the user
         type: string
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
       user_internal_id:
         description: The Drupal user ID
@@ -274,14 +295,12 @@ definitions:
           user_id:
             description: The UUID of the user.
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
             example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
           notification_id:
             description: The UUID of the notification message.
             type: string
-            pattern: >-
-              ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
+            pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
             example: 52000da2-8513-4472-8395-4a080f662b48
         required:
           - user_id
@@ -300,15 +319,56 @@ definitions:
       item_id:
         description: The UUID of the most recent item in the feed.
         type: string
-        pattern: >-
-          ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
-        example: "2df46a6e-6f73-4b09-b340-7cea68b6e5f6"
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
       timestamp:
         description: The Unix timestamp (in seconds) of when the most recent item was added to the feed.
         type: integer
         example: 1442089320
     required:
       - read
+  pdf-export-job-submission-schema:
+    type: object
+    properties:
+      job_uuid:
+        description: The UUID of the PDF export job.
+        type: string
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+      user_uuid:
+        description: The UUID of the user submitting the PDF export request.
+        type: string
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+      latest:
+        description: Whether to use the latest revision of each page.
+        type: boolean
+        default: false
+      node_grants:
+        description: The content's access grants.
+        type: object
+      secret_token:
+        description: The export job's secret token.
+        type: string
+      use_export_service:
+        description: Optionally specify an alternative PDF export service to use for testing purposes.
+        type: string
+        example: http://invotra-pdf-render-batch:3000/mock-render
+    required:
+      - job_uuid
+      - user_uuid
+      - node_grants
+      - secret_token
+  pdf-export-job-response-schema:
+    type: object
+    properties:
+      uuid:
+        description: The UUID of the PDF export job.
+        type: string
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+    required:
+      - uuid
 securityDefinitions:
   APIKeyHeader:
     type: apiKey
