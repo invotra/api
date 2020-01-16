@@ -1749,6 +1749,10 @@ paths:
               description: 'The URL at which the newly provisioned message may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The message was not saved due to malformed JSON.'
         '403':
@@ -1786,12 +1790,6 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - name: status
-          description: 'Filter the list of messages on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
-          in: query
-          schema:
-            type: string
-            example: 'unpublished'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -6130,6 +6128,17 @@ components:
         default: 25
       description: The numbers of items to return.
   schemas:
+    successful-post-response-schema:
+      type: object
+      properties:
+        uuid:
+          description: The UUID of the entity
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          readOnly: true
+      required:
+        - uuid
     pdf-export-completion-schema:
       type: object
       properties:
@@ -7099,7 +7108,7 @@ components:
         body:
           description: 'The body of the message.'
           type: string
-          example: 'You can create strong passwords using an online random password generator.'
+          example: 'It is my birthday next week so remember to get me a present.'
     user-trimmed-schema:
       properties:
         uuid:
@@ -7122,7 +7131,7 @@ components:
             - Mrs
             - Ms
           type: string
-          example: Mr
+          example: Ms
         firstname:
           description: The user's first name
           type: string
