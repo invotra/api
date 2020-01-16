@@ -6886,11 +6886,13 @@ components:
         body:
           description: 'The body of the group document.'
           type: string
-          example: 'You can create strong passwords using an online random password generator.'
-        published:
-          description: 'Indicates that this group document is published.'
-          type: boolean
-          example: true
+          example: 'You can create strong passwords using an offline random password generator.'
+        state:
+          description: 'Indicates the workflow state of the group document.'
+          type: string
+          enum:
+            - 'published'
+            - 'unpublished'
         enable_comments:
           description: 'Indicates that this group document has comments enabled.'
           type: boolean
@@ -6921,7 +6923,7 @@ components:
             - Mrs
             - Ms
           type: string
-          example: Mr
+          example: Ms
         firstname:
           description: The user's first name
           type: string
