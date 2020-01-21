@@ -7040,6 +7040,7 @@ components:
               description: 'The options for this group poll.'
               type: array
               minItems: 2
+              maxItems: 26
               items:
                 type: string
               example: ['Pork', 'Beef', 'Mutton']
@@ -7109,6 +7110,7 @@ components:
               description: 'The options for this group poll.'
               type: array
               minItems: 2
+              maxItems: 26
               items:
                 type: string
               example: ['Pork', 'Beef', 'Mutton']
@@ -7123,10 +7125,6 @@ components:
           description: 'Title of the group poll.'
           type: string
           example: 'What is your favorite food?'
-        enable_comments:
-          description: 'Indicates that this group poll has comments enabled.'
-          type: boolean
-          example: false
     user-trimmed-schema:
       properties:
         uuid:
