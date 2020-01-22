@@ -7110,7 +7110,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             options:
-              description: 'The options for this group poll, with vote counts.'
+              description: 'The options for this group poll.'
               type: array
               minItems: 2
               maxItems: 26
