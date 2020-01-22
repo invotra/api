@@ -1168,6 +1168,7 @@ paths:
               - relevance
               - likes
               - members_count
+              - timestamp
             default: relevance
         - description: Sort order.
           in: query
