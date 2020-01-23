@@ -1168,7 +1168,7 @@ paths:
               - relevance
               - likes
               - members_count
-              - timestamp
+              - timestamp_created
             default: relevance
         - description: Sort order.
           in: query
@@ -6859,6 +6859,14 @@ components:
           description: This is used to store the group's external reference ID.
           type: string
           example: ABC123
+        timestamp_created:
+          description: 'The timestamp (in seconds) of when the group was created'
+          type: integer
+          example: 1510941596
+        timestamp_updated:
+          description: 'The timestamp (in seconds) of when the group was updated'
+          type: integer
+          example: 1510941596
       type: object
     group-search-schema:
       allOf:
