@@ -7022,6 +7022,7 @@ components:
       type: object
     poll-schema:
       allOf:
+        - $ref: '#/components/schemas/poll-schema-common'
         - type: object
           properties:
             uuid:
@@ -7029,21 +7030,32 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/poll-schema-common'
-        - type: object
-          properties:
             author:
               description: 'The author of this poll.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
             options:
-              description: 'The options for this poll.'
+              description: 'The options for this group poll, with vote counts.'
               type: array
               minItems: 2
+              maxItems: 26
               items:
-                type: string
-              example: ['Pork', 'Beef', 'Mutton']
+                type: object
+                properties:
+                  option:
+                    description: 'The option text.'
+                    type: string
+                  vote_count:
+                    description: 'The current vote count for this option.'
+                    type: integer
+              example:
+                - option: 'Pork'
+                  vote_count: 12
+                - option: 'Beef'
+                  vote_count: 24
+                - option: 'Mutton'
+                  vote_count: 48
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the poll was created.'
               type: integer
@@ -7093,12 +7105,20 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             options:
-              description: 'The options for this poll.'
+              description: 'The options for this group poll.'
               type: array
               minItems: 2
+              maxItems: 26
               items:
-                type: string
-              example: ['Pork', 'Beef', 'Mutton']
+                type: object
+                properties:
+                  option:
+                    description: 'The option text.'
+                    type: string
+              example:
+                - option: 'Pork'
+                - option: 'Beef'
+                - option: 'Mutton'
           required:
             - title
             - choices
