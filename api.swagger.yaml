@@ -7022,6 +7022,7 @@ components:
       type: object
     group-document-schema:
       allOf:
+        - $ref: '#/components/schemas/group-document-schema-common'
         - type: object
           properties:
             uuid:
@@ -7029,9 +7030,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/group-document-schema-common'
-        - type: object
-          properties:
             group:
               description: 'The group for this group document.'
               type: object
@@ -7079,6 +7077,10 @@ components:
               description: 'Published status of the group document.'
               type: boolean
               example: true
+            enable_comments:
+              description: 'Indicates that this group document has comments enabled.'
+              type: boolean
+              example: true
     group-document-schema-update:
       allOf:
         - $ref: '#/components/schemas/group-document-schema-common'
@@ -7093,7 +7095,7 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            image:
+            featured_image:
               description: 'The image for this group document.'
               type: object
               properties:
@@ -7120,6 +7122,10 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            enable_comments:
+              description: 'Indicates that this group document has comments enabled.'
+              type: boolean
+              example: true
     group-document-schema-create:
       allOf:
         - $ref: '#/components/schemas/group-document-schema-common'
@@ -7134,7 +7140,7 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            image:
+            featured_image:
               description: 'The image for this group document.'
               type: object
               properties:
@@ -7153,7 +7159,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             folder:
-              description: 'The folder of this group document. (If not supplied the Root folder will be used)'
+              description: 'The folder of this group document. (If not supplied the default home folder will be used)'
               type: object
               properties:
                 uuid:
@@ -7161,9 +7167,15 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            enable_comments:
+              description: 'Indicates that this group document has comments enabled.'
+              type: boolean
+              example: true
+              default: true
           required:
             - title
             - body
+            - state
             - group
             - review_date_timestamp
     group-document-schema-common:
@@ -7183,10 +7195,6 @@ components:
           enum:
             - 'published'
             - 'unpublished'
-        enable_comments:
-          description: 'Indicates that this group document has comments enabled.'
-          type: boolean
-          example: true
         review_date_timestamp:
           description: 'The review date timestamp for the group document (in seconds).'
           type: integer
