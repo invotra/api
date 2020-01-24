@@ -7036,7 +7036,7 @@ components:
               allOf:
                 - $ref: '#/components/schemas/group-schema'
             featured_image:
-              description: 'Group document Image.'
+              description: 'The featured image for this group document.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
@@ -7096,7 +7096,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             featured_image:
-              description: 'The image for this group document.'
+              description: 'The featured image for this group document.'
               type: object
               properties:
                 uuid:
@@ -7141,7 +7141,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             featured_image:
-              description: 'The image for this group document.'
+              description: 'The featured image for this group document.'
               type: object
               properties:
                 uuid:
