@@ -7016,6 +7016,7 @@ components:
       type: object
     message-schema:
       allOf:
+        - $ref: '#/components/schemas/message-schema-common'
         - type: object
           properties:
             uuid:
@@ -7023,9 +7024,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/message-schema-common'
-        - type: object
-          properties:
             author:
               description: 'The author of this message.'
               type: object
@@ -7051,6 +7049,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the message was last updated.'
               type: integer
               example: 1510941696
+            comment_count:
+              description: 'Count of comments on the message.'
+              type: integer
+              example: 5
             likes_count:
               description: 'Count of likes on the message.'
               type: integer
