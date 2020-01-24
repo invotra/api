@@ -7035,7 +7035,7 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/group-schema'
-            image:
+            featured_image:
               description: 'Group document Image.'
               type: object
               allOf:
