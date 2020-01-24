@@ -7138,8 +7138,8 @@ components:
             - 'reviewed'
             - 'published'
             - 'unpublished'
-        review_date_timestamp:
-          description: 'The review date timestamp for the poll (in seconds).'
+        schedule_timestamp:
+          description: 'The scheduled review date timestamp for the poll (in seconds).'
           type: integer
           example: 1510941596
         poll_duration:
