@@ -7030,6 +7030,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            title:
+              description: 'The question the poll is asking.'
+              type: string
+              example: 'What is your favorite food?'
             author:
               description: 'The author of this poll.'
               type: object
@@ -7095,6 +7099,10 @@ components:
         - $ref: '#/components/schemas/poll-schema-common'
         - type: object
           properties:
+            title:
+              description: 'The question the poll is asking.'
+              type: string
+              example: 'What is your favorite food?'
             author:
               description: 'The author of this poll. (Will use the authenticated user if not supplied).'
               type: object
@@ -7120,15 +7128,12 @@ components:
                 - option: 'Beef'
                 - option: 'Mutton'
           required:
+            - state
             - title
-            - choices
+            - options
     poll-schema-common:
       type: object
       properties:
-        title:
-          description: 'The question the poll is asking.'
-          type: string
-          example: 'What is your favorite food?'
         state:
           description: 'Indicates the workflow state of the poll.'
           type: string
