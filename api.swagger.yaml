@@ -6,13 +6,14 @@ info:
   description: In general most fields are optional for update (PUT) requests; you can leave them blank (pass an empty string / array / whatever as appropriate) to clear them, or omit the key to leave them unchanged.
   version: '0.3'
 security:
-  - APISessionHeader: []
+  - SessionCookieHeader: []
   - APIKeyHeader: []
 paths:
   /status:
     get:
       tags:
         - status
+      security: [] # no authentication
       responses:
         '200':
           description: Status returned successfully.
@@ -25,6 +26,7 @@ paths:
     get:
       tags:
         - configuration
+      security: [] # no authentication
       responses:
         '200':
           description: Branding returned.
@@ -86,6 +88,8 @@ paths:
       tags:
         - sessions
       description: Returns a CSRF token.
+      security:
+        - SessionCookieHeader: [] # only allow cookie for csrf token exchange, not api key
       responses:
         '200':
           description: Returns a CSRF token.
@@ -103,6 +107,7 @@ paths:
             schema:
               $ref: '#/components/schemas/auth-token-schema'
         required: true
+      security: [] # no authentication
       responses:
         '200':
           description: A valid token was exchanged for a valid session.
@@ -115,6 +120,7 @@ paths:
               description: A valid session cookie.
               schema:
                 type: string
+                example: 'SSESS{name}={id}'
         '400':
           description: The JSON was malformed.
         '401':
@@ -125,10 +131,17 @@ paths:
     post:
       tags:
         - sessions
-      description: Login a user.
+      description: Login a user. Use this endpoint if you are authenticating with an individual user rather than an API Key. The session cookie returned in the header should be used for subsequent requests.
+      security: [] # no authentication
       responses:
         '200':
           description: Successfully logged in a user.
+          headers:
+            Set-Cookie:
+              description: A valid session cookie.
+              schema:
+                type: string
+                example: 'SSESS{name}={id}'
         '401':
           description: Access denied
       requestBody:
@@ -142,6 +155,8 @@ paths:
       tags:
         - sessions
       description: Logout the user.
+      security:
+        - SessionCookieHeader: [] # only allow cookie for logout, not api key
       responses:
         '200':
           description: Successfully logged user out.
@@ -197,6 +212,10 @@ paths:
                 The URL at which the newly provisioned team may be retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The team was not saved due to malformed JSON.
         '422':
@@ -426,6 +445,10 @@ paths:
                 The URL at which the newly provisioned user may be retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: The user was not saved due to malformed JSON.
         '403':
@@ -1053,6 +1076,10 @@ paths:
                 The URL at which the newly created group may be retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: The group was not saved due to malformed JSON.
         '403':
@@ -1255,6 +1282,29 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get information about the group.
+    put:
+      tags:
+        - groups
+      responses:
+        '201':
+          description: The group was updated successfully.
+        '400':
+          description: The group was not saved due to malformed JSON.
+        '403':
+          description: The user does not have permission to update the group.
+        '404':
+          description: The UUID does not correspond to an existing group.
+        '422':
+          description: |
+            The group was not saved due to Drupal validation failure or JSON schema validation
+            failure.
+      description: Update a group.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-schema'
+        required: true
   '/groups/{group_id}/members':
     parameters:
       - description: The Invotra UUID of the group.
@@ -1411,6 +1461,10 @@ paths:
                 The URL at which the newly provisioned post may be retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: The post was not saved due to malformed JSON.
         '422':
@@ -2133,6 +2187,10 @@ paths:
                 The URL at which the file entity may be retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The file was not saved due to malformed JSON.
         '422':
@@ -2221,6 +2279,10 @@ paths:
                 retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The job role was not saved due to malformed JSON.
         '422':
@@ -2369,6 +2431,10 @@ paths:
                 retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -2458,6 +2524,10 @@ paths:
                 retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -2547,6 +2617,10 @@ paths:
                 retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -2636,6 +2710,10 @@ paths:
                 retrieved.
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
         '422':
@@ -2724,6 +2802,10 @@ paths:
               description: 'The URL at which the newly provisioned badge may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The badge was not saved due to malformed JSON.'
         '403':
@@ -2858,6 +2940,10 @@ paths:
               description: 'The URL at which the newly provisioned content category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The content category was not saved due to malformed JSON.'
         '403':
@@ -2992,6 +3078,10 @@ paths:
               description: 'The URL at which the newly provisioned content type may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The content type was not saved due to malformed JSON.'
         '403':
@@ -3126,6 +3216,10 @@ paths:
               description: 'The URL at which the newly provisioned country may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The country was not saved due to malformed JSON.'
         '403':
@@ -3260,6 +3354,10 @@ paths:
               description: 'The URL at which the newly provisioned event status may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The event status was not saved due to malformed JSON.'
         '403':
@@ -3394,6 +3492,10 @@ paths:
               description: 'The URL at which the newly provisioned event topic may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The event topic was not saved due to malformed JSON.'
         '403':
@@ -3528,6 +3630,10 @@ paths:
               description: 'The URL at which the newly provisioned free skill may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The free skill was not saved due to malformed JSON.'
         '403':
@@ -3662,6 +3768,10 @@ paths:
               description: 'The URL at which the newly provisioned general topic may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The general topic was not saved due to malformed JSON.'
         '403':
@@ -3796,6 +3906,10 @@ paths:
               description: 'The URL at which the newly provisioned grade may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The grade was not saved due to malformed JSON.'
         '403':
@@ -3930,6 +4044,10 @@ paths:
               description: 'The URL at which the newly provisioned group category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The group category was not saved due to malformed JSON.'
         '403':
@@ -4064,6 +4182,10 @@ paths:
               description: 'The URL at which the newly provisioned idea category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The idea category was not saved due to malformed JSON.'
         '403':
@@ -4198,6 +4320,10 @@ paths:
               description: 'The URL at which the newly provisioned interest may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The interest was not saved due to malformed JSON.'
         '403':
@@ -4332,6 +4458,10 @@ paths:
               description: 'The URL at which the newly provisioned message type may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The message type was not saved due to malformed JSON.'
         '403':
@@ -4466,6 +4596,10 @@ paths:
               description: 'The URL at which the newly provisioned organisational skill may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The organisational skill was not saved due to malformed JSON.'
         '403':
@@ -4600,6 +4734,10 @@ paths:
               description: 'The URL at which the newly provisioned person type may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The person type was not saved due to malformed JSON.'
         '403':
@@ -4734,6 +4872,10 @@ paths:
               description: 'The URL at which the newly provisioned policy type may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The policy type was not saved due to malformed JSON.'
         '403':
@@ -4868,6 +5010,10 @@ paths:
               description: 'The URL at which the newly provisioned primary category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The primary category was not saved due to malformed JSON.'
         '403':
@@ -5002,6 +5148,10 @@ paths:
               description: 'The URL at which the newly provisioned project may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The project was not saved due to malformed JSON.'
         '403':
@@ -5136,6 +5286,10 @@ paths:
               description: 'The URL at which the newly provisioned query category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The query category was not saved due to malformed JSON.'
         '403':
@@ -5270,6 +5424,10 @@ paths:
               description: 'The URL at which the newly provisioned region may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The region was not saved due to malformed JSON.'
         '403':
@@ -5404,6 +5562,10 @@ paths:
               description: 'The URL at which the newly provisioned search highlight may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The search highlight was not saved due to malformed JSON.'
         '403':
@@ -5538,6 +5700,10 @@ paths:
               description: 'The URL at which the newly provisioned security classification may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The security classification was not saved due to malformed JSON.'
         '403':
@@ -5672,6 +5838,10 @@ paths:
               description: 'The URL at which the newly provisioned title may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The title was not saved due to malformed JSON.'
         '403':
@@ -5806,6 +5976,10 @@ paths:
               description: 'The URL at which the newly provisioned user category may be retrieved.'
               schema:
                 type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
         '400':
           description: 'The user category was not saved due to malformed JSON.'
         '403':
@@ -6118,10 +6292,10 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-    APISessionHeader:
+    SessionCookieHeader:
       type: apiKey
-      name: 'SESSS{name}'
-      in: header
+      name: SSESS{name}
+      in: cookie
     BearerAuth:
       type: http
       scheme: bearer
@@ -6156,6 +6330,19 @@ components:
           example: 01234567-89ab-cdef-1234-56789abcdef0
           readOnly: true
       required:
+        - uuid
+    successful-post-response-with-message-schema:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/successful-post-response-schema'
+        - properties:
+            message:
+              description: The message included in the response.
+              type: string
+              example: The post was created successfully.
+              deprecated: true
+      required:
+        - message
         - uuid
     pdf-export-completion-schema:
       type: object
@@ -6536,24 +6723,20 @@ components:
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
+    team-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/team-schema'
+        - properties:
+            context:
+              type: array
+              items:
+                $ref: '#/components/schemas/team-schema'
     team-schema-create:
       allOf:
         - $ref: '#/components/schemas/team-schema'
       required:
         - title
       type: object
-    team-list-schema:
-      type: array
-      items:
-        allOf:
-          - $ref: '#/components/schemas/team-schema'
-          - properties:
-              context:
-                description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
-                type: array
-                items:
-                  allOf:
-                    - $ref: '#/components/schemas/team-schema'
     user-schema:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
@@ -6841,6 +7024,11 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
+          readOnly: true
+        external_id:
+          description: This is used to store the group's external reference ID.
+          type: string
+          example: ABC123
       type: object
     group-search-schema:
       allOf:
@@ -7977,34 +8165,6 @@ components:
         type: string
         format: uuid
         example: 01234567-89ab-cdef-12F34-56789abcdef0
-      type: array
-    uuid-label-context-list-schema:
-      items:
-        type: object
-        properties:
-          uuid:
-            description: The entity UUID.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-12F34-56789abcdef0
-          label:
-            description: The entity label.
-            type: string
-            example: Security
-          context:
-            description: Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.
-            type: array
-            items:
-              type: object
-              properties:
-                label:
-                  description: The entity label.
-                  type: string
-                uuid:
-                  description: The entity UUID.
-                  type: string
-                  format: uuid
-                  example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
     location-uuid-title-context-list-schema:
       items:
