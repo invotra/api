@@ -1910,27 +1910,6 @@ paths:
           description: 'User is not authorized to show this group poll.'
         '404':
           description: 'The UUID does not correspond to an existing group poll.'
-    put:
-      tags:
-        - 'group polls'
-      description: 'Update group poll information.'
-      responses:
-        '200':
-          description: 'The group poll information was updated successfully.'
-        '400':
-          description: 'The supplied UUID or JSON was malformed.'
-        '403':
-          description: 'User is not authorized to update this group poll.'
-        '404':
-          description: 'The UUID does not correspond to an existing group poll.'
-        '422':
-          description: 'The group poll was not updated due to a Drupal validation failure or a JSON schema validation failure.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/group-poll-schema-update'
-        required: true
     delete:
       tags:
         - 'group polls'
@@ -7260,20 +7239,6 @@ components:
               description: 'Count of likes on the group poll.'
               type: integer
               example: 5
-    group-poll-schema-update:
-      allOf:
-        - $ref: '#/components/schemas/group-poll-schema-common'
-        - type: object
-          properties:
-            author:
-              description: 'The author of this group poll.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     group-poll-schema-create:
       allOf:
         - $ref: '#/components/schemas/group-poll-schema-common'
