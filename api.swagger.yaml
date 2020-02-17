@@ -2171,7 +2171,7 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - $ref: '#/components/schemas/job-role-schema'
+                        - $ref: '#/components/schemas/job-role-list-schema'
         '403':
           description: 'User is not authorized to list job roles.'
   '/job_roles/{job_role_id}':
@@ -7396,6 +7396,23 @@ components:
           type: string
           format: uuid
       type: object
+    job-role-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/job-role-schema'
+      type: object
+      properties:
+        has_children:
+          description: 'Indicates that this job role has children.'
+          type: boolean
+          example: true
+        published:
+          description: 'Indicates that this job role is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a job role in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
     job-role-schema-create:
       allOf:
         - $ref: '#/components/schemas/job-role-schema'
