@@ -4048,11 +4048,6 @@ paths:
           name: external_id
           schema:
             type: string
-        - name: status
-          description: 'Filter the list of group document folders on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
-          in: query
-          schema:
-            type: string
         - name: valid_parents_for
           description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the group document folder.'
           in: query
@@ -8435,17 +8430,17 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/group-schema'
+                - type: object
+                  properties:
+                    uuid:
+                      description: 'Invotra UUID of the group.'
+                      type: string
+                      format: uuid
+                      example: '01234567-89ab-cdef-1234-56789abcdef0'
         - $ref: '#/components/schemas/group-document-folder-schema-common'
     group-document-folder-schema-update:
       allOf:
         - $ref: '#/components/schemas/group-document-folder-schema-common'
-        - type: object
-          properties:
-            group_uuid:
-              description: 'Invotra UUID of the group.'
-              type: string
-              format: uuid
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
     group-document-folder-schema-create:
       allOf:
         - $ref: '#/components/schemas/group-document-folder-schema-common'
@@ -8456,8 +8451,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-            published:
-              default: true
           required:
             - name
             - group_uuid
@@ -8477,10 +8470,6 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
-        published:
-          description: 'Indicates that this group document folder is published.'
-          type: boolean
-          example: true
         weight:
           description: 'Determines the position of a group document folder in the hierarchy in relation to its siblings.'
           type: integer
