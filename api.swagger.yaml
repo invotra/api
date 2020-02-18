@@ -2131,8 +2131,8 @@ paths:
         - 'job roles'
       description: 'Search for job roles. An empty array is returned if no job roles are found.'
       parameters:
-        - name: name
-          description: 'Filter by name. Matches on whole words.'
+        - name: title
+          description: 'Filter by title. Matches on whole words.'
           in: query
           schema:
             type: string
