@@ -1428,6 +1428,162 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/group-membership-common-schema'
+  '/groups/{group_id}/document_folders':
+    parameters:
+      - description: 'The Invotra UUID of the group.'
+        in: path
+        name: group_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      tags:
+        - 'groups'
+      description: 'Provision a new group document folder.'
+      responses:
+        '201':
+          description: 'The group document folder was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned group document folder may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The group document folder was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a group document folder.'
+        '422':
+          description: 'The group document folder was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-document-folder-schema-create'
+        required: true
+  '/groups/{group_id}/document_folders/list':
+    parameters:
+      - description: 'The Invotra UUID of the group.'
+        in: path
+        name: group_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'groups'
+      description: 'Search for group document folders. An empty array is returned if no group document folders are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the group document folder.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of group document folders matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/group-document-folder-schema'
+        '403':
+          description: 'User is not authorized to list group document folders.'
+  '/groups/{group_id}/document_folders/{group_document_folder_id}':
+    parameters:
+      - description: 'The Invotra UUID of the group.'
+        in: path
+        name: group_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - description: 'The Invotra UUID of the group document folders.'
+        in: path
+        name: group_document_folder_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'groups'
+      description: 'Get information about the group document folder.'
+      responses:
+        '200':
+          description: 'Returns a single complete group document folder object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group-document-folder-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this group document folder.'
+        '404':
+          description: 'The UUID does not correspond to an existing group document folder.'
+    put:
+      tags:
+        - 'groups'
+      description: 'Update group document folder information.'
+      responses:
+        '200':
+          description: 'The group document folder information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this group document folder.'
+        '404':
+          description: 'The UUID does not correspond to an existing group document folder.'
+        '422':
+          description: 'The group document folder was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-document-folder-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'groups'
+      description: 'Delete a group document folder.'
+      responses:
+        '200':
+          description: 'The group document folder was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this group document folder.'
+        '404':
+          description: 'The UUID does not correspond to an existing group document folder.'
   /posts:
     get:
       tags:
@@ -8330,6 +8486,49 @@ components:
           description: Total number of users that are a member of at least one group.
           type: integer
           example: 150
+    group-document-folder-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the group document folder.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this group document folder has children.'
+              type: boolean
+              example: true
+        - $ref: '#/components/schemas/group-document-folder-schema-common'
+    group-document-folder-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/group-document-folder-schema-common'
+    group-document-folder-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/group-document-folder-schema-common'
+        - type: object
+          required:
+            - name
+    group-document-folder-schema-common:
+      type: object
+      properties:
+        name:
+          description: 'Name of the group document folder.'
+          type: string
+          example: 'Sales Documents'
+        external_id:
+          description: 'The group document folder external reference id.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent group document folder.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        weight:
+          description: 'Determines the position of a group document folder in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
     post-schema:
       allOf:
         - $ref: '#/components/schemas/post-schema-base'
