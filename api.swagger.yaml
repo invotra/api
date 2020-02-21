@@ -1240,8 +1240,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/title-uuid-list-common-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/title-uuid-list-item-common-schema'
     description: 'List all group categories. An empty array is returned if no categories are found'
   '/groups/metrics':
     get:
@@ -6351,16 +6352,19 @@ components:
           example: Dorothy Whitehead
         teams:
           description: The user's teams. An array of team names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         locations:
           description: The user's locations. An array of location names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         job_roles:
           description: The user's job roles. An array of job role names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         entity_uuid:
           description: The UUID of the entity that the feed message is about
           type: string
@@ -6699,20 +6703,24 @@ components:
           deprecated: true
         teams:
           description: The user's teams. An array of team names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         locations:
           description: The user's locations. An array of location names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         job_roles:
           description: The user's job roles. An array of job role names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         role_grades:
           description: The user's role grades. An array of role grade names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         user_uuid:
           description: The UUID of the user
           type: string
@@ -9093,23 +9101,21 @@ components:
           description: 'Invotra UUIDs of users in this user category.'
           allOf:
             - $ref: '#/components/schemas/uuid-list-schema'
-    title-uuid-list-common-schema:
-      type: array
-      items:
-        type: object
-        required:
-          - name
-          - uuid
-        properties:
-          name:
-            description: The title of the entity.
-            type: string
-            readOnly: true
-          uuid:
-            description: The UUID of the entity.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-1234-56789abcdef0
+    title-uuid-list-item-common-schema:
+      type: object
+      required:
+        - name
+        - uuid
+      properties:
+        name:
+          description: The title of the entity.
+          type: string
+          readOnly: true
+        uuid:
+          description: The UUID of the entity.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
     title-or-uuid-writable-list-schema:
       type: array
       items:
