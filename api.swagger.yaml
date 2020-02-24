@@ -834,8 +834,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/location-uuid-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/location-uuid-list-item-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -2203,7 +2204,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/location-uuid-list-schema'
+                type: array
+                items:
+                  $ref: '#/components/schemas/location-uuid-list-item-schema'
       description: Search for locations.
   /locations/list:
     get:
@@ -7590,7 +7593,7 @@ components:
             allOf:
               - $ref: '#/components/schemas/location-context-schema'
       type: array
-    location-uuid-schema:
+    location-uuid-list-item-schema:
       type: object
       properties:
         uuid:
@@ -7609,10 +7612,6 @@ components:
       required:
         - uuid
         - type
-    location-uuid-list-schema:
-      type: array
-      items:
-        $ref: '#/components/schemas/location-uuid-schema'
     push-notifications-schema:
       properties:
         token:
