@@ -755,8 +755,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/uuid-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/uuid-field-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -7562,12 +7563,15 @@ components:
               format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
     uuid-list-schema:
-      items:
-        description: An array of UUIDs.
-        type: string
-        format: uuid
-        example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
+      description: An array of UUIDs.
+      items:
+        $ref: '#/components/schemas/uuid-field-schema'
+    uuid-field-schema:
+      description: A valid UUIDv4 string.
+      type: string
+      format: uuid
+      example: 01234567-89ab-cdef-12F34-56789abcdef0
     location-uuid-title-context-list-item-schema:
       type: object
       properties:
@@ -9104,8 +9108,9 @@ components:
           example: 3
         users_uuids:
           description: 'Invotra UUIDs of users in this user category.'
-          allOf:
-            - $ref: '#/components/schemas/uuid-list-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/uuid-field-schema'
     title-uuid-list-item-common-schema:
       type: object
       required:
