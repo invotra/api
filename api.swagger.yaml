@@ -6739,8 +6739,9 @@ components:
         - $ref: '#/components/schemas/user-schema-common'
         - properties:
             job_roles:
-              allOf:
-                - $ref: '#/components/schemas/title-or-uuid-writable-list-schema'
+              type: array
+              items:
+                $ref: '#/components/schemas/title-or-uuid-writable-list-item-schema'
     user-schema-create:
       allOf:
         - $ref: '#/components/schemas/user-schema-update'
@@ -9126,23 +9127,21 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
-    title-or-uuid-writable-list-schema:
-      type: array
-      items:
-        anyOf:
-          - type: object
-            properties:
-              name:
-                description: The title of the entity. Case sensitive.
-                type: string
-                example: Entity Title
-          - type: object
-            properties:
-              uuid:
-                description: The UUID of the entity.
-                type: string
-                format: uuid
-                example: 01234567-89ab-cdef-1234-56789abcdef0
+    title-or-uuid-writable-list-item-schema:
+      anyOf:
+        - type: object
+          properties:
+            name:
+              description: The title of the entity. Case sensitive.
+              type: string
+              example: Entity Title
+        - type: object
+          properties:
+            uuid:
+              description: The UUID of the entity.
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
     entity-lookup-schema:
       type: object
       properties:
