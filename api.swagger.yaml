@@ -6760,9 +6760,9 @@ components:
                   example: ['N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2']
                   items:
                     type: string
-        - required:
-            - email
-            - username
+      required:
+        - email
+        - username
     user-metrics-accessed-schema:
       type: object
       properties:
@@ -7336,11 +7336,11 @@ components:
     file-schema-create:
       allOf:
         - $ref: '#/components/schemas/file-schema-update'
-        - required:
-            - file
-            - filename
-            - alt_text
-            - type
+      required:
+        - file
+        - filename
+        - alt_text
+        - type
     job-role-schema:
       properties:
         title:
