@@ -2247,8 +2247,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/location-uuid-title-context-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/location-uuid-title-context-list-item-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
   /locations/sites:
     post:
@@ -7393,8 +7394,10 @@ components:
               enum:
                 - site
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-site-schema-common'
     location-site-schema-create:
       allOf:
@@ -7458,8 +7461,10 @@ components:
               enum:
                 - building
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-building-schema-common'
     location-building-schema-create:
       allOf:
@@ -7495,8 +7500,10 @@ components:
               enum:
                 - floor
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-floor-schema-common'
     location-floor-schema-create:
       allOf:
@@ -7531,8 +7538,10 @@ components:
               enum:
                 - space
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-space-schema-common'
     location-space-schema-create:
       allOf:
@@ -7559,40 +7568,40 @@ components:
         format: uuid
         example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
-    location-uuid-title-context-list-schema:
-      items:
-        type: object
-        properties:
-          uuid:
-            description: The entity UUID.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-12F34-56789abcdef0
-          title:
-            description: The entity title.
-            type: string
-            example: Chertsey House
-          type:
-            description: The location type.
-            type: string
-            enum:
-              - site
-              - building
-              - floor
-              - space
-          description:
-            description: 'The description of the location.'
-            type: string
-            example: Woking
-          parent_uuid:
-            description: The parent UUID.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-12F34-56789abcdef0
-          context:
-            allOf:
-              - $ref: '#/components/schemas/location-context-schema'
-      type: array
+    location-uuid-title-context-list-item-schema:
+      type: object
+      properties:
+        uuid:
+          description: The entity UUID.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-12F34-56789abcdef0
+        title:
+          description: The entity title.
+          type: string
+          example: Chertsey House
+        type:
+          description: The location type.
+          type: string
+          enum:
+            - site
+            - building
+            - floor
+            - space
+        description:
+          description: 'The description of the location.'
+          type: string
+          example: Woking
+        parent_uuid:
+          description: The parent UUID.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-12F34-56789abcdef0
+        context:
+          description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+          type: array
+          items:
+            $ref: '#/components/schemas/location-context-list-item-schema'
     location-uuid-list-item-schema:
       type: object
       properties:
@@ -7628,39 +7637,36 @@ components:
             - ios
             - android
       type: object
-    location-context-schema:
-      description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
-      type: array
-      items:
-        type: object
-        properties:
-          uuid:
-            description: 'The entity UUID.'
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-12F34-56789abcdef0'
-          title:
-            description: 'The location title.'
-            type: string
-            example: 'Woking'
-          type:
-            description: 'The location type.'
-            type: string
-            enum:
-              - site
-              - building
-              - floor
-              - space
-            example: 'floor'
-          description:
-            description: 'The description of the location.'
-            type: string
-            example: 'Woking head office.'
-          parent_uuid:
-            description: 'The parent UUID.'
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-12F34-56789abcdef0'
+    location-context-list-item-schema:
+      type: object
+      properties:
+        uuid:
+          description: 'The entity UUID.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-12F34-56789abcdef0'
+        title:
+          description: 'The location title.'
+          type: string
+          example: 'Woking'
+        type:
+          description: 'The location type.'
+          type: string
+          enum:
+            - site
+            - building
+            - floor
+            - space
+          example: 'floor'
+        description:
+          description: 'The description of the location.'
+          type: string
+          example: 'Woking head office.'
+        parent_uuid:
+          description: 'The parent UUID.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-12F34-56789abcdef0'
     team-membership-common-schema:
       type: object
       properties:
