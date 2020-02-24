@@ -6589,6 +6589,11 @@ components:
                   example: ['N2IwNTFmYjYtOGQ2MS00Yjg0LTlhMTgtMzRkY2M5OTFhNDI2']
                   items:
                     type: string
+            job_roles:
+              description: The user's job roles. An array of job role names and UUIDs.
+              type: array
+              items:
+                $ref: '#/components/schemas/title-uuid-list-item-common-schema'
     user-schema-common:
       properties:
         uuid:
@@ -6713,11 +6718,6 @@ components:
             $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         locations:
           description: The user's locations. An array of location names and UUIDs.
-          type: array
-          items:
-            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
-        job_roles:
-          description: The user's job roles. An array of job role names and UUIDs.
           type: array
           items:
             $ref: '#/components/schemas/title-uuid-list-item-common-schema'
