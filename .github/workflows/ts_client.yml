@@ -1,0 +1,32 @@
+name: Build and publish TypeScript API client
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+#          registry-url: 'https://registry.npmjs.org'
+#          scope: '@octocat' # Defaults to the user or organization that owns the workflow file
+      - name: Prepare tools for building TypeScript client
+        working-directory: client/typescript-axios
+        run: |
+          yarn install --frozen-lockfile
+      - name: Build TypeScript client
+        working-directory: client/typescript-axios
+        run: |
+          yarn openapi-generator generate -i ../api.swagger.yaml -g typescript-axios -o src/api/ -c generator.yml
+      - name: Create archive
+        working-directory: client/typescript-axios
+        run: |
+          tar cvfz client.tar.gz client
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: client
+          path: client/typescript-axios/client.tar.gz
