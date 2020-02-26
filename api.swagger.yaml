@@ -1790,6 +1790,1443 @@ paths:
         '422':
           description: JSON schema validation failure
       description: Report a post as the current user.
+  '/blogs':
+    post:
+      tags:
+        - 'blogs'
+      description: 'Provision a new blog.'
+      responses:
+        '201':
+          description: 'The blog was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned blog may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The blog was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a blog.'
+        '422':
+          description: 'The blog was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/blog-schema-create'
+        required: true
+  '/blogs/list':
+    get:
+      tags:
+        - 'blogs'
+      description: 'Search for blogs. An empty array is returned if no blogs where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of blogs on a comma seperated list of states. Valid states are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of blogs matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/blog-schema'
+        '403':
+          description: 'User is not authorized to list blogs.'
+  '/blogs/{blog_id}':
+    parameters:
+      - description: 'The Invotra UUID of the blog.'
+        in: path
+        name: blog_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'blogs'
+      description: 'Get information about the blog.'
+      responses:
+        '200':
+          description: 'Returns a single complete blog object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/blog-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this blog.'
+        '404':
+          description: 'The UUID does not correspond to an existing blog.'
+    put:
+      tags:
+        - 'blogs'
+      description: 'Update blog information.'
+      responses:
+        '200':
+          description: 'The blog information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this blog.'
+        '404':
+          description: 'The UUID does not correspond to an existing blog.'
+        '422':
+          description: 'The blog was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/blog-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'blogs'
+      description: 'Delete a blog.'
+      responses:
+        '200':
+          description: 'The blog was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this blog.'
+        '404':
+          description: 'The UUID does not correspond to an existing blog.'
+  '/custom_content':
+    post:
+      tags:
+        - 'custom content'
+      description: 'Provision a new custom content.'
+      responses:
+        '201':
+          description: 'The custom content was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned custom content may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The custom content was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a custom content.'
+        '422':
+          description: 'The custom content was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/custom-content-schema-create'
+        required: true
+  '/custom_content/list':
+    get:
+      tags:
+        - 'custom content'
+      description: 'Search for custom content. An empty array is returned if no custom content was found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: custom_content_type
+          description: 'Filter by the custom content type machine name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+            example: 'guideline'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
+        - name: state
+          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of custom content matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/custom-content-schema'
+        '403':
+          description: 'User is not authorized to list custom content.'
+  '/custom_content/{custom_content_id}':
+    parameters:
+      - description: 'The Invotra UUID of the custom content.'
+        in: path
+        name: custom_content_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'custom content'
+      description: 'Get information about the custom content.'
+      responses:
+        '200':
+          description: 'Returns a single complete custom content object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/custom-content-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this custom content.'
+        '404':
+          description: 'The UUID does not correspond to an existing custom content.'
+    put:
+      tags:
+        - 'custom content'
+      description: 'Update custom content information.'
+      responses:
+        '200':
+          description: 'The custom content information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this custom content.'
+        '404':
+          description: 'The UUID does not correspond to an existing custom content.'
+        '422':
+          description: 'The custom content was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/custom-content-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'custom content'
+      description: 'Delete custom content.'
+      responses:
+        '200':
+          description: 'The custom content was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this custom content.'
+        '404':
+          description: 'The UUID does not correspond to an existing custom content.'
+  '/lists':
+    post:
+      tags:
+        - 'lists'
+      description: 'Provision a new list.'
+      responses:
+        '201':
+          description: 'The list was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned list may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The list was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a list.'
+        '422':
+          description: 'The list was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list-schema-create'
+        required: true
+  '/lists/list':
+    get:
+      tags:
+        - 'lists'
+      description: 'Search for lists. An empty array is returned if no lists where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of lists on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of lists matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/list-schema'
+        '403':
+          description: 'User is not authorized to list lists.'
+  '/lists/{list_id}':
+    parameters:
+      - description: 'The Invotra UUID of the list.'
+        in: path
+        name: list_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'lists'
+      description: 'Get information about the list.'
+      responses:
+        '200':
+          description: 'Returns a single complete list object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/list-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this list.'
+        '404':
+          description: 'The UUID does not correspond to an existing list.'
+    put:
+      tags:
+        - 'lists'
+      description: 'Update list information.'
+      responses:
+        '200':
+          description: 'The list information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this list.'
+        '404':
+          description: 'The UUID does not correspond to an existing list.'
+        '422':
+          description: 'The list was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/list-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'lists'
+      description: 'Delete a list.'
+      responses:
+        '200':
+          description: 'The list was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this list.'
+        '404':
+          description: 'The UUID does not correspond to an existing list.'
+  '/messages':
+    post:
+      tags:
+        - 'messages'
+      description: 'Provision a new message.'
+      responses:
+        '201':
+          description: 'The message was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned message may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The message was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a message.'
+        '422':
+          description: 'The message was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/message-schema-create'
+        required: true
+  '/messages/list':
+    get:
+      tags:
+        - 'messages'
+      description: 'Search for messages. An empty array is returned if no messages where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of messages matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/message-schema'
+        '403':
+          description: 'User is not authorized to list messages.'
+  '/messages/{message_id}':
+    parameters:
+      - description: 'The Invotra UUID of the message.'
+        in: path
+        name: message_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'messages'
+      description: 'Get information about the message.'
+      responses:
+        '200':
+          description: 'Returns a single complete message object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this message.'
+        '404':
+          description: 'The UUID does not correspond to an existing message.'
+    put:
+      tags:
+        - 'messages'
+      description: 'Update message information.'
+      responses:
+        '200':
+          description: 'The message information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this message.'
+        '404':
+          description: 'The UUID does not correspond to an existing message.'
+        '422':
+          description: 'The message was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/message-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'messages'
+      description: 'Delete a message.'
+      responses:
+        '200':
+          description: 'The message was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this message.'
+        '404':
+          description: 'The UUID does not correspond to an existing message.'
+  '/news':
+    post:
+      tags:
+        - 'news'
+      description: 'Provision a new news.'
+      responses:
+        '201':
+          description: 'The news was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned news may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The news was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a news.'
+        '422':
+          description: 'The news was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/news-schema-create'
+        required: true
+  '/news/list':
+    get:
+      tags:
+        - 'news'
+      description: 'Search for news. An empty array is returned if no news where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of news on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of news matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/news-schema'
+        '403':
+          description: 'User is not authorized to list news.'
+  '/news/{news_id}':
+    parameters:
+      - description: 'The Invotra UUID of the news.'
+        in: path
+        name: news_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'news'
+      description: 'Get information about the news.'
+      responses:
+        '200':
+          description: 'Returns a single complete news object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/news-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this news.'
+        '404':
+          description: 'The UUID does not correspond to an existing news.'
+    put:
+      tags:
+        - 'news'
+      description: 'Update news information.'
+      responses:
+        '200':
+          description: 'The news information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this news.'
+        '404':
+          description: 'The UUID does not correspond to an existing news.'
+        '422':
+          description: 'The news was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/news-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'news'
+      description: 'Delete a news.'
+      responses:
+        '200':
+          description: 'The news was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this news.'
+        '404':
+          description: 'The UUID does not correspond to an existing news.'
+  '/pages':
+    post:
+      tags:
+        - 'pages'
+      description: 'Provision a new page.'
+      responses:
+        '201':
+          description: 'The page was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned page may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The page was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a page.'
+        '422':
+          description: 'The page was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/page-schema-create'
+        required: true
+  '/pages/list':
+    get:
+      tags:
+        - 'pages'
+      description: 'Search for pages. An empty array is returned if no pages where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of pages matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/page-schema'
+        '403':
+          description: 'User is not authorized to list pages.'
+  '/pages/{page_id}':
+    parameters:
+      - description: 'The Invotra UUID of the page.'
+        in: path
+        name: page_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'pages'
+      description: 'Get information about the page.'
+      responses:
+        '200':
+          description: 'Returns a single complete page object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/page-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this page.'
+        '404':
+          description: 'The UUID does not correspond to an existing page.'
+    put:
+      tags:
+        - 'pages'
+      description: 'Update page information.'
+      responses:
+        '200':
+          description: 'The page information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this page.'
+        '404':
+          description: 'The UUID does not correspond to an existing page.'
+        '422':
+          description: 'The page was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/page-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'pages'
+      description: 'Delete a page.'
+      responses:
+        '200':
+          description: 'The page was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this page.'
+        '404':
+          description: 'The UUID does not correspond to an existing page.'
+  '/policies':
+    post:
+      tags:
+        - 'policies'
+      description: 'Provision a new policy.'
+      responses:
+        '201':
+          description: 'The policy was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned policy may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The policy was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a policy.'
+        '422':
+          description: 'The policy was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/policy-schema-create'
+        required: true
+  '/policies/list':
+    get:
+      tags:
+        - 'policies'
+      description: 'Search for policies. An empty array is returned if no policies where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of policies matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/policy-schema'
+        '403':
+          description: 'User is not authorized to list policies.'
+  '/policies/{policy_id}':
+    parameters:
+      - description: 'The Invotra UUID of the policy.'
+        in: path
+        name: policy_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'policies'
+      description: 'Get information about the policy.'
+      responses:
+        '200':
+          description: 'Returns a single complete policy object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/policy-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this policy.'
+        '404':
+          description: 'The UUID does not correspond to an existing policy.'
+    put:
+      tags:
+        - 'policies'
+      description: 'Update policy information.'
+      responses:
+        '200':
+          description: 'The policy information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this policy.'
+        '404':
+          description: 'The UUID does not correspond to an existing policy.'
+        '422':
+          description: 'The policy was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/policy-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'policies'
+      description: 'Delete a policy.'
+      responses:
+        '200':
+          description: 'The policy was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this policy.'
+        '404':
+          description: 'The UUID does not correspond to an existing policy.'
+  '/polls':
+    post:
+      tags:
+        - 'polls'
+      description: 'Provision a new poll.'
+      responses:
+        '201':
+          description: 'The poll was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned poll may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The poll was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a poll.'
+        '422':
+          description: 'The poll was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/poll-schema-create'
+        required: true
+  '/polls/list':
+    get:
+      tags:
+        - 'polls'
+      description: 'Search for polls. An empty array is returned if no polls where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of polls matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/poll-schema'
+        '403':
+          description: 'User is not authorized to list polls.'
+  '/polls/{poll_id}':
+    parameters:
+      - description: 'The Invotra UUID of the poll.'
+        in: path
+        name: poll_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'polls'
+      description: 'Get information about the poll.'
+      responses:
+        '200':
+          description: 'Returns a single complete poll object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/poll-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this poll.'
+        '404':
+          description: 'The UUID does not correspond to an existing poll.'
+    put:
+      tags:
+        - 'polls'
+      description: 'Update poll information.'
+      responses:
+        '200':
+          description: 'The poll information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this poll.'
+        '404':
+          description: 'The UUID does not correspond to an existing poll.'
+        '422':
+          description: 'The poll was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/poll-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'polls'
+      description: 'Delete a poll.'
+      responses:
+        '200':
+          description: 'The poll was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this poll.'
+        '404':
+          description: 'The UUID does not correspond to an existing poll.'
+  '/promotions':
+    post:
+      tags:
+        - 'promotions'
+      description: 'Provision a new promotion.'
+      responses:
+        '201':
+          description: 'The promotion was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned promotion may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The promotion was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a promotion.'
+        '422':
+          description: 'The promotion was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/promotion-schema-create'
+        required: true
+  '/promotions/list':
+    get:
+      tags:
+        - 'promotions'
+      description: 'Search for promotions. An empty array is returned if no promotions where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of promotions matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/promotion-schema'
+        '403':
+          description: 'User is not authorized to list promotions.'
+  '/promotions/{promotion_id}':
+    parameters:
+      - description: 'The Invotra UUID of the promotion.'
+        in: path
+        name: promotion_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'promotions'
+      description: 'Get information about the promotion.'
+      responses:
+        '200':
+          description: 'Returns a single complete promotion object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/promotion-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this promotion.'
+        '404':
+          description: 'The UUID does not correspond to an existing promotion.'
+    put:
+      tags:
+        - 'promotions'
+      description: 'Update promotion information.'
+      responses:
+        '200':
+          description: 'The promotion information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this promotion.'
+        '404':
+          description: 'The UUID does not correspond to an existing promotion.'
+        '422':
+          description: 'The promotion was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/promotion-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'promotions'
+      description: 'Delete a promotion.'
+      responses:
+        '200':
+          description: 'The promotion was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this promotion.'
+        '404':
+          description: 'The UUID does not correspond to an existing promotion.'
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -7049,6 +8486,2814 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
+    blog-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the blog.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/blog-schema-common'
+        - type: object
+          properties:
+            image:
+              description: 'Blog Image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this blog.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            general_topic:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the general topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the general topic.'
+                  type: string
+                  example: 'Darts'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the blog was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the blog was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the blog.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the blog.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status of the blog.'
+              type: boolean
+              example: true
+    blog-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/blog-schema-common'
+        - type: object
+          properties:
+            image:
+              description: 'The image for this blog.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topic:
+              description: 'The genetal topic of this blog.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the genetal topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    blog-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/blog-schema-common'
+        - type: object
+          properties:
+            image:
+              description: 'The image for this blog.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topic:
+              description: 'The general topic of this blog.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the general topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
+    blog-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the blog.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the blog.'
+          type: string
+          example: 'You can create strong passwords using an offline random password generator.'
+        state:
+          description: 'Indicates the workflow state of the blog.'
+          type: string
+          enum:
+            - 'published'
+            - 'unpublished'
+    custom-content-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the custom content.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/custom-content-schema-common'
+        - type: object
+          properties:
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
+            site_section:
+              description: 'The site section of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the site section.'
+                  type: string
+                  example: 'Operations'
+            image:
+              description: 'Custom content Image'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this custom content. (Will use the authenticated user if not supplied.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            attachments:
+              description: 'List of attachments on the custom content.'
+              type: array
+              items:
+                $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner user of the custom content.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            team:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: This is the name of the team
+                  type: string
+                  example: Operations
+            locations:
+              description: 'The locations targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: The name of the location.
+                    type: string
+                    example: Chertsey House
+                  type:
+                    description: The location type.
+                    type: string
+                    enum:
+                      - site
+                      - building
+                      - floor
+                      - space
+            grades:
+              description: 'The grades targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the content was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the content was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the content.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the content.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the custom content.'
+              type: boolean
+              example: true
+    custom-content-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/custom-content-schema-common'
+        - type: object
+          properties:
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
+            site_section:
+              description: 'The site section of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this custom content'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this custom content. (Will use the authenticated user if not supplied.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+    custom-content-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/custom-content-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this custom content'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this custom content. (Will use the authenticated user if not supplied.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - custom_content_type
+            - title
+            - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
+    custom-content-schema-common:
+      type: object
+      properties:
+        custom_content_type:
+          description: 'The the custom content type machine name.'
+          type: string
+          example: 'guideline'
+        title:
+          description: 'Title of the custom content.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the custom content.'
+          type: string
+          example: 'You can create strong passwords using an offline random password generator.'
+        state:
+          description: 'Indicates the workflow state of the custom content.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the custom content (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the custom content'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the custom content'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content' 
+                  - 'site section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        featured:
+          description: 'Indicates that this content is featured.'
+          type: boolean
+          default: false
+          example: false
+        external_id:
+          description: 'The custom content external reference id.'
+          type: string
+          example: 'ABC123'
+    list-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the list.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/list-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the site section.'
+                  type: string
+                  example: 'Operations'
+            author:
+              description: 'The author of this list.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            general_topic:
+              description: 'The general topic of this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the general topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the general topic.'
+                  type: string
+                  example: 'Darts'
+            team:
+              description: 'The team targeting this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: This is the name of the team
+                  type: string
+                  example: Operations
+            locations:
+              description: 'The locations targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: The name of the location.
+                    type: string
+                    example: Chertsey House
+                  type:
+                    description: The location type.
+                    type: string
+                    enum:
+                      - site
+                      - building
+                      - floor
+                      - space
+            grades:
+              description: 'The grades targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the list was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the list was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the list.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the list.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status of the list.'
+              type: boolean
+              example: true
+    list-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/list-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topic:
+              description: 'The general topic of this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the genetal topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+    list-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/list-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this list. (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topic:
+              description: 'The general topic of this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the genetal topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this list.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
+    list-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the list.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the list.'
+          type: string
+          example: 'You can create strong passwords using an online random password generator.'
+        state:
+          description: 'Indicates the workflow state of the list.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the list (in seconds).'
+          type: integer
+          example: 1510941596
+        list:
+          description: 'List of content and links in the list.'
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/list-list-content-schema'
+              - $ref: '#/components/schemas/list-list-site-section-schema'
+              - $ref: '#/components/schemas/list-list-link-schema'
+            discriminator:
+              propertyName: type
+              mapping:
+                content: '#/components/schemas/list-list-content-schema'
+                site_section: '#/components/schemas/list-list-site-section-schema'
+                link: '#/components/schemas/list-list-link-schema'
+    list-list-common-schema:
+      type: object
+      properties:
+        type:
+          description: 'The type of content in the list.'
+          type: string
+          enum:
+            - 'content'
+            - 'site_section'
+            - 'link'
+        title:
+          description: 'Title of the content or link.'
+          type: string
+          example: 'More information here.'
+      required:
+      - type
+      - content
+    list-list-content-schema:
+      allOf:
+      - $ref: '#/components/schemas/list-list-common-schema'
+      - type: object
+        properties:
+          type:
+            example: 'content'
+          content:
+            type: object
+            properties:
+              uuid:
+                description: 'Invotra UUID of the content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+    list-list-site-section-schema:
+      allOf:
+      - $ref: '#/components/schemas/list-list-common-schema'
+      - type: object
+        properties:
+          type:
+            example: 'site_section'
+          content:
+            type: object
+            properties:
+              uuid:
+                description: 'Invotra UUID of the site section.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+    list-list-link-schema:
+      allOf:
+      - $ref: '#/components/schemas/list-list-common-schema'
+      - type: object
+        properties:
+          type:
+            example: 'link'
+          content:
+            type: string
+            description: 'The URL of the link.'
+            example: 'https://example.com'
+    message-schema:
+      allOf:
+        - $ref: '#/components/schemas/message-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the message.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this message.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            message_type:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the message type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the message type.'
+                  type: string
+                  example: 'Empowering'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the message was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the message was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the message.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the message.'
+              type: integer
+              example: 5
+    message-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/message-schema-common'
+        - type: object
+          properties:
+            message_type:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the message type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this custom content.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    message-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/message-schema-common'
+        - type: object
+          properties:
+            message_type:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the message type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this custom content (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - message_type
+            - body
+    message-schema-common:
+      type: object
+      properties:
+        body:
+          description: 'The body of the message.'
+          type: string
+          example: 'It is my birthday next week so remember to get me a present.'
+    news-schema:
+      allOf:
+        - $ref: '#/components/schemas/news-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the news.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            site_section:
+              description: 'The site section of this news.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the site section.'
+                  type: string
+                  example: 'Finance'
+            image:
+              description: 'news Image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this news.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            attachments:
+              description: 'A list of attachments for the news.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner of this news item.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            team:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the team.'
+                  type: string
+                  example: 'Operations'
+            locations:
+              description: 'The locations targeting this news item.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/location-trimmed-schema'
+            grades:
+              description: 'The grades targeting this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the news was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the news was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the news.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the news.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the news.'
+              type: boolean
+              example: true
+    news-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/news-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this news.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this news.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this news.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this news item.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the owner user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team of this news item.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+    news-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/news-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this news.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this news.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this news. (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this news item.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the owner user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team of this news item.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
+    news-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the news.'
+          type: string
+          example: 'Good news about the car park'
+        body:
+          description: 'The body of the news.'
+          type: string
+          example: 'The car park is having the line markings repainted.'
+        state:
+          description: 'Indicates the workflow state of the news.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        schedule_date_timestamp:
+          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+          type: integer
+          example: 1510941596
+        review_date_timestamp:
+          description: 'The review date timestamp for the custom content (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the custom content'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the custom content'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content' 
+                  - 'site section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        featured:
+          description: 'Indicates that this news item is featured.'
+          type: boolean
+          default: false
+          example: false
+        external_id:
+          description: 'The news item external reference id.'
+          type: string
+          example: 'ABC123'
+    page-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the page.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/page-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the site section.'
+                  type: string
+                  example: 'Finance'
+            image:
+              description: 'Page Image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this page.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            attachments:
+              description: 'A list of attachments for the page.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner user of the page.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            team:
+              description: 'The team targeting this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the team.'
+                  type: string
+                  example: 'Operations'
+            locations:
+              description: 'The locations targeting this page.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/location-trimmed-schema'
+            grades:
+              description: 'The grades targeting this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the page was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the page was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the page.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the page.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the page.'
+              type: boolean
+              example: true
+    page-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/page-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+    page-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/page-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this page. (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this news page.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
+    page-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the page.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the page.'
+          type: string
+          example: 'You can create strong passwords using an offline random password generator.'
+        state:
+          description: 'Indicates the workflow state of the page.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        schedule_date_timestamp:
+          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+          type: integer
+          example: 1510941596
+        review_date_timestamp:
+          description: 'The review date timestamp for the page (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the page.'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the page.'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content' 
+                  - 'site section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        featured:
+          description: 'Indicates that this page is featured.'
+          type: boolean
+          default: false
+          example: false
+        external_id:
+          description: 'The page external reference id.'
+          type: string
+          example: 'ABC123'
+    policy-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the policy.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/policy-schema-common'
+        - type: object
+          properties:
+            site_section:
+              type: object
+              description: 'The site section of this policy.'
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the site section.'
+                  type: string
+                  example: 'Finance'
+            policy_type:
+              description: 'The policy type of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the policy type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the policy type.'
+                  type: string
+                  example: 'Constituent'
+            primary_category:
+              description: 'The primary category of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the primary category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the primary category.'
+                  type: string
+                  example: 'Involving staff training'
+            general_topic:
+              description: 'The general topic of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the general topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the general topic.'
+                  type: string
+                  example: 'Darts'
+            country:
+              description: 'The country of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the country.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the country.'
+                  type: string
+                  example: 'Involving staff training'
+            team:
+              description: 'The team targeting this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: This is the name of the team
+                  type: string
+                  example: Operations
+            locations:
+              description: 'The locations targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: The name of the location.
+                    type: string
+                    example: Chertsey House
+                  type:
+                    description: The location type.
+                    type: string
+                    enum:
+                      - site
+                      - building
+                      - floor
+                      - space
+            grades:
+              description: 'The grades targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            attachments:
+              description: 'List of attachments on the policy.'
+              type: array
+              items:
+                $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner user of the policy.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the policy was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the policy was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the policy.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the policy.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the policy.'
+              type: boolean
+              example: true
+    policy-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/policy-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            policy_type:
+              description: 'The policy type of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the policy type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            primary_category:
+              description: 'The primary category of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the primary category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topic:
+              description: 'The general topic of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the genetal topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            country:
+              description: 'The country of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the country.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    policy-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/policy-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            policy_type:
+              description: 'The policy type of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the policy type.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            primary_category:
+              description: 'The primary category of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the primary category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topic:
+              description: 'The general topic of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the genetal topic.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            country:
+              description: 'The country of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the country.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attatched files of this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
+    policy-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the policy.'
+          type: string
+          example: 'Policy for creating passwords'
+        body:
+          description: 'The body of the policy.'
+          type: string
+          example: 'You must create strong password and never share it.'
+        state:
+          description: 'Indicates the workflow state of the policy.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        implementation_start_timestamp:
+          description: 'This is the timestamp (in seconds) of when the policy will start being implementated.'
+          type: integer
+          example: 1510941596
+        implementation_end_timestamp:
+          description: 'This is the timestamp (in seconds) of when the policy will end being implementated.'
+          type: integer
+          example: 1510941696
+        review_date_timestamp:
+          description: 'The review date timestamp for the policy (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the policy.'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the policy.'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content' 
+                  - 'site section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        featured:
+          description: 'Indicates that this content is featured.'
+          type: boolean
+          default: false
+          example: false
+        external_id:
+          description: 'The policy external reference id.'
+          type: string
+          example: 'ABC123'
+    poll-schema:
+      allOf:
+        - $ref: '#/components/schemas/poll-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the poll.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            title:
+              description: 'The question the poll is asking.'
+              type: string
+              example: 'What is your favorite food?'
+            author:
+              description: 'The author of this poll.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            options:
+              description: 'The options for this group poll, with vote counts.'
+              type: array
+              minItems: 2
+              maxItems: 26
+              items:
+                type: object
+                properties:
+                  option:
+                    description: 'The option text.'
+                    type: string
+                  vote_count:
+                    description: 'The current vote count for this option.'
+                    type: integer
+              example:
+                - option: 'Pork'
+                  vote_count: 12
+                - option: 'Beef'
+                  vote_count: 24
+                - option: 'Mutton'
+                  vote_count: 48
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the poll was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the poll was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the poll.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the poll.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the poll.'
+              type: boolean
+              example: true
+    poll-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/poll-schema-common'
+        - type: object
+          properties:
+            author:
+              description: 'The author of this poll.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    poll-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/poll-schema-common'
+        - type: object
+          properties:
+            title:
+              description: 'The question the poll is asking.'
+              type: string
+              example: 'What is your favorite food?'
+            author:
+              description: 'The author of this poll. (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            options:
+              description: 'The options for this group poll.'
+              type: array
+              minItems: 2
+              maxItems: 26
+              items:
+                type: object
+                properties:
+                  option:
+                    description: 'The option text.'
+                    type: string
+              example:
+                - option: 'Pork'
+                - option: 'Beef'
+                - option: 'Mutton'
+          required:
+            - state
+            - title
+            - options
+    poll-schema-common:
+      type: object
+      properties:
+        state:
+          description: 'Indicates the workflow state of the poll.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        schedule_timestamp:
+          description: 'The scheduled review date timestamp for the poll (in seconds).'
+          type: integer
+          example: 1510941596
+        poll_duration:
+          description: 'The duration this poll will remain open (in seconds from the create date).'
+          type: integer
+          example: 1510941596
+        poll_open:
+          description: 'Indicates that poll is open.'
+          type: boolean
+          default: true
+          example: true
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        external_id:
+          description: 'The poll external reference id.'
+          type: string
+          example: 'ABC123'
+    promotion-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the promotion.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/promotion-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the site section.'
+                  type: string
+                  example: 'Operations'
+            image:
+              description: 'promotion Image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner user of the promotion.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            author:
+              description: 'The author of this promotion.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            team:
+              description: 'The team targeting this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: This is the name of the team
+                  type: string
+                  example: Operations
+            locations:
+              description: 'The locations targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: The name of the location.
+                    type: string
+                    example: Chertsey House
+                  type:
+                    description: The location type.
+                    type: string
+                    enum:
+                      - site
+                      - building
+                      - floor
+                      - space
+            grades:
+              description: 'The grades targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the promotion was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the promotion was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the promotion.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the promotion.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the promotion.'
+              type: boolean
+              example: true
+    promotion-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/promotion-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
+    promotion-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/promotion-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this promotion. (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this promotion.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
+    promotion-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the promotion.'
+          type: string
+          example: 'Company talent competition'
+        body:
+          description: 'The body of the promotion.'
+          type: string
+          example: 'Demonstrate your talent at the company talent competition.'
+        state:
+          description: 'Indicates the workflow state of the promotion.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        schedule_date_timestamp:
+          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+          type: integer
+          example: 1510941596
+        link:
+          description: 'The link for this promotion.'
+          type: string
+          example: 'https://dev.invotra.com/post/ill-be-annual-leave'
+          format: uri
+        review_date_timestamp:
+          description: 'The review date timestamp for the promotion (in seconds).'
+          type: integer
+          example: 1510941596
+        featured:
+          description: 'Indicates that this content is featured.'
+          type: boolean
+          default: false
+          example: false
+    location-trimmed-schema:
+      properties:
+        uuid:
+          description: 'Invotra UUID of the location.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        name:
+          description: The name of the location.
+          type: string
+          example: Chertsey House
+        type:
+          description: The location type.
+          type: string
+          enum:
+            - site
+            - building
+            - floor
+            - space
+    user-trimmed-schema:
+      properties:
+        uuid:
+          description: 'Invotra UUID of the user.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        username:
+          description: The user's username
+          type: string
+          example: Dorothy Whitehead
+        title:
+          default: ''
+          description: The user's title
+          enum:
+            - ''
+            - Dr
+            - Mr
+            - Miss
+            - Mrs
+            - Ms
+          type: string
+          example: Ms
+        firstname:
+          description: The user's first name
+          type: string
+          example: Dorothy
+        surname:
+          description: The user's surname
+          type: string
+          example: Whitehead
+        user_avatar:
+          description: The user's image
+          type: string
+          example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
     manual-listing-schema:
       type: object
       properties:
