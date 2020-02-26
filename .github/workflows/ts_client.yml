@@ -20,7 +20,7 @@ jobs:
       - name: Build TypeScript client
         working-directory: client/typescript-axios
         run: |
-          yarn openapi-generator generate -i ../api.swagger.yaml -g typescript-axios -o src/api/ -c generator.yml
+          yarn openapi-generator generate -i ../../api.swagger.yaml -g typescript-axios -o src/api/ -c generator.yml
       - name: Create archive
         working-directory: client/typescript-axios
         run: |
