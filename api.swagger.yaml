@@ -1484,6 +1484,13 @@ paths:
       tags:
         - posts
       parameters:
+        - description: 'UUID of the group to filter by.'
+          in: query
+          name: group_uuid
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
         - description: Field to sort by
           in: query
           name: sort
