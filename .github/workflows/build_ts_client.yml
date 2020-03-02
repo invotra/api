@@ -78,6 +78,6 @@ jobs:
             Build done.
             You may now include the API client we just built in your project by running:
             ```bash
-            yarn add @invotra/api-client@${{ github.repository }}#${{ env.API_CLIENT_TAG }}
+            yarn add @invotra/api@${{ github.repository }}#${{ env.API_CLIENT_TAG }}
             ```
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
