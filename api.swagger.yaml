@@ -173,7 +173,7 @@ paths:
                - $ref: '#/components/schemas/pdf-export-completion-schema'
                - $ref: '#/components/schemas/pdf-export-error-schema'
       security:
-        - BearerAuth: []
+        - PdfExportJobSecret: []
       responses:
         '200':
           description: A matching PDF export job was found.
@@ -3590,7 +3590,7 @@ paths:
           schema:
             type: string
       security:
-        - BearerAuth: []
+        - PdfExportJobSecret: []
       responses:
         '200':
           description: Returns a list of manual pages.
@@ -3637,7 +3637,7 @@ paths:
             type: boolean
             default: false
       security:
-        - BearerAuth: []
+        - PdfExportJobSecret: []
       responses:
         '200':
           description: Returns content in HTML.
@@ -7914,9 +7914,20 @@ components:
       type: apiKey
       name: SSESS{name}
       in: cookie
-    BearerAuth:
+    PdfExportJobSecret:
+      description: PDF Export secret auth.
       type: http
       scheme: bearer
+      bearerFormat: 'PDF job secret'
+    CognitoJwt:
+      description: Cognito JWT auth.
+      type: oauth2
+      flows:
+        authorizationCode:
+          tokenUrl: '/oauth2/token'
+          authorizationUrl: '/oauth2/authorize'
+          scopes:
+            openid: Default scope
   parameters:
     offsetParam:
       in: query
