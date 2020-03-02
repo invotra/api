@@ -47,6 +47,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/product-options-schema'
       description: Returns the product options for an instance of Invotra.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/drupal_info ]
   /configuration:
     get:
       tags:
@@ -58,6 +62,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/configuration-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/drupal_info ]
   /entities/path-lookup:
     get:
       tags:
@@ -173,7 +181,7 @@ paths:
                - $ref: '#/components/schemas/pdf-export-completion-schema'
                - $ref: '#/components/schemas/pdf-export-error-schema'
       security:
-        - BearerAuth: []
+        - PdfExportJobSecret: []
       responses:
         '200':
           description: A matching PDF export job was found.
@@ -755,8 +763,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/uuid-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/uuid-field-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -834,8 +843,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/location-uuid-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/location-uuid-list-item-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
@@ -1241,8 +1251,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/title-uuid-list-common-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/title-uuid-list-item-common-schema'
     description: 'List all group categories. An empty array is returned if no categories are found'
   '/groups/metrics':
     get:
@@ -3587,7 +3598,7 @@ paths:
           schema:
             type: string
       security:
-        - BearerAuth: []
+        - PdfExportJobSecret: []
       responses:
         '200':
           description: Returns a list of manual pages.
@@ -3634,7 +3645,7 @@ paths:
             type: boolean
             default: false
       security:
-        - BearerAuth: []
+        - PdfExportJobSecret: []
       responses:
         '200':
           description: Returns content in HTML.
@@ -3985,7 +3996,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/location-uuid-list-schema'
+                type: array
+                items:
+                  $ref: '#/components/schemas/location-uuid-list-item-schema'
       description: Search for locations.
   /locations/list:
     get:
@@ -4026,8 +4039,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/location-uuid-title-context-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/location-uuid-title-context-list-item-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
   /locations/sites:
     post:
@@ -7908,9 +7922,21 @@ components:
       type: apiKey
       name: SSESS{name}
       in: cookie
-    BearerAuth:
+    PdfExportJobSecret:
+      description: PDF Export secret auth.
       type: http
       scheme: bearer
+      bearerFormat: 'PDF job secret'
+    CognitoJwt:
+      description: Cognito JWT auth.
+      type: oauth2
+      flows:
+        authorizationCode:
+          tokenUrl: '/oauth2/token'
+          authorizationUrl: '/oauth2/authorize'
+          scopes:
+            openid: default scope
+            invotra/drupal_info: retrieve Drupal info
   parameters:
     offsetParam:
       in: query
@@ -8134,16 +8160,19 @@ components:
           example: Dorothy Whitehead
         teams:
           description: The user's teams. An array of team names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         locations:
           description: The user's locations. An array of location names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         job_roles:
           description: The user's job roles. An array of job role names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         entity_uuid:
           description: The UUID of the entity that the feed message is about
           type: string
@@ -8369,6 +8398,11 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
+            job_roles:
+              description: The user's job roles. An array of job role names and UUIDs.
+              type: array
+              items:
+                $ref: '#/components/schemas/title-uuid-list-item-common-schema'
     user-schema-common:
       properties:
         uuid:
@@ -8488,20 +8522,19 @@ components:
           deprecated: true
         teams:
           description: The user's teams. An array of team names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         locations:
           description: The user's locations. An array of location names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
-        job_roles:
-          description: The user's job roles. An array of job role names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         role_grades:
           description: The user's role grades. An array of role grade names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         user_uuid:
           description: The UUID of the user
           type: string
@@ -8515,8 +8548,9 @@ components:
         - $ref: '#/components/schemas/user-schema-common'
         - properties:
             job_roles:
-              allOf:
-                - $ref: '#/components/schemas/title-or-uuid-writable-list-schema'
+              type: array
+              items:
+                $ref: '#/components/schemas/title-or-uuid-writable-list-item-schema'
     user-schema-create:
       allOf:
         - $ref: '#/components/schemas/user-schema-update'
@@ -8541,9 +8575,9 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
-        - required:
-            - email
-            - username
+      required:
+        - email
+        - username
     user-metrics-accessed-schema:
       type: object
       properties:
@@ -8716,9 +8750,8 @@ components:
     group-document-folder-schema-create:
       allOf:
         - $ref: '#/components/schemas/group-document-folder-schema-common'
-        - type: object
-          required:
-            - name
+      required:
+        - name
     group-document-folder-schema-common:
       type: object
       properties:
@@ -12082,11 +12115,11 @@ components:
     file-schema-create:
       allOf:
         - $ref: '#/components/schemas/file-schema-update'
-        - required:
-            - file
-            - filename
-            - alt_text
-            - type
+      required:
+        - file
+        - filename
+        - alt_text
+        - type
     job-role-schema:
       properties:
         title:
@@ -12164,8 +12197,10 @@ components:
               enum:
                 - site
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-site-schema-common'
     location-site-schema-create:
       allOf:
@@ -12229,8 +12264,10 @@ components:
               enum:
                 - building
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-building-schema-common'
     location-building-schema-create:
       allOf:
@@ -12266,8 +12303,10 @@ components:
               enum:
                 - floor
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-floor-schema-common'
     location-floor-schema-create:
       allOf:
@@ -12302,8 +12341,10 @@ components:
               enum:
                 - space
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-space-schema-common'
     location-space-schema-create:
       allOf:
@@ -12324,47 +12365,50 @@ components:
               format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
     uuid-list-schema:
-      items:
-        description: An array of UUIDs.
-        type: string
-        format: uuid
-        example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
-    location-uuid-title-context-list-schema:
+      description: An array of UUIDs.
       items:
-        type: object
-        properties:
-          uuid:
-            description: The entity UUID.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-12F34-56789abcdef0
-          title:
-            description: The entity title.
-            type: string
-            example: Chertsey House
-          type:
-            description: The location type.
-            type: string
-            enum:
-              - site
-              - building
-              - floor
-              - space
-          description:
-            description: 'The description of the location.'
-            type: string
-            example: Woking
-          parent_uuid:
-            description: The parent UUID.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-12F34-56789abcdef0
-          context:
-            allOf:
-              - $ref: '#/components/schemas/location-context-schema'
-      type: array
-    location-uuid-schema:
+        $ref: '#/components/schemas/uuid-field-schema'
+    uuid-field-schema:
+      description: A valid UUIDv4 string.
+      type: string
+      format: uuid
+      example: 01234567-89ab-cdef-12F34-56789abcdef0
+    location-uuid-title-context-list-item-schema:
+      type: object
+      properties:
+        uuid:
+          description: The entity UUID.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-12F34-56789abcdef0
+        title:
+          description: The entity title.
+          type: string
+          example: Chertsey House
+        type:
+          description: The location type.
+          type: string
+          enum:
+            - site
+            - building
+            - floor
+            - space
+        description:
+          description: 'The description of the location.'
+          type: string
+          example: Woking
+        parent_uuid:
+          description: The parent UUID.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-12F34-56789abcdef0
+        context:
+          description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+          type: array
+          items:
+            $ref: '#/components/schemas/location-context-list-item-schema'
+    location-uuid-list-item-schema:
       type: object
       properties:
         uuid:
@@ -12383,10 +12427,6 @@ components:
       required:
         - uuid
         - type
-    location-uuid-list-schema:
-      type: array
-      items:
-        $ref: '#/components/schemas/location-uuid-schema'
     push-notifications-schema:
       properties:
         token:
@@ -12403,39 +12443,36 @@ components:
             - ios
             - android
       type: object
-    location-context-schema:
-      description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
-      type: array
-      items:
-        type: object
-        properties:
-          uuid:
-            description: 'The entity UUID.'
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-12F34-56789abcdef0'
-          title:
-            description: 'The location title.'
-            type: string
-            example: 'Woking'
-          type:
-            description: 'The location type.'
-            type: string
-            enum:
-              - site
-              - building
-              - floor
-              - space
-            example: 'floor'
-          description:
-            description: 'The description of the location.'
-            type: string
-            example: 'Woking head office.'
-          parent_uuid:
-            description: 'The parent UUID.'
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-12F34-56789abcdef0'
+    location-context-list-item-schema:
+      type: object
+      properties:
+        uuid:
+          description: 'The entity UUID.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-12F34-56789abcdef0'
+        title:
+          description: 'The location title.'
+          type: string
+          example: 'Woking'
+        type:
+          description: 'The location type.'
+          type: string
+          enum:
+            - site
+            - building
+            - floor
+            - space
+          example: 'floor'
+        description:
+          description: 'The description of the location.'
+          type: string
+          example: 'Woking head office.'
+        parent_uuid:
+          description: 'The parent UUID.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-12F34-56789abcdef0'
     team-membership-common-schema:
       type: object
       properties:
@@ -13873,42 +13910,39 @@ components:
           example: 3
         users_uuids:
           description: 'Invotra UUIDs of users in this user category.'
-          allOf:
-            - $ref: '#/components/schemas/uuid-list-schema'
-    title-uuid-list-common-schema:
-      type: array
-      items:
-        type: object
-        required:
-          - name
-          - uuid
-        properties:
-          name:
-            description: The title of the entity.
-            type: string
-            readOnly: true
-          uuid:
-            description: The UUID of the entity.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-    title-or-uuid-writable-list-schema:
-      type: array
-      items:
-        anyOf:
-          - type: object
-            properties:
-              name:
-                description: The title of the entity. Case sensitive.
-                type: string
-                example: Entity Title
-          - type: object
-            properties:
-              uuid:
-                description: The UUID of the entity.
-                type: string
-                format: uuid
-                example: 01234567-89ab-cdef-1234-56789abcdef0
+          type: array
+          items:
+            $ref: '#/components/schemas/uuid-field-schema'
+    title-uuid-list-item-common-schema:
+      type: object
+      required:
+        - name
+        - uuid
+      properties:
+        name:
+          description: The title of the entity.
+          type: string
+          readOnly: true
+        uuid:
+          description: The UUID of the entity.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+    title-or-uuid-writable-list-item-schema:
+      anyOf:
+        - type: object
+          properties:
+            name:
+              description: The title of the entity. Case sensitive.
+              type: string
+              example: Entity Title
+        - type: object
+          properties:
+            uuid:
+              description: The UUID of the entity.
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
     entity-lookup-schema:
       type: object
       properties:
