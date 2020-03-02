@@ -47,6 +47,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/product-options-schema'
       description: Returns the product options for an instance of Invotra.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/drupal_info ]
   /configuration:
     get:
       tags:
@@ -58,6 +62,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/configuration-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/drupal_info ]
   /entities/path-lookup:
     get:
       tags:
@@ -7927,7 +7935,8 @@ components:
           tokenUrl: '/oauth2/token'
           authorizationUrl: '/oauth2/authorize'
           scopes:
-            openid: Default scope
+            openid: default scope
+            invotra/drupal_info: retrieve Drupal info
   parameters:
     offsetParam:
       in: query
