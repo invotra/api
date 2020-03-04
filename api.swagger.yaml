@@ -7773,7 +7773,7 @@ components:
         minimum: 1
         maximum: 100
         default: 25
-      description: The numbers of items to return.
+      description: The numbers of items to return. If the value specified is more than the maximum, the result count will be limited to the maximum.
   schemas:
     successful-post-response-schema:
       type: object
