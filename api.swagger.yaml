@@ -631,6 +631,8 @@ paths:
         '404':
           description: Current user was not found.
       description: Get the current user's information.
+      security:
+        - CognitoJwt: ['invotra/users:self:read']
   '/users/{user_id}':
     parameters:
       - description: The Invotra UUID of the user.
@@ -7937,6 +7939,7 @@ components:
           scopes:
             openid: default scope
             invotra/drupal_info: retrieve Drupal info
+            invotra/users:self:read: retrieve current user info
   parameters:
     offsetParam:
       in: query
