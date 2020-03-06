@@ -441,6 +441,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
       description: Search for users. Returns list of uuids.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
     post:
       tags:
         - users
@@ -477,6 +481,10 @@ paths:
             schema:
               $ref: '#/components/schemas/user-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write ]
   /users/metrics/accessed:
     get:
       tags:
@@ -498,6 +506,10 @@ paths:
         '403':
           description: 'User is not authorized to view this.'
       description: Returns a count of users who accessed the site on 4 or more days within a given calendar month.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:admin ]
   /users/metrics/profiles:
     get:
       tags:
@@ -512,6 +524,10 @@ paths:
         '403':
           description: 'User is not authorized to view this.'
       description: Returns the total count of active users (i.e. not blocked) profiles matching various conditions.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:admin ]
   /users/search:
     get:
       tags:
@@ -581,7 +597,11 @@ paths:
                       $ref: '#/components/schemas/user-search-schema'
         '403':
           description: Access denied. This may occur if you try to filter by a private or secret group that you are not a member of.
-    description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
+      description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
   /users/mention:
     get:
       tags:
@@ -617,6 +637,10 @@ paths:
           description: A group UUID was supplied but the group is a private or secret group and the user making the request is not a member.
         '400':
           description: A malformed group UUID was supplied.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
   /users/me:
     get:
       tags:
@@ -659,6 +683,10 @@ paths:
         '404':
           description: No user with that UUID was found.
       description: Get the user's information.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
     put:
       tags:
         - users
@@ -685,6 +713,10 @@ paths:
             schema:
               $ref: '#/components/schemas/user-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write ]
   '/users/{user_id}/activity':
     parameters:
       - in: path
