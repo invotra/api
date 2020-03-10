@@ -8003,15 +8003,114 @@ components:
           tokenUrl: '/oauth2/token'
           authorizationUrl: '/oauth2/authorize'
           scopes:
-            openid: default scope
+            openid: default openid scope
+
+            # Content types.
+            invotra/group_polls:read: read group polls
+            invotra/group_polls:write: write group polls
+            invotra/blogs:read: read blogs
+            invotra/blogs:write: write blogs
+            invotra/custom_content:read: read custom content types
+            invotra/custom_content:write: write custom content types
+            invotra/ideas:read: read ideas
+            invotra/ideas:write: write ideas
+            invotra/lists:read: read ideas
+            invotra/lists:write: write ideas
+            invotra/manuals:read: read manuals
+            invotra/manuals:write: write manuals
+            invotra/messages:read: read messages
+            invotra/messages:write: write messages
+            invotra/news:read: read news
+            invotra/news:write: write news
+            invotra/pages:read: read pages
+            invotra/pages:write: write pages
+            invotra/policies:read: read policies
+            invotra/policies:write: write policies
+            invotra/polls:read: read polls
+            invotra/polls:write: write polls
+            invotra/promotions:read: read promotions
+            invotra/promotions:write: write promotions
+            invotra/queries:read: read queries
+            invotra/queries:write: write queries
+            invotra/web_forms:read: read web forms
+            invotra/web_forms:write: write web forms
+            invotra/groups:read: read groups
+            invotra/groups:write: write groups
+            invotra/groups:metrics: retrieve groups metrics
+            invotra/feeds:read: read feed messages
+            invotra/feeds:write: write feed messages
+            invotra/files:read: read files
+            invotra/files:write: write files
+
+            # Taxonomies.
+            invotra/job_roles:read: read job roles
+            invotra/job_roles:write: write job roles
+            invotra/locations:read: read locations
+            invotra/locations:write: write locations
+            invotra/teams:read: read teams
+            invotra/teams:write: write teams
+            invotra/badges:read: read badges
+            invotra/badges:write: write badges
+            invotra/content_categories:read: read content categories
+            invotra/content_categories:write: write content categories
+            invotra/content_types:read: read content types
+            invotra/content_types:write: write content types
+            invotra/countries:read: read countries
+            invotra/countries:write: write countries
+            invotra/event_statuses:read: read event statuses
+            invotra/event_statuses:write: write event statuses
+            invotra/event_topics:read: read event topics
+            invotra/event_topics:write: write event topics
+            invotra/free_skills:read: read free skills
+            invotra/free_skills:write: write free skills
+            invotra/general_topics:read: read general topics
+            invotra/general_topics:write: write general topics
+            invotra/grades:read: read grades
+            invotra/grades:write: write grades
+            invotra/group_categories:read: read group categories
+            invotra/group_categories:write: write group categories
+            invotra/idea_categories:read: read idea categories
+            invotra/idea_categories:write: write idea categories
+            invotra/interests:read: read interests
+            invotra/interests:write: write interests
+            invotra/message_types:read: read message types
+            invotra/message_types:write: write message types
+            invotra/organisational_skills:read: read organisational skills
+            invotra/organisational_skills:write: write organisational skills
+            invotra/person_types:read: read person types
+            invotra/person_types:write: write person types
+            invotra/policy_types:read: read policy types
+            invotra/policy_types:write: write policy types
+            invotra/primary_categories:read: read primary categories
+            invotra/primary_categories:write: write primary categories
+            invotra/projects:read: read projects
+            invotra/projects:write: write projects
+            invotra/query_categories:read: read query categories
+            invotra/query_categories:write: write query categories
+            invotra/regions:read: read regions
+            invotra/regions:write: write regions
+            invotra/search_highlights:read: read search highlights
+            invotra/search_highlights:write: write search highlights
+            invotra/security_classifications:read: read security classifications
+            invotra/security_classifications:write: write security classifications
+            invotra/site_sections:read: read site sections
+            invotra/site_sections:write: write site sections
+            invotra/titles:read: read titles
+            invotra/titles:write: write titles
+            invotra/user_categories:read: read user categories
+            invotra/user_categories:write: write user categories
+
+            # Other scopes.
             invotra/drupal_info: retrieve Drupal info
             invotra/users:self:read: retrieve current user info
             invotra/users:read: retrieve users info
             invotra/users:write: update users info
             invotra/users:admin: administer users
-            invotra/groups:read: read groups
-            invotra/groups:write: write groups
-            invotra/groups:metrics: retrieve groups metrics
+            invotra/notifications:read: read notifications
+            invotra/notifications:write: write notifications
+            invotra/comments:read: read comments
+            invotra/pdf_export: use PDF export
+            invotra/path_lookup: retrieve entities paths
   parameters:
     offsetParam:
       in: query
