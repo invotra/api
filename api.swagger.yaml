@@ -8189,7 +8189,7 @@ components:
           type: string
           enum:
             - people
-            - groups
+            - group
             - content
         category:
           description: The category of a post
