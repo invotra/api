@@ -3416,6 +3416,8 @@ paths:
                 $ref: '#/components/schemas/manual-page-schema'
         '400':
           description: The UUID or request body JSON was malformed.
+        '403':
+          description: User is not authorized to show this manual.
         '404':
           description: No manual page with that UUID was found.
   '/manuals/pages':
