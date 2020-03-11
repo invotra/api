@@ -804,6 +804,10 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
   '/users/{user_id}/job_roles':
     parameters:
       - in: path
@@ -846,6 +850,10 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read, invotra/job_roles:read ]
   '/users/{user_id}/job_roles/{job_role_id}':
     parameters:
       - description: The Invotra UUID of the user.
@@ -875,6 +883,10 @@ paths:
           description: >
             The user or job role does not exist, or the user did not have that
             job role.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write, invotra/job_roles:read ]
     put:
       tags:
         - users
@@ -888,6 +900,10 @@ paths:
           description: One or both of the UUIDs was malformed.
         '404':
           description: The user or job role does not exist.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write, invotra/job_roles:read ]
   '/users/{user_id}/locations':
     parameters:
       - in: path
@@ -926,6 +942,10 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read, invotra/locations:read ]
   '/users/{user_id}/locations/{location_id}':
     parameters:
       - description: The Invotra UUID of the user.
@@ -955,6 +975,10 @@ paths:
           description: >
             The user or location does not exist, or the user did not have that
             location.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write, invotra/locations:read ]
     put:
       tags:
         - users
@@ -968,6 +992,10 @@ paths:
           description: One or both of the UUIDs was malformed.
         '404':
           description: The user or location does not exist.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write, invotra/locations:read ]
   '/users/{user_id}/teams':
     parameters:
       - in: path
@@ -1051,6 +1079,10 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
   '/users/{user_id}/groups':
     parameters:
       - in: path
@@ -1088,6 +1120,10 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read, invotra/groups:read ]
   '/users/{user_id}/follow':
     parameters:
       - description: The Invotra UUID of the user.
@@ -1109,6 +1145,10 @@ paths:
           description: |
             The user or follower flag does not exist.
       description: Stop following a user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write ]
     get:
       tags:
         - users
@@ -1124,6 +1164,10 @@ paths:
           description: The UUID was malformed.
         '404':
           description: The user does not exist.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
     put:
       tags:
         - users
@@ -1135,6 +1179,10 @@ paths:
         '404':
           description: The user or follower does not exist.
       description: Follow a user as another user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write ]
   /groups:
     get:
       tags:
