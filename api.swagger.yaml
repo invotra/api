@@ -2765,6 +2765,10 @@ paths:
             schema:
               $ref: '#/components/schemas/list-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/lists:write ]
   '/lists/list':
     get:
       tags:
@@ -2835,6 +2839,10 @@ paths:
                       $ref: '#/components/schemas/list-schema'
         '403':
           description: 'User is not authorized to list lists.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/lists:read ]
   '/lists/{list_id}':
     parameters:
       - description: 'The Invotra UUID of the list.'
@@ -2861,6 +2869,10 @@ paths:
           description: 'User is not authorized to show this list.'
         '404':
           description: 'The UUID does not correspond to an existing list.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/lists:read ]
     put:
       tags:
         - 'lists'
@@ -2882,6 +2894,10 @@ paths:
             schema:
               $ref: '#/components/schemas/list-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/lists:write ]
     delete:
       tags:
         - 'lists'
@@ -2895,6 +2911,10 @@ paths:
           description: 'User is not authorized to delete this list.'
         '404':
           description: 'The UUID does not correspond to an existing list.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/lists:write ]
   '/messages':
     post:
       tags:
