@@ -101,7 +101,7 @@ paths:
         - sessions
       description: Returns a CSRF token.
       security:
-        - SessionCookieHeader: [] # only allow cookie for csrf token exchange, not api key
+        - SessionCookieHeader: [] # only allow cookie for csrf token exchange, not api key or Cognito
       responses:
         '200':
           description: Returns a CSRF token.
@@ -168,7 +168,7 @@ paths:
         - sessions
       description: Logout the user.
       security:
-        - SessionCookieHeader: [] # only allow cookie for logout, not api key
+        - SessionCookieHeader: [] # only allow cookie for logout, not api key or Cognito
       responses:
         '200':
           description: Successfully logged user out.
