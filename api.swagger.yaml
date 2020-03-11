@@ -1520,6 +1520,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read, invotra/users:read ]
   '/groups/{group_id}/my_membership':
     parameters:
       - description: The Invotra UUID of the group to check membership status against.
@@ -1545,6 +1549,10 @@ paths:
         '404':
           description: The group does not exist.
       description: Check if the current user is a member of a group.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read, invotra/users:self:read ]
   '/groups/{group_id}/members/{user_id}':
     parameters:
       - description: The Invotra UUID of the group.
@@ -1576,6 +1584,10 @@ paths:
             The user or group does not exist, or the user was not a member
             of the group.
       description: Remove the user's membership of the group. Note that at present the {user_id} must match that of the current logged-in user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write, invotra/users:read ]
     put:
       tags:
         - groups
@@ -1600,6 +1612,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/group-membership-common-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write, invotra/users:read ]
   '/groups/{group_id}/document_folders':
     parameters:
       - description: 'The Invotra UUID of the group.'
@@ -1637,6 +1653,10 @@ paths:
             schema:
               $ref: '#/components/schemas/group-document-folder-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   '/groups/{group_id}/document_folders/list':
     parameters:
       - description: 'The Invotra UUID of the group.'
@@ -1689,6 +1709,10 @@ paths:
                         - $ref: '#/components/schemas/group-document-folder-schema'
         '403':
           description: 'User is not authorized to list group document folders.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
   '/groups/{group_id}/document_folders/{group_document_folder_id}':
     parameters:
       - description: 'The Invotra UUID of the group.'
@@ -1722,6 +1746,10 @@ paths:
           description: 'User is not authorized to show this group document folder.'
         '404':
           description: 'The UUID does not correspond to an existing group document folder.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
     put:
       tags:
         - 'groups'
@@ -1743,6 +1771,10 @@ paths:
             schema:
               $ref: '#/components/schemas/group-document-folder-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
     delete:
       tags:
         - 'groups'
@@ -1756,6 +1788,10 @@ paths:
           description: 'User is not authorized to delete this group document folder.'
         '404':
           description: 'The UUID does not correspond to an existing group document folder.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   /posts:
     get:
       tags:
