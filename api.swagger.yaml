@@ -47,6 +47,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/product-options-schema'
       description: Returns the product options for an instance of Invotra.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/drupal_info ]
   /configuration:
     get:
       tags:
@@ -58,6 +62,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/configuration-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/drupal_info ]
   /entities/path-lookup:
     get:
       tags:
@@ -83,13 +91,17 @@ paths:
           description: User is not authorized to perform the lookup (e.g. they are unauthenticated and anonymous content access is disabled), or does not have access to the entity that was found (e.g. it is a private group and the user is not a member).
         '404':
           description: No matching entity was found for the given path.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/path_lookup ]
   /sessions/token:
     get:
       tags:
         - sessions
       description: Returns a CSRF token.
       security:
-        - SessionCookieHeader: [] # only allow cookie for csrf token exchange, not api key
+        - SessionCookieHeader: [] # only allow cookie for csrf token exchange, not api key or Cognito
       responses:
         '200':
           description: Returns a CSRF token.
@@ -156,7 +168,7 @@ paths:
         - sessions
       description: Logout the user.
       security:
-        - SessionCookieHeader: [] # only allow cookie for logout, not api key
+        - SessionCookieHeader: [] # only allow cookie for logout, not api key or Cognito
       responses:
         '200':
           description: Successfully logged user out.
@@ -173,7 +185,7 @@ paths:
                - $ref: '#/components/schemas/pdf-export-completion-schema'
                - $ref: '#/components/schemas/pdf-export-error-schema'
       security:
-        - BearerAuth: []
+        - PdfExportJobSecret: []
       responses:
         '200':
           description: A matching PDF export job was found.
@@ -200,6 +212,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:read ]
     post:
       tags:
         - teams
@@ -229,6 +245,10 @@ paths:
             schema:
               $ref: '#/components/schemas/team-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:write ]
   /teams/list:
     get:
       tags:
@@ -268,6 +288,10 @@ paths:
                     allOf:
                       - $ref: '#/components/schemas/team-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:read ]
   '/teams/{team_id}':
     parameters:
       - description: The Invotra UUID of the team.
@@ -292,6 +316,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing team.
       description: Get information about the team.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:read ]
     put:
       tags:
         - teams
@@ -313,6 +341,10 @@ paths:
             schema:
               $ref: '#/components/schemas/team-schema'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:write ]
     delete:
       tags:
         - teams
@@ -326,6 +358,10 @@ paths:
           description: The user does not have permission to remove this team.
         '404':
           description: The UUID does not correspond to an existing team.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:write ]
   '/teams/{team_id}/memberships':
     parameters:
       - description: The Invotra UUID of the team.
@@ -364,6 +400,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing team.
       description: Get a list of team members.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:read, invotra/users:read ]
   '/teams/{team_id}/memberships/{user_id}':
     parameters:
       - description: The Invotra UUID of the team.
@@ -393,6 +433,10 @@ paths:
             The user or team does not exist, or the user was not a member
             of the team.
       description: Remove the user's membership of the team.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:write, invotra/users:read ]
     put:
       tags:
         - teams
@@ -412,6 +456,10 @@ paths:
             schema:
               $ref: '#/components/schemas/team-membership-common-schema'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:write, invotra/users:read ]
   /users:
     get:
       tags:
@@ -433,6 +481,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
       description: Search for users. Returns list of uuids.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
     post:
       tags:
         - users
@@ -469,6 +521,10 @@ paths:
             schema:
               $ref: '#/components/schemas/user-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write ]
   /users/metrics/accessed:
     get:
       tags:
@@ -490,6 +546,10 @@ paths:
         '403':
           description: 'User is not authorized to view this.'
       description: Returns a count of users who accessed the site on 4 or more days within a given calendar month.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:admin ]
   /users/metrics/profiles:
     get:
       tags:
@@ -504,6 +564,10 @@ paths:
         '403':
           description: 'User is not authorized to view this.'
       description: Returns the total count of active users (i.e. not blocked) profiles matching various conditions.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:admin ]
   /users/search:
     get:
       tags:
@@ -573,7 +637,11 @@ paths:
                       $ref: '#/components/schemas/user-search-schema'
         '403':
           description: Access denied. This may occur if you try to filter by a private or secret group that you are not a member of.
-    description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
+      description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
   /users/mention:
     get:
       tags:
@@ -609,6 +677,10 @@ paths:
           description: A group UUID was supplied but the group is a private or secret group and the user making the request is not a member.
         '400':
           description: A malformed group UUID was supplied.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
   /users/me:
     get:
       tags:
@@ -623,6 +695,10 @@ paths:
         '404':
           description: Current user was not found.
       description: Get the current user's information.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:self:read ]
   '/users/{user_id}':
     parameters:
       - description: The Invotra UUID of the user.
@@ -647,6 +723,10 @@ paths:
         '404':
           description: No user with that UUID was found.
       description: Get the user's information.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
     put:
       tags:
         - users
@@ -673,6 +753,10 @@ paths:
             schema:
               $ref: '#/components/schemas/user-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write ]
   '/users/{user_id}/activity':
     parameters:
       - in: path
@@ -720,6 +804,10 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
   '/users/{user_id}/job_roles':
     parameters:
       - in: path
@@ -755,12 +843,17 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/uuid-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/uuid-field-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read, invotra/job_roles:read ]
   '/users/{user_id}/job_roles/{job_role_id}':
     parameters:
       - description: The Invotra UUID of the user.
@@ -790,6 +883,10 @@ paths:
           description: >
             The user or job role does not exist, or the user did not have that
             job role.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write, invotra/job_roles:read ]
     put:
       tags:
         - users
@@ -803,6 +900,10 @@ paths:
           description: One or both of the UUIDs was malformed.
         '404':
           description: The user or job role does not exist.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write, invotra/job_roles:read ]
   '/users/{user_id}/locations':
     parameters:
       - in: path
@@ -834,12 +935,17 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/location-uuid-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/location-uuid-list-item-schema'
         '400':
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read, invotra/locations:read ]
   '/users/{user_id}/locations/{location_id}':
     parameters:
       - description: The Invotra UUID of the user.
@@ -869,6 +975,10 @@ paths:
           description: >
             The user or location does not exist, or the user did not have that
             location.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write, invotra/locations:read ]
     put:
       tags:
         - users
@@ -882,6 +992,10 @@ paths:
           description: One or both of the UUIDs was malformed.
         '404':
           description: The user or location does not exist.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write, invotra/locations:read ]
   '/users/{user_id}/teams':
     parameters:
       - in: path
@@ -921,6 +1035,10 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read, invotra/teams:read ]
   '/users/{user_id}/following':
     parameters:
       - in: path
@@ -961,6 +1079,10 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
   '/users/{user_id}/groups':
     parameters:
       - in: path
@@ -998,6 +1120,10 @@ paths:
           description: The supplied UUID was malformed.
         '404':
           description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read, invotra/groups:read ]
   '/users/{user_id}/follow':
     parameters:
       - description: The Invotra UUID of the user.
@@ -1019,6 +1145,10 @@ paths:
           description: |
             The user or follower flag does not exist.
       description: Stop following a user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write ]
     get:
       tags:
         - users
@@ -1034,6 +1164,10 @@ paths:
           description: The UUID was malformed.
         '404':
           description: The user does not exist.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read ]
     put:
       tags:
         - users
@@ -1045,6 +1179,10 @@ paths:
         '404':
           description: The user or follower does not exist.
       description: Follow a user as another user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write ]
   /groups:
     get:
       tags:
@@ -1064,6 +1202,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
       description: Search for groups. Returns list of uuids. Returns an empty array if no groups are found.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
     post:
       tags:
         - groups
@@ -1095,6 +1237,10 @@ paths:
             schema:
               $ref: '#/components/schemas/group-schema'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   '/groups/{group_id}/posts':
     parameters:
       - description: The Invotra UUID of the group.
@@ -1138,6 +1284,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group posts. This returns only the top-level posts in the group, not their replies.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
   /groups/search:
     get:
       tags:
@@ -1201,7 +1351,11 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/group-search-schema'
-    description: 'Search for groups. Returns group snippets. An empty array is returned if no groups are found.'
+      description: 'Search for groups. Returns group snippets. An empty array is returned if no groups are found.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
   /groups/categories:
     get:
       tags:
@@ -1241,9 +1395,14 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/title-uuid-list-common-schema'
-    description: 'List all group categories. An empty array is returned if no categories are found'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/title-uuid-list-item-common-schema'
+      description: 'List all group categories. An empty array is returned if no categories are found'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
   '/groups/metrics':
     get:
       tags:
@@ -1257,6 +1416,10 @@ paths:
                 $ref: '#/components/schemas/group-metrics-schema'
         '403':
           description: The user is not permitted to view metrics.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:metrics ]
   '/groups/{group_id}':
     parameters:
       - description: The Invotra UUID of the group.
@@ -1283,6 +1446,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get information about the group.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
     put:
       tags:
         - groups
@@ -1306,6 +1473,10 @@ paths:
             schema:
               $ref: '#/components/schemas/group-schema'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   '/groups/{group_id}/members':
     parameters:
       - description: The Invotra UUID of the group.
@@ -1349,6 +1520,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing group.
       description: Get a list of group members.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read, invotra/users:read ]
   '/groups/{group_id}/my_membership':
     parameters:
       - description: The Invotra UUID of the group to check membership status against.
@@ -1374,6 +1549,10 @@ paths:
         '404':
           description: The group does not exist.
       description: Check if the current user is a member of a group.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read, invotra/users:self:read ]
   '/groups/{group_id}/members/{user_id}':
     parameters:
       - description: The Invotra UUID of the group.
@@ -1405,6 +1584,10 @@ paths:
             The user or group does not exist, or the user was not a member
             of the group.
       description: Remove the user's membership of the group. Note that at present the {user_id} must match that of the current logged-in user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write, invotra/users:read ]
     put:
       tags:
         - groups
@@ -1429,6 +1612,10 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/group-membership-common-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write, invotra/users:read ]
   '/groups/{group_id}/document_folders':
     parameters:
       - description: 'The Invotra UUID of the group.'
@@ -1466,6 +1653,10 @@ paths:
             schema:
               $ref: '#/components/schemas/group-document-folder-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   '/groups/{group_id}/document_folders/list':
     parameters:
       - description: 'The Invotra UUID of the group.'
@@ -1518,6 +1709,10 @@ paths:
                         - $ref: '#/components/schemas/group-document-folder-schema'
         '403':
           description: 'User is not authorized to list group document folders.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
   '/groups/{group_id}/document_folders/{group_document_folder_id}':
     parameters:
       - description: 'The Invotra UUID of the group.'
@@ -1551,6 +1746,10 @@ paths:
           description: 'User is not authorized to show this group document folder.'
         '404':
           description: 'The UUID does not correspond to an existing group document folder.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
     put:
       tags:
         - 'groups'
@@ -1572,6 +1771,10 @@ paths:
             schema:
               $ref: '#/components/schemas/group-document-folder-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
     delete:
       tags:
         - 'groups'
@@ -1585,6 +1788,10 @@ paths:
           description: 'User is not authorized to delete this group document folder.'
         '404':
           description: 'The UUID does not correspond to an existing group document folder.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   /posts:
     get:
       tags:
@@ -1606,6 +1813,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
       description: Search for posts.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
     post:
       tags:
         - posts
@@ -1635,6 +1846,10 @@ paths:
             schema:
               $ref: '#/components/schemas/post-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   /posts/list:
     get:
       summary: List of posts.
@@ -1684,6 +1899,10 @@ paths:
         '403':
           description: The user does not have permission to view a list of posts.
       description: List of posts. An empty array is returned if no posts are found.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
   '/posts/{post_id}':
     parameters:
       - description: The Invotra UUID of the post.
@@ -1708,6 +1927,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing post.
       description: Get information about the post.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
     put:
       tags:
         - posts
@@ -1729,6 +1952,10 @@ paths:
             schema:
               $ref: '#/components/schemas/post-schema-base'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   '/posts/{post_id}/replies':
     parameters:
       - description: The Invotra UUID of the parent post. Currently this must be a top-level post in its group. This restriction may be relaxed in a future API version.
@@ -1773,6 +2000,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing post, or the post is not a top-level post in its group.
       description: "Get a list of post replies. The replies are returned in thread order, old-to-new. Replies to a post appear after the post but before the next post at the same level, and posts are ordered oldest-to-newest within each level."
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
   '/posts/categories':
     get:
       tags:
@@ -1788,6 +2019,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/post-category-schema'
       description: List post categories.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
   '/posts/{post_id}/likes':
     parameters:
       - description: The Invotra UUID of the post.
@@ -1831,6 +2066,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing post.
       description: Get a list of users who have liked a post.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
   '/posts/{post_id}/like':
     parameters:
       - description: The Invotra UUID of the post.
@@ -1854,6 +2093,10 @@ paths:
           description: |
             The user, post or like does not exist.
       description: Remove the current user's like from a post.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
     get:
       tags:
         - posts
@@ -1872,6 +2115,10 @@ paths:
         '404':
           description: The post does not exist.
       description: Check if the current user has liked a post.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
     put:
       tags:
         - posts
@@ -1885,6 +2132,10 @@ paths:
         '404':
           description: The user or post does not exist.
       description: Like a post as the current user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   '/posts/{post_id}/report':
     parameters:
       - description: The Invotra UUID of the post.
@@ -1908,6 +2159,10 @@ paths:
           description: |
             The user, post or report flag does not exist.
       description: Remove the current user's report flag from a post.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
     get:
       tags:
         - posts
@@ -1926,6 +2181,10 @@ paths:
         '404':
           description: The post does not exist.
       description: Check if the current user has reported a post.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
     put:
       tags:
         - posts
@@ -1947,6 +2206,10 @@ paths:
         '422':
           description: JSON schema validation failure
       description: Report a post as the current user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   '/blogs':
     post:
       tags:
@@ -3587,7 +3850,7 @@ paths:
           schema:
             type: string
       security:
-        - BearerAuth: []
+        - PdfExportJobSecret: []
       responses:
         '200':
           description: Returns a list of manual pages.
@@ -3634,7 +3897,7 @@ paths:
             type: boolean
             default: false
       security:
-        - BearerAuth: []
+        - PdfExportJobSecret: []
       responses:
         '200':
           description: Returns content in HTML.
@@ -3985,7 +4248,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/location-uuid-list-schema'
+                type: array
+                items:
+                  $ref: '#/components/schemas/location-uuid-list-item-schema'
       description: Search for locations.
   /locations/list:
     get:
@@ -4026,8 +4291,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/location-uuid-title-context-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/location-uuid-title-context-list-item-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
   /locations/sites:
     post:
@@ -7908,9 +8174,127 @@ components:
       type: apiKey
       name: SSESS{name}
       in: cookie
-    BearerAuth:
+    PdfExportJobSecret:
+      description: PDF Export secret auth.
       type: http
       scheme: bearer
+      bearerFormat: 'PDF job secret'
+    CognitoJwt:
+      description: Cognito JWT auth.
+      type: oauth2
+      flows:
+        authorizationCode:
+          tokenUrl: '/oauth2/token'
+          authorizationUrl: '/oauth2/authorize'
+          scopes:
+            openid: default openid scope
+
+            # Content types.
+            invotra/group_polls:read: read group polls
+            invotra/group_polls:write: write group polls
+            invotra/blogs:read: read blogs
+            invotra/blogs:write: write blogs
+            invotra/custom_content:read: read custom content types
+            invotra/custom_content:write: write custom content types
+            invotra/ideas:read: read ideas
+            invotra/ideas:write: write ideas
+            invotra/lists:read: read ideas
+            invotra/lists:write: write ideas
+            invotra/manuals:read: read manuals
+            invotra/manuals:write: write manuals
+            invotra/messages:read: read messages
+            invotra/messages:write: write messages
+            invotra/news:read: read news
+            invotra/news:write: write news
+            invotra/pages:read: read pages
+            invotra/pages:write: write pages
+            invotra/policies:read: read policies
+            invotra/policies:write: write policies
+            invotra/polls:read: read polls
+            invotra/polls:write: write polls
+            invotra/promotions:read: read promotions
+            invotra/promotions:write: write promotions
+            invotra/queries:read: read queries
+            invotra/queries:write: write queries
+            invotra/web_forms:read: read web forms
+            invotra/web_forms:write: write web forms
+            invotra/groups:read: read groups
+            invotra/groups:write: write groups
+            invotra/groups:metrics: retrieve groups metrics
+            invotra/feeds:read: read feed messages
+            invotra/feeds:write: write feed messages
+            invotra/files:read: read files
+            invotra/files:write: write files
+
+            # Taxonomies.
+            invotra/job_roles:read: read job roles
+            invotra/job_roles:write: write job roles
+            invotra/locations:read: read locations
+            invotra/locations:write: write locations
+            invotra/teams:read: read teams
+            invotra/teams:write: write teams
+            invotra/badges:read: read badges
+            invotra/badges:write: write badges
+            invotra/content_categories:read: read content categories
+            invotra/content_categories:write: write content categories
+            invotra/content_types:read: read content types
+            invotra/content_types:write: write content types
+            invotra/countries:read: read countries
+            invotra/countries:write: write countries
+            invotra/event_statuses:read: read event statuses
+            invotra/event_statuses:write: write event statuses
+            invotra/event_topics:read: read event topics
+            invotra/event_topics:write: write event topics
+            invotra/free_skills:read: read free skills
+            invotra/free_skills:write: write free skills
+            invotra/general_topics:read: read general topics
+            invotra/general_topics:write: write general topics
+            invotra/grades:read: read grades
+            invotra/grades:write: write grades
+            invotra/group_categories:read: read group categories
+            invotra/group_categories:write: write group categories
+            invotra/idea_categories:read: read idea categories
+            invotra/idea_categories:write: write idea categories
+            invotra/interests:read: read interests
+            invotra/interests:write: write interests
+            invotra/message_types:read: read message types
+            invotra/message_types:write: write message types
+            invotra/organisational_skills:read: read organisational skills
+            invotra/organisational_skills:write: write organisational skills
+            invotra/person_types:read: read person types
+            invotra/person_types:write: write person types
+            invotra/policy_types:read: read policy types
+            invotra/policy_types:write: write policy types
+            invotra/primary_categories:read: read primary categories
+            invotra/primary_categories:write: write primary categories
+            invotra/projects:read: read projects
+            invotra/projects:write: write projects
+            invotra/query_categories:read: read query categories
+            invotra/query_categories:write: write query categories
+            invotra/regions:read: read regions
+            invotra/regions:write: write regions
+            invotra/search_highlights:read: read search highlights
+            invotra/search_highlights:write: write search highlights
+            invotra/security_classifications:read: read security classifications
+            invotra/security_classifications:write: write security classifications
+            invotra/site_sections:read: read site sections
+            invotra/site_sections:write: write site sections
+            invotra/titles:read: read titles
+            invotra/titles:write: write titles
+            invotra/user_categories:read: read user categories
+            invotra/user_categories:write: write user categories
+
+            # Other scopes.
+            invotra/drupal_info: retrieve Drupal info
+            invotra/users:self:read: retrieve current user info
+            invotra/users:read: retrieve users info
+            invotra/users:write: update users info
+            invotra/users:admin: administer users
+            invotra/notifications:read: read notifications
+            invotra/notifications:write: write notifications
+            invotra/comments:read: read comments
+            invotra/pdf_export: use PDF export
+            invotra/path_lookup: retrieve entities paths
   parameters:
     offsetParam:
       in: query
@@ -8134,16 +8518,19 @@ components:
           example: Dorothy Whitehead
         teams:
           description: The user's teams. An array of team names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         locations:
           description: The user's locations. An array of location names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         job_roles:
           description: The user's job roles. An array of job role names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         entity_uuid:
           description: The UUID of the entity that the feed message is about
           type: string
@@ -8369,6 +8756,11 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
+            job_roles:
+              description: The user's job roles. An array of job role names and UUIDs.
+              type: array
+              items:
+                $ref: '#/components/schemas/title-uuid-list-item-common-schema'
     user-schema-common:
       properties:
         uuid:
@@ -8488,20 +8880,19 @@ components:
           deprecated: true
         teams:
           description: The user's teams. An array of team names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         locations:
           description: The user's locations. An array of location names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
-        job_roles:
-          description: The user's job roles. An array of job role names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         role_grades:
           description: The user's role grades. An array of role grade names and UUIDs.
-          allOf:
-            - $ref: '#/components/schemas/title-uuid-list-common-schema'
+          type: array
+          items:
+            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         user_uuid:
           description: The UUID of the user
           type: string
@@ -8515,8 +8906,9 @@ components:
         - $ref: '#/components/schemas/user-schema-common'
         - properties:
             job_roles:
-              allOf:
-                - $ref: '#/components/schemas/title-or-uuid-writable-list-schema'
+              type: array
+              items:
+                $ref: '#/components/schemas/title-or-uuid-writable-list-item-schema'
     user-schema-create:
       allOf:
         - $ref: '#/components/schemas/user-schema-update'
@@ -8541,9 +8933,9 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
-        - required:
-            - email
-            - username
+      required:
+        - email
+        - username
     user-metrics-accessed-schema:
       type: object
       properties:
@@ -8716,9 +9108,8 @@ components:
     group-document-folder-schema-create:
       allOf:
         - $ref: '#/components/schemas/group-document-folder-schema-common'
-        - type: object
-          required:
-            - name
+      required:
+        - name
     group-document-folder-schema-common:
       type: object
       properties:
@@ -12082,11 +12473,11 @@ components:
     file-schema-create:
       allOf:
         - $ref: '#/components/schemas/file-schema-update'
-        - required:
-            - file
-            - filename
-            - alt_text
-            - type
+      required:
+        - file
+        - filename
+        - alt_text
+        - type
     job-role-schema:
       properties:
         title:
@@ -12164,8 +12555,10 @@ components:
               enum:
                 - site
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-site-schema-common'
     location-site-schema-create:
       allOf:
@@ -12229,8 +12622,10 @@ components:
               enum:
                 - building
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-building-schema-common'
     location-building-schema-create:
       allOf:
@@ -12266,8 +12661,10 @@ components:
               enum:
                 - floor
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-floor-schema-common'
     location-floor-schema-create:
       allOf:
@@ -12302,8 +12699,10 @@ components:
               enum:
                 - space
             context:
-              allOf:
-                - $ref: '#/components/schemas/location-context-schema'
+              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+              type: array
+              items:
+                $ref: '#/components/schemas/location-context-list-item-schema'
         - $ref: '#/components/schemas/location-space-schema-common'
     location-space-schema-create:
       allOf:
@@ -12324,47 +12723,50 @@ components:
               format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
     uuid-list-schema:
-      items:
-        description: An array of UUIDs.
-        type: string
-        format: uuid
-        example: 01234567-89ab-cdef-12F34-56789abcdef0
       type: array
-    location-uuid-title-context-list-schema:
+      description: An array of UUIDs.
       items:
-        type: object
-        properties:
-          uuid:
-            description: The entity UUID.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-12F34-56789abcdef0
-          title:
-            description: The entity title.
-            type: string
-            example: Chertsey House
-          type:
-            description: The location type.
-            type: string
-            enum:
-              - site
-              - building
-              - floor
-              - space
-          description:
-            description: 'The description of the location.'
-            type: string
-            example: Woking
-          parent_uuid:
-            description: The parent UUID.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-12F34-56789abcdef0
-          context:
-            allOf:
-              - $ref: '#/components/schemas/location-context-schema'
-      type: array
-    location-uuid-schema:
+        $ref: '#/components/schemas/uuid-field-schema'
+    uuid-field-schema:
+      description: A valid UUIDv4 string.
+      type: string
+      format: uuid
+      example: 01234567-89ab-cdef-12F34-56789abcdef0
+    location-uuid-title-context-list-item-schema:
+      type: object
+      properties:
+        uuid:
+          description: The entity UUID.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-12F34-56789abcdef0
+        title:
+          description: The entity title.
+          type: string
+          example: Chertsey House
+        type:
+          description: The location type.
+          type: string
+          enum:
+            - site
+            - building
+            - floor
+            - space
+        description:
+          description: 'The description of the location.'
+          type: string
+          example: Woking
+        parent_uuid:
+          description: The parent UUID.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-12F34-56789abcdef0
+        context:
+          description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+          type: array
+          items:
+            $ref: '#/components/schemas/location-context-list-item-schema'
+    location-uuid-list-item-schema:
       type: object
       properties:
         uuid:
@@ -12383,10 +12785,6 @@ components:
       required:
         - uuid
         - type
-    location-uuid-list-schema:
-      type: array
-      items:
-        $ref: '#/components/schemas/location-uuid-schema'
     push-notifications-schema:
       properties:
         token:
@@ -12403,39 +12801,36 @@ components:
             - ios
             - android
       type: object
-    location-context-schema:
-      description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
-      type: array
-      items:
-        type: object
-        properties:
-          uuid:
-            description: 'The entity UUID.'
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-12F34-56789abcdef0'
-          title:
-            description: 'The location title.'
-            type: string
-            example: 'Woking'
-          type:
-            description: 'The location type.'
-            type: string
-            enum:
-              - site
-              - building
-              - floor
-              - space
-            example: 'floor'
-          description:
-            description: 'The description of the location.'
-            type: string
-            example: 'Woking head office.'
-          parent_uuid:
-            description: 'The parent UUID.'
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-12F34-56789abcdef0'
+    location-context-list-item-schema:
+      type: object
+      properties:
+        uuid:
+          description: 'The entity UUID.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-12F34-56789abcdef0'
+        title:
+          description: 'The location title.'
+          type: string
+          example: 'Woking'
+        type:
+          description: 'The location type.'
+          type: string
+          enum:
+            - site
+            - building
+            - floor
+            - space
+          example: 'floor'
+        description:
+          description: 'The description of the location.'
+          type: string
+          example: 'Woking head office.'
+        parent_uuid:
+          description: 'The parent UUID.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-12F34-56789abcdef0'
     team-membership-common-schema:
       type: object
       properties:
@@ -13873,42 +14268,39 @@ components:
           example: 3
         users_uuids:
           description: 'Invotra UUIDs of users in this user category.'
-          allOf:
-            - $ref: '#/components/schemas/uuid-list-schema'
-    title-uuid-list-common-schema:
-      type: array
-      items:
-        type: object
-        required:
-          - name
-          - uuid
-        properties:
-          name:
-            description: The title of the entity.
-            type: string
-            readOnly: true
-          uuid:
-            description: The UUID of the entity.
-            type: string
-            format: uuid
-            example: 01234567-89ab-cdef-1234-56789abcdef0
-    title-or-uuid-writable-list-schema:
-      type: array
-      items:
-        anyOf:
-          - type: object
-            properties:
-              name:
-                description: The title of the entity. Case sensitive.
-                type: string
-                example: Entity Title
-          - type: object
-            properties:
-              uuid:
-                description: The UUID of the entity.
-                type: string
-                format: uuid
-                example: 01234567-89ab-cdef-1234-56789abcdef0
+          type: array
+          items:
+            $ref: '#/components/schemas/uuid-field-schema'
+    title-uuid-list-item-common-schema:
+      type: object
+      required:
+        - name
+        - uuid
+      properties:
+        name:
+          description: The title of the entity.
+          type: string
+          readOnly: true
+        uuid:
+          description: The UUID of the entity.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+    title-or-uuid-writable-list-item-schema:
+      anyOf:
+        - type: object
+          properties:
+            name:
+              description: The title of the entity. Case sensitive.
+              type: string
+              example: Entity Title
+        - type: object
+          properties:
+            uuid:
+              description: The UUID of the entity.
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
     entity-lookup-schema:
       type: object
       properties:
