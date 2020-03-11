@@ -2610,6 +2610,10 @@ paths:
             schema:
               $ref: '#/components/schemas/group-poll-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_polls:write ]
   '/group_polls/list':
     get:
       tags:
@@ -2681,6 +2685,10 @@ paths:
                       $ref: '#/components/schemas/group-poll-schema'
         '403':
           description: 'User is not authorized to list group polls.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_polls:read ]
   '/group_polls/{group_poll_id}':
     parameters:
       - description: 'The Invotra UUID of the group poll.'
@@ -2707,6 +2715,10 @@ paths:
           description: 'User is not authorized to show this group poll.'
         '404':
           description: 'The UUID does not correspond to an existing group poll.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_polls:read ]
     delete:
       tags:
         - 'group polls'
@@ -2720,6 +2732,10 @@ paths:
           description: 'User is not authorized to delete this group poll.'
         '404':
           description: 'The UUID does not correspond to an existing group poll.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_polls:write ]
   '/lists':
     post:
       tags:
