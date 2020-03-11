@@ -2418,6 +2418,10 @@ paths:
             schema:
               $ref: '#/components/schemas/custom-content-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/custom_content:write ]
   '/custom_content/list':
     get:
       tags:
@@ -2500,6 +2504,10 @@ paths:
                       $ref: '#/components/schemas/custom-content-schema'
         '403':
           description: 'User is not authorized to list custom content.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/custom_content:read ]
   '/custom_content/{custom_content_id}':
     parameters:
       - description: 'The Invotra UUID of the custom content.'
@@ -2526,6 +2534,10 @@ paths:
           description: 'User is not authorized to show this custom content.'
         '404':
           description: 'The UUID does not correspond to an existing custom content.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/custom_content:read ]
     put:
       tags:
         - 'custom content'
@@ -2547,6 +2559,10 @@ paths:
             schema:
               $ref: '#/components/schemas/custom-content-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/custom_content:write ]
     delete:
       tags:
         - 'custom content'
@@ -2560,6 +2576,10 @@ paths:
           description: 'User is not authorized to delete this custom content.'
         '404':
           description: 'The UUID does not correspond to an existing custom content.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/custom_content:write ]
   '/group_polls':
     post:
       tags:
