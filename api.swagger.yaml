@@ -212,6 +212,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/uuid-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:read ]
     post:
       tags:
         - teams
@@ -241,6 +245,10 @@ paths:
             schema:
               $ref: '#/components/schemas/team-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:write ]
   /teams/list:
     get:
       tags:
@@ -280,6 +288,10 @@ paths:
                     allOf:
                       - $ref: '#/components/schemas/team-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:read ]
   '/teams/{team_id}':
     parameters:
       - description: The Invotra UUID of the team.
@@ -304,6 +316,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing team.
       description: Get information about the team.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:read ]
     put:
       tags:
         - teams
@@ -325,6 +341,10 @@ paths:
             schema:
               $ref: '#/components/schemas/team-schema'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:write ]
     delete:
       tags:
         - teams
@@ -338,6 +358,10 @@ paths:
           description: The user does not have permission to remove this team.
         '404':
           description: The UUID does not correspond to an existing team.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:write ]
   '/teams/{team_id}/memberships':
     parameters:
       - description: The Invotra UUID of the team.
@@ -376,6 +400,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing team.
       description: Get a list of team members.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:read, invotra/users:read ]
   '/teams/{team_id}/memberships/{user_id}':
     parameters:
       - description: The Invotra UUID of the team.
@@ -405,6 +433,10 @@ paths:
             The user or team does not exist, or the user was not a member
             of the team.
       description: Remove the user's membership of the team.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:write, invotra/users:read ]
     put:
       tags:
         - teams
@@ -424,6 +456,10 @@ paths:
             schema:
               $ref: '#/components/schemas/team-membership-common-schema'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/teams:write, invotra/users:read ]
   /users:
     get:
       tags:
