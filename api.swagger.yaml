@@ -2239,6 +2239,10 @@ paths:
             schema:
               $ref: '#/components/schemas/blog-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/blogs:write ]
   '/blogs/list':
     get:
       tags:
@@ -2309,6 +2313,10 @@ paths:
                       $ref: '#/components/schemas/blog-schema'
         '403':
           description: 'User is not authorized to list blogs.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/blogs:read ]
   '/blogs/{blog_id}':
     parameters:
       - description: 'The Invotra UUID of the blog.'
@@ -2335,6 +2343,10 @@ paths:
           description: 'User is not authorized to show this blog.'
         '404':
           description: 'The UUID does not correspond to an existing blog.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/blogs:read ]
     put:
       tags:
         - 'blogs'
@@ -2356,6 +2368,10 @@ paths:
             schema:
               $ref: '#/components/schemas/blog-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/blogs:write ]
     delete:
       tags:
         - 'blogs'
@@ -2369,6 +2385,10 @@ paths:
           description: 'User is not authorized to delete this blog.'
         '404':
           description: 'The UUID does not correspond to an existing blog.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/blogs:write ]
   '/custom_content':
     post:
       tags:
