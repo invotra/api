@@ -12436,6 +12436,10 @@ components:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-12F34-56789abcdef0'
+          external_id:
+            description: 'The location external reference id.'
+            type: string
+            example: 'ABC123'
     team-membership-common-schema:
       type: object
       properties:
