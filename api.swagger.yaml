@@ -91,6 +91,10 @@ paths:
           description: User is not authorized to perform the lookup (e.g. they are unauthenticated and anonymous content access is disabled), or does not have access to the entity that was found (e.g. it is a private group and the user is not a member).
         '404':
           description: No matching entity was found for the given path.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/path_lookup ]
   /sessions/token:
     get:
       tags:
