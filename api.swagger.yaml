@@ -2944,6 +2944,10 @@ paths:
             schema:
               $ref: '#/components/schemas/message-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/messages:write ]
   '/messages/list':
     get:
       tags:
@@ -3008,6 +3012,10 @@ paths:
                       $ref: '#/components/schemas/message-schema'
         '403':
           description: 'User is not authorized to list messages.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/messages:read ]
   '/messages/{message_id}':
     parameters:
       - description: 'The Invotra UUID of the message.'
@@ -3034,6 +3042,10 @@ paths:
           description: 'User is not authorized to show this message.'
         '404':
           description: 'The UUID does not correspond to an existing message.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/messages:read ]
     put:
       tags:
         - 'messages'
@@ -3055,6 +3067,10 @@ paths:
             schema:
               $ref: '#/components/schemas/message-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/messages:write ]
     delete:
       tags:
         - 'messages'
@@ -3068,6 +3084,10 @@ paths:
           description: 'User is not authorized to delete this message.'
         '404':
           description: 'The UUID does not correspond to an existing message.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/messages:write ]
   '/news':
     post:
       tags:
