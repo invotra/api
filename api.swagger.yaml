@@ -5324,6 +5324,10 @@ paths:
             schema:
               $ref: '#/components/schemas/content-type-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/content_types:write ]
   '/content_types/list':
     get:
       tags:
@@ -5373,6 +5377,10 @@ paths:
                         - $ref: '#/components/schemas/content-type-schema'
         '403':
           description: 'User is not authorized to list content types.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/content_types:read ]
   '/content_types/{content_type_id}':
     parameters:
       - description: 'The Invotra UUID of the content type.'
@@ -5399,6 +5407,10 @@ paths:
           description: 'User is not authorized to show this content type.'
         '404':
           description: 'The UUID does not correspond to an existing content type.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/content_types:read ]
     put:
       tags:
         - 'content types'
@@ -5420,6 +5432,10 @@ paths:
             schema:
               $ref: '#/components/schemas/content-type-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/content_types:write ]
     delete:
       tags:
         - 'content types'
