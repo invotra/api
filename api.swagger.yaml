@@ -7058,6 +7058,10 @@ paths:
             schema:
               $ref: '#/components/schemas/organisational-skill-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/organisational_skills:write ]
   '/organisational_skills/list':
     get:
       tags:
@@ -7107,6 +7111,10 @@ paths:
                         - $ref: '#/components/schemas/organisational-skill-schema'
         '403':
           description: 'User is not authorized to list organisational skills.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/organisational_skills:read ]
   '/organisational_skills/{organisational_skill_id}':
     parameters:
       - description: 'The Invotra UUID of the organisational skill.'
@@ -7133,6 +7141,10 @@ paths:
           description: 'User is not authorized to show this organisational skill.'
         '404':
           description: 'The UUID does not correspond to an existing organisational skill.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/organisational_skills:read ]
     put:
       tags:
         - 'organisational skills'
@@ -7154,6 +7166,10 @@ paths:
             schema:
               $ref: '#/components/schemas/organisational-skill-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/organisational_skills:write ]
     delete:
       tags:
         - 'organisational skills'
@@ -7167,6 +7183,10 @@ paths:
           description: 'User is not authorized to delete this organisational skill.'
         '404':
           description: 'The UUID does not correspond to an existing organisational skill.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/organisational_skills:write ]
   '/person_types':
     post:
       tags:
