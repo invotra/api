@@ -7216,6 +7216,10 @@ paths:
             schema:
               $ref: '#/components/schemas/person-type-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/person_types:write ]
   '/person_types/list':
     get:
       tags:
@@ -7265,6 +7269,10 @@ paths:
                         - $ref: '#/components/schemas/person-type-schema'
         '403':
           description: 'User is not authorized to list person types.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/person_types:read ]
   '/person_types/{person_type_id}':
     parameters:
       - description: 'The Invotra UUID of the person type.'
@@ -7291,6 +7299,10 @@ paths:
           description: 'User is not authorized to show this person type.'
         '404':
           description: 'The UUID does not correspond to an existing person type.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/person_types:read ]
     put:
       tags:
         - 'person types'
@@ -7312,6 +7324,10 @@ paths:
             schema:
               $ref: '#/components/schemas/person-type-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/person_types:write ]
     delete:
       tags:
         - 'person types'
@@ -7325,6 +7341,10 @@ paths:
           description: 'User is not authorized to delete this person type.'
         '404':
           description: 'The UUID does not correspond to an existing person type.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/person_types:write ]
   '/policy_types':
     post:
       tags:
