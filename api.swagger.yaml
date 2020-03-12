@@ -4005,6 +4005,10 @@ paths:
                     items:
                       allOf:
                         - $ref: '#/components/schemas/manual-listing-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/manuals:read ]
   '/manuals/{manual_page_id}':
     parameters:
       - description: The Invotra UUID of a manual page.
@@ -4030,6 +4034,10 @@ paths:
           description: The UUID or request body JSON was malformed.
         '404':
           description: No manual page with that UUID was found.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/manuals:read ]
   '/manuals/pages':
     get:
       description: Get all pages in a manual or manual page.
