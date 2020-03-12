@@ -7690,6 +7690,10 @@ paths:
             schema:
               $ref: '#/components/schemas/project-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/projects:write ]
   '/projects/list':
     get:
       tags:
@@ -7739,6 +7743,10 @@ paths:
                         - $ref: '#/components/schemas/project-schema'
         '403':
           description: 'User is not authorized to list projects.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/projects:read ]
   '/projects/{project_id}':
     parameters:
       - description: 'The Invotra UUID of the project.'
@@ -7765,6 +7773,10 @@ paths:
           description: 'User is not authorized to show this project.'
         '404':
           description: 'The UUID does not correspond to an existing project.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/projects:read ]
     put:
       tags:
         - 'projects'
@@ -7786,6 +7798,10 @@ paths:
             schema:
               $ref: '#/components/schemas/project-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/projects:write ]
     delete:
       tags:
         - 'projects'
@@ -7799,6 +7815,10 @@ paths:
           description: 'User is not authorized to delete this project.'
         '404':
           description: 'The UUID does not correspond to an existing project.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/projects:write ]
   '/query_categories':
     post:
       tags:
