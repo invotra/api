@@ -7848,6 +7848,10 @@ paths:
             schema:
               $ref: '#/components/schemas/query-category-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/query_categories:write ]
   '/query_categories/list':
     get:
       tags:
@@ -7897,6 +7901,10 @@ paths:
                         - $ref: '#/components/schemas/query-category-schema'
         '403':
           description: 'User is not authorized to list query categories.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/query_categories:read ]
   '/query_categories/{query_category_id}':
     parameters:
       - description: 'The Invotra UUID of the query category.'
@@ -7923,6 +7931,10 @@ paths:
           description: 'User is not authorized to show this query category.'
         '404':
           description: 'The UUID does not correspond to an existing query category.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/query_categories:read ]
     put:
       tags:
         - 'query categories'
@@ -7944,6 +7956,10 @@ paths:
             schema:
               $ref: '#/components/schemas/query-category-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/query_categories:write ]
     delete:
       tags:
         - 'query categories'
@@ -7957,6 +7973,10 @@ paths:
           description: 'User is not authorized to delete this query category.'
         '404':
           description: 'The UUID does not correspond to an existing query category.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/query_categories:write ]
   '/regions':
     post:
       tags:
