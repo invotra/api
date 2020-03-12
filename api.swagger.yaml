@@ -6268,6 +6268,10 @@ paths:
             schema:
               $ref: '#/components/schemas/grade-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/grades:write ]
   '/grades/list':
     get:
       tags:
@@ -6317,6 +6321,10 @@ paths:
                         - $ref: '#/components/schemas/grade-schema'
         '403':
           description: 'User is not authorized to list grades.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/grades:read ]
   '/grades/{grade_id}':
     parameters:
       - description: 'The Invotra UUID of the grade.'
@@ -6343,6 +6351,10 @@ paths:
           description: 'User is not authorized to show this grade.'
         '404':
           description: 'The UUID does not correspond to an existing grade.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/grades:read ]
     put:
       tags:
         - 'grades'
@@ -6364,6 +6376,10 @@ paths:
             schema:
               $ref: '#/components/schemas/grade-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/grades:write ]
     delete:
       tags:
         - 'grades'
@@ -6377,6 +6393,10 @@ paths:
           description: 'User is not authorized to delete this grade.'
         '404':
           description: 'The UUID does not correspond to an existing grade.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/grades:write ]
   '/group_categories':
     post:
       tags:
