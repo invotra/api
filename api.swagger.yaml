@@ -5636,6 +5636,10 @@ paths:
             schema:
               $ref: '#/components/schemas/event-status-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/event_statuses:write ]
   '/event_statuses/list':
     get:
       tags:
@@ -5685,6 +5689,10 @@ paths:
                         - $ref: '#/components/schemas/event-status-schema'
         '403':
           description: 'User is not authorized to list event statuses.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/event_statuses:read ]
   '/event_statuses/{event_status_id}':
     parameters:
       - description: 'The Invotra UUID of the event status.'
@@ -5711,6 +5719,10 @@ paths:
           description: 'User is not authorized to show this event status.'
         '404':
           description: 'The UUID does not correspond to an existing event status.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/event_statuses:read ]
     put:
       tags:
         - 'event statuses'
@@ -5732,6 +5744,10 @@ paths:
             schema:
               $ref: '#/components/schemas/event-status-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/event_statuses:write ]
     delete:
       tags:
         - 'event statuses'
@@ -5745,6 +5761,10 @@ paths:
           description: 'User is not authorized to delete this event status.'
         '404':
           description: 'The UUID does not correspond to an existing event status.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/event_statuses:write ]
   '/event_topics':
     post:
       tags:
