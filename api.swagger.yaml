@@ -3117,6 +3117,10 @@ paths:
             schema:
               $ref: '#/components/schemas/news-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/news:write ]
   '/news/list':
     get:
       tags:
@@ -3187,6 +3191,10 @@ paths:
                       $ref: '#/components/schemas/news-schema'
         '403':
           description: 'User is not authorized to list news.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/news:read ]
   '/news/{news_id}':
     parameters:
       - description: 'The Invotra UUID of the news.'
@@ -3213,6 +3221,10 @@ paths:
           description: 'User is not authorized to show this news.'
         '404':
           description: 'The UUID does not correspond to an existing news.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/news:read ]
     put:
       tags:
         - 'news'
@@ -3234,6 +3246,10 @@ paths:
             schema:
               $ref: '#/components/schemas/news-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/news:write ]
     delete:
       tags:
         - 'news'
@@ -3247,6 +3263,10 @@ paths:
           description: 'User is not authorized to delete this news.'
         '404':
           description: 'The UUID does not correspond to an existing news.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/news:write ]
   '/pages':
     post:
       tags:
