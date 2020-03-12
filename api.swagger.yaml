@@ -3829,6 +3829,10 @@ paths:
             schema:
               $ref: '#/components/schemas/promotion-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/promotions:write ]
   '/promotions/list':
     get:
       tags:
@@ -3899,6 +3903,10 @@ paths:
                       $ref: '#/components/schemas/promotion-schema'
         '403':
           description: 'User is not authorized to list promotions.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/promotions:read ]
   '/promotions/{promotion_id}':
     parameters:
       - description: 'The Invotra UUID of the promotion.'
@@ -3925,6 +3933,10 @@ paths:
           description: 'User is not authorized to show this promotion.'
         '404':
           description: 'The UUID does not correspond to an existing promotion.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/promotions:read ]
     put:
       tags:
         - 'promotions'
@@ -3946,6 +3958,10 @@ paths:
             schema:
               $ref: '#/components/schemas/promotion-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/promotions:write ]
     delete:
       tags:
         - 'promotions'
@@ -3959,6 +3975,10 @@ paths:
           description: 'User is not authorized to delete this promotion.'
         '404':
           description: 'The UUID does not correspond to an existing promotion.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/promotions:write ]
   '/manuals':
     get:
       description: Get a listing of all manuals
