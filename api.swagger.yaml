@@ -8480,6 +8480,10 @@ paths:
             schema:
               $ref: '#/components/schemas/title-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/titles:write ]
   '/titles/list':
     get:
       tags:
@@ -8529,6 +8533,10 @@ paths:
                         - $ref: '#/components/schemas/title-schema'
         '403':
           description: 'User is not authorized to list titles.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/titles:read ]
   '/titles/{title_id}':
     parameters:
       - description: 'The Invotra UUID of the title.'
@@ -8555,6 +8563,10 @@ paths:
           description: 'User is not authorized to show this title.'
         '404':
           description: 'The UUID does not correspond to an existing title.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/titles:read ]
     put:
       tags:
         - 'titles'
@@ -8576,6 +8588,10 @@ paths:
             schema:
               $ref: '#/components/schemas/title-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/titles:write ]
     delete:
       tags:
         - 'titles'
@@ -8589,6 +8605,10 @@ paths:
           description: 'User is not authorized to delete this title.'
         '404':
           description: 'The UUID does not correspond to an existing title.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/titles:write ]
   '/user_categories':
     post:
       tags:
