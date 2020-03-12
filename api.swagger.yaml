@@ -6742,6 +6742,10 @@ paths:
             schema:
               $ref: '#/components/schemas/interest-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/interests:write ]
   '/interests/list':
     get:
       tags:
@@ -6791,6 +6795,10 @@ paths:
                         - $ref: '#/components/schemas/interest-schema'
         '403':
           description: 'User is not authorized to list interests.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/interests:read ]
   '/interests/{interest_id}':
     parameters:
       - description: 'The Invotra UUID of the interest.'
@@ -6817,6 +6825,10 @@ paths:
           description: 'User is not authorized to show this interest.'
         '404':
           description: 'The UUID does not correspond to an existing interest.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/interests:read ]
     put:
       tags:
         - 'interests'
@@ -6838,6 +6850,10 @@ paths:
             schema:
               $ref: '#/components/schemas/interest-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/interests:write ]
     delete:
       tags:
         - 'interests'
@@ -6851,6 +6867,10 @@ paths:
           description: 'User is not authorized to delete this interest.'
         '404':
           description: 'The UUID does not correspond to an existing interest.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/interests:write ]
   '/message_types':
     post:
       tags:
