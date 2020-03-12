@@ -8923,6 +8923,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/feed-status-schema'
       description: Check if any new feed items are available for a user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/feeds:read ]
     put:
       tags:
         - feeds
@@ -8934,6 +8938,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/feed-status-schema'
       description: Set the feed as read for a user. You should only set this to 0.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/feeds:write ]
   /feeds:
     get:
       tags:
@@ -8972,6 +8980,10 @@ paths:
                     items:
                       $ref: '#/components/schemas/feed-schema'
       description: Returns the feed for a user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/feeds:read ]
 components:
   securitySchemes:
     APIKeyHeader:
