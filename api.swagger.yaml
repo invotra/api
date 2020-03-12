@@ -4683,10 +4683,10 @@ paths:
             schema:
               $ref: '#/components/schemas/location-building-schema-create'
         required: true
-    security:
-      - SessionCookieHeader: []
-      - APIKeyHeader: []
-      - CognitoJwt: [ invotra/locations:write ]
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
   '/locations/buildings/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
