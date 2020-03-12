@@ -8322,6 +8322,10 @@ paths:
             schema:
               $ref: '#/components/schemas/security-classification-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/security_classifications:write ]
   '/security_classifications/list':
     get:
       tags:
@@ -8371,6 +8375,10 @@ paths:
                         - $ref: '#/components/schemas/security-classification-schema'
         '403':
           description: 'User is not authorized to list security classifications.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/security_classifications:read ]
   '/security_classifications/{security_classification_id}':
     parameters:
       - description: 'The Invotra UUID of the security classification.'
@@ -8397,6 +8405,10 @@ paths:
           description: 'User is not authorized to show this security classification.'
         '404':
           description: 'The UUID does not correspond to an existing security classification.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/security_classifications:read ]
     put:
       tags:
         - 'security classifications'
@@ -8418,6 +8430,10 @@ paths:
             schema:
               $ref: '#/components/schemas/security-classification-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/security_classifications:write ]
     delete:
       tags:
         - 'security classifications'
@@ -8431,6 +8447,10 @@ paths:
           description: 'User is not authorized to delete this security classification.'
         '404':
           description: 'The UUID does not correspond to an existing security classification.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/security_classifications:write ]
   '/titles':
     post:
       tags:
