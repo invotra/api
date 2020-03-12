@@ -7374,6 +7374,10 @@ paths:
             schema:
               $ref: '#/components/schemas/policy-type-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/policy_types:write ]
   '/policy_types/list':
     get:
       tags:
@@ -7423,6 +7427,10 @@ paths:
                         - $ref: '#/components/schemas/policy-type-schema'
         '403':
           description: 'User is not authorized to list policy types.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/policy_types:read ]
   '/policy_types/{policy_type_id}':
     parameters:
       - description: 'The Invotra UUID of the policy type.'
@@ -7449,6 +7457,10 @@ paths:
           description: 'User is not authorized to show this policy type.'
         '404':
           description: 'The UUID does not correspond to an existing policy type.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/policy_types:read ]
     put:
       tags:
         - 'policy types'
@@ -7470,6 +7482,10 @@ paths:
             schema:
               $ref: '#/components/schemas/policy-type-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/policy_types:write ]
     delete:
       tags:
         - 'policy types'
@@ -7483,6 +7499,10 @@ paths:
           description: 'User is not authorized to delete this policy type.'
         '404':
           description: 'The UUID does not correspond to an existing policy type.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/policy_types:write ]
   '/primary_categories':
     post:
       tags:
