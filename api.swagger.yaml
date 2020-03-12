@@ -6110,6 +6110,10 @@ paths:
             schema:
               $ref: '#/components/schemas/general-topic-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/general_topics:write ]
   '/general_topics/list':
     get:
       tags:
@@ -6159,6 +6163,10 @@ paths:
                         - $ref: '#/components/schemas/general-topic-schema'
         '403':
           description: 'User is not authorized to list general topics.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/general_topics:read ]
   '/general_topics/{general_topic_id}':
     parameters:
       - description: 'The Invotra UUID of the general topic.'
@@ -6185,6 +6193,10 @@ paths:
           description: 'User is not authorized to show this general topic.'
         '404':
           description: 'The UUID does not correspond to an existing general topic.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/general_topics:read ]
     put:
       tags:
         - 'general topics'
@@ -6206,6 +6218,10 @@ paths:
             schema:
               $ref: '#/components/schemas/general-topic-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/general_topics:write ]
     delete:
       tags:
         - 'general topics'
@@ -6219,6 +6235,10 @@ paths:
           description: 'User is not authorized to delete this general topic.'
         '404':
           description: 'The UUID does not correspond to an existing general topic.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/general_topics:write ]
   '/grades':
     post:
       tags:
