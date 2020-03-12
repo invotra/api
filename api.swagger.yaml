@@ -8730,9 +8730,8 @@ components:
     group-document-folder-schema-create:
       allOf:
         - $ref: '#/components/schemas/group-document-folder-schema-common'
-        - type: object
-          required:
-            - name
+      required:
+        - name
     group-document-folder-schema-common:
       type: object
       properties:
