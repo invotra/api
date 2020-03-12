@@ -5794,6 +5794,10 @@ paths:
             schema:
               $ref: '#/components/schemas/event-topic-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/event_topics:write ]
   '/event_topics/list':
     get:
       tags:
@@ -5843,6 +5847,10 @@ paths:
                         - $ref: '#/components/schemas/event-topic-schema'
         '403':
           description: 'User is not authorized to list event topics.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/event_topics:read ]
   '/event_topics/{event_topic_id}':
     parameters:
       - description: 'The Invotra UUID of the event topic.'
@@ -5869,6 +5877,10 @@ paths:
           description: 'User is not authorized to show this event topic.'
         '404':
           description: 'The UUID does not correspond to an existing event topic.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/event_topics:read ]
     put:
       tags:
         - 'event topics'
@@ -5890,6 +5902,10 @@ paths:
             schema:
               $ref: '#/components/schemas/event-topic-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/event_topics:write ]
     delete:
       tags:
         - 'event topics'
@@ -5903,6 +5919,10 @@ paths:
           description: 'User is not authorized to delete this event topic.'
         '404':
           description: 'The UUID does not correspond to an existing event topic.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/event_topics:write ]
   '/free_skills':
     post:
       tags:
