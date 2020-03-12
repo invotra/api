@@ -8798,6 +8798,10 @@ paths:
                     items:
                       $ref: '#/components/schemas/notification-item-schema'
       description: Retrieve notifications for a user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/notifications:read ]
   '/notifications/{notification_id}':
     parameters:
       - description: The Invotra UUID of the notification.
@@ -8819,6 +8823,10 @@ paths:
           description: |
             The notification does not exist.
       description: Mark a notification as read.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/notifications:write ]
   '/notifications/clear_all':
     parameters:
       - description: Marks all notifications for the mobile app as read. If true, this will mark as read notifications with entity type user, and entity type node and bundle type post only.
@@ -8836,6 +8844,10 @@ paths:
         '403':
           description: User is not authorized to clear all notifications.
       description: Clear all notifications for the current user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/notifications:read ]
   /notifications/register/{service_id}:
     parameters:
       - description: Identifying name of the notification service to be used.
@@ -8864,6 +8876,10 @@ paths:
           description: The token and device id was registered successfully.
         '404':
           description: Unknown service.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/notifications:write ]
     delete:
       tags:
         - notifications
@@ -8891,6 +8907,10 @@ paths:
           description: 'The device id was deregistered.'
         '404':
           description: 'The device id was not found or the service was unknown.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/notifications:write ]
   /feeds/status:
     get:
       tags:
