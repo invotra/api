@@ -5166,6 +5166,10 @@ paths:
             schema:
               $ref: '#/components/schemas/content-category-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/content_categories:write ]
   '/content_categories/list':
     get:
       tags:
@@ -5215,6 +5219,10 @@ paths:
                         - $ref: '#/components/schemas/content-category-schema'
         '403':
           description: 'User is not authorized to list content categories.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/content_categories:read ]
   '/content_categories/{content_category_id}':
     parameters:
       - description: 'The Invotra UUID of the content category.'
@@ -5241,6 +5249,10 @@ paths:
           description: 'User is not authorized to show this content category.'
         '404':
           description: 'The UUID does not correspond to an existing content category.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/content_categories:read ]
     put:
       tags:
         - 'content categories'
@@ -5262,6 +5274,10 @@ paths:
             schema:
               $ref: '#/components/schemas/content-category-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/content_categories:write ]
     delete:
       tags:
         - 'content categories'
@@ -5275,6 +5291,10 @@ paths:
           description: 'User is not authorized to delete this content category.'
         '404':
           description: 'The UUID does not correspond to an existing content category.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/content_categories:write ]
   '/content_types':
     post:
       tags:
