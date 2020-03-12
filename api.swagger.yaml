@@ -6584,6 +6584,10 @@ paths:
             schema:
               $ref: '#/components/schemas/idea-category-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/idea_categories:write ]
   '/idea_categories/list':
     get:
       tags:
@@ -6633,6 +6637,10 @@ paths:
                         - $ref: '#/components/schemas/idea-category-schema'
         '403':
           description: 'User is not authorized to list idea categories.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/idea_categories:read ]
   '/idea_categories/{idea_category_id}':
     parameters:
       - description: 'The Invotra UUID of the idea category.'
@@ -6659,6 +6667,10 @@ paths:
           description: 'User is not authorized to show this idea category.'
         '404':
           description: 'The UUID does not correspond to an existing idea category.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/idea_categories:read ]
     put:
       tags:
         - 'idea categories'
@@ -6680,6 +6692,10 @@ paths:
             schema:
               $ref: '#/components/schemas/idea-category-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/idea_categories:write ]
     delete:
       tags:
         - 'idea categories'
@@ -6693,6 +6709,10 @@ paths:
           description: 'User is not authorized to delete this idea category.'
         '404':
           description: 'The UUID does not correspond to an existing idea category.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/idea_categories:write ]
   '/interests':
     post:
       tags:
