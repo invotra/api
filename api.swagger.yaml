@@ -4492,6 +4492,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/location-uuid-list-item-schema'
       description: Search for locations.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:read ]
   /locations/list:
     get:
       tags:
@@ -4535,6 +4539,10 @@ paths:
                     items:
                       $ref: '#/components/schemas/location-uuid-title-context-list-item-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:read ]
   /locations/sites:
     post:
       tags:
@@ -4566,6 +4574,10 @@ paths:
             schema:
               $ref: '#/components/schemas/location-site-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
   '/locations/sites/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
@@ -4592,6 +4604,10 @@ paths:
             The UUID does not correspond to an existing location, or the
             location is not a site.
       description: Get information about the location.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:read ]
     put:
       tags:
         - locations
@@ -4615,6 +4631,10 @@ paths:
             schema:
               $ref: '#/components/schemas/location-site-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
     delete:
       tags:
         - locations
@@ -4628,6 +4648,10 @@ paths:
           description: The user does not have permission to remove this location.
         '404':
           description: The UUID does not correspond to an existing location, or the location is not a site.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
   /locations/buildings:
     post:
       tags:
@@ -4659,6 +4683,10 @@ paths:
             schema:
               $ref: '#/components/schemas/location-building-schema-create'
         required: true
+    security:
+      - SessionCookieHeader: []
+      - APIKeyHeader: []
+      - CognitoJwt: [ invotra/locations:write ]
   '/locations/buildings/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
@@ -4685,6 +4713,10 @@ paths:
             The UUID does not correspond to an existing location, or the
             location is not a building.
       description: Get information about the location.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:read ]
     put:
       tags:
         - locations
@@ -4708,6 +4740,10 @@ paths:
             schema:
               $ref: '#/components/schemas/location-building-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
     delete:
       tags:
       - locations
@@ -4721,6 +4757,10 @@ paths:
           description: The user does not have permission to remove this location.
         '404':
           description: The UUID does not correspond to an existing location, or the location is not a building.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
   /locations/floors:
     post:
       tags:
@@ -4752,6 +4792,10 @@ paths:
             schema:
               $ref: '#/components/schemas/location-floor-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
   '/locations/floors/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
@@ -4778,6 +4822,10 @@ paths:
             The UUID does not correspond to an existing location, or the
             location is not a floor.
       description: Get information about the location.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:read ]
     put:
       tags:
         - locations
@@ -4801,6 +4849,10 @@ paths:
             schema:
               $ref: '#/components/schemas/location-floor-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
     delete:
       tags:
       - locations
@@ -4814,6 +4866,10 @@ paths:
           description: The user does not have permission to remove this location.
         '404':
           description: The UUID does not correspond to an existing location, or the location is not a floor.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
   /locations/spaces:
     post:
       tags:
@@ -4845,6 +4901,10 @@ paths:
             schema:
               $ref: '#/components/schemas/location-space-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
   '/locations/spaces/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
@@ -4871,6 +4931,10 @@ paths:
             The UUID does not correspond to an existing location, or the
             location is not a space.
       description: Get information about the location.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:read ]
     put:
       tags:
         - locations
@@ -4894,6 +4958,10 @@ paths:
             schema:
               $ref: '#/components/schemas/location-space-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
     delete:
       tags:
       - locations
@@ -4907,6 +4975,10 @@ paths:
           description: The user does not have permission to remove this location.
         '404':
           description: The UUID does not correspond to an existing location, or the location is not a space.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:write ]
   '/badges':
     post:
       tags:
