@@ -6900,6 +6900,10 @@ paths:
             schema:
               $ref: '#/components/schemas/message-type-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/message_types:write ]
   '/message_types/list':
     get:
       tags:
@@ -6949,6 +6953,10 @@ paths:
                         - $ref: '#/components/schemas/message-type-schema'
         '403':
           description: 'User is not authorized to list message types.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/message_types:read ]
   '/message_types/{message_type_id}':
     parameters:
       - description: 'The Invotra UUID of the message type.'
@@ -6975,6 +6983,10 @@ paths:
           description: 'User is not authorized to show this message type.'
         '404':
           description: 'The UUID does not correspond to an existing message type.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/message_types:read ]
     put:
       tags:
         - 'message types'
@@ -6996,6 +7008,10 @@ paths:
             schema:
               $ref: '#/components/schemas/message-type-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/message_types:write ]
     delete:
       tags:
         - 'message types'
@@ -7009,6 +7025,10 @@ paths:
           description: 'User is not authorized to delete this message type.'
         '404':
           description: 'The UUID does not correspond to an existing message type.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/message_types:write ]
   '/organisational_skills':
     post:
       tags:
