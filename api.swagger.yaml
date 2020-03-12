@@ -4228,6 +4228,10 @@ paths:
             The file was not saved due to Drupal validation failure or JSON
             schema validation failure.
       description: Provision a new file.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/files:write ]
   '/files/{file_id}':
     parameters:
       - description: The Invotra UUID of the file.
@@ -4252,6 +4256,10 @@ paths:
         '404':
           description: The UUID does not correspond to an existing file.
       description: Get information about the file.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/files:read ]
     put:
       tags:
         - files
@@ -4275,6 +4283,10 @@ paths:
           description: |
             The file was not updated due to a Drupal validation failure or a
             JSON schema validation failure.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/files:write ]
   /job_roles:
     get:
       tags:
