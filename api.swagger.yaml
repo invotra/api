@@ -5952,6 +5952,10 @@ paths:
             schema:
               $ref: '#/components/schemas/free-skill-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/free_skills:write ]
   '/free_skills/list':
     get:
       tags:
@@ -6001,6 +6005,10 @@ paths:
                         - $ref: '#/components/schemas/free-skill-schema'
         '403':
           description: 'User is not authorized to list free skills.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/free_skills:read ]
   '/free_skills/{free_skill_id}':
     parameters:
       - description: 'The Invotra UUID of the free skill.'
@@ -6027,6 +6035,10 @@ paths:
           description: 'User is not authorized to show this free skill.'
         '404':
           description: 'The UUID does not correspond to an existing free skill.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/free_skills:read ]
     put:
       tags:
         - 'free skills'
@@ -6048,6 +6060,10 @@ paths:
             schema:
               $ref: '#/components/schemas/free-skill-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/free_skills:write ]
     delete:
       tags:
         - 'free skills'
@@ -6061,6 +6077,10 @@ paths:
           description: 'User is not authorized to delete this free skill.'
         '404':
           description: 'The UUID does not correspond to an existing free skill.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/free_skills:write ]
   '/general_topics':
     post:
       tags:
