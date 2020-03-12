@@ -3650,6 +3650,10 @@ paths:
             schema:
               $ref: '#/components/schemas/poll-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/polls:write ]
   '/polls/list':
     get:
       tags:
@@ -3720,6 +3724,10 @@ paths:
                       $ref: '#/components/schemas/poll-schema'
         '403':
           description: 'User is not authorized to list polls.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/polls:read ]
   '/polls/{poll_id}':
     parameters:
       - description: 'The Invotra UUID of the poll.'
@@ -3746,6 +3754,10 @@ paths:
           description: 'User is not authorized to show this poll.'
         '404':
           description: 'The UUID does not correspond to an existing poll.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/polls:read ]
     put:
       tags:
         - 'polls'
@@ -3767,6 +3779,10 @@ paths:
             schema:
               $ref: '#/components/schemas/poll-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/polls:write ]
     delete:
       tags:
         - 'polls'
@@ -3780,6 +3796,10 @@ paths:
           description: 'User is not authorized to delete this poll.'
         '404':
           description: 'The UUID does not correspond to an existing poll.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/polls:write ]
   '/promotions':
     post:
       tags:
