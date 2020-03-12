@@ -8006,6 +8006,10 @@ paths:
             schema:
               $ref: '#/components/schemas/region-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/regions:write ]
   '/regions/list':
     get:
       tags:
@@ -8055,6 +8059,10 @@ paths:
                         - $ref: '#/components/schemas/region-schema'
         '403':
           description: 'User is not authorized to list regions.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/regions:read ]
   '/regions/{region_id}':
     parameters:
       - description: 'The Invotra UUID of the region.'
@@ -8081,6 +8089,10 @@ paths:
           description: 'User is not authorized to show this region.'
         '404':
           description: 'The UUID does not correspond to an existing region.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/regions:read ]
     put:
       tags:
         - 'regions'
@@ -8102,6 +8114,10 @@ paths:
             schema:
               $ref: '#/components/schemas/region-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/regions:write ]
     delete:
       tags:
         - 'regions'
@@ -8115,6 +8131,10 @@ paths:
           description: 'User is not authorized to delete this region.'
         '404':
           description: 'The UUID does not correspond to an existing region.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/regions:write ]
   '/search_highlights':
     post:
       tags:
