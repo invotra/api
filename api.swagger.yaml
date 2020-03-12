@@ -8638,6 +8638,10 @@ paths:
             schema:
               $ref: '#/components/schemas/user-category-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/user_categories:write ]
   '/user_categories/list':
     get:
       tags:
@@ -8687,6 +8691,10 @@ paths:
                         - $ref: '#/components/schemas/user-category-schema'
         '403':
           description: 'User is not authorized to list user categories.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/user_categories:read ]
   '/user_categories/{user_category_id}':
     parameters:
       - description: 'The Invotra UUID of the user category.'
@@ -8713,6 +8721,10 @@ paths:
           description: 'User is not authorized to show this user category.'
         '404':
           description: 'The UUID does not correspond to an existing user category.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/user_categories:read ]
     put:
       tags:
         - 'user categories'
@@ -8734,6 +8746,10 @@ paths:
             schema:
               $ref: '#/components/schemas/user-category-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/user_categories:write ]
     delete:
       tags:
         - 'user categories'
@@ -8747,6 +8763,10 @@ paths:
           description: 'User is not authorized to delete this user category.'
         '404':
           description: 'The UUID does not correspond to an existing user category.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/user_categories:write ]
   /notifications:
     get:
       tags:
