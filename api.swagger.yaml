@@ -8164,6 +8164,10 @@ paths:
             schema:
               $ref: '#/components/schemas/search-highlight-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/search_highlights:write ]
   '/search_highlights/list':
     get:
       tags:
@@ -8213,6 +8217,10 @@ paths:
                         - $ref: '#/components/schemas/search-highlight-schema'
         '403':
           description: 'User is not authorized to list search highlights.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/search_highlights:read ]
   '/search_highlights/{search_highlight_id}':
     parameters:
       - description: 'The Invotra UUID of the search highlight.'
@@ -8239,6 +8247,10 @@ paths:
           description: 'User is not authorized to show this search highlight.'
         '404':
           description: 'The UUID does not correspond to an existing search highlight.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/search_highlights:read ]
     put:
       tags:
         - 'search highlights'
@@ -8260,6 +8272,10 @@ paths:
             schema:
               $ref: '#/components/schemas/search-highlight-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/search_highlights:write ]
     delete:
       tags:
         - 'search highlights'
@@ -8273,6 +8289,10 @@ paths:
           description: 'User is not authorized to delete this search highlight.'
         '404':
           description: 'The UUID does not correspond to an existing search highlight.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/search_highlights:write ]
   '/security_classifications':
     post:
       tags:
