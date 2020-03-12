@@ -8847,7 +8847,7 @@ paths:
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
-        - CognitoJwt: [ invotra/notifications:read ]
+        - CognitoJwt: [ invotra/notifications:write ]
   /notifications/register/{service_id}:
     parameters:
       - description: Identifying name of the notification service to be used.
