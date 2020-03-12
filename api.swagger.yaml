@@ -4191,6 +4191,10 @@ paths:
                       - $ref: '#/components/schemas/comment-schema'
         '403':
           description: 'User is not authorized to list comments.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/comments:read ]
   /files:
     post:
       requestBody:
