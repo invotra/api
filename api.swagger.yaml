@@ -5478,6 +5478,10 @@ paths:
             schema:
               $ref: '#/components/schemas/country-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/countries:write ]
   '/countries/list':
     get:
       tags:
@@ -5527,6 +5531,10 @@ paths:
                         - $ref: '#/components/schemas/country-schema'
         '403':
           description: 'User is not authorized to list countries.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/countries:read ]
   '/countries/{country_id}':
     parameters:
       - description: 'The Invotra UUID of the country.'
@@ -5553,6 +5561,10 @@ paths:
           description: 'User is not authorized to show this country.'
         '404':
           description: 'The UUID does not correspond to an existing country.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/countries:read ]
     put:
       tags:
         - 'countries'
@@ -5574,6 +5586,10 @@ paths:
             schema:
               $ref: '#/components/schemas/country-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/countries:write ]
     delete:
       tags:
         - 'countries'
@@ -5587,6 +5603,10 @@ paths:
           description: 'User is not authorized to delete this country.'
         '404':
           description: 'The UUID does not correspond to an existing country.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/countries:write ]
   '/event_statuses':
     post:
       tags:
