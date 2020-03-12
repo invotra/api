@@ -5008,6 +5008,10 @@ paths:
             schema:
               $ref: '#/components/schemas/badge-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/badges:write ]
   '/badges/list':
     get:
       tags:
@@ -5057,6 +5061,10 @@ paths:
                         - $ref: '#/components/schemas/badge-schema'
         '403':
           description: 'User is not authorized to list badges.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/badges:read ]
   '/badges/{badge_id}':
     parameters:
       - description: 'The Invotra UUID of the badge.'
@@ -5083,6 +5091,10 @@ paths:
           description: 'User is not authorized to show this badge.'
         '404':
           description: 'The UUID does not correspond to an existing badge.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/badges:read ]
     put:
       tags:
         - 'badges'
@@ -5104,6 +5116,10 @@ paths:
             schema:
               $ref: '#/components/schemas/badge-schema-update'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/badges:write ]
     delete:
       tags:
         - 'badges'
@@ -5117,6 +5133,10 @@ paths:
           description: 'User is not authorized to delete this badge.'
         '404':
           description: 'The UUID does not correspond to an existing badge.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/badges:write ]
   '/content_categories':
     post:
       tags:
