@@ -6426,6 +6426,10 @@ paths:
             schema:
               $ref: '#/components/schemas/group-category-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_categories:write ]
   '/group_categories/list':
     get:
       tags:
@@ -6475,6 +6479,10 @@ paths:
                         - $ref: '#/components/schemas/group-category-schema'
         '403':
           description: 'User is not authorized to list group categories.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_categories:read ]
   '/group_categories/{group_category_id}':
     parameters:
       - description: 'The Invotra UUID of the group category.'
@@ -6501,6 +6509,10 @@ paths:
           description: 'User is not authorized to show this group category.'
         '404':
           description: 'The UUID does not correspond to an existing group category.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_categories:read ]
     put:
       tags:
         - 'group categories'
@@ -6522,6 +6534,10 @@ paths:
             schema:
               $ref: '#/components/schemas/group-category-schema-common'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_categories:write ]
     delete:
       tags:
         - 'group categories'
@@ -6535,6 +6551,10 @@ paths:
           description: 'User is not authorized to delete this group category.'
         '404':
           description: 'The UUID does not correspond to an existing group category.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_categories:write ]
   '/idea_categories':
     post:
       tags:
