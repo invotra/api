@@ -574,7 +574,7 @@ paths:
         '403':
           description: 'Access denied. This may occur if you try to filter by a private or secret group that you are not a member of.'
         '404':
-          description: 'The group, team, or location you filtering on does not exist.'
+          description: 'The group, team, or location you are filtering on does not exist.'
     description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
   /users/mention:
     get:
