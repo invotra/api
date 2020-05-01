@@ -12362,6 +12362,43 @@ components:
             type: string
             format: uuid
             example: 01234567-89ab-cdef-12F34-56789abcdef0
+          external_id:
+            description: 'The location external reference id.'
+            type: string
+            example: 'ABC123'
+          address1:
+            description: The first line of the location's postal address.
+            type: string
+            example: 1 Main Street
+          address2:
+            description: The second line of the location's postal address.
+            type: string
+            example: Littleton Village
+          address3:
+            description: The third line of the location's postal address.
+            type: string
+            example: Northern District
+          town:
+            description: The town where the location is.
+            type: string
+            example: Metropolis
+          postcode:
+            description: 'The location''s postal code or zip code, if any.'
+            type: string
+            example: ABC 123
+          team:
+            description: A team associated with the location.
+            type: string
+            format: uuid
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+          phone:
+            description: The location's telephone number.
+            type: string
+            example: +1-23-456-789
+          email:
+            description: The location's email address.
+            type: string
+            format: email
           context:
             allOf:
               - $ref: '#/components/schemas/location-context-schema'
@@ -12438,6 +12475,43 @@ components:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-12F34-56789abcdef0'
+          external_id:
+            description: 'The location external reference id.'
+            type: string
+            example: 'ABC123'
+          address1:
+            description: The first line of the location's postal address.
+            type: string
+            example: 1 Main Street
+          address2:
+            description: The second line of the location's postal address.
+            type: string
+            example: Littleton Village
+          address3:
+            description: The third line of the location's postal address.
+            type: string
+            example: Northern District
+          town:
+            description: The town where the location is.
+            type: string
+            example: Metropolis
+          postcode:
+            description: 'The location''s postal code or zip code, if any.'
+            type: string
+            example: ABC 123
+          team:
+            description: A team associated with the location.
+            type: string
+            format: uuid
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+          phone:
+            description: The location's telephone number.
+            type: string
+            example: +1-23-456-789
+          email:
+            description: The location's email address.
+            type: string
+            format: email
     team-membership-common-schema:
       type: object
       properties:
