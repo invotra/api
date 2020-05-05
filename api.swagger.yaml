@@ -10335,7 +10335,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             media_smil:
-              description: 'SMIL file for the multi media.'
+              description: 'SMIL file for the multi media. This is mandatory if a video file has been uploaded into the media field.'
               type: object
               properties:
                 uuid:
@@ -10344,7 +10344,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             meida_tta:
-              description: 'TTA file for the multi media.'
+              description: 'TTA file for the multi media. Used if you are uploading video that requires subtitles in the media field.'
               type: object
               properties:
                 uuid:
@@ -10445,7 +10445,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             media_smil:
-              description: 'SMIL file for the multi media.'
+              description: 'SMIL file for the multi media. This is mandatory if a video file has been uploaded into the media field.'
               type: object
               properties:
                 uuid:
@@ -10454,7 +10454,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             meida_tta:
-              description: 'TTA file for the multi media.'
+              description: 'TTA file for the multi media. Used if you are uploading video that requires subtitles in the media field.'
               type: object
               properties:
                 uuid:
