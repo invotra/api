@@ -10204,7 +10204,7 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            meida:
+            media:
               description: 'Multi media file.'
               type: object
               allOf:
@@ -10214,7 +10214,7 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
-            meida_tta:
+            media_tta:
               description: 'TTA file for the Multi media.'
               type: object
               allOf:
@@ -10325,7 +10325,7 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            meida:
+            media:
               description: 'Multi media file.'
               type: object
               properties:
@@ -10343,7 +10343,7 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            meida_tta:
+            media_tta:
               description: 'TTA file for the multi media. Used if you are uploading video that requires subtitles in the media field.'
               type: object
               properties:
@@ -10435,7 +10435,7 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            meida:
+            media:
               description: 'Multi media file.'
               type: object
               properties:
@@ -10453,7 +10453,7 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            meida_tta:
+            media_tta:
               description: 'TTA file for the multi media. Used if you are uploading video that requires subtitles in the media field.'
               type: object
               properties:
