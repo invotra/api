@@ -2277,6 +2277,165 @@ paths:
           description: 'User is not authorized to delete this custom content.'
         '404':
           description: 'The UUID does not correspond to an existing custom content.'
+  '/galleries':
+    post:
+      tags:
+        - 'galleries'
+      description: 'Provision a new gallery.'
+      responses:
+        '201':
+          description: 'The gallery was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned gallery may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The gallery was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a gallery.'
+        '422':
+          description: 'The gallery was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/gallery-schema-create'
+        required: true
+  '/galleries/list':
+    get:
+      tags:
+        - 'galleries'
+      description: 'Search for galleries. An empty array is returned if no galleries where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of galleries on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of galleries matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/gallery-schema'
+        '403':
+          description: 'User is not authorized to list galleries.'
+  '/galleries/{gallery_id}':
+    parameters:
+      - description: 'The Invotra UUID of the gallery.'
+        in: path
+        name: gallery_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'galleries'
+      description: 'Get information about the gallery.'
+      responses:
+        '200':
+          description: 'Returns a single complete gallery object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gallery-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this gallery.'
+        '404':
+          description: 'The UUID does not correspond to an existing gallery.'
+    put:
+      tags:
+        - 'galleries'
+      description: 'Update gallery information.'
+      responses:
+        '200':
+          description: 'The gallery information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this gallery.'
+        '404':
+          description: 'The UUID does not correspond to an existing gallery.'
+        '422':
+          description: 'The gallery was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/gallery-schema-update'
+        required: true
+    delete:
+      tags:
+        - 'galleries'
+      description: 'Delete a gallery.'
+      responses:
+        '200':
+          description: 'The gallery was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this gallery.'
+        '404':
+          description: 'The UUID does not correspond to an existing gallery.'
   '/group_polls':
     post:
       tags:
@@ -9428,6 +9587,388 @@ components:
           example: false
         external_id:
           description: 'The custom content external reference id.'
+          type: string
+          example: 'ABC123'
+    gallery-schema:
+      allOf:
+        - $ref: '#/components/schemas/gallery-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the gallery.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            site_section:
+              description: 'The site section of this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the site section.'
+                  type: string
+                  example: 'Finance'
+            image:
+              description: 'Gallery image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this gallery.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            gallery_items:
+              description: 'The gallery items.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner of this gallery.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            team:
+              description: 'The team targeting this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the team.'
+                  type: string
+                  example: 'Operations'
+            locations:
+              description: 'The locations targeting this gallery.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/location-trimmed-schema'
+            grades:
+              description: 'The grades targeting this gallery.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this gallery.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the gallery was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the gallery was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the gallery.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the gallery.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the gallery.'
+              type: boolean
+              example: true
+    gallery-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/gallery-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            gallery_items:
+              description: 'The gallery items.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the gallery item.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the owner user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting of this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this gallery.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this gallery.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this gallery.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+    gallery-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/gallery-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            gallery_items:
+              description: 'The gallery items.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the gallery item.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the owner user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting of this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this gallery.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this gallery.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this gallery.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
+    gallery-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the gallery.'
+          type: string
+          example: 'Gallery showing the new car park.'
+        body:
+          description: 'The body of the gallery.'
+          type: string
+          example: 'The car park is having the line markings repainted, see the pictures.'
+        state:
+          description: 'Indicates the workflow state of the gallery.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        schedule_date_timestamp:
+          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+          type: integer
+          example: 1510941596
+        review_date_timestamp:
+          description: 'The review date timestamp for the gallery (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the gallery.'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the gallery.'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content'
+                  - 'site section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        featured:
+          description: 'Indicates that this gallery is featured.'
+          type: boolean
+          default: false
+          example: false
+        external_id:
+          description: 'The gallery external reference id.'
           type: string
           example: 'ABC123'
     group-poll-schema:
