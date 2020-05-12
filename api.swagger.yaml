@@ -9627,7 +9627,7 @@ components:
               type: array
               items:
                 allOf:
-                  - $ref: '#/components/schemas/file-schema'
+                  - $ref: '#/components/schemas/multi-media-trimmed-schema'
             owner:
               description: 'The owner of this gallery.'
               type: object
@@ -9736,13 +9736,15 @@ components:
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             gallery_items:
               description: 'The gallery items.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the gallery item.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the multi media.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
               description: 'The owner of this gallery.'
               type: object
@@ -9828,13 +9830,15 @@ components:
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             gallery_items:
               description: 'The gallery items.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the gallery item.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the multi media.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
               description: 'The owner of this gallery.'
               type: object
@@ -12317,6 +12321,17 @@ components:
             - building
             - floor
             - space
+    multi-media-trimmed-schema:
+      properties:
+        uuid:
+          description: 'Invotra UUID of the multi media.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        title:
+          description: 'The title of the multi media.'
+          type: string
+          example: 'Video of car park renovation.'
     user-trimmed-schema:
       properties:
         uuid:
