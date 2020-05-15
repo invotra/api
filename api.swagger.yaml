@@ -8907,6 +8907,21 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the blog. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the blog.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             image:
               description: 'Blog Image.'
               type: object
@@ -8954,6 +8969,21 @@ components:
         - $ref: '#/components/schemas/blog-schema-common'
         - type: object
           properties:
+            workflow_schedule:
+              description: 'The scheduled workflow state of the blog. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the blog.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             image:
               description: 'The image for this blog.'
               type: object
@@ -9011,9 +9041,10 @@ components:
           type: string
           example: 'You can create strong passwords using an offline random password generator.'
         state:
-          description: 'Indicates the workflow state of the blog.'
+          description: 'Indicates the workflow state of the blog. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
           type: string
           enum:
+            - 'draft'
             - 'published'
             - 'unpublished'
     custom-content-schema:
@@ -9026,10 +9057,23 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-            schedule_date_timestamp:
-              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
-              type: integer
-              example: 1510941596
+            workflow_schedule:
+              description: 'The scheduled workflow state of the custom content. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the custom content.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               description: 'The site section of this custom content.'
               type: object
@@ -9153,10 +9197,23 @@ components:
         - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
-            schedule_date_timestamp:
-              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
-              type: integer
-              example: 1510941596
+            workflow_schedule:
+              description: 'The scheduled workflow state of the custom content. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the custom content.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               description: 'The site section of this custom content.'
               type: object
@@ -9364,7 +9421,7 @@ components:
           type: string
           example: 'You can create strong passwords using an offline random password generator.'
         state:
-          description: 'Indicates the workflow state of the custom content.'
+          description: 'Indicates the workflow state of the custom content. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
           type: string
           enum:
             - 'draft'
@@ -9542,6 +9599,23 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the list. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the list.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               description: 'The site section of this list.'
               type: object
@@ -9673,6 +9747,23 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the list. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the list.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             author:
               description: 'The author of this list.'
               type: object
@@ -9825,7 +9916,7 @@ components:
           type: string
           example: 'You can create strong passwords using an online random password generator.'
         state:
-          description: 'Indicates the workflow state of the list.'
+          description: 'Indicates the workflow state of the list. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
           type: string
           enum:
             - 'draft'
@@ -9833,10 +9924,6 @@ components:
             - 'reviewed'
             - 'published'
             - 'unpublished'
-        review_date_timestamp:
-          description: 'The review date timestamp for the list (in seconds).'
-          type: integer
-          example: 1510941596
         list:
           description: 'List of content and links in the list.'
           type: array
@@ -10016,6 +10103,23 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the news. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the news.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               description: 'The site section of this news.'
               type: object
@@ -10132,6 +10236,23 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the news. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the news.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             image:
               description: 'The image for this news.'
               type: object
@@ -10325,7 +10446,7 @@ components:
           type: string
           example: 'The car park is having the line markings repainted.'
         state:
-          description: 'Indicates the workflow state of the news.'
+          description: 'Indicates the workflow state of the news. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
           type: string
           enum:
             - 'draft'
@@ -10333,10 +10454,6 @@ components:
             - 'reviewed'
             - 'published'
             - 'unpublished'
-        schedule_date_timestamp:
-          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
-          type: integer
-          example: 1510941596
         review_date_timestamp:
           description: 'The review date timestamp for the custom content (in seconds).'
           type: integer
@@ -10401,6 +10518,23 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the page. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the page.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               description: 'The site section of this page.'
               type: object
@@ -10509,6 +10643,23 @@ components:
         - $ref: '#/components/schemas/page-schema-common'
         - type: object
           properties:
+            workflow_schedule:
+              description: 'The scheduled workflow state of the page. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the page.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               description: 'The site section of this page.'
               type: object
@@ -10711,7 +10862,7 @@ components:
           type: string
           example: 'You can create strong passwords using an offline random password generator.'
         state:
-          description: 'Indicates the workflow state of the page.'
+          description: 'Indicates the workflow state of the page. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
           type: string
           enum:
             - 'draft'
@@ -10719,10 +10870,6 @@ components:
             - 'reviewed'
             - 'published'
             - 'unpublished'
-        schedule_date_timestamp:
-          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
-          type: integer
-          example: 1510941596
         review_date_timestamp:
           description: 'The review date timestamp for the page (in seconds).'
           type: integer
@@ -10787,6 +10934,23 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the policy. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the policy.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               type: object
               description: 'The site section of this policy.'
@@ -10953,6 +11117,23 @@ components:
         - $ref: '#/components/schemas/policy-schema-common'
         - type: object
           properties:
+            workflow_schedule:
+              description: 'The scheduled workflow state of the policy. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the policy.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               description: 'The site section of this policy.'
               type: object
@@ -11191,7 +11372,7 @@ components:
           type: string
           example: 'You must create strong password and never share it.'
         state:
-          description: 'Indicates the workflow state of the policy.'
+          description: 'Indicates the workflow state of the policy. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
           type: string
           enum:
             - 'draft'
@@ -11271,6 +11452,23 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the poll. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the poll.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             title:
               description: 'The question the poll is asking.'
               type: string
@@ -11335,6 +11533,23 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the poll. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the poll.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
     poll-schema-create:
       allOf:
         - $ref: '#/components/schemas/poll-schema-common'
@@ -11376,7 +11591,7 @@ components:
       type: object
       properties:
         state:
-          description: 'Indicates the workflow state of the poll.'
+          description: 'Indicates the workflow state of the poll. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
           type: string
           enum:
             - 'draft'
@@ -11384,10 +11599,6 @@ components:
             - 'reviewed'
             - 'published'
             - 'unpublished'
-        schedule_timestamp:
-          description: 'The scheduled review date timestamp for the poll (in seconds).'
-          type: integer
-          example: 1510941596
         poll_duration:
           description: 'The duration this poll will remain open (in seconds from the create date).'
           type: integer
@@ -11416,6 +11627,23 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the promotion. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the promotion.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               description: 'The site section of this promotion.'
               type: object
@@ -11544,6 +11772,23 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the promotion. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the promotion.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             image:
               description: 'The image for this promotion.'
               type: object
@@ -11719,7 +11964,7 @@ components:
           type: string
           example: 'Demonstrate your talent at the company talent competition.'
         state:
-          description: 'Indicates the workflow state of the promotion.'
+          description: 'Indicates the workflow state of the promotion. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
           type: string
           enum:
             - 'draft'
@@ -11727,10 +11972,6 @@ components:
             - 'reviewed'
             - 'published'
             - 'unpublished'
-        schedule_date_timestamp:
-          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
-          type: integer
-          example: 1510941596
         link:
           description: 'The link for this promotion.'
           type: string
