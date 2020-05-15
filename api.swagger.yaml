@@ -10181,6 +10181,23 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the multi media. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the multi media.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               description: 'The site section of this multi media.'
               type: object
@@ -10298,6 +10315,23 @@ components:
         - $ref: '#/components/schemas/multi-media-schema-common'
         - type: object
           properties:
+            workflow_schedule:
+              description: 'The scheduled workflow state of the multi media. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the multi media.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
             site_section:
               description: 'The site section of this multi media.'
               type: object
@@ -10532,7 +10566,7 @@ components:
           type: string
           example: 'The car park is having the line markings repainted, watch the paint dry.'
         state:
-          description: 'Indicates the workflow state of the multi media.'
+          description: 'Indicates the workflow state of the multi media. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
           type: string
           enum:
             - 'draft'
@@ -10540,10 +10574,6 @@ components:
             - 'reviewed'
             - 'published'
             - 'unpublished'
-        schedule_date_timestamp:
-          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
-          type: integer
-          example: 1510941596
         review_date_timestamp:
           description: 'The review date timestamp for the multi media (in seconds).'
           type: integer
