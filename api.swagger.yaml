@@ -8899,6 +8899,7 @@ components:
       type: object
     blog-schema:
       allOf:
+        - $ref: '#/components/schemas/blog-schema-common'
         - type: object
           properties:
             uuid:
@@ -8906,9 +8907,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/blog-schema-common'
-        - type: object
-          properties:
             image:
               description: 'Blog Image.'
               type: object
@@ -9020,6 +9018,7 @@ components:
             - 'unpublished'
     custom-content-schema:
       allOf:
+        - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
             uuid:
@@ -9027,9 +9026,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/custom-content-schema-common'
-        - type: object
-          properties:
             schedule_date_timestamp:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
@@ -9538,6 +9534,7 @@ components:
           example: 'What is your favorite food?'
     list-schema:
       allOf:
+        - $ref: '#/components/schemas/list-schema-common'
         - type: object
           properties:
             uuid:
@@ -9545,9 +9542,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/list-schema-common'
-        - type: object
-          properties:
             site_section:
               description: 'The site section of this list.'
               type: object
@@ -10399,6 +10393,7 @@ components:
           example: 'ABC123'
     page-schema:
       allOf:
+        - $ref: '#/components/schemas/page-schema-common'
         - type: object
           properties:
             uuid:
@@ -10406,9 +10401,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/page-schema-common'
-        - type: object
-          properties:
             site_section:
               description: 'The site section of this page.'
               type: object
@@ -10787,6 +10779,7 @@ components:
           example: 'ABC123'
     policy-schema:
       allOf:
+        - $ref: '#/components/schemas/policy-schema-common'
         - type: object
           properties:
             uuid:
@@ -10794,9 +10787,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/policy-schema-common'
-        - type: object
-          properties:
             site_section:
               type: object
               description: 'The site section of this policy.'
@@ -11418,6 +11408,7 @@ components:
           example: 'ABC123'
     promotion-schema:
       allOf:
+        - $ref: '#/components/schemas/promotion-schema-common'
         - type: object
           properties:
             uuid:
@@ -11425,9 +11416,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/promotion-schema-common'
-        - type: object
-          properties:
             site_section:
               description: 'The site section of this promotion.'
               type: object
