@@ -3673,13 +3673,15 @@ paths:
           description: 'The comment was not saved due to malformed JSON.'
         '403':
           description: 'User is not authorized to create a comment.'
+        '406':
+          description: 'Comments are closed for this content.'
         '422':
           description: 'The comment was not saved due to Drupal validation failure or JSON schema validation failure.'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/comment-schema'
+              $ref: '#/components/schemas/comment-schema-create'
         required: true
   /comments/list:
     get:
@@ -11996,20 +11998,115 @@ components:
                       type: string
                       example: Appendix A - Acronyms
     comment-schema:
+      allOf:
+        - $ref: '#/components/schemas/comment-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the comment.'
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            content_uuid:
+              type: string
+              format: uuid
+              description: 'This is the Invotra UUID of the content.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            parent_uuid:
+              type: string
+              format: uuid
+              description: 'This is the Invotra UUID of the parent of the comment. Only present on replies.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            timestamp_created:
+              description: 'The timestamp (in seconds) of when the comment was created'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'The timestamp (in seconds) of when the comment was updated'
+              type: integer
+              example: 1510941596
+            content_type:
+              description: 'The content type machine name of the comment.'
+              type: string
+              example: 'blog'
+            category:
+              description: 'The category of the comment.'
+              type: object
+              required:
+                - name
+                - uuid
+              properties:
+                name:
+                  type: string
+                  description: 'The name of the comment category.'
+                  example: 'Idea'
+                uuid:
+                  type: string
+                  format: uuid
+                  description: 'This is the Invotra UUID of the comment category.'
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            likes_count:
+              description: 'The total number of likes for the comment.'
+              type: integer
+              example: 33
+            attachments:
+              description: 'List of attachments on the comment.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/file-schema'
       required:
         - uuid
         - body
+        - author_uuid
         - timestamp_created
         - timestamp_updated
         - content_uuid
         - content_type
+        - category
         - likes_count
+    comment-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/comment-schema-common'
+        - type: object
+          properties:
+            parent_uuid:
+              type: string
+              format: uuid
+              description: 'This is the Invotra UUID of the parent of the comment. It may be a post or comment.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            category:
+              description: 'The category of the comment.'
+              type: object
+              properties:
+                uuid:
+                  type: string
+                  format: uuid
+                  description: 'This is the Invotra UUID of the comment category.'
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              required:
+                - uuid
+            attachments:
+              description: 'List of attachments on the comment.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                required:
+                  - uuid
+          required:
+            - parent_uuid
+            - category
+            - body
+            - author_uuid
+    comment-schema-common:
+      type: object
       properties:
-        uuid:
-          description: 'Invotra UUID of the comment.'
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-1234-56789abcdef0
         body:
           description: 'The main body text of the comment.'
           type: string
@@ -12019,54 +12116,6 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
-        timestamp_created:
-          description: 'The timestamp (in seconds) of when the comment was created'
-          type: integer
-          example: 1510941596
-        timestamp_updated:
-          description: 'The timestamp (in seconds) of when the comment was updated'
-          type: integer
-          example: 1510941596
-        parent_uuid:
-          type: string
-          format: uuid
-          description: 'This is the Invotra UUID of the parent of the comment. Only present on replies.'
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-        content_uuid:
-          type: string
-          format: uuid
-          description: 'This is the Invotra UUID of the content.'
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-        content_type:
-          description: 'The content type machine name of the comment.'
-          type: string
-          example: 'blog'
-        category:
-          description: 'The category of the comment.'
-          type: object
-          required:
-            - name
-            - uuid
-          properties:
-            name:
-              type: string
-              description: 'The name of the comment category.'
-              example: 'Idea'
-            uuid:
-              type: string
-              format: uuid
-              description: 'This is the Invotra UUID of the comment category.'
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-        likes_count:
-          description: 'The total number of likes for the comment.'
-          type: integer
-          example: 33
-        attachments:
-          description: 'List of attachments on the comment.'
-          type: array
-          items:
-            allOf:
-              - $ref: '#/components/schemas/file-schema'
     file-schema:
       type: object
       required:
