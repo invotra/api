@@ -3659,7 +3659,7 @@ paths:
       description: 'Provision a new comment.'
       responses:
         '201':
-          description: 'The promotion was created successfully.'
+          description: 'The comment was created successfully.'
           headers:
             Location:
               description: 'The URL at which the newly provisioned comment may be retrieved.'
@@ -12073,35 +12073,10 @@ components:
             parent_uuid:
               type: string
               format: uuid
-              description: 'This is the Invotra UUID of the parent of the comment. It may be a post or comment.'
+              description: 'This is the Invotra UUID of the parent of the comment.'
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-            category:
-              description: 'The category of the comment.'
-              type: object
-              properties:
-                uuid:
-                  type: string
-                  format: uuid
-                  description: 'This is the Invotra UUID of the comment category.'
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-              required:
-                - uuid
-            attachments:
-              description: 'List of attachments on the comment.'
-              type: array
-              items:
-                type: object
-                properties:
-                  uuid:
-                    description: 'Invotra UUID of the file.'
-                    type: string
-                    format: uuid
-                    example: '01234567-89ab-cdef-1234-56789abcdef0'
-                required:
-                  - uuid
           required:
             - parent_uuid
-            - category
             - body
             - author_uuid
     comment-schema-common:
