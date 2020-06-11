@@ -3673,10 +3673,8 @@ paths:
           description: 'The comment was not saved due to malformed JSON.'
         '403':
           description: 'User is not authorized to create a comment.'
-        '406':
-          description: 'Comments are closed for this content.'
         '422':
-          description: 'The comment was not saved due to Drupal validation failure or JSON schema validation failure.'
+          description: 'The comment was not saved due to Drupal validation failure or JSON schema validation failure. (Comments may be closed for this content)'
       requestBody:
         content:
           application/json:
