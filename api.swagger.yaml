@@ -12010,11 +12010,6 @@ components:
               format: uuid
               description: 'This is the Invotra UUID of the content.'
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-            parent_uuid:
-              type: string
-              format: uuid
-              description: 'This is the Invotra UUID of the parent of the comment. Only present on replies.'
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
             timestamp_created:
               description: 'The timestamp (in seconds) of when the comment was created'
               type: integer
@@ -12066,17 +12061,10 @@ components:
     comment-schema-create:
       allOf:
         - $ref: '#/components/schemas/comment-schema-common'
-        - type: object
-          properties:
-            parent_uuid:
-              type: string
-              format: uuid
-              description: 'This is the Invotra UUID of the parent of the comment.'
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-          required:
-            - parent_uuid
-            - body
-            - author_uuid
+      required:
+        - parent_uuid
+        - body
+        - author_uuid
     comment-schema-common:
       type: object
       properties:
@@ -12084,6 +12072,11 @@ components:
           description: 'The main body text of the comment.'
           type: string
           example: 'How long will this take? I have been waiting ages.'
+        parent_uuid:
+          type: string
+          format: uuid
+          description: "The Invotra UUID of the comment's parent, content UUID for a top level comment, or comment UUID for a reply."
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
         author_uuid:
           description: 'Invotra UUID of the author.'
           example: '01234567-89ab-cdef-1234-56789abcdef0'
