@@ -45,12 +45,20 @@ jobs:
           rm -rf node_modules
           node ../update-package-name.js package.json @${{ github.repository }}
       - name: Publish release package in private NPM
+        if: github.event_name == 'release'
         working-directory: client/typescript-axios/build
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn version --new-version ${{ env.NEW_CLIENT_VERSION }} --no-git-tag-version
           yarn publish --access restricted --registry https://npm.pkg.github.com
+      - name: Publish PR package in private NPM
+        working-directory: client/typescript-axios/build
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          yarn version --new-version ${{ env.NEW_CLIENT_VERSION }} --no-git-tag-version
+          yarn publish --tag pr-build --access restricted --registry https://npm.pkg.github.com
       - name: Comment PR
         if: github.event_name == 'pull_request'
         uses: thollander/actions-comment-pull-request@master
