@@ -55,6 +55,7 @@ jobs:
           yarn version --new-version ${{ env.NEW_CLIENT_VERSION }} --no-git-tag-version
           yarn publish --access restricted --registry https://npm.pkg.github.com
       - name: Publish PR package in private NPM
+        if: github.event_name == 'pull_request'
         working-directory: client/typescript-axios/build
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
