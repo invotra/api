@@ -57,9 +57,13 @@ jobs:
         with:
           message: |
             :robot: beep beep beep
-            Build done.
-            You may now include the API client we just built in your project by running:
+            Build complete.
+            You may install the freshly built package.
+            To do so, run:
             ```bash
+            echo '"@${{ github.repository_owner }}:registry" "https://npm.pkg.github.com/"
+            ' > .yarnrc
             yarn add @${{ github.repository }}@${{ env.NEW_CLIENT_VERSION }}
             ```
+            Note that you may need to store your GitHub npm token in `~/.npmrc` to access the private registry.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
