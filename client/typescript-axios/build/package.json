@@ -5,8 +5,14 @@
   "typings": "lib/index.d.ts",
   "module": "lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "src"
   ],
+  "author": "Invotra",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/invotra/api"
+  },
   "license": "PROPRIETARY",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
