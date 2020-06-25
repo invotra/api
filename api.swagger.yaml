@@ -4051,6 +4051,8 @@ paths:
                 $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
+        '403':
+          description: 'The user does not have permission to create a location.'
         '422':
           description: |
             The location was not saved due to Drupal validation failure or JSON
@@ -4096,6 +4098,8 @@ paths:
           description: The location information was updated successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
+        '403':
+          description: 'The user does not have permission to update this location.'
         '404':
           description: >-
             The UUID does not correspond to an existing location, or the
@@ -4144,6 +4148,8 @@ paths:
                 $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
+        '403':
+          description: 'The user does not have permission to create a location.'
         '422':
           description: |
             The location was not saved due to Drupal validation failure or JSON
@@ -4189,6 +4195,8 @@ paths:
           description: The location information was updated successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
+        '403':
+          description: 'The user does not have permission to update this location.'
         '404':
           description: >-
             The UUID does not correspond to an existing location, or the
@@ -4237,6 +4245,8 @@ paths:
                 $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
+        '403':
+          description: 'The user does not have permission to create a location.'
         '422':
           description: |
             The location was not saved due to Drupal validation failure or JSON
@@ -4282,6 +4292,8 @@ paths:
           description: The location information was updated successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
+        '403':
+          description: 'The user does not have permission to update this location.'
         '404':
           description: >-
             The UUID does not correspond to an existing location, or the
@@ -4330,6 +4342,8 @@ paths:
                 $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
           description: The location was not saved due to malformed JSON.
+        '403':
+          description: 'The user does not have permission to create a location.'
         '422':
           description: |
             The location was not saved due to Drupal validation failure or JSON
@@ -4375,6 +4389,8 @@ paths:
           description: The location information was updated successfully.
         '400':
           description: The supplied UUID or JSON was malformed.
+        '403':
+          description: 'The user does not have permission to update this location.'
         '404':
           description: >-
             The UUID does not correspond to an existing location, or the
