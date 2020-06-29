@@ -3765,7 +3765,9 @@ paths:
                     example: 50
                   results:
                     description: 'The results set.'
-                    allOf:
+                    type: array
+                    items:
+                      allOf:
                       - $ref: '#/components/schemas/comment-schema'
         '403':
           description: 'User is not authorized to list comments.'
