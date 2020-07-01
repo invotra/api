@@ -8861,6 +8861,7 @@ components:
             - Problem / Risk
             - Agreed
             - Decision
+            - Idea
         featured_image:
           description: The featured image for this post
           type: object
