@@ -13729,35 +13729,29 @@ components:
               - $ref: '#/components/schemas/search-highlight-list-link-schema'
             discriminator:
               propertyName: type
-              mapping:
-                content: '#/components/schemas/search-highlight-list-content-schema'
-                site_section: '#/components/schemas/search-highlight-list-site_section-schema'
-                link: '#/components/schemas/search-highlight-list-link-schema'
     search-highlight-list-common-schema:
       type: object
       properties:
         type:
           description: 'The type of content in the search highlight.'
           type: string
-          enum:
-            - 'content'
-            - 'site_section'
-            - 'link'
         title:
           description: 'Title of the content or link.'
           type: string
           example: 'More information here.'
       required:
-      - type
-      - title
-      - content
+        - type
+        - title
+        - content
     search-highlight-list-content-schema:
       allOf:
       - $ref: '#/components/schemas/search-highlight-list-common-schema'
       - type: object
         properties:
           type:
-            example: 'content'
+            type: string
+            enum:
+              - 'content'
           content:
             type: object
             properties:
@@ -13772,7 +13766,9 @@ components:
       - type: object
         properties:
           type:
-            example: 'site_section'
+            type: string
+            enum:
+              - 'site_section'
           content:
             type: object
             properties:
@@ -13787,7 +13783,9 @@ components:
       - type: object
         properties:
           type:
-            example: 'link'
+            type: string
+            enum:
+              - 'link'
           content:
             type: string
             description: 'The URL of the link.'
