@@ -9405,7 +9405,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -10341,11 +10341,11 @@ components:
           type: integer
           example: 1510941596
         review_date_timestamp:
-          description: 'The review date timestamp for the custom content (in seconds).'
+          description: 'The review date timestamp for the news (in seconds).'
           type: integer
           example: 1510941596
         related_external_links:
-          description: 'Related external links for the custom content'
+          description: 'Related external links for the news.'
           type: array
           items:
             type: object
@@ -10359,7 +10359,7 @@ components:
                 type: string
                 example: 'https://dev.invotra.com/info/passwords'
         related_content_links:
-          description: 'Related content links for the custom content'
+          description: 'Related content links for the news.'
           type: array
           items:
             type: object
@@ -10369,7 +10369,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -10757,7 +10757,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -11243,7 +11243,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
