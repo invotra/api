@@ -8454,17 +8454,10 @@ components:
           type: string
           example: Whitehead
         title:
-          default: ''
-          description: The user's title
-          enum:
-            - ''
-            - Dr
-            - Mr
-            - Miss
-            - Mrs
-            - Ms
+          description: This is the Invotra UUID of the user's title.
           type: string
-          example: Mr
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         person_type:
           description: This is the Invotra UUID of the user's person type.
           type: string
