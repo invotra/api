@@ -8399,7 +8399,7 @@ components:
         roles:
           items:
             default: Organisational user
-            description: This is the default Invotra user role
+            description: "The user's roles. (Note: the 'External user' role cannot be assigned with other roles)."
             enum:
               - Organisational user
               - Webmaster
