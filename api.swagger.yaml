@@ -1786,7 +1786,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/post-category-schema'
+                  $ref: '#/components/schemas/post-category-deprecating-schema'
       description: List post categories.
   '/posts/{post_id}/likes':
     parameters:
@@ -6611,6 +6611,138 @@ paths:
           description: 'User is not authorized to delete this policy type.'
         '404':
           description: 'The UUID does not correspond to an existing policy type.'
+  '/post_categories':
+    post:
+      tags:
+        - 'post categories'
+      description: 'Provision a new post category.'
+      responses:
+        '201':
+          description: 'The post category was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned post category may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The post category was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a post category.'
+        '422':
+          description: 'The post category was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post-category-schema-create'
+        required: true
+  '/post_categories/list':
+    get:
+      tags:
+        - 'post categories'
+      description: 'Search for post categories. An empty array is returned if no post categories are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of post categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of post categories matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/post-category-schema'
+        '403':
+          description: 'User is not authorized to list post categories.'
+  '/post_categories/{post_category_id}':
+    parameters:
+      - description: 'The Invotra UUID of the post category.'
+        in: path
+        name: post_category_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'post categories'
+      description: 'Get information about the post category.'
+      responses:
+        '200':
+          description: 'Returns a single complete post category object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/post-category-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this post category.'
+        '404':
+          description: 'The UUID does not correspond to an existing post category.'
+    put:
+      tags:
+        - 'post categories'
+      description: 'Update post category information.'
+      responses:
+        '200':
+          description: 'The post category information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this post category.'
+        '404':
+          description: 'The UUID does not correspond to an existing post category.'
+        '422':
+          description: 'The post category was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/post-category-schema-common'
+        required: true
+    delete:
+      tags:
+        - 'post categories'
+      description: 'Delete a post category.'
+      responses:
+        '200':
+          description: 'The post category was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this post category.'
+        '404':
+          description: 'The UUID does not correspond to an existing post category.'
   '/primary_categories':
     post:
       tags:
@@ -8881,7 +9013,7 @@ components:
           example: I find this offensive
       required:
         - reason
-    post-category-schema:
+    post-category-deprecating-schema:
       properties:
         name:
           description: 'Category name'
@@ -13474,6 +13606,49 @@ components:
           description: 'Determines the position of a policy type in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+    post-category-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the post category.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/post-category-schema-common'
+    post-category-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/post-category-schema-common'
+        - type: object
+          properties:
+            published:
+              default: true
+          required:
+            - name
+            - colour
+    post-category-schema-common:
+      type: object
+      properties:
+        name:
+          description: 'Name of the post category.'
+          type: string
+          example: 'Note'
+        external_id:
+          description: 'The post category external reference id.'
+          type: string
+          example: 'ABC123'
+        published:
+          description: 'Indicates that this post category is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a post category.'
+          type: integer
+          example: 3
+        colour:
+          description: 'Colour of the post category. Any CSS colour allowed.'
+          type: string
+          example: '#4BB88B'
     primary-category-schema:
       allOf:
         - type: object
