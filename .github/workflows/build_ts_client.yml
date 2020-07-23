@@ -1,0 +1,83 @@
+name: Build and publish TypeScript API client
+
+on:
+  pull_request:
+  release:
+    types:
+      - published
+      - created
+      - edited
+      - prereleased
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Prepare tools for building TypeScript client
+        working-directory: client/typescript-axios
+        run: |
+          yarn install --frozen-lockfile
+      - name: Generate TypeScript API client
+        working-directory: client/typescript-axios
+        run: |
+          yarn openapi-generator generate -i ../../api.swagger.yaml -g typescript-axios -o build/src/ -c generator.yml
+      - name: Generate PR build version
+        if: github.event_name == 'pull_request'
+        working-directory: client/typescript-axios
+        run: |
+          echo ::set-env name=NEW_CLIENT_VERSION::`node pr-build-version.js ${{ github.base_ref }} pr-build-${{ github.run_id }}`
+      - name: Generate release build version
+        if: github.event_name == 'release'
+        working-directory: client/typescript-axios
+        run: |
+          echo ::set-env name=NEW_CLIENT_VERSION::`node pr-build-version.js ${{ github.ref }}`
+      - name: Build TypeScript API client
+        working-directory: client/typescript-axios/build
+        run: |
+          yarn install
+          yarn build
+          rm -rf node_modules
+          node ../update-package-name.js package.json @${{ github.repository }}
+      - name: Push a temporary build for PR
+        if: github.event_name == 'pull_request'
+        run: |
+          git checkout --detach
+          git rm -rf .
+          git reset -- client/typescript-axios/build/
+          git checkout -- client/typescript-axios/build/
+          git add client/typescript-axios/build/
+          git mv client/typescript-axios/build/* .
+          yarn version --new-version ${{ env.NEW_CLIENT_VERSION }} --no-git-tag-version
+          git add package.json
+          git config --global user.email "${{ github.actor }}@nowhere"
+          git config --global user.name "Automated build on behalf of ${{ github.actor }}"
+          git commit -m "Automatic client build for ${{ github.head_ref }}, build number ${{ github.run_number }}"
+          git tag build-run-${{ github.run_id }}
+          git push origin build-run-${{ github.run_id }}
+          echo ::set-env name=API_CLIENT_TAG::build-run-${{ github.run_id }}
+      - name: Publish release package in private NPM
+        if: github.event_name == 'release'
+        working-directory: client/typescript-axios/build
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          yarn version --new-version ${{ env.NEW_CLIENT_VERSION }} --no-git-tag-version
+          yarn publish --access restricted --registry https://npm.pkg.github.com
+      - name: Comment PR
+        if: github.event_name == 'pull_request'
+        uses: thollander/actions-comment-pull-request@master
+        with:
+          message: |
+            :robot: beep beep beep
+            Build done.
+            You may now include the API client we just built in your project by running:
+            ```bash
+            yarn add @invotra/api@${{ github.repository }}#${{ env.API_CLIENT_TAG }}
+            ```
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
