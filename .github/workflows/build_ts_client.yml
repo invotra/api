@@ -30,13 +30,17 @@ jobs:
       - name: Generate PR build version
         if: github.event_name == 'pull_request'
         working-directory: client/typescript-axios
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
         run: |
-          echo ::set-env name=NEW_CLIENT_VERSION::`node pr-build-version.js ${{ github.base_ref }} pr-build-${{ github.run_id }}`
+          echo ::set-env name=NEW_CLIENT_VERSION::`node pr-build-version.js "$GITHUB_BASE_REF" pr-build-${{ github.run_id }}`
       - name: Generate release build version
         if: github.event_name == 'release'
         working-directory: client/typescript-axios
+        env:
+          GITHUB_REF: ${{ github.ref }}
         run: |
-          echo ::set-env name=NEW_CLIENT_VERSION::`node pr-build-version.js ${{ github.ref }}`
+          echo ::set-env name=NEW_CLIENT_VERSION::`node pr-build-version.js "$GITHUB_REF"`
       - name: Build TypeScript API client
         working-directory: client/typescript-axios/build
         run: |
