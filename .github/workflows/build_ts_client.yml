@@ -50,6 +50,8 @@ jobs:
           node ../update-package-name.js package.json @${{ github.repository }}
       - name: Push a temporary build for PR
         if: github.event_name == 'pull_request'
+        env:
+          GITHUB_HEAD_REF: ${{ github.head_ref }}
         run: |
           git checkout --detach
           git rm -rf .
@@ -61,7 +63,7 @@ jobs:
           git add package.json
           git config --global user.email "${{ github.actor }}@nowhere"
           git config --global user.name "Automated build on behalf of ${{ github.actor }}"
-          git commit -m "Automatic client build for ${{ github.head_ref }}, build number ${{ github.run_number }}"
+          git commit -m "Automatic client build for $GITHUB_HEAD_REF, build number ${{ github.run_number }}"
           git tag build-run-${{ github.run_id }}
           git push origin build-run-${{ github.run_id }}
           echo ::set-env name=API_CLIENT_TAG::build-run-${{ github.run_id }}
