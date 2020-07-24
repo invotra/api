@@ -2,7 +2,7 @@ openapi: 3.0.0
 servers:
   - url: 'https://dev.invotra.com/api/0.3'
 info:
-  title: InvotraAPI
+  title: Invotra API
   description: In general most fields are optional for update (PUT) requests; you can leave them blank (pass an empty string / array / whatever as appropriate) to clear them, or omit the key to leave them unchanged.
   version: '0.3'
 security:
@@ -2269,7 +2269,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of blogs on a comma seperated list of states. Valid states are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of blogs on a comma-separated list of states. Valid states are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -2460,7 +2460,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: state
-          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -2795,7 +2795,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of lists on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of lists on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3147,7 +3147,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of news on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of news on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3326,7 +3326,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3505,7 +3505,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3684,7 +3684,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3863,7 +3863,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -4369,7 +4369,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of job roles on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of job roles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -5035,7 +5035,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of badges on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of badges on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -5193,7 +5193,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of content categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of content categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -5351,7 +5351,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of content types on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of content types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -5509,7 +5509,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of countries on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of countries on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -5667,7 +5667,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of event statuses on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of event statuses on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -5825,7 +5825,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of event topics on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of event topics on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -5983,7 +5983,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of free skills on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of free skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6141,7 +6141,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of general topics on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of general topics on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6299,7 +6299,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of grades on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of grades on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6457,7 +6457,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of group categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of group categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6615,7 +6615,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of idea categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of idea categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6773,7 +6773,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of interests on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of interests on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -6931,7 +6931,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of message types on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of message types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -7089,7 +7089,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of organisational skills on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of organisational skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -7247,7 +7247,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of person types on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of person types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -7405,7 +7405,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of policy types on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of policy types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -7563,7 +7563,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of primary categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of primary categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -7721,7 +7721,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of projects on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of projects on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -7879,7 +7879,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of query categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of query categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -8037,7 +8037,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of regions on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of regions on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -8195,7 +8195,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of search highlights on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of search highlights on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -8353,7 +8353,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of security classifications on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of security classifications on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -8511,7 +8511,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of titles on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of titles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -8669,7 +8669,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of user categories on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of user categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -10408,7 +10408,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             attachments:
-              description: 'The attatched files of this custom content.'
+              description: 'The attached files of this custom content.'
               type: array
               items:
                 type: object
@@ -10502,7 +10502,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             attachments:
-              description: 'The attatched files of this custom content.'
+              description: 'The attached files of this custom content.'
               type: array
               items:
                 type: object
@@ -11376,7 +11376,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             attachments:
-              description: 'The attatched files of this news item.'
+              description: 'The attached files of this news item.'
               type: array
               items:
                 type: object
@@ -11470,7 +11470,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             attachments:
-              description: 'The attatched files of this news item.'
+              description: 'The attached files of this news item.'
               type: array
               items:
                 type: object
@@ -11764,7 +11764,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             attachments:
-              description: 'The attatched files of this page.'
+              description: 'The attached files of this page.'
               type: array
               items:
                 type: object
@@ -11858,7 +11858,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             attachments:
-              description: 'The attatched files of this page.'
+              description: 'The attached files of this page.'
               type: array
               items:
                 type: object
@@ -12270,7 +12270,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             attachments:
-              description: 'The attatched files of this policy.'
+              description: 'The attached files of this policy.'
               type: array
               items:
                 type: object
@@ -12382,7 +12382,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             attachments:
-              description: 'The attatched files of this policy.'
+              description: 'The attached files of this policy.'
               type: array
               items:
                 type: object
