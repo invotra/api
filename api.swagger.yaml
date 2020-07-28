@@ -269,6 +269,12 @@ paths:
           in: query
           schema:
             type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -596,6 +602,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - description: Field to sort by
           in: query
           name: sort
@@ -1309,6 +1321,12 @@ paths:
           schema:
             type: boolean
             default: false
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - description: Field to sort by.
           in: query
           name: sort
@@ -1681,6 +1699,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: valid_parents_for
           description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the group document folder.'
           in: query
@@ -1856,6 +1875,12 @@ paths:
       tags:
         - posts
       parameters:
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - description: Field to sort by
           in: query
           name: sort
@@ -2268,6 +2293,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - name: state
           description: 'Filter the list of blogs on a comma-separated list of states. Valid states are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -2458,7 +2489,7 @@ paths:
           name: external_id
           schema:
             type: string
-            example: 'ABC123'
+          example: 'ABC123'
         - name: state
           description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -2646,6 +2677,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -2794,6 +2831,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - name: state
           description: 'Filter the list of lists on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -2973,6 +3016,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -3146,6 +3195,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - name: state
           description: 'Filter the list of news on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -3325,6 +3380,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - name: state
           description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -3504,6 +3565,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - name: state
           description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -3683,6 +3750,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - name: state
           description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -3862,6 +3935,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - name: state
           description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -3989,6 +4068,12 @@ paths:
       tags:
         - manuals
       parameters:
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4368,6 +4453,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of job roles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -4517,6 +4603,12 @@ paths:
           in: query
           schema:
             type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
         - name: users_fulltext_search
           description: Filter the list of locations to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by location (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
           in: query
@@ -5034,6 +5126,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of badges on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -5192,6 +5285,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of content categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -5350,6 +5444,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of content types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -5508,6 +5603,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of countries on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -5666,6 +5762,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of event statuses on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -5824,6 +5921,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of event topics on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -5982,6 +6080,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of free skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -6140,6 +6239,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of general topics on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -6298,6 +6398,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of grades on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -6456,6 +6557,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of group categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -6614,6 +6716,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of idea categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -6772,6 +6875,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of interests on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -6930,6 +7034,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of message types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -7088,6 +7193,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of organisational skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -7246,6 +7352,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of person types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -7404,6 +7511,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of policy types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -7562,6 +7670,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of primary categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -7720,6 +7829,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of projects on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -7878,6 +7988,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of query categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -8036,6 +8147,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of regions on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -8194,6 +8306,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of search highlights on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -8352,6 +8465,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of security classifications on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -8510,6 +8624,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of titles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -8668,6 +8783,7 @@ paths:
           name: external_id
           schema:
             type: string
+          example: 'ABC123'
         - name: status
           description: 'Filter the list of user categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
