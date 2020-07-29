@@ -4148,6 +4148,10 @@ paths:
             schema:
               $ref: '#/components/schemas/comment-schema-create'
         required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/comments:write ]
   /comments/list:
     get:
       tags:
