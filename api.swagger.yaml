@@ -178,7 +178,7 @@ paths:
         - logs
       description: 'Write log entries to the applications log.'
       requestBody:
-        description: 'An array containing one or more log entry objects.'
+        description: 'An array containing one or more log entry objects. A maximum of 25 entries is permitted per request.'
         content:
           application/json:
             schema:
