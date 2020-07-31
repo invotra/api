@@ -10517,7 +10517,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this custom content.'
+              description: 'The owner of this custom content. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -10573,7 +10573,6 @@ components:
             - body
             - state
             - site_section
-            - owner
     custom-content-schema-common:
       type: object
       properties:
@@ -11039,7 +11038,6 @@ components:
             - title
             - state
             - site_section
-            - owner
     list-schema-common:
       type: object
       properties:
@@ -11483,7 +11481,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this news item.'
+              description: 'The owner of this news item. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -11538,7 +11536,6 @@ components:
             - body
             - state
             - site_section
-            - owner
     news-schema-common:
       type: object
       properties:
@@ -11870,7 +11867,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this page.'
+              description: 'The owner of this page. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -11925,7 +11922,6 @@ components:
             - body
             - state
             - site_section
-            - owner
     page-schema-common:
       type: object
       properties:
@@ -12393,7 +12389,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this policy.'
+              description: 'The owner of this policy. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -12406,7 +12402,6 @@ components:
             - body
             - state
             - site_section
-            - owner
     policy-schema-common:
       type: object
       properties:
@@ -12871,7 +12866,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this promotion.'
+              description: 'The owner of this promotion. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -12935,7 +12930,6 @@ components:
             - body
             - state
             - site_section
-            - owner
     promotion-schema-common:
       type: object
       properties:
