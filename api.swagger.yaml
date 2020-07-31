@@ -10237,6 +10237,10 @@ components:
           enum:
             - 'published'
             - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the blog (in seconds). The review date is mandatory if configured to be in Invotra admin.'
+          type: integer
+          example: 1510941596
     custom-content-schema:
       allOf:
         - type: object
@@ -10569,7 +10573,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
             - owner
     custom-content-schema-common:
       type: object
@@ -10596,7 +10599,7 @@ components:
             - 'published'
             - 'unpublished'
         review_date_timestamp:
-          description: 'The review date timestamp for the custom content (in seconds).'
+          description: 'The review date timestamp for the custom content (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
@@ -11036,7 +11039,6 @@ components:
             - title
             - state
             - site_section
-            - review_date_timestamp
             - owner
     list-schema-common:
       type: object
@@ -11059,7 +11061,7 @@ components:
             - 'published'
             - 'unpublished'
         review_date_timestamp:
-          description: 'The review date timestamp for the list (in seconds).'
+          description: 'The review date timestamp for the list (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         list:
@@ -11536,7 +11538,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
             - owner
     news-schema-common:
       type: object
@@ -11563,7 +11564,7 @@ components:
           type: integer
           example: 1510941596
         review_date_timestamp:
-          description: 'The review date timestamp for the custom content (in seconds).'
+          description: 'The review date timestamp for the custom content (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
@@ -11924,7 +11925,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
             - owner
     page-schema-common:
       type: object
@@ -11951,7 +11951,7 @@ components:
           type: integer
           example: 1510941596
         review_date_timestamp:
-          description: 'The review date timestamp for the page (in seconds).'
+          description: 'The review date timestamp for the page (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
@@ -12406,7 +12406,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
             - owner
     policy-schema-common:
       type: object
@@ -12437,7 +12436,7 @@ components:
           type: integer
           example: 1510941696
         review_date_timestamp:
-          description: 'The review date timestamp for the policy (in seconds).'
+          description: 'The review date timestamp for the policy (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
@@ -12936,7 +12935,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
             - owner
     promotion-schema-common:
       type: object
@@ -12968,7 +12966,7 @@ components:
           example: 'https://dev.invotra.com/post/ill-be-annual-leave'
           format: uri
         review_date_timestamp:
-          description: 'The review date timestamp for the promotion (in seconds).'
+          description: 'The review date timestamp for the promotion (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         featured:
