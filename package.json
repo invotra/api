@@ -1,0 +1,22 @@
+{
+  "name": "@invotra/api",
+  "version": "5.2.0-pr-build-193473777",
+  "description": "Invotra API client",
+  "typings": "lib/index.d.ts",
+  "module": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^13.7.6",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
+}
