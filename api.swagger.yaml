@@ -22,6 +22,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/status-schema'
       description: 'Returns the status of the Invotra API. If successful, the API is running as expected and will return the "OK" response that includes the server time. (If it is not, an appropriate 5xx error message will be returned).'
+  /administration:
+    get:
+      tags:
+        - configuration
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/administration:read ]
+      responses:
+        '200':
+          description: 'Administration configuration returned.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/administration-schema'
+      description: 'Returns the administration configuration for an instance of Invotra.'
   /branding:
     get:
       tags:
@@ -9187,6 +9203,23 @@ components:
           type: string
       required:
         - error
+    administration-schema:
+      type: object
+      properties:
+        mandatory_content_review:
+          description: 'Mandatory configuration for the "content_review" property.'
+          type: array
+          items:
+            type: object
+            properties:
+              content_type:
+                description: 'Content type name.'
+                type: string
+                example: 'news'
+              mandatory:
+                description: 'Flag indicating the property is mandatory.'
+                type: boolean
+                example: true
     branding-schema:
       properties:
         logo:
