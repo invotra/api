@@ -9220,6 +9220,20 @@ components:
                 description: 'Flag indicating the property is mandatory.'
                 type: boolean
                 example: true
+        mandatory_owner:
+          description: 'Mandatory configuration for the "owner" property.'
+          type: array
+          items:
+            type: object
+            properties:
+              content_type:
+                description: 'Content type name.'
+                type: string
+                example: 'news'
+              mandatory:
+                description: 'Flag indicating the property is mandatory.'
+                type: boolean
+                example: true
     branding-schema:
       properties:
         logo:
