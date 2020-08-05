@@ -2,12 +2,14 @@ name: Build and publish TypeScript API client
 
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
   release:
     types:
       - published
-      - created
-      - edited
-      - prereleased
 
 jobs:
   build:
@@ -48,25 +50,6 @@ jobs:
           yarn build
           rm -rf node_modules
           node ../update-package-name.js package.json @${{ github.repository }}
-      - name: Push a temporary build for PR
-        if: github.event_name == 'pull_request'
-        env:
-          GITHUB_HEAD_REF: ${{ github.head_ref }}
-        run: |
-          git checkout --detach
-          git rm -rf .
-          git reset -- client/typescript-axios/build/
-          git checkout -- client/typescript-axios/build/
-          git add client/typescript-axios/build/
-          git mv client/typescript-axios/build/* .
-          yarn version --new-version ${{ env.NEW_CLIENT_VERSION }} --no-git-tag-version
-          git add package.json
-          git config --global user.email "${{ github.actor }}@nowhere"
-          git config --global user.name "Automated build on behalf of ${{ github.actor }}"
-          git commit -m "Automatic client build for $GITHUB_HEAD_REF, build number ${{ github.run_number }}"
-          git tag build-run-${{ github.run_id }}
-          git push origin build-run-${{ github.run_id }}
-          echo ::set-env name=API_CLIENT_TAG::build-run-${{ github.run_id }}
       - name: Publish release package in private NPM
         if: github.event_name == 'release'
         working-directory: client/typescript-axios/build
@@ -75,15 +58,27 @@ jobs:
         run: |
           yarn version --new-version ${{ env.NEW_CLIENT_VERSION }} --no-git-tag-version
           yarn publish --access restricted --registry https://npm.pkg.github.com
+      - name: Publish PR package in private NPM
+        if: github.event_name == 'pull_request'
+        working-directory: client/typescript-axios/build
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          yarn version --new-version ${{ env.NEW_CLIENT_VERSION }} --no-git-tag-version
+          yarn publish --tag pr-build --access restricted --registry https://npm.pkg.github.com
       - name: Comment PR
         if: github.event_name == 'pull_request'
         uses: thollander/actions-comment-pull-request@master
         with:
           message: |
             :robot: beep beep beep
-            Build done.
-            You may now include the API client we just built in your project by running:
+            Build complete.
+            You may install the freshly built package.
+            To do so, run:
             ```bash
-            yarn add @invotra/api@${{ github.repository }}#${{ env.API_CLIENT_TAG }}
+            echo '"@${{ github.repository_owner }}:registry" "https://npm.pkg.github.com/"
+            ' > .yarnrc
+            yarn add @${{ github.repository }}@${{ env.NEW_CLIENT_VERSION }}
             ```
+            Note that you may need to store your GitHub npm token in `~/.npmrc` to access the private registry.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
