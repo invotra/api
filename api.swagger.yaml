@@ -26,10 +26,6 @@ paths:
     get:
       tags:
         - configuration
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/administration:read ]
       responses:
         '200':
           description: 'Administration configuration returned.'
@@ -38,6 +34,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/administration-schema'
       description: 'Returns the administration configuration for an instance of Invotra.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/administration:read ]
   /branding:
     get:
       tags:
@@ -9208,20 +9208,6 @@ components:
       properties:
         mandatory_content_review:
           description: 'Mandatory configuration for the "content_review" property.'
-          type: array
-          items:
-            type: object
-            properties:
-              content_type:
-                description: 'Content type name.'
-                type: string
-                example: 'news'
-              mandatory:
-                description: 'Flag indicating the property is mandatory.'
-                type: boolean
-                example: true
-        mandatory_owner:
-          description: 'Mandatory configuration for the "owner" property.'
           type: array
           items:
             type: object
