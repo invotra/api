@@ -13407,10 +13407,11 @@ components:
           type: string
           example: ABC123
         parent_uuid:
-          description: 'This is the Invotra UUID of the parent job role, optional.'
+          description: 'This is the Invotra UUID of the parent job role, optional. Note you can create and update this property, but it will have no effect.'
           example: 01234567-89ab-cdef-1234-56789abcdef0
           type: string
           format: uuid
+          deprecated: true
       type: object
     job-role-list-schema:
       allOf:
