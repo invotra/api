@@ -172,6 +172,33 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /logs:
+    post:
+      tags:
+        - logs
+      description: 'Write log entries to the applications log.'
+      requestBody:
+        description: 'An array containing one or more log entry objects. A maximum of 25 entries is permitted per request.'
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/log-schema'
+        required: true
+      responses:
+        '201':
+          description: 'The log entries were saved successfully.'
+        '400':
+          description: 'The log entries were not saved due to malformed JSON.'
+        '403':
+          description: 'The user does not have permission to write to the applications log.'
+        '422':
+          description: 'The log entries were not saved due to a JSON schema validation failure.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/logs:write ]
   /pdf-export/close-job:
     post:
       tags:
@@ -9378,6 +9405,20 @@ components:
         password:
           description: The password that the user logs in with
           type: string
+    log-schema:
+      type: object
+      properties:
+        app_id:
+          description: 'Application identity.'
+          type: string
+          example: 'MOB123'
+        log_message:
+          description: 'The log entry message.'
+          type: string
+          example: 'An unhandled exception has occurred rendering a view.'
+      required:
+        - app_id
+        - log_message
     feed-schema:
       required:
         - user_uuid
