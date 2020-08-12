@@ -9604,6 +9604,8 @@ components:
             - invotra.post.like
             - invotra.post.comment
             - invotra.comment.like
+            - invotra.group.pending
+            - invotra.group.added
         status:
           description: Whether the notification has been read or not
           type: boolean
