@@ -4452,11 +4452,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - name: status
-          description: 'Filter the list of badges on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
-          in: query
-          schema:
-            type: string
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4601,7 +4596,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of badges on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of locations on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
