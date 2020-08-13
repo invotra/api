@@ -1,0 +1,84 @@
+name: Build and publish TypeScript API client
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - edited
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Prepare tools for building TypeScript client
+        working-directory: client/typescript-axios
+        run: |
+          yarn install --frozen-lockfile
+      - name: Generate TypeScript API client
+        working-directory: client/typescript-axios
+        run: |
+          yarn openapi-generator generate -i ../../api.swagger.yaml -g typescript-axios -o build/src/ -c generator.yml
+      - name: Generate PR build version
+        if: github.event_name == 'pull_request'
+        working-directory: client/typescript-axios
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+        run: |
+          echo ::set-env name=NEW_CLIENT_VERSION::`node pr-build-version.js "$GITHUB_BASE_REF" pr-build-${{ github.run_id }}`
+      - name: Generate release build version
+        if: github.event_name == 'release'
+        working-directory: client/typescript-axios
+        env:
+          GITHUB_REF: ${{ github.ref }}
+        run: |
+          echo ::set-env name=NEW_CLIENT_VERSION::`node pr-build-version.js "$GITHUB_REF"`
+      - name: Build TypeScript API client
+        working-directory: client/typescript-axios/build
+        run: |
+          yarn install
+          yarn build
+          rm -rf node_modules
+          node ../update-package-name.js package.json @${{ github.repository }}
+      - name: Publish release package in private NPM
+        if: github.event_name == 'release'
+        working-directory: client/typescript-axios/build
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          yarn version --new-version ${{ env.NEW_CLIENT_VERSION }} --no-git-tag-version
+          yarn publish --access restricted --registry https://npm.pkg.github.com
+      - name: Publish PR package in private NPM
+        if: github.event_name == 'pull_request'
+        working-directory: client/typescript-axios/build
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          yarn version --new-version ${{ env.NEW_CLIENT_VERSION }} --no-git-tag-version
+          yarn publish --tag pr-build --access restricted --registry https://npm.pkg.github.com
+      - name: Comment PR
+        if: github.event_name == 'pull_request'
+        uses: thollander/actions-comment-pull-request@master
+        with:
+          message: |
+            :robot: beep beep beep
+            Build complete.
+            You may install the freshly built package.
+            To do so, run:
+            ```bash
+            echo '"@${{ github.repository_owner }}:registry" "https://npm.pkg.github.com/"
+            ' > .yarnrc
+            yarn add @${{ github.repository }}@${{ env.NEW_CLIENT_VERSION }}
+            ```
+            Note that you may need to store your GitHub npm token in `~/.npmrc` to access the private registry.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
