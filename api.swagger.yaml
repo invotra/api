@@ -2580,6 +2580,185 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/custom_content:write ]
+  '/group_documents':
+    post:
+      tags:
+        - 'group documents'
+      description: 'Provision a new group document.'
+      responses:
+        '201':
+          description: 'The group document was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned group document may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The group document was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a group document.'
+        '422':
+          description: 'The group document was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-document-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_documents:write ]
+  '/group_documents/list':
+    get:
+      tags:
+        - 'group documents'
+      description: 'Search for group documents. An empty array is returned if no group documents where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of group documents on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of group documents matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/group-document-schema'
+        '403':
+          description: 'User is not authorized to list group documents.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_documents:read ]
+  '/group_documents/{group_document_id}':
+    parameters:
+      - description: 'The Invotra UUID of the group document.'
+        in: path
+        name: group_document_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'group documents'
+      description: 'Get information about the group document.'
+      responses:
+        '200':
+          description: 'Returns a single complete group document object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group-document-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this group document.'
+        '404':
+          description: 'The UUID does not correspond to an existing group document.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_documents:read ]
+    put:
+      tags:
+        - 'group documents'
+      description: 'Update group document information.'
+      responses:
+        '200':
+          description: 'The group document information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this group document.'
+        '404':
+          description: 'The UUID does not correspond to an existing group document.'
+        '422':
+          description: 'The group document was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-document-schema-update'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_documents:write ]
+    delete:
+      tags:
+        - 'group documents'
+      description: 'Delete a group document.'
+      responses:
+        '200':
+          description: 'The group document was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this group document.'
+        '404':
+          description: 'The UUID does not correspond to an existing group document.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_documents:write ]
   '/group_polls':
     post:
       tags:
@@ -10398,6 +10577,185 @@ components:
           description: 'The custom content external reference id.'
           type: string
           example: 'ABC123'
+    group-document-schema:
+      allOf:
+        - $ref: '#/components/schemas/group-document-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the group document.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            group:
+              description: 'The group for this group document.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/group-schema'
+            featured_image:
+              description: 'The featured image for this group document.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this group document.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            folder:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group document folder.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the group document folder.'
+                  type: string
+                  example: 'Darts'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the group document was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the group document was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the group document.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the group document.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status of the group document.'
+              type: boolean
+              example: true
+            enable_comments:
+              description: 'Indicates that this group document has comments enabled.'
+              type: boolean
+              example: true
+    group-document-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/group-document-schema-common'
+        - type: object
+          properties:
+            group:
+              description: 'The group for this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            featured_image:
+              description: 'The featured image for this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the author user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            folder:
+              description: 'The folder of this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group document folder.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            enable_comments:
+              description: 'Indicates that this group document has comments enabled.'
+              type: boolean
+              example: true
+    group-document-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/group-document-schema-common'
+        - type: object
+          properties:
+            group:
+              description: 'The group for this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            featured_image:
+              description: 'The featured image for this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the author user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            folder:
+              description: 'The folder of this group document. (If not supplied the default home folder will be used)'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group document folder.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            enable_comments:
+              description: 'Indicates that this group document has comments enabled.'
+              type: boolean
+              example: true
+              default: true
+          required:
+            - title
+            - body
+            - state
+            - group
+            - review_date_timestamp
+    group-document-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the group document.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the group document.'
+          type: string
+          example: 'You can create strong passwords using an offline random password generator.'
+        state:
+          description: 'Indicates the workflow state of the group document.'
+          type: string
+          enum:
+            - 'published'
+            - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the group document (in seconds).'
+          type: integer
+          example: 1510941596
     group-poll-schema:
       allOf:
         - $ref: '#/components/schemas/group-poll-schema-common'
