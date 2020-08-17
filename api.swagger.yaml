@@ -4162,6 +4162,185 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
+  '/queries':
+    post:
+      tags:
+        - 'queries'
+      description: 'Provision a new query.'
+      responses:
+        '201':
+          description: 'The query was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned query may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The query was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a query.'
+        '422':
+          description: 'The query was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:write ]
+  '/queries/list':
+    get:
+      tags:
+        - 'queries'
+      description: 'Search for queries. An empty array is returned if no queries where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of queries matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/query-schema'
+        '403':
+          description: 'User is not authorized to list queries.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:read ]
+  '/queries/{query_id}':
+    parameters:
+      - description: 'The Invotra UUID of the query.'
+        in: path
+        name: query_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'queries'
+      description: 'Get information about the query.'
+      responses:
+        '200':
+          description: 'Returns a single complete query object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/query-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this query.'
+        '404':
+          description: 'The UUID does not correspond to an existing query.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:read ]
+    put:
+      tags:
+        - 'queries'
+      description: 'Update query information.'
+      responses:
+        '200':
+          description: 'The query information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this query.'
+        '404':
+          description: 'The UUID does not correspond to an existing query.'
+        '422':
+          description: 'The query was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query-schema-update'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:write ]
+    delete:
+      tags:
+        - 'queries'
+      description: 'Delete a query.'
+      responses:
+        '200':
+          description: 'The query was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this query.'
+        '404':
+          description: 'The UUID does not correspond to an existing query.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:write ]
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -13083,6 +13262,223 @@ components:
           type: boolean
           default: false
           example: false
+    query-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the query.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/query-schema-common'
+        - type: object
+          properties:
+            attachment:
+              description: 'Query attachment.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            query_assignee:
+              description: 'The assignee user of the query.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            query_status:
+              description: 'The query status.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the query status.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the query status.'
+                  type: string
+                  example: 'Open'
+            query_categories:
+              description: 'List of categories associated with the query.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the query category.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'The name of the query category.'
+                    type: string
+                    example: 'Important'
+            author:
+              description: 'The author of this query.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the query was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the query was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the query.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the query.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the query.'
+              type: boolean
+              example: true
+    query-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/query-schema-common'
+        - type: object
+          properties:
+            attachment:
+              description: 'Query attachment.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the attachment.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_assignee:
+              description: 'The assignee of this query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_status:
+              description: 'The query status.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the query status.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_categories:
+              description: 'List of categories associated with the query.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the query category.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    query-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/query-schema-common'
+        - type: object
+          properties:
+            attachment:
+              description: 'Query attachment.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the attachment.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_assignee:
+              description: 'The assignee of this query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_status:
+              description: 'The query status.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the query status.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_categories:
+              description: 'List of categories associated with the query.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the query category.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
+            - review_date_timestamp
+            - owner
+    query-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the query.'
+          type: string
+          example: 'Company talent competition'
+        body:
+          description: 'The body of the query.'
+          type: string
+          example: 'Demonstrate your talent at the company talent competition.'
+        query_reference:
+          description: 'The query reference.'
+          type: string
+          example: 'Q123'
+        state:
+          description: 'Indicates the workflow state of the query.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        schedule_date_timestamp:
+          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+          type: integer
+          example: 1510941596
+        review_date_timestamp:
+          description: 'The review date timestamp for the query (in seconds).'
+          type: integer
+          example: 1510941596
     location-trimmed-schema:
       properties:
         uuid:
