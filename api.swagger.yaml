@@ -14994,7 +14994,6 @@ components:
           example: 'More information here.'
       required:
       - type
-      - title
       - content
     search-highlight-list-content-schema:
       allOf:
