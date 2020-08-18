@@ -13469,10 +13469,6 @@ components:
             - 'draft'
             - 'published'
             - 'unpublished'
-        schedule_date_timestamp:
-          description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
-          type: integer
-          example: 1510941596
         review_date_timestamp:
           description: 'The review date timestamp for the query (in seconds).'
           type: integer
