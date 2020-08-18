@@ -4221,7 +4221,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -13467,8 +13467,6 @@ components:
           type: string
           enum:
             - 'draft'
-            - 'needs_review'
-            - 'reviewed'
             - 'published'
             - 'unpublished'
         schedule_date_timestamp:
