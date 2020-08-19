@@ -11101,6 +11101,10 @@ components:
               description: 'Count of likes on the idea.'
               type: integer
               example: 5
+            published:
+              description: 'Published status for the idea.'
+              type: boolean
+              example: true
     idea-schema-update:
       allOf:
         - $ref: '#/components/schemas/idea-schema-common'
