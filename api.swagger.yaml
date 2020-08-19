@@ -2970,7 +2970,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of lists on a comma seperated list of states. Valid statuses are "published" and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of lists on a comma seperated list of states. Valid statuses are "draft", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -11039,6 +11039,7 @@ components:
           example: 'What is your favorite food?'
     idea-schema:
       allOf:
+        - $ref: '#/components/schemas/idea-schema-common'
         - type: object
           properties:
             uuid:
@@ -11046,31 +11047,44 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/idea-schema-common'
-        - type: object
-          properties:
-            image:
-              description: 'idea Image.'
+            idea_status:
+              description: 'The idea status.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the idea status.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the idea status.'
+                  type: string
+                  example: 'Open'
+            idea_assignee:
+              description: 'The assignee user of the idea.'
               type: object
               allOf:
-                - $ref: '#/components/schemas/file-schema'
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            idea_categories:
+              description: 'List of categories associated with the idea.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the idea category.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'The name of the idea category.'
+                    type: string
+                    example: 'Important'
             author:
               description: 'The author of this idea.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            general_topic:
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'This is the name of the general topic.'
-                  type: string
-                  example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the idea was created.'
               type: integer
@@ -11092,21 +11106,41 @@ components:
         - $ref: '#/components/schemas/idea-schema-common'
         - type: object
           properties:
-            image:
-              description: 'The image for this idea.'
+            idea_status:
+              description: 'The idea status.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the image.'
+                  description: 'Invotra UUID of the idea status.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this idea.'
+            idea_assignee:
+              description: 'The assignee of this idea.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the genetal topic.'
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            idea_categories:
+              description: 'List of categories associated with the idea.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the idea category.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this idea.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -11115,28 +11149,47 @@ components:
         - $ref: '#/components/schemas/idea-schema-common'
         - type: object
           properties:
-            image:
-              description: 'The image for this idea.'
+            idea_status:
+              description: 'The idea status.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the image.'
+                  description: 'Invotra UUID of the idea status.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this idea.'
+            idea_assignee:
+              description: 'The assignee of this idea.'
               type: object
               properties:
                 uuid:
-                  description: 'Invotra UUID of the genetal topic.'
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            idea_categories:
+              description: 'List of categories associated with the idea.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the idea category.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this idea.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - state
-            - site_section
             - review_date_timestamp
             - owner
     idea-schema-common:
@@ -11150,19 +11203,17 @@ components:
           description: 'The body of the idea.'
           type: string
           example: 'You can create strong passwords using an online random password generator.'
+        idea_reference:
+          description: 'The idea reference.'
+          type: string
+          example: 'I123'
         state:
           description: 'Indicates the workflow state of the idea.'
           type: string
           enum:
+            - 'draft'
             - 'published'
             - 'unpublished'
-        idea_status:
-          description: 'Indicates the status of the idea (taxonomy?).'
-          type: string
-          enum:
-            - 'submitted'
-            - 'open'
-            - 'closed'
     list-schema:
       allOf:
         - type: object
