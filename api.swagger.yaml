@@ -13962,6 +13962,7 @@ components:
           type: string
           format: email
     location-schema:
+      type: object
       oneOf:
         - $ref: '#/components/schemas/location-site-schema'
         - $ref: '#/components/schemas/location-building-schema'
@@ -13970,6 +13971,7 @@ components:
       discriminator:
         propertyName: type
     location-schema-create:
+      type: object
       oneOf:
         - allOf:
           - $ref: '#/components/schemas/location-site-schema-create'
@@ -14018,6 +14020,7 @@ components:
       discriminator:
         propertyName: type
     location-schema-update:
+      type: object
       oneOf:
         - allOf:
           - $ref: '#/components/schemas/location-site-schema-update'
