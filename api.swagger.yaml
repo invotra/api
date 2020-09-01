@@ -9251,6 +9251,8 @@ components:
         - link
         - short_text
         - topic
+        - category
+        - category_colour
         - likes
         - comment_count
         - current_user_liked
@@ -9334,7 +9336,7 @@ components:
           type: string
           enum:
             - people
-            - group
+            - groups
             - content
         category:
           description: The category of a post
