@@ -14028,6 +14028,8 @@ components:
                 type: string
                 enum:
                   - site
+            required:
+              - type
         - allOf:
           - $ref: '#/components/schemas/location-building-schema-update'
           - type: object
@@ -14037,6 +14039,8 @@ components:
                 type: string
                 enum:
                   - building
+            required:
+              - type
         - allOf:
           - $ref: '#/components/schemas/location-floor-schema-update'
           - type: object
@@ -14046,6 +14050,8 @@ components:
                 type: string
                 enum:
                   - floor
+            required:
+              - type
         - allOf:
           - $ref: '#/components/schemas/location-space-schema-update'
           - type: object
@@ -14055,6 +14061,8 @@ components:
                 type: string
                 enum:
                   - space
+            required:
+              - type
       discriminator:
         propertyName: type
     team-membership-common-schema:
