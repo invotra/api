@@ -3523,7 +3523,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of pages on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3702,7 +3702,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of policies on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3881,7 +3881,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of polls on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -4060,7 +4060,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of promotions on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -10789,7 +10789,7 @@ components:
             - 'published'
             - 'unpublished'
         review_date_timestamp:
-          description: 'The review date timestamp for the custom content (in seconds). The review date is mandatory if configured to be in Invotra admin.'
+          description: 'The review date timestamp for the group document (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
     group-poll-schema:
@@ -11107,7 +11107,7 @@ components:
         - type: object
           properties:
             site_section:
-              description: 'The site section of this custom content.'
+              description: 'The site section of this list.'
               type: object
               properties:
                 uuid:
@@ -11332,7 +11332,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             author:
-              description: 'The author of this custom content.'
+              description: 'The author of this message.'
               type: object
               properties:
                 uuid:
@@ -11354,7 +11354,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             author:
-              description: 'The author of this custom content (Will use the authenticated user if not supplied).'
+              description: 'The author of this message (Will use the authenticated user if not supplied).'
               type: object
               properties:
                 uuid:
@@ -11450,7 +11450,7 @@ components:
                     type: string
                     example: 'Grade 3'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this news item.'
               type: array
               items:
                 type: object
@@ -11557,7 +11557,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             grades:
-              description: 'The grades targeting this custom content.'
+              description: 'The grades targeting this news item.'
               type: array
               items:
                 type: object
@@ -11568,7 +11568,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this news item.'
               type: array
               items:
                 type: object
@@ -11651,7 +11651,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             grades:
-              description: 'The grades targeting this custom content.'
+              description: 'The grades targeting this news item.'
               type: array
               items:
                 type: object
@@ -11662,7 +11662,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this news item.'
               type: array
               items:
                 type: object
@@ -11702,11 +11702,11 @@ components:
           type: integer
           example: 1510941596
         review_date_timestamp:
-          description: 'The review date timestamp for the custom content (in seconds). The review date is mandatory if configured to be in Invotra admin.'
+          description: 'The review date timestamp for the news (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
-          description: 'Related external links for the custom content'
+          description: 'Related external links for the news'
           type: array
           items:
             type: object
@@ -11720,7 +11720,7 @@ components:
                 type: string
                 example: 'https://dev.invotra.com/info/passwords'
         related_content_links:
-          description: 'Related content links for the custom content'
+          description: 'Related content links for the news item.'
           type: array
           items:
             type: object
