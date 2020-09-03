@@ -4162,17 +4162,17 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
-  '/web_forms':
+  '/webforms':
     post:
       tags:
-        - 'web forms'
-      description: 'Provision a new web form.'
+        - 'webforms'
+      description: 'Provision a new webform.'
       responses:
         '201':
-          description: 'The web form was created successfully.'
+          description: 'The webform was created successfully.'
           headers:
             Location:
-              description: 'The URL at which the newly provisioned web form may be retrieved.'
+              description: 'The URL at which the newly provisioned webform may be retrieved.'
               schema:
                 type: string
           content:
@@ -4180,26 +4180,26 @@ paths:
               schema:
                 $ref: '#/components/schemas/successful-post-response-schema'
         '400':
-          description: 'The web form was not saved due to malformed JSON.'
+          description: 'The webform was not saved due to malformed JSON.'
         '403':
-          description: 'User is not authorized to create a web form.'
+          description: 'User is not authorized to create a webform.'
         '422':
-          description: 'The web form was not saved due to Drupal validation failure or JSON schema validation failure.'
+          description: 'The webform was not saved due to Drupal validation failure or JSON schema validation failure.'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/web-form-schema-create'
+              $ref: '#/components/schemas/webform-schema-create'
         required: true
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
-        - CognitoJwt: [ invotra/web_forms:write ]
-  '/web_forms/list':
+        - CognitoJwt: [ invotra/webforms:write ]
+  '/webforms/list':
     get:
       tags:
-        - 'web forms'
-      description: 'Search for web forms. An empty array is returned if no web forms where found.'
+        - 'webforms'
+      description: 'Search for webforms. An empty array is returned if no webforms where found.'
       parameters:
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
@@ -4221,7 +4221,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of web forms on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of webforms on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -4248,7 +4248,7 @@ paths:
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
-          description: 'List of web forms matching the filter criteria.'
+          description: 'List of webforms matching the filter criteria.'
           content:
             application/json:
               schema:
@@ -4262,85 +4262,85 @@ paths:
                     description: 'The results set.'
                     type: array
                     items:
-                      $ref: '#/components/schemas/web-form-schema'
+                      $ref: '#/components/schemas/webform-schema'
         '403':
-          description: 'User is not authorized to list web forms.'
+          description: 'User is not authorized to list webforms.'
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
-        - CognitoJwt: [ invotra/web_forms:read ]
-  '/web_forms/{web_form_id}':
+        - CognitoJwt: [ invotra/webforms:read ]
+  '/webforms/{webform_id}':
     parameters:
-      - description: 'The Invotra UUID of the web form.'
+      - description: 'The Invotra UUID of the webform.'
         in: path
-        name: web_form_id
+        name: webform_id
         required: true
         schema:
           type: string
           format: uuid
     get:
       tags:
-        - 'web forms'
-      description: 'Get information about the web form.'
+        - 'webforms'
+      description: 'Get information about the webform.'
       responses:
         '200':
-          description: 'Returns a single complete web form object.'
+          description: 'Returns a single complete webform object.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/web-form-schema'
+                $ref: '#/components/schemas/webform-schema'
         '400':
           description: 'The supplied UUID was malformed.'
         '403':
-          description: 'User is not authorized to show this web form.'
+          description: 'User is not authorized to show this webform.'
         '404':
-          description: 'The UUID does not correspond to an existing web form.'
+          description: 'The UUID does not correspond to an existing webform.'
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
-        - CognitoJwt: [ invotra/web_forms:read ]
+        - CognitoJwt: [ invotra/webforms:read ]
     put:
       tags:
-        - 'web forms'
-      description: 'Update web form information.'
+        - 'webforms'
+      description: 'Update webform information.'
       responses:
         '200':
-          description: 'The web form information was updated successfully.'
+          description: 'The webform information was updated successfully.'
         '400':
           description: 'The supplied UUID or JSON was malformed.'
         '403':
-          description: 'User is not authorized to update this web form.'
+          description: 'User is not authorized to update this webform.'
         '404':
-          description: 'The UUID does not correspond to an existing web form.'
+          description: 'The UUID does not correspond to an existing webform.'
         '422':
-          description: 'The web form was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+          description: 'The webform was not updated due to a Drupal validation failure or a JSON schema validation failure.'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/web-form-schema-update'
+              $ref: '#/components/schemas/webform-schema-update'
         required: true
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
-        - CognitoJwt: [ invotra/web_forms:write ]
+        - CognitoJwt: [ invotra/webforms:write ]
     delete:
       tags:
-        - 'web forms'
-      description: 'Delete a web form.'
+        - 'webforms'
+      description: 'Delete a webform.'
       responses:
         '200':
-          description: 'The web form was successfully deleted.'
+          description: 'The webform was successfully deleted.'
         '400':
           description: 'The supplied UUID was malformed.'
         '403':
-          description: 'User is not authorized to delete this web form.'
+          description: 'User is not authorized to delete this webform.'
         '404':
-          description: 'The UUID does not correspond to an existing web form.'
+          description: 'The UUID does not correspond to an existing webform.'
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
-        - CognitoJwt: [ invotra/web_forms:write ]
+        - CognitoJwt: [ invotra/webforms:write ]
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -9156,8 +9156,8 @@ components:
             invotra/promotions:write: write promotions
             invotra/queries:read: read queries
             invotra/queries:write: write queries
-            invotra/web_forms:read: read web forms
-            invotra/web_forms:write: write web forms
+            invotra/webforms:read: read webforms
+            invotra/webforms:write: write webforms
             invotra/groups:read: read groups
             invotra/groups:write: write groups
             invotra/groups:metrics: retrieve groups metrics
@@ -13262,16 +13262,16 @@ components:
           type: boolean
           default: false
           example: false
-    web-form-schema:
+    webform-schema:
       allOf:
         - type: object
           properties:
             uuid:
-              description: 'Invotra UUID of the web form.'
+              description: 'Invotra UUID of the webform.'
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/web-form-schema-common'
+        - $ref: '#/components/schemas/webform-schema-common'
         - type: object
           properties:
             schedule_date_timestamp:
@@ -13279,7 +13279,7 @@ components:
               type: integer
               example: 1510941596
             site_section:
-              description: 'The site section of this web form.'
+              description: 'The site section of this webform.'
               type: object
               properties:
                 uuid:
@@ -13292,22 +13292,22 @@ components:
                   type: string
                   example: 'Operations'
             image:
-              description: 'Web form Image'
+              description: 'Webform Image'
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
             author:
-              description: 'The author of this web form. (Will use the authenticated user if not supplied.'
+              description: 'The author of this webform. (Will use the authenticated user if not supplied.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
             attachments:
-              description: 'List of attachments on the web form.'
+              description: 'List of attachments on the webform.'
               type: array
               items:
                 $ref: '#/components/schemas/file-schema'
             owner:
-              description: 'The owner user of the web form.'
+              description: 'The owner user of the webform.'
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
@@ -13324,7 +13324,7 @@ components:
                   type: string
                   example: Operations
             locations:
-              description: 'The locations targeting this web form.'
+              description: 'The locations targeting this webform.'
               type: array
               items:
                 type: object
@@ -13347,7 +13347,7 @@ components:
                       - floor
                       - space
             grades:
-              description: 'The grades targeting this web form.'
+              description: 'The grades targeting this webform.'
               type: array
               items:
                 type: object
@@ -13362,7 +13362,7 @@ components:
                     type: string
                     example: 'Grade 3'
             regions:
-              description: 'The regions targeting this web form.'
+              description: 'The regions targeting this webform.'
               type: array
               items:
                 type: object
@@ -13393,12 +13393,12 @@ components:
               type: integer
               example: 5
             published:
-              description: 'Published status for the web form.'
+              description: 'Published status for the webform.'
               type: boolean
               example: true
-    web-form-schema-update:
+    webform-schema-update:
       allOf:
-        - $ref: '#/components/schemas/web-form-schema-common'
+        - $ref: '#/components/schemas/webform-schema-common'
         - type: object
           properties:
             schedule_date_timestamp:
@@ -13406,7 +13406,7 @@ components:
               type: integer
               example: 1510941596
             site_section:
-              description: 'The site section of this web form.'
+              description: 'The site section of this webform.'
               type: object
               properties:
                 uuid:
@@ -13415,7 +13415,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             image:
-              description: 'The image for this web form.'
+              description: 'The image for this webform.'
               type: object
               properties:
                 uuid:
@@ -13424,7 +13424,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             author:
-              description: 'The author of this web form. (Will use the authenticated user if not supplied.'
+              description: 'The author of this webform. (Will use the authenticated user if not supplied.'
               type: object
               properties:
                 uuid:
@@ -13433,7 +13433,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             attachments:
-              description: 'The attached files of this web form.'
+              description: 'The attached files of this webform.'
               type: array
               items:
                 type: object
@@ -13444,7 +13444,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this web form.'
+              description: 'The owner of this webform.'
               type: object
               properties:
                 uuid:
@@ -13453,7 +13453,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
-              description: 'The team targeting this web form.'
+              description: 'The team targeting this webform.'
               type: object
               properties:
                 uuid:
@@ -13462,7 +13462,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             locations:
-              description: 'The locations targeting this web form.'
+              description: 'The locations targeting this webform.'
               type: array
               items:
                 type: object
@@ -13473,7 +13473,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             grades:
-              description: 'The grades targeting this web form.'
+              description: 'The grades targeting this webform.'
               type: array
               items:
                 type: object
@@ -13484,7 +13484,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             regions:
-              description: 'The regions targeting this web form.'
+              description: 'The regions targeting this webform.'
               type: array
               items:
                 type: object
@@ -13494,13 +13494,13 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
-    web-form-schema-create:
+    webform-schema-create:
       allOf:
-        - $ref: '#/components/schemas/web-form-schema-common'
+        - $ref: '#/components/schemas/webform-schema-common'
         - type: object
           properties:
             site_section:
-              description: 'The site section of this web form.'
+              description: 'The site section of this webform.'
               type: object
               properties:
                 uuid:
@@ -13509,7 +13509,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             image:
-              description: 'The image for this web form.'
+              description: 'The image for this webform.'
               type: object
               properties:
                 uuid:
@@ -13518,7 +13518,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             author:
-              description: 'The author of this web form. (Will use the authenticated user if not supplied.'
+              description: 'The author of this webform. (Will use the authenticated user if not supplied.'
               type: object
               properties:
                 uuid:
@@ -13527,7 +13527,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             attachments:
-              description: 'The attached files of this web form.'
+              description: 'The attached files of this webform.'
               type: array
               items:
                 type: object
@@ -13538,7 +13538,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this web form.'
+              description: 'The owner of this webform.'
               type: object
               properties:
                 uuid:
@@ -13547,7 +13547,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
-              description: 'The team targeting this web form.'
+              description: 'The team targeting this webform.'
               type: object
               properties:
                 uuid:
@@ -13556,7 +13556,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             locations:
-              description: 'The locations targeting this web form.'
+              description: 'The locations targeting this webform.'
               type: array
               items:
                 type: object
@@ -13567,7 +13567,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             grades:
-              description: 'The grades targeting this web form.'
+              description: 'The grades targeting this webform.'
               type: array
               items:
                 type: object
@@ -13578,7 +13578,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             regions:
-              description: 'The regions targeting this web form.'
+              description: 'The regions targeting this webform.'
               type: array
               items:
                 type: object
@@ -13595,19 +13595,19 @@ components:
             - site_section
             - review_date_timestamp
             - owner
-    web-form-schema-common:
+    webform-schema-common:
       type: object
       properties:
         title:
-          description: 'Title of the web form.'
+          description: 'Title of the webform.'
           type: string
           example: 'Guidelines for creating a strong password'
         body:
-          description: 'The body of the web form.'
+          description: 'The body of the webform.'
           type: string
           example: 'You can create strong passwords using an offline random password generator.'
         state:
-          description: 'Indicates the workflow state of the web form.'
+          description: 'Indicates the workflow state of the webform.'
           type: string
           enum:
             - 'draft'
@@ -13616,11 +13616,11 @@ components:
             - 'published'
             - 'unpublished'
         review_date_timestamp:
-          description: 'The review date timestamp for the web form (in seconds).'
+          description: 'The review date timestamp for the webform (in seconds).'
           type: integer
           example: 1510941596
         related_external_links:
-          description: 'Related external links for the web form.'
+          description: 'Related external links for the webform.'
           type: array
           items:
             type: object
@@ -13634,7 +13634,7 @@ components:
                 type: string
                 example: 'https://dev.invotra.com/info/passwords'
         related_content_links:
-          description: 'Related content links for the web form.'
+          description: 'Related content links for the webform.'
           type: array
           items:
             type: object
@@ -13666,7 +13666,7 @@ components:
           default: false
           example: false
         external_id:
-          description: 'The web form external reference id.'
+          description: 'The webform external reference id.'
           type: string
           example: 'ABC123'
     location-trimmed-schema:
