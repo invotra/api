@@ -22,6 +22,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/status-schema'
       description: 'Returns the status of the Invotra API. If successful, the API is running as expected and will return the "OK" response that includes the server time. (If it is not, an appropriate 5xx error message will be returned).'
+  /administration:
+    get:
+      tags:
+        - configuration
+      responses:
+        '200':
+          description: 'Administration configuration returned.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/administration-schema'
+      description: 'Returns the administration configuration for an instance of Invotra.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/administration:read ]
   /branding:
     get:
       tags:
@@ -172,6 +188,33 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /logs:
+    post:
+      tags:
+        - logs
+      description: 'Write log entries to the applications log.'
+      requestBody:
+        description: 'An array containing one or more log entry objects. A maximum of 25 entries is permitted per request.'
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/log-schema'
+        required: true
+      responses:
+        '201':
+          description: 'The log entries were saved successfully.'
+        '400':
+          description: 'The log entries were not saved due to malformed JSON.'
+        '403':
+          description: 'The user does not have permission to write to the applications log.'
+        '422':
+          description: 'The log entries were not saved due to a JSON schema validation failure.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/logs:write ]
   /pdf-export/close-job:
     post:
       tags:
@@ -3507,7 +3550,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of pages on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3686,7 +3729,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of policies on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3865,7 +3908,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of polls on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -4044,7 +4087,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of promotions on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -9117,6 +9160,23 @@ components:
           type: string
       required:
         - error
+    administration-schema:
+      type: object
+      properties:
+        mandatory_content_review:
+          description: 'Mandatory configuration for the "content_review" property.'
+          type: array
+          items:
+            type: object
+            properties:
+              content_type:
+                description: 'Content type name.'
+                type: string
+                example: 'news'
+              mandatory:
+                description: 'Flag indicating the property is mandatory.'
+                type: boolean
+                example: true
     branding-schema:
       properties:
         logo:
@@ -9239,6 +9299,20 @@ components:
         password:
           description: The password that the user logs in with
           type: string
+    log-schema:
+      type: object
+      properties:
+        app_id:
+          description: 'Application identity.'
+          type: string
+          example: 'MOB123'
+        log_message:
+          description: 'The log entry message.'
+          type: string
+          example: 'An unhandled exception has occurred rendering a view.'
+      required:
+        - app_id
+        - log_message
     feed-schema:
       required:
         - user_uuid
@@ -9424,6 +9498,8 @@ components:
             - invotra.post.like
             - invotra.post.comment
             - invotra.comment.like
+            - invotra.group.pending
+            - invotra.group.added
         status:
           description: Whether the notification has been read or not
           type: boolean
@@ -10167,6 +10243,10 @@ components:
           enum:
             - 'published'
             - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the blog (in seconds). The review date is mandatory if configured to be in Invotra admin.'
+          type: integer
+          example: 1510941596
     custom-content-schema:
       allOf:
         - type: object
@@ -10443,7 +10523,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this custom content.'
+              description: 'The owner of this custom content. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -10499,8 +10579,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     custom-content-schema-common:
       type: object
       properties:
@@ -10526,7 +10604,7 @@ components:
             - 'published'
             - 'unpublished'
         review_date_timestamp:
-          description: 'The review date timestamp for the custom content (in seconds).'
+          description: 'The review date timestamp for the custom content (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
@@ -10736,7 +10814,6 @@ components:
             - body
             - state
             - group
-            - review_date_timestamp
     group-document-schema-common:
       type: object
       properties:
@@ -10755,7 +10832,7 @@ components:
             - 'published'
             - 'unpublished'
         review_date_timestamp:
-          description: 'The review date timestamp for the group document (in seconds).'
+          description: 'The review date timestamp for the group document (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
     group-poll-schema:
@@ -11073,7 +11150,7 @@ components:
         - type: object
           properties:
             site_section:
-              description: 'The site section of this custom content.'
+              description: 'The site section of this list.'
               type: object
               properties:
                 uuid:
@@ -11145,8 +11222,6 @@ components:
             - title
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     list-schema-common:
       type: object
       properties:
@@ -11168,7 +11243,7 @@ components:
             - 'published'
             - 'unpublished'
         review_date_timestamp:
-          description: 'The review date timestamp for the list (in seconds).'
+          description: 'The review date timestamp for the list (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         list:
@@ -11300,7 +11375,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             author:
-              description: 'The author of this custom content.'
+              description: 'The author of this message.'
               type: object
               properties:
                 uuid:
@@ -11322,7 +11397,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             author:
-              description: 'The author of this custom content (Will use the authenticated user if not supplied).'
+              description: 'The author of this message (Will use the authenticated user if not supplied).'
               type: object
               properties:
                 uuid:
@@ -11418,7 +11493,7 @@ components:
                     type: string
                     example: 'Grade 3'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this news item.'
               type: array
               items:
                 type: object
@@ -11525,7 +11600,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             grades:
-              description: 'The grades targeting this custom content.'
+              description: 'The grades targeting this news item.'
               type: array
               items:
                 type: object
@@ -11536,7 +11611,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this news item.'
               type: array
               items:
                 type: object
@@ -11590,7 +11665,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this news item.'
+              description: 'The owner of this news item. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -11619,7 +11694,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             grades:
-              description: 'The grades targeting this custom content.'
+              description: 'The grades targeting this news item.'
               type: array
               items:
                 type: object
@@ -11630,7 +11705,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this news item.'
               type: array
               items:
                 type: object
@@ -11645,8 +11720,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     news-schema-common:
       type: object
       properties:
@@ -11672,11 +11745,11 @@ components:
           type: integer
           example: 1510941596
         review_date_timestamp:
-          description: 'The review date timestamp for the custom content (in seconds).'
+          description: 'The review date timestamp for the news (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
-          description: 'Related external links for the custom content'
+          description: 'Related external links for the news'
           type: array
           items:
             type: object
@@ -11690,7 +11763,7 @@ components:
                 type: string
                 example: 'https://dev.invotra.com/info/passwords'
         related_content_links:
-          description: 'Related content links for the custom content'
+          description: 'Related content links for the news item.'
           type: array
           items:
             type: object
@@ -11978,7 +12051,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this page.'
+              description: 'The owner of this page. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -12033,8 +12106,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     page-schema-common:
       type: object
       properties:
@@ -12060,7 +12131,7 @@ components:
           type: integer
           example: 1510941596
         review_date_timestamp:
-          description: 'The review date timestamp for the page (in seconds).'
+          description: 'The review date timestamp for the page (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
@@ -12502,7 +12573,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this policy.'
+              description: 'The owner of this policy. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -12515,8 +12586,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     policy-schema-common:
       type: object
       properties:
@@ -12546,7 +12615,7 @@ components:
           type: integer
           example: 1510941696
         review_date_timestamp:
-          description: 'The review date timestamp for the policy (in seconds).'
+          description: 'The review date timestamp for the policy (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
@@ -12981,7 +13050,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this promotion.'
+              description: 'The owner of this promotion. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -13045,8 +13114,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     promotion-schema-common:
       type: object
       properties:
@@ -13077,7 +13144,7 @@ components:
           example: 'https://dev.invotra.com/post/ill-be-annual-leave'
           format: uri
         review_date_timestamp:
-          description: 'The review date timestamp for the promotion (in seconds).'
+          description: 'The review date timestamp for the promotion (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         featured:
@@ -13447,10 +13514,11 @@ components:
           type: string
           example: ABC123
         parent_uuid:
-          description: 'This is the Invotra UUID of the parent job role, optional.'
+          description: 'This is the Invotra UUID of the parent job role, optional. Note you can create and update this property, but it will have no effect.'
           example: 01234567-89ab-cdef-1234-56789abcdef0
           type: string
           format: uuid
+          deprecated: true
       type: object
     job-role-list-schema:
       allOf:
