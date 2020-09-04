@@ -578,19 +578,19 @@ paths:
           name: fulltext_search
           schema:
             type: string
-        - description: Filter by team.
+        - description: The Invotra UUID of the team to filter by.
           in: query
           name: team
           schema:
             type: string
             format: uuid
-        - description: Filter by location.
+        - description: The Invotra UUID of the location to filter by.
           in: query
           name: location
           schema:
             type: string
             format: uuid
-        - description: Filter by group.
+        - description: The Invotra UUID of the group to filter by.
           in: query
           name: group
           schema:
@@ -636,7 +636,9 @@ paths:
                     items:
                       $ref: '#/components/schemas/user-search-schema'
         '403':
-          description: Access denied. This may occur if you try to filter by a private or secret group that you are not a member of.
+          description: 'Access denied. This may occur if you try to filter by a private or secret group that you are not a member of.'
+        '404':
+          description: 'The group, team, or location you are filtering on does not exist.'
       description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
       security:
         - SessionCookieHeader: []
