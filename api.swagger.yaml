@@ -22,6 +22,22 @@ paths:
               schema:
                 $ref: '#/components/schemas/status-schema'
       description: 'Returns the status of the Invotra API. If successful, the API is running as expected and will return the "OK" response that includes the server time. (If it is not, an appropriate 5xx error message will be returned).'
+  /administration:
+    get:
+      tags:
+        - configuration
+      responses:
+        '200':
+          description: 'Administration configuration returned.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/administration-schema'
+      description: 'Returns the administration configuration for an instance of Invotra.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/administration:read ]
   /branding:
     get:
       tags:
@@ -605,19 +621,19 @@ paths:
           name: fulltext_search
           schema:
             type: string
-        - description: Filter by team.
+        - description: The Invotra UUID of the team to filter by.
           in: query
           name: team
           schema:
             type: string
             format: uuid
-        - description: Filter by location.
+        - description: The Invotra UUID of the location to filter by.
           in: query
           name: location
           schema:
             type: string
             format: uuid
-        - description: Filter by group.
+        - description: The Invotra UUID of the group to filter by.
           in: query
           name: group
           schema:
@@ -663,7 +679,9 @@ paths:
                     items:
                       $ref: '#/components/schemas/user-search-schema'
         '403':
-          description: Access denied. This may occur if you try to filter by a private or secret group that you are not a member of.
+          description: 'Access denied. This may occur if you try to filter by a private or secret group that you are not a member of.'
+        '404':
+          description: 'The group, team, or location you are filtering on does not exist.'
       description: Search for users. Returns user snippets. If there are no result, an empty array is returned.
       security:
         - SessionCookieHeader: []
@@ -2607,6 +2625,185 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/custom_content:write ]
+  '/group_documents':
+    post:
+      tags:
+        - 'group documents'
+      description: 'Provision a new group document.'
+      responses:
+        '201':
+          description: 'The group document was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned group document may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The group document was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a group document.'
+        '422':
+          description: 'The group document was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-document-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_documents:write ]
+  '/group_documents/list':
+    get:
+      tags:
+        - 'group documents'
+      description: 'Search for group documents. An empty array is returned if no group documents where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of group documents on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of group documents matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/group-document-schema'
+        '403':
+          description: 'User is not authorized to list group documents.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_documents:read ]
+  '/group_documents/{group_document_id}':
+    parameters:
+      - description: 'The Invotra UUID of the group document.'
+        in: path
+        name: group_document_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'group documents'
+      description: 'Get information about the group document.'
+      responses:
+        '200':
+          description: 'Returns a single complete group document object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/group-document-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this group document.'
+        '404':
+          description: 'The UUID does not correspond to an existing group document.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_documents:read ]
+    put:
+      tags:
+        - 'group documents'
+      description: 'Update group document information.'
+      responses:
+        '200':
+          description: 'The group document information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this group document.'
+        '404':
+          description: 'The UUID does not correspond to an existing group document.'
+        '422':
+          description: 'The group document was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-document-schema-update'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_documents:write ]
+    delete:
+      tags:
+        - 'group documents'
+      description: 'Delete a group document.'
+      responses:
+        '200':
+          description: 'The group document was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this group document.'
+        '404':
+          description: 'The UUID does not correspond to an existing group document.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_documents:write ]
   '/group_polls':
     post:
       tags:
@@ -3353,7 +3550,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of pages on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3532,7 +3729,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of policies on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3711,7 +3908,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of polls on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -3890,7 +4087,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of promotions on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -5712,322 +5909,6 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/countries:write ]
-  '/event_statuses':
-    post:
-      tags:
-        - 'event statuses'
-      description: 'Provision a new event status.'
-      responses:
-        '201':
-          description: 'The event status was created successfully.'
-          headers:
-            Location:
-              description: 'The URL at which the newly provisioned event status may be retrieved.'
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/successful-post-response-schema'
-        '400':
-          description: 'The event status was not saved due to malformed JSON.'
-        '403':
-          description: 'User is not authorized to create an event status.'
-        '422':
-          description: 'The event status was not saved due to Drupal validation failure or JSON schema validation failure.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/event-status-schema-create'
-        required: true
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/event_statuses:write ]
-  '/event_statuses/list':
-    get:
-      tags:
-        - 'event statuses'
-      description: 'Search for event statuses. An empty array is returned if no event statuses are found.'
-      parameters:
-        - name: name
-          description: 'Filter by name. Matches on whole words.'
-          in: query
-          schema:
-            type: string
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-        - name: status
-          description: 'Filter the list of event statuses on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
-          in: query
-          schema:
-            type: string
-        - name: valid_parents_for
-          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the event status.'
-          in: query
-          schema:
-            type: string
-            format: uuid
-        - $ref: '#/components/parameters/offsetParam'
-        - $ref: '#/components/parameters/limitParam'
-      responses:
-        '200':
-          description: 'List of event statuses matching the filter criteria.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    description: 'Count of results.'
-                    type: integer
-                    example: 50
-                  results:
-                    description: 'The results set.'
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/event-status-schema'
-        '403':
-          description: 'User is not authorized to list event statuses.'
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/event_statuses:read ]
-  '/event_statuses/{event_status_id}':
-    parameters:
-      - description: 'The Invotra UUID of the event status.'
-        in: path
-        name: event_status_id
-        required: true
-        schema:
-          type: string
-          format: uuid
-    get:
-      tags:
-        - 'event statuses'
-      description: 'Get information about the event status.'
-      responses:
-        '200':
-          description: 'Returns a single complete event status object.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/event-status-schema'
-        '400':
-          description: 'The supplied UUID was malformed.'
-        '403':
-          description: 'User is not authorized to show this event status.'
-        '404':
-          description: 'The UUID does not correspond to an existing event status.'
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/event_statuses:read ]
-    put:
-      tags:
-        - 'event statuses'
-      description: 'Update event status information.'
-      responses:
-        '200':
-          description: 'The event status information was updated successfully.'
-        '400':
-          description: 'The supplied UUID or JSON was malformed.'
-        '403':
-          description: 'User is not authorized to update this event status.'
-        '404':
-          description: 'The UUID does not correspond to an existing event status.'
-        '422':
-          description: 'The event status was not updated due to a Drupal validation failure or a JSON schema validation failure.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/event-status-schema-common'
-        required: true
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/event_statuses:write ]
-    delete:
-      tags:
-        - 'event statuses'
-      description: 'Delete an event status.'
-      responses:
-        '200':
-          description: 'The event status was successfully deleted.'
-        '400':
-          description: 'The supplied UUID was malformed.'
-        '403':
-          description: 'User is not authorized to delete this event status.'
-        '404':
-          description: 'The UUID does not correspond to an existing event status.'
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/event_statuses:write ]
-  '/event_topics':
-    post:
-      tags:
-        - 'event topics'
-      description: 'Provision a new event topic.'
-      responses:
-        '201':
-          description: 'The event topic was created successfully.'
-          headers:
-            Location:
-              description: 'The URL at which the newly provisioned event topic may be retrieved.'
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/successful-post-response-schema'
-        '400':
-          description: 'The event topic was not saved due to malformed JSON.'
-        '403':
-          description: 'User is not authorized to create an event topic.'
-        '422':
-          description: 'The event topic was not saved due to Drupal validation failure or JSON schema validation failure.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/event-topic-schema-create'
-        required: true
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/event_topics:write ]
-  '/event_topics/list':
-    get:
-      tags:
-        - 'event topics'
-      description: 'Search for event topics. An empty array is returned if no event topics are found.'
-      parameters:
-        - name: name
-          description: 'Filter by name. Matches on whole words.'
-          in: query
-          schema:
-            type: string
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-        - name: status
-          description: 'Filter the list of event topics on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
-          in: query
-          schema:
-            type: string
-        - name: valid_parents_for
-          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the event topic.'
-          in: query
-          schema:
-            type: string
-            format: uuid
-        - $ref: '#/components/parameters/offsetParam'
-        - $ref: '#/components/parameters/limitParam'
-      responses:
-        '200':
-          description: 'List of event topics matching the filter criteria.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    description: 'Count of results.'
-                    type: integer
-                    example: 50
-                  results:
-                    description: 'The results set.'
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/event-topic-schema'
-        '403':
-          description: 'User is not authorized to list event topics.'
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/event_topics:read ]
-  '/event_topics/{event_topic_id}':
-    parameters:
-      - description: 'The Invotra UUID of the event topic.'
-        in: path
-        name: event_topic_id
-        required: true
-        schema:
-          type: string
-          format: uuid
-    get:
-      tags:
-        - 'event topics'
-      description: 'Get information about the event topic.'
-      responses:
-        '200':
-          description: 'Returns a single complete event topic object.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/event-topic-schema'
-        '400':
-          description: 'The supplied UUID was malformed.'
-        '403':
-          description: 'User is not authorized to show this event topic.'
-        '404':
-          description: 'The UUID does not correspond to an existing event topic.'
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/event_topics:read ]
-    put:
-      tags:
-        - 'event topics'
-      description: 'Update event topic information.'
-      responses:
-        '200':
-          description: 'The event topic information was updated successfully.'
-        '400':
-          description: 'The supplied UUID or JSON was malformed.'
-        '403':
-          description: 'User is not authorized to update this event topic.'
-        '404':
-          description: 'The UUID does not correspond to an existing event topic.'
-        '422':
-          description: 'The event topic was not updated due to a Drupal validation failure or a JSON schema validation failure.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/event-topic-schema-common'
-        required: true
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/event_topics:write ]
-    delete:
-      tags:
-        - 'event topics'
-      description: 'Delete an event topic.'
-      responses:
-        '200':
-          description: 'The event topic was successfully deleted.'
-        '400':
-          description: 'The supplied UUID was malformed.'
-        '403':
-          description: 'User is not authorized to delete this event topic.'
-        '404':
-          description: 'The UUID does not correspond to an existing event topic.'
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/event_topics:write ]
   '/free_skills':
     post:
       tags:
@@ -9166,10 +9047,6 @@ components:
             invotra/content_types:write: write content types
             invotra/countries:read: read countries
             invotra/countries:write: write countries
-            invotra/event_statuses:read: read event statuses
-            invotra/event_statuses:write: write event statuses
-            invotra/event_topics:read: read event topics
-            invotra/event_topics:write: write event topics
             invotra/free_skills:read: read free skills
             invotra/free_skills:write: write free skills
             invotra/general_topics:read: read general topics
@@ -9283,6 +9160,23 @@ components:
           type: string
       required:
         - error
+    administration-schema:
+      type: object
+      properties:
+        mandatory_content_review:
+          description: 'Mandatory configuration for the "content_review" property.'
+          type: array
+          items:
+            type: object
+            properties:
+              content_type:
+                description: 'Content type name.'
+                type: string
+                example: 'news'
+              mandatory:
+                description: 'Flag indicating the property is mandatory.'
+                type: boolean
+                example: true
     branding-schema:
       properties:
         logo:
@@ -10349,6 +10243,10 @@ components:
           enum:
             - 'published'
             - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the blog (in seconds). The review date is mandatory if configured to be in Invotra admin.'
+          type: integer
+          example: 1510941596
     custom-content-schema:
       allOf:
         - type: object
@@ -10625,7 +10523,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this custom content.'
+              description: 'The owner of this custom content. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -10681,8 +10579,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     custom-content-schema-common:
       type: object
       properties:
@@ -10708,7 +10604,7 @@ components:
             - 'published'
             - 'unpublished'
         review_date_timestamp:
-          description: 'The review date timestamp for the custom content (in seconds).'
+          description: 'The review date timestamp for the custom content (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
@@ -10761,6 +10657,184 @@ components:
           description: 'The custom content external reference id.'
           type: string
           example: 'ABC123'
+    group-document-schema:
+      allOf:
+        - $ref: '#/components/schemas/group-document-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the group document.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            group:
+              description: 'The group for this group document.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/group-schema'
+            featured_image:
+              description: 'The featured image for this group document.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this group document.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            folder:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group document folder.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the group document folder.'
+                  type: string
+                  example: 'Darts'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the group document was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the group document was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the group document.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the group document.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status of the group document.'
+              type: boolean
+              example: true
+            enable_comments:
+              description: 'Indicates that this group document has comments enabled.'
+              type: boolean
+              example: true
+    group-document-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/group-document-schema-common'
+        - type: object
+          properties:
+            group:
+              description: 'The group for this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            featured_image:
+              description: 'The featured image for this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the author user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            folder:
+              description: 'The folder of this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group document folder.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            enable_comments:
+              description: 'Indicates that this group document has comments enabled.'
+              type: boolean
+              example: true
+    group-document-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/group-document-schema-common'
+        - type: object
+          properties:
+            group:
+              description: 'The group for this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            featured_image:
+              description: 'The featured image for this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this group document.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the author user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            folder:
+              description: 'The folder of this group document. (If not supplied the default home folder will be used)'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the group document folder.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            enable_comments:
+              description: 'Indicates that this group document has comments enabled.'
+              type: boolean
+              example: true
+              default: true
+          required:
+            - title
+            - body
+            - state
+            - group
+    group-document-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the group document.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the group document.'
+          type: string
+          example: 'You can create strong passwords using an offline random password generator.'
+        state:
+          description: 'Indicates the workflow state of the group document.'
+          type: string
+          enum:
+            - 'published'
+            - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the group document (in seconds). The review date is mandatory if configured to be in Invotra admin.'
+          type: integer
+          example: 1510941596
     group-poll-schema:
       allOf:
         - $ref: '#/components/schemas/group-poll-schema-common'
@@ -11076,7 +11150,7 @@ components:
         - type: object
           properties:
             site_section:
-              description: 'The site section of this custom content.'
+              description: 'The site section of this list.'
               type: object
               properties:
                 uuid:
@@ -11148,8 +11222,6 @@ components:
             - title
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     list-schema-common:
       type: object
       properties:
@@ -11171,7 +11243,7 @@ components:
             - 'published'
             - 'unpublished'
         review_date_timestamp:
-          description: 'The review date timestamp for the list (in seconds).'
+          description: 'The review date timestamp for the list (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         list:
@@ -11303,7 +11375,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             author:
-              description: 'The author of this custom content.'
+              description: 'The author of this message.'
               type: object
               properties:
                 uuid:
@@ -11325,7 +11397,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             author:
-              description: 'The author of this custom content (Will use the authenticated user if not supplied).'
+              description: 'The author of this message (Will use the authenticated user if not supplied).'
               type: object
               properties:
                 uuid:
@@ -11421,7 +11493,7 @@ components:
                     type: string
                     example: 'Grade 3'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this news item.'
               type: array
               items:
                 type: object
@@ -11528,7 +11600,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             grades:
-              description: 'The grades targeting this custom content.'
+              description: 'The grades targeting this news item.'
               type: array
               items:
                 type: object
@@ -11539,7 +11611,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this news item.'
               type: array
               items:
                 type: object
@@ -11593,7 +11665,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this news item.'
+              description: 'The owner of this news item. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -11622,7 +11694,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             grades:
-              description: 'The grades targeting this custom content.'
+              description: 'The grades targeting this news item.'
               type: array
               items:
                 type: object
@@ -11633,7 +11705,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             regions:
-              description: 'The regions targeting this custom content.'
+              description: 'The regions targeting this news item.'
               type: array
               items:
                 type: object
@@ -11648,8 +11720,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     news-schema-common:
       type: object
       properties:
@@ -11675,11 +11745,11 @@ components:
           type: integer
           example: 1510941596
         review_date_timestamp:
-          description: 'The review date timestamp for the custom content (in seconds).'
+          description: 'The review date timestamp for the news (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
-          description: 'Related external links for the custom content'
+          description: 'Related external links for the news'
           type: array
           items:
             type: object
@@ -11693,7 +11763,7 @@ components:
                 type: string
                 example: 'https://dev.invotra.com/info/passwords'
         related_content_links:
-          description: 'Related content links for the custom content'
+          description: 'Related content links for the news item.'
           type: array
           items:
             type: object
@@ -11981,7 +12051,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this page.'
+              description: 'The owner of this page. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -12036,8 +12106,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     page-schema-common:
       type: object
       properties:
@@ -12063,7 +12131,7 @@ components:
           type: integer
           example: 1510941596
         review_date_timestamp:
-          description: 'The review date timestamp for the page (in seconds).'
+          description: 'The review date timestamp for the page (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
@@ -12505,7 +12573,7 @@ components:
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this policy.'
+              description: 'The owner of this policy. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -12518,8 +12586,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     policy-schema-common:
       type: object
       properties:
@@ -12549,7 +12615,7 @@ components:
           type: integer
           example: 1510941696
         review_date_timestamp:
-          description: 'The review date timestamp for the policy (in seconds).'
+          description: 'The review date timestamp for the policy (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         related_external_links:
@@ -12984,7 +13050,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
-              description: 'The owner of this promotion.'
+              description: 'The owner of this promotion. The owner is mandatory if configured to be in Invotra admin.'
               type: object
               properties:
                 uuid:
@@ -13048,8 +13114,6 @@ components:
             - body
             - state
             - site_section
-            - review_date_timestamp
-            - owner
     promotion-schema-common:
       type: object
       properties:
@@ -13080,7 +13144,7 @@ components:
           example: 'https://dev.invotra.com/post/ill-be-annual-leave'
           format: uri
         review_date_timestamp:
-          description: 'The review date timestamp for the promotion (in seconds).'
+          description: 'The review date timestamp for the promotion (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
         featured:
@@ -14175,108 +14239,6 @@ components:
           example: true
         weight:
           description: 'Determines the position of a country in the hierarchy in relation to its siblings.'
-          type: integer
-          example: 3
-    event-status-schema:
-      allOf:
-        - type: object
-          properties:
-            uuid:
-              description: 'Invotra UUID of the event status.'
-              type: string
-              format: uuid
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-            has_children:
-              description: 'Indicates that this event status has children.'
-              type: boolean
-              example: true
-        - $ref: '#/components/schemas/event-status-schema-common'
-    event-status-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/event-status-schema-common'
-        - type: object
-          properties:
-            published:
-              default: true
-          required:
-            - name
-    event-status-schema-common:
-      type: object
-      properties:
-        name:
-          description: 'Name of the event status.'
-          type: string
-          example: 'Cancelled'
-        description:
-          description: 'Description of the event status.'
-          type: string
-          example: 'Event is cancelled'
-        external_id:
-          description: 'The event status external reference id.'
-          type: string
-          example: 'ABC123'
-        parent_uuid:
-          description: 'Invotra UUID of the parent event status.'
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-          type: string
-          format: uuid
-        published:
-          description: 'Indicates that this event status is published.'
-          type: boolean
-          example: true
-        weight:
-          description: 'Determines the position of an event status in the hierarchy in relation to its siblings.'
-          type: integer
-          example: 3
-    event-topic-schema:
-      allOf:
-        - type: object
-          properties:
-            uuid:
-              description: 'Invotra UUID of the event topic.'
-              type: string
-              format: uuid
-              example: '01234567-89ab-cdef-1234-56789abcdef0'
-            has_children:
-              description: 'Indicates that this event topic has children.'
-              type: boolean
-              example: true
-        - $ref: '#/components/schemas/event-topic-schema-common'
-    event-topic-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/event-topic-schema-common'
-        - type: object
-          properties:
-            published:
-              default: true
-          required:
-            - name
-    event-topic-schema-common:
-      type: object
-      properties:
-        name:
-          description: 'Name of the event topic.'
-          type: string
-          example: 'Luncheon'
-        description:
-          description: 'Description of the event topic.'
-          type: string
-          example: 'Special events that include a meal'
-        external_id:
-          description: 'The event topic external reference id.'
-          type: string
-          example: 'ABC123'
-        parent_uuid:
-          description: 'Invotra UUID of the parent event topic.'
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-          type: string
-          format: uuid
-        published:
-          description: 'Indicates that this event topic is published.'
-          type: boolean
-          example: true
-        weight:
-          description: 'Determines the position of an event topic in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
     free-skill-schema:
