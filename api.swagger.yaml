@@ -11079,6 +11079,10 @@ components:
           description: 'The review date timestamp for the blog (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
+        external_id:
+          description: 'The blog external reference id.'
+          type: string
+          example: 'ABC123'
     custom-content-schema:
       allOf:
         - $ref: '#/components/schemas/custom-content-schema-common'
@@ -11718,6 +11722,10 @@ components:
           description: 'The review date timestamp for the group document (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
+        external_id:
+          description: 'The group document external reference id.'
+          type: string
+          example: 'ABC123'
     group-poll-schema:
       allOf:
         - $ref: '#/components/schemas/group-poll-schema-common'
@@ -11824,6 +11832,10 @@ components:
           description: 'Title of the group poll.'
           type: string
           example: 'What is your favorite food?'
+        external_id:
+          description: 'The group poll external reference id.'
+          type: string
+          example: 'ABC123'
     list-schema:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
@@ -12141,6 +12153,10 @@ components:
           description: 'The review date timestamp for the list (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
+        external_id:
+          description: 'The list external reference id.'
+          type: string
+          example: 'ABC123'
         list:
           description: 'List of content and links in the list.'
           type: array
@@ -12311,6 +12327,10 @@ components:
           description: 'The body of the message.'
           type: string
           example: 'It is my birthday next week so remember to get me a present.'
+        external_id:
+          description: 'The message external reference id.'
+          type: string
+          example: 'ABC123'
     multi-media-schema:
       allOf:
         - $ref: '#/components/schemas/multi-media-schema-common'
@@ -14732,6 +14752,10 @@ components:
           type: boolean
           default: false
           example: false
+        external_id:
+          description: 'The promotion external reference id.'
+          type: string
+          example: 'ABC123'
     webform-schema:
       allOf:
         - $ref: '#/components/schemas/webform-schema-common'
