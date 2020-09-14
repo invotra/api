@@ -1623,12 +1623,12 @@ paths:
         '400':
           description: The UUID was malformed.
         '403':
-          description: The logged-in user is not authorized to remove the specified user from the group. (Since group admin functionality is not yet implemented, all users will currently receive this response if trying to remove users other than themselves from a group).
+          description: The logged-in user is not authorized to remove the specified user from the group.
         '404':
           description: |
             The user or group does not exist, or the user was not a member
             of the group.
-      description: Remove the user's membership of the group. Note that at present the {user_id} must match that of the current logged-in user.
+      description: Remove the user's membership of the group.
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
@@ -1646,12 +1646,10 @@ paths:
         '400':
           description: The UUID was malformed or the role type was invalid.
         '403':
-          description: The logged-in user is not authorized to add the specified user to the group or modify their membership. (Since group admin functionality is not yet implemented, all users will currently receive this response if trying to add users other than themselves to a group or modify other users' group memberships).
+          description: The logged-in user is not authorized to add the specified user to the group or modify their membership.
         '404':
           description: The user or group does not exist.
-      description: >-
-        Add a user to a group or update information about a user's existing
-        group membership. Note that at present the {user_id} must match that of the current logged-in user.
+      description: Add a user to a group or update information about a user's existing group membership.
       requestBody:
         content:
           application/json:
