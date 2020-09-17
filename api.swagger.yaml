@@ -9780,6 +9780,7 @@ components:
               description: 'Users who are flagged as read-only are not able to create, update, or delete content.'
               type: boolean
               example: false
+              readOnly: true
     user-schema-common:
       properties:
         uuid:
