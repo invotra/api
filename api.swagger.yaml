@@ -2672,6 +2672,13 @@ paths:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: group_uuid
+          description: 'Filter on Invotra UUID of the group.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -4208,6 +4215,185 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
+  '/webforms':
+    post:
+      tags:
+        - 'webforms'
+      description: 'Provision a new webform.'
+      responses:
+        '201':
+          description: 'The webform was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned webform may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The webform was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a webform.'
+        '422':
+          description: 'The webform was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webform-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:write ]
+  '/webforms/list':
+    get:
+      tags:
+        - 'webforms'
+      description: 'Search for webforms. An empty array is returned if no webforms where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of webforms on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of webforms matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/webform-schema'
+        '403':
+          description: 'User is not authorized to list webforms.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:read ]
+  '/webforms/{webform_id}':
+    parameters:
+      - description: 'The Invotra UUID of the webform.'
+        in: path
+        name: webform_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'webforms'
+      description: 'Get information about the webform.'
+      responses:
+        '200':
+          description: 'Returns a single complete webform object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webform-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this webform.'
+        '404':
+          description: 'The UUID does not correspond to an existing webform.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:read ]
+    put:
+      tags:
+        - 'webforms'
+      description: 'Update webform information.'
+      responses:
+        '200':
+          description: 'The webform information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this webform.'
+        '404':
+          description: 'The UUID does not correspond to an existing webform.'
+        '422':
+          description: 'The webform was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webform-schema-update'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:write ]
+    delete:
+      tags:
+        - 'webforms'
+      description: 'Delete a webform.'
+      responses:
+        '200':
+          description: 'The webform was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this webform.'
+        '404':
+          description: 'The UUID does not correspond to an existing webform.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:write ]
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -9023,8 +9209,8 @@ components:
             invotra/promotions:write: write promotions
             invotra/queries:read: read queries
             invotra/queries:write: write queries
-            invotra/web_forms:read: read web forms
-            invotra/web_forms:write: write web forms
+            invotra/webforms:read: read webforms
+            invotra/webforms:write: write webforms
             invotra/groups:read: read groups
             invotra/groups:write: write groups
             invotra/groups:metrics: retrieve groups metrics
@@ -13151,6 +13337,413 @@ components:
           type: boolean
           default: false
           example: false
+    webform-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the webform.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/webform-schema-common'
+        - type: object
+          properties:
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
+            site_section:
+              description: 'The site section of this webform.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the site section.'
+                  type: string
+                  example: 'Operations'
+            image:
+              description: 'Webform Image'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this webform. (Will use the authenticated user if not supplied.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            attachments:
+              description: 'List of attachments on the webform.'
+              type: array
+              items:
+                $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner user of the webform.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            team:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: This is the name of the team
+                  type: string
+                  example: Operations
+            locations:
+              description: 'The locations targeting this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: The name of the location.
+                    type: string
+                    example: Chertsey House
+                  type:
+                    description: The location type.
+                    type: string
+                    enum:
+                      - site
+                      - building
+                      - floor
+                      - space
+            grades:
+              description: 'The grades targeting this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the content was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the content was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the content.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the content.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the webform.'
+              type: boolean
+              example: true
+    webform-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/webform-schema-common'
+        - type: object
+          properties:
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
+            site_section:
+              description: 'The site section of this webform.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this webform.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this webform. (Will use the authenticated user if not supplied.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attached files of this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this webform.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this webform.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+    webform-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/webform-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this webform.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this webform.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this webform. (Will use the authenticated user if not supplied.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attached files of this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this webform.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting this webform.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
+    webform-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the webform.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the webform.'
+          type: string
+          example: 'You can create strong passwords using an offline random password generator.'
+        state:
+          description: 'Indicates the workflow state of the webform.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the webform (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the webform.'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the webform.'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content'
+                  - 'site section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        featured:
+          description: 'Indicates that this content is featured.'
+          type: boolean
+          default: false
+          example: false
+        external_id:
+          description: 'The webform external reference id.'
+          type: string
+          example: 'ABC123'
     location-trimmed-schema:
       properties:
         uuid:
