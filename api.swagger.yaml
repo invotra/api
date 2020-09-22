@@ -9952,6 +9952,7 @@ components:
               items:
                 $ref: '#/components/schemas/title-or-uuid-writable-list-item-schema'
             regions:
+              description: "The user's regions. An array of region names or UUIDs."
               type: array
               items:
                 $ref: '#/components/schemas/title-or-uuid-writable-list-item-schema'
