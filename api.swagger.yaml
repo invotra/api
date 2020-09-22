@@ -9783,6 +9783,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/title-uuid-list-item-common-schema'
+            regions:
+              description: "The user's regions. An array of region names and UUIDs."
+              type: array
+              items:
+                $ref: '#/components/schemas/title-uuid-list-item-common-schema'
     user-schema-common:
       properties:
         uuid:
@@ -9943,6 +9948,10 @@ components:
         - $ref: '#/components/schemas/user-schema-common'
         - properties:
             job_roles:
+              type: array
+              items:
+                $ref: '#/components/schemas/title-or-uuid-writable-list-item-schema'
+            regions:
               type: array
               items:
                 $ref: '#/components/schemas/title-or-uuid-writable-list-item-schema'
