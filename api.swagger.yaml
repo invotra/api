@@ -2671,6 +2671,13 @@ paths:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: group_uuid
+          description: 'Filter on Invotra UUID of the group.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -9802,6 +9809,11 @@ components:
           format: email
           type: string
           example: dorothy.whitehead@akagera.com
+        hide_email:
+          description: "The user's email address will be hidden throughout the product."
+          type: boolean
+          default: false
+          example: false
         external_id:
           description: The user's external reference ID
           type: string
@@ -9850,6 +9862,11 @@ components:
           description: The user's mobile number.
           type: string
           example: +1-23-456-789
+        hide_phone_numbers:
+          description: "The user's phone & mobile number will be hidden throughout the product."
+          type: boolean
+          default: false
+          example: false
         manager_uuid:
           description: This is the Invotra UUID of the user's manager.
           type: string
