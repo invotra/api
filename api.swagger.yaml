@@ -10443,6 +10443,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the blog was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the blog was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the blog.'
               type: integer
@@ -10646,6 +10650,10 @@ components:
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the content was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the content was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -10979,6 +10987,10 @@ components:
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the group document was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the group document was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -11335,6 +11347,10 @@ components:
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the list was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the list was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -11794,6 +11810,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the news was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the news was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the news.'
               type: integer
@@ -12178,6 +12198,10 @@ components:
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the page was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the page was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -12624,6 +12648,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the policy was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the policy was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the policy.'
               type: integer
@@ -12995,6 +13023,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the poll was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the poll was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the poll.'
               type: integer
@@ -13204,6 +13236,10 @@ components:
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the promotion was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the promotion was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -13546,11 +13582,15 @@ components:
                     type: string
                     example: 'Midlands'
             timestamp_created:
-              description: 'This is the timestamp (in seconds) of when the content was created.'
+              description: 'This is the timestamp (in seconds) of when the webform was created.'
               type: integer
               example: 1510941596
             timestamp_updated:
-              description: 'This is the timestamp (in seconds) of when the content was last updated.'
+              description: 'This is the timestamp (in seconds) of when the webform was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the webform was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -13976,6 +14016,10 @@ components:
           example: 1510941596
         timestamp_updated:
           description: This is the timestamp (in seconds) of when the manual page was last updated
+          type: integer
+          example: 1510941696
+        timestamp_published:
+          description: 'This is the timestamp (in seconds) of when the manual page was published.'
           type: integer
           example: 1510941696
         attachments:
