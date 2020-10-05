@@ -8623,6 +8623,89 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/security_classifications:write ]
+  '/site_sections/list':
+    get:
+      tags:
+        - 'site sections'
+      description: 'Search for site sections. An empty array is returned if no site sections are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of site sections on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the site sections.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of site sections matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/site-section-schema'
+        '403':
+          description: 'User is not authorized to list site sections.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:read ]
+  '/site_sections/{site_section_id}':
+    parameters:
+      - description: 'The Invotra UUID of the site section.'
+        in: path
+        name: site_section_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'site sections'
+      description: 'Get information about the site section.'
+      responses:
+        '200':
+          description: 'Returns a single complete site section object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site-section-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this site section.'
+        '404':
+          description: 'The UUID does not correspond to an existing site section.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:read ]
   '/titles':
     post:
       tags:
@@ -15764,6 +15847,53 @@ components:
           example: true
         weight:
           description: 'Determines the position of a security classification in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    site-section-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the site section.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this site section has children.'
+              type: boolean
+              example: true
+            image:
+              description: 'Site section image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+        - $ref: '#/components/schemas/site-section-schema-common'
+    site-section-schema-common:
+      type: object
+      properties:
+        name:
+          description: 'Name of the site section.'
+          type: string
+          example: 'Top Secret'
+        description:
+          description: 'Description of the site section.'
+          type: string
+          example: 'Strictly only authorised access'
+        external_id:
+          description: 'The site section external reference id.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent site section.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this site section is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a site section in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
     title-schema:
