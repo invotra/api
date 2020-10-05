@@ -11822,6 +11822,10 @@ components:
               description: 'Count of likes on the news.'
               type: integer
               example: 5
+            rating:
+              description: 'The mean average rating as a percentage calculated from all the ratings cast against this news item.'
+              type: integer
+              example: 63
             published:
               description: 'Published status for the news.'
               type: boolean
@@ -12212,6 +12216,10 @@ components:
               description: 'Count of likes on the page.'
               type: integer
               example: 5
+            rating:
+              description: 'The mean average rating as a percentage calculated from all the ratings cast against this page.'
+              type: integer
+              example: 63
             published:
               description: 'Published status for the page.'
               type: boolean
@@ -13949,6 +13957,14 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/file-schema'
+        timestamp_published:
+          description: 'This is the timestamp (in seconds) of when the manual was published.'
+          type: integer
+          example: 1510941696
+        rating:
+          description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual.'
+          type: integer
+          example: 63
     manual-page-listing-schema:
       type: object
       properties:
@@ -14022,6 +14038,10 @@ components:
           description: 'This is the timestamp (in seconds) of when the manual page was published.'
           type: integer
           example: 1510941696
+        rating:
+          description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual page.'
+          type: integer
+          example: 63
         attachments:
           description: List of attachments on manual page
           type: array
