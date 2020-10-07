@@ -11922,6 +11922,14 @@ components:
               description: 'This is the timestamp (in seconds) of when the multi media was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the multi media was published.'
+              type: integer
+              example: 1510941696
+            rating:
+              description: 'The mean average rating as a percentage calculated from all the ratings cast against this multi media.'
+              type: integer
+              example: 63
             comment_count:
               description: 'Count of comments on the multi media.'
               type: integer
