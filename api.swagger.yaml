@@ -3330,6 +3330,185 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/messages:write ]
+  '/multi_media':
+    post:
+      tags:
+        - 'multi media'
+      description: 'Provision a new multi media.'
+      responses:
+        '201':
+          description: 'The multi media was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned multi media may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The multi media was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a multi media.'
+        '422':
+          description: 'The multi media was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/multi-media-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/multi_media:write ]
+  '/multi_media/list':
+    get:
+      tags:
+        - 'multi media'
+      description: 'Search for multi media. An empty array is returned if no multi media where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of multi media on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of multi media matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/multi-media-schema'
+        '403':
+          description: 'User is not authorized to list multi media.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/multi_media:read ]
+  '/multi_media/{multi_media_id}':
+    parameters:
+      - description: 'The Invotra UUID of the multi media.'
+        in: path
+        name: multi_media_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'multi media'
+      description: 'Get information about the multi media.'
+      responses:
+        '200':
+          description: 'Returns a single complete multi media object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/multi-media-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this multi media.'
+        '404':
+          description: 'The UUID does not correspond to an existing multi media.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/multi_media:read ]
+    put:
+      tags:
+        - 'multi media'
+      description: 'Update multi media information.'
+      responses:
+        '200':
+          description: 'The multi media information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this multi media.'
+        '404':
+          description: 'The UUID does not correspond to an existing multi media.'
+        '422':
+          description: 'The multi media was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/multi-media-schema-update'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/multi_media:write ]
+    delete:
+      tags:
+        - 'multi media'
+      description: 'Delete a multi media.'
+      responses:
+        '200':
+          description: 'The multi media was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this multi media.'
+        '404':
+          description: 'The UUID does not correspond to an existing multi media.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/multi_media:write ]
   '/news':
     post:
       tags:
@@ -8657,6 +8836,89 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/security_classifications:write ]
+  '/site_sections/list':
+    get:
+      tags:
+        - 'site sections'
+      description: 'Search for site sections. An empty array is returned if no site sections are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of site sections on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the site sections.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of site sections matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/site-section-schema'
+        '403':
+          description: 'User is not authorized to list site sections.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:read ]
+  '/site_sections/{site_section_id}':
+    parameters:
+      - description: 'The Invotra UUID of the site section.'
+        in: path
+        name: site_section_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'site sections'
+      description: 'Get information about the site section.'
+      responses:
+        '200':
+          description: 'Returns a single complete site section object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site-section-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this site section.'
+        '404':
+          description: 'The UUID does not correspond to an existing site section.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:read ]
   '/titles':
     post:
       tags:
@@ -10420,6 +10682,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the blog was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the blog was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the blog.'
               type: integer
@@ -10623,6 +10889,10 @@ components:
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the content was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the content was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -10956,6 +11226,10 @@ components:
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the group document was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the group document was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -11314,6 +11588,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the list was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the list was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the list.'
               type: integer
@@ -11512,68 +11790,75 @@ components:
               - $ref: '#/components/schemas/list-list-link-schema'
             discriminator:
               propertyName: type
-              mapping:
-                content: '#/components/schemas/list-list-content-schema'
-                site_section: '#/components/schemas/list-list-site-section-schema'
-                link: '#/components/schemas/list-list-link-schema'
     list-list-common-schema:
       type: object
+      required:
+        - type
       properties:
         type:
           description: 'The type of content in the list.'
           type: string
-          enum:
-            - 'content'
-            - 'site_section'
-            - 'link'
         title:
           description: 'Title of the content or link.'
           type: string
           example: 'More information here.'
-      required:
-      - type
-      - content
     list-list-content-schema:
       allOf:
-      - $ref: '#/components/schemas/list-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'content'
-          content:
-            type: object
-            properties:
-              uuid:
-                description: 'Invotra UUID of the content.'
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/list-list-common-schema'
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - content
+        content:
+          type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the content.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            uri:
+              description: 'The API URI for the content.'
+              type: string
+              example: 'https://dev.invotra.com/api/0.3/blogs/01234567-89ab-cdef-1234-56789abcdef0'
+              format: uri
     list-list-site-section-schema:
       allOf:
-      - $ref: '#/components/schemas/list-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'site_section'
-          content:
-            type: object
-            properties:
-              uuid:
-                description: 'Invotra UUID of the site section.'
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/list-list-common-schema'
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - site_section
+        content:
+          type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the site section.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            uri:
+              description: 'The API URI for the site section.'
+              type: string
+              example: 'https://dev.invotra.com/api/0.3/site_sections/01234567-89ab-cdef-1234-56789abcdef0'
+              format: uri
     list-list-link-schema:
       allOf:
-      - $ref: '#/components/schemas/list-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'link'
-          content:
-            type: string
-            description: 'The URL of the link.'
-            example: 'https://example.com'
+        - $ref: '#/components/schemas/list-list-common-schema'
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - link
+        content:
+          type: string
+          description: 'The URL of the link.'
+          example: 'https://example.com'
     message-schema:
       allOf:
         - $ref: '#/components/schemas/message-schema-common'
@@ -11671,6 +11956,471 @@ components:
           description: 'The body of the message.'
           type: string
           example: 'It is my birthday next week so remember to get me a present.'
+    multi-media-schema:
+      allOf:
+        - $ref: '#/components/schemas/multi-media-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the multi media.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the multi media. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the multi media.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
+            site_section:
+              description: 'The site section of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the site section.'
+                  type: string
+                  example: 'Finance'
+            image:
+              description: 'Multi media image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this multi media.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            media:
+              description: 'Multi media file.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            media_smil:
+              description: 'SMIL file for the Multi media.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            media_tta:
+              description: 'TTA file for the Multi media.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner of this multi media.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            team:
+              description: 'The team targeting this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the team.'
+                  type: string
+                  example: 'Operations'
+            locations:
+              description: 'The locations targeting this multi media.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/location-trimmed-schema'
+            grades:
+              description: 'The grades targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the multi media was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the multi media was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the multi media was published.'
+              type: integer
+              example: 1510941696
+            rating:
+              description: 'The mean average rating as a percentage calculated from all the ratings cast against this multi media.'
+              type: integer
+              example: 63
+            comment_count:
+              description: 'Count of comments on the multi media.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the multi media.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the multi media.'
+              type: boolean
+              example: true
+    multi-media-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/multi-media-schema-common'
+        - type: object
+          properties:
+            workflow_schedule:
+              description: 'The scheduled workflow state of the multi media. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the multi media.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
+            site_section:
+              description: 'The site section of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media:
+              description: 'Multi media file.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media_smil:
+              description: 'SMIL file for the multi media. This is mandatory if a video file has been uploaded into the media field.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media_tta:
+              description: 'TTA file for the multi media. Used if you are uploading video that requires subtitles in the media field.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the owner user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this multi media item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+    multi-media-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/multi-media-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media:
+              description: 'Multi media file.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media_smil:
+              description: 'SMIL file for the multi media. This is mandatory if a video file has been uploaded into the media field.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media_tta:
+              description: 'TTA file for the multi media. Used if you are uploading video that requires subtitles in the media field.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the owner user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this multi media item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
+    multi-media-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the multi media.'
+          type: string
+          example: 'Video showing the new car park.'
+        body:
+          description: 'The body of the multi media.'
+          type: string
+          example: 'The car park is having the line markings repainted, watch the paint dry.'
+        state:
+          description: 'Indicates the workflow state of the multi media. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the multi media (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the multi media.'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the multi media.'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content'
+                  - 'site section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        featured:
+          description: 'Indicates that this multi media is featured.'
+          type: boolean
+          default: false
+          example: false
+        external_id:
+          description: 'The multi media external reference id.'
+          type: string
+          example: 'ABC123'
     news-schema:
       allOf:
         - $ref: '#/components/schemas/news-schema-common'
@@ -11771,6 +12521,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the news was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the news was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the news.'
               type: integer
@@ -11779,6 +12533,10 @@ components:
               description: 'Count of likes on the news.'
               type: integer
               example: 5
+            rating:
+              description: 'The mean average rating as a percentage calculated from all the ratings cast against this news item.'
+              type: integer
+              example: 63
             published:
               description: 'Published status for the news.'
               type: boolean
@@ -12157,6 +12915,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the page was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the page was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the page.'
               type: integer
@@ -12165,6 +12927,10 @@ components:
               description: 'Count of likes on the page.'
               type: integer
               example: 5
+            rating:
+              description: 'The mean average rating as a percentage calculated from all the ratings cast against this page.'
+              type: integer
+              example: 63
             published:
               description: 'Published status for the page.'
               type: boolean
@@ -12601,6 +13367,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the policy was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the policy was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the policy.'
               type: integer
@@ -12972,6 +13742,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the poll was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the poll was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the poll.'
               type: integer
@@ -13181,6 +13955,10 @@ components:
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the promotion was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the promotion was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -13523,11 +14301,15 @@ components:
                     type: string
                     example: 'Midlands'
             timestamp_created:
-              description: 'This is the timestamp (in seconds) of when the content was created.'
+              description: 'This is the timestamp (in seconds) of when the webform was created.'
               type: integer
               example: 1510941596
             timestamp_updated:
-              description: 'This is the timestamp (in seconds) of when the content was last updated.'
+              description: 'This is the timestamp (in seconds) of when the webform was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the webform was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -13886,6 +14668,14 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/file-schema'
+        timestamp_published:
+          description: 'This is the timestamp (in seconds) of when the manual was published.'
+          type: integer
+          example: 1510941696
+        rating:
+          description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual.'
+          type: integer
+          example: 63
     manual-page-listing-schema:
       type: object
       properties:
@@ -13955,12 +14745,25 @@ components:
           description: This is the timestamp (in seconds) of when the manual page was last updated
           type: integer
           example: 1510941696
+        timestamp_published:
+          description: 'This is the timestamp (in seconds) of when the manual page was published.'
+          type: integer
+          example: 1510941696
+        rating:
+          description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual page.'
+          type: integer
+          example: 63
         attachments:
           description: List of attachments on manual page
           type: array
           items:
             allOf:
               - $ref: '#/components/schemas/file-schema'
+        image:
+          description: 'Manual page image.'
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/file-schema'
         parent_page_uuid:
           description: Invotra UUID of the parent manual page (empty at root).
           type: string
@@ -15819,6 +16622,53 @@ components:
           example: true
         weight:
           description: 'Determines the position of a security classification in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    site-section-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the site section.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this site section has children.'
+              type: boolean
+              example: true
+            image:
+              description: 'Site section image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+        - $ref: '#/components/schemas/site-section-schema-common'
+    site-section-schema-common:
+      type: object
+      properties:
+        name:
+          description: 'Name of the site section.'
+          type: string
+          example: 'Top Secret'
+        description:
+          description: 'Description of the site section.'
+          type: string
+          example: 'Strictly only authorised access'
+        external_id:
+          description: 'The site section external reference id.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent site section.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this site section is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a site section in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
     title-schema:
