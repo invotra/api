@@ -312,6 +312,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: parent_uuid
+          description: 'Filter the list to only those with the specified immediate parent.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -5010,6 +5016,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: parent_uuid
+          description: 'Filter the list to only those with the specified immediate parent.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -6477,6 +6489,12 @@ paths:
             type: string
         - name: valid_parents_for
           description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the grade.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: parent_uuid
+          description: 'Filter the list to only those with the specified immediate parent.'
           in: query
           schema:
             type: string
@@ -8215,6 +8233,12 @@ paths:
             type: string
         - name: valid_parents_for
           description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the region.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: parent_uuid
+          description: 'Filter the list to only those with the specified immediate parent.'
           in: query
           schema:
             type: string
