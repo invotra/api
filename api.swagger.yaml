@@ -3006,6 +3006,11 @@ paths:
         - 'lists'
       description: 'Search for lists. An empty array is returned if no lists where found.'
       parameters:
+        - name: autocomplete
+          description: 'Autocomplete term. Matches on list name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
@@ -4074,6 +4079,11 @@ paths:
         - 'promotions'
       description: 'Search for promotions. An empty array is returned if no promotions where found.'
       parameters:
+        - name: autocomplete
+          description: 'Autocomplete term. Matches on promotion name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
