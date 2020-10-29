@@ -313,7 +313,7 @@ paths:
           schema:
             type: string
         - name: parent_uuid
-          description: 'Filter the list to only those with the specified immediate parent.'
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
           schema:
             type: string
@@ -5007,7 +5007,7 @@ paths:
           schema:
             type: string
         - name: parent_uuid
-          description: 'Filter the list to only those with the specified immediate parent.'
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
           schema:
             type: string
@@ -6484,7 +6484,7 @@ paths:
             type: string
             format: uuid
         - name: parent_uuid
-          description: 'Filter the list to only those with the specified immediate parent.'
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
           schema:
             type: string
@@ -8228,7 +8228,7 @@ paths:
             type: string
             format: uuid
         - name: parent_uuid
-          description: 'Filter the list to only those with the specified immediate parent.'
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
           schema:
             type: string
