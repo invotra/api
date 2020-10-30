@@ -313,7 +313,7 @@ paths:
           schema:
             type: string
         - name: parent_uuid
-          description: 'Filter the list to only those with the specified immediate parent.'
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
           schema:
             type: string
@@ -334,8 +334,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/team-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/team-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
       security:
         - SessionCookieHeader: []
@@ -5196,7 +5197,7 @@ paths:
           schema:
             type: string
         - name: parent_uuid
-          description: 'Filter the list to only those with the specified immediate parent.'
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
           schema:
             type: string
@@ -6673,7 +6674,7 @@ paths:
             type: string
             format: uuid
         - name: parent_uuid
-          description: 'Filter the list to only those with the specified immediate parent.'
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
           schema:
             type: string
@@ -8417,7 +8418,7 @@ paths:
             type: string
             format: uuid
         - name: parent_uuid
-          description: 'Filter the list to only those with the specified immediate parent.'
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
           schema:
             type: string
