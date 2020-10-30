@@ -334,8 +334,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/team-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/team-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
       security:
         - SessionCookieHeader: []
