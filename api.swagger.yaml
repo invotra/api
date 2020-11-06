@@ -9786,7 +9786,8 @@ components:
     user-schema:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
-        - properties:
+        - type: object
+          properties:
             authname:
               description: 'The authname (SSO unique ID) of the user.'
               type: object
@@ -9966,7 +9967,8 @@ components:
     user-schema-update:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
-        - properties:
+        - type: object
+          properties:
             job_roles:
               type: array
               items:
@@ -9974,7 +9976,8 @@ components:
     user-schema-create:
       allOf:
         - $ref: '#/components/schemas/user-schema-update'
-        - properties:
+        - type: object
+          properties:
             password:
               description: The password that the user logs in with
               type: string
