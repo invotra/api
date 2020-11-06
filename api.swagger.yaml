@@ -4842,7 +4842,7 @@ paths:
                     type: array
                     items:
                       allOf:
-                      - $ref: '#/components/schemas/comment-schema'
+                        - $ref: '#/components/schemas/comment-schema'
         '403':
           description: 'User is not authorized to list comments.'
       security:
@@ -9617,7 +9617,8 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/successful-post-response-schema'
-        - properties:
+        - type: object
+          properties:
             message:
               description: The message included in the response.
               type: string
@@ -10044,7 +10045,8 @@ components:
     team-list-schema:
       allOf:
         - $ref: '#/components/schemas/team-schema'
-        - properties:
+        - type: object
+          properties:
             context:
               type: array
               items:
@@ -16538,45 +16540,45 @@ components:
       - content
     search-highlight-list-content-schema:
       allOf:
-      - $ref: '#/components/schemas/search-highlight-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'content'
-          content:
-            type: object
-            properties:
-              uuid:
-                description: 'Invotra UUID of the content.'
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/search-highlight-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'content'
+            content:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the content.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     search-highlight-list-site_section-schema:
       allOf:
-      - $ref: '#/components/schemas/search-highlight-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'site_section'
-          content:
-            type: object
-            properties:
-              uuid:
-                description: 'Invotra UUID of the site section.'
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/search-highlight-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'site_section'
+            content:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     search-highlight-list-link-schema:
       allOf:
-      - $ref: '#/components/schemas/search-highlight-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'link'
-          content:
-            type: string
-            description: 'The URL of the link.'
-            example: 'https://example.com'
+        - $ref: '#/components/schemas/search-highlight-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'link'
+            content:
+              type: string
+              description: 'The URL of the link.'
+              example: 'https://example.com'
     security-classification-schema:
       allOf:
         - type: object
