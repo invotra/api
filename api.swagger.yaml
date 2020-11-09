@@ -11510,45 +11510,45 @@ components:
       - content
     list-list-content-schema:
       allOf:
-      - $ref: '#/components/schemas/list-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'content'
-          content:
-            type: object
-            properties:
-              uuid:
-                description: 'Invotra UUID of the content.'
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/list-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'content'
+            content:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the content.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     list-list-site-section-schema:
       allOf:
-      - $ref: '#/components/schemas/list-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'site_section'
-          content:
-            type: object
-            properties:
-              uuid:
-                description: 'Invotra UUID of the site section.'
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/list-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'site_section'
+            content:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     list-list-link-schema:
       allOf:
-      - $ref: '#/components/schemas/list-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'link'
-          content:
-            type: string
-            description: 'The URL of the link.'
-            example: 'https://example.com'
+        - $ref: '#/components/schemas/list-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'link'
+            content:
+              type: string
+              description: 'The URL of the link.'
+              example: 'https://example.com'
     message-schema:
       allOf:
         - $ref: '#/components/schemas/message-schema-common'
