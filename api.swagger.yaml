@@ -11823,6 +11823,11 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+                uri:
+                  description: 'The API URI for the content.'
+                  type: string
+                  example: 'https://dev.invotra.com/api/0.3/blogs/01234567-89ab-cdef-1234-56789abcdef0'
+                  format: uri
     list-list-site-section-schema:
       allOf:
         - $ref: '#/components/schemas/list-list-common-schema'
@@ -11838,6 +11843,11 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+                uri:
+                  description: 'The API URI for the site section.'
+                  type: string
+                  example: 'https://dev.invotra.com/api/0.3/site_sections/01234567-89ab-cdef-1234-56789abcdef0'
+                  format: uri
     list-list-link-schema:
       allOf:
         - $ref: '#/components/schemas/list-list-common-schema'
