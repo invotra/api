@@ -11790,7 +11790,7 @@ components:
           description: 'List of content and links in the list.'
           type: array
           items:
-            oneOf:
+            anyOf:
               - $ref: '#/components/schemas/list-list-content-schema'
               - $ref: '#/components/schemas/list-list-site-section-schema'
               - $ref: '#/components/schemas/list-list-link-schema'
