@@ -12573,6 +12573,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this policy.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
             owner:
               description: 'The owner user of the policy.'
               type: object
@@ -12701,6 +12706,15 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
               description: 'The owner of this policy.'
               type: object
@@ -12813,6 +12827,15 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this policy. (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
               description: 'The owner of this policy. The owner is mandatory if configured to be in Invotra admin.'
               type: object
