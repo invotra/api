@@ -10668,18 +10668,21 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            general_topic:
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'This is the name of the general topic.'
-                  type: string
-                  example: 'Darts'
+            general_topics:
+              description: 'The general topics of this blog.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the blog was created.'
               type: integer
@@ -10718,15 +10721,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The genetal topic of this blog.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this blog.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     blog-schema-create:
       allOf:
         - $ref: '#/components/schemas/blog-schema-common'
@@ -10741,15 +10746,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this blog.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this blog.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - body
@@ -10889,6 +10896,21 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the content was created.'
               type: integer
@@ -11011,6 +11033,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     custom-content-schema-create:
       allOf:
         - $ref: '#/components/schemas/custom-content-schema-common'
@@ -11102,6 +11135,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -11507,19 +11551,21 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            general_topic:
-              description: 'The general topic of this list.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'This is the name of the general topic.'
-                  type: string
-                  example: 'Darts'
+            general_topics:
+              description: 'The general topics of this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             team:
               description: 'The team targeting this list.'
               type: object
@@ -11633,15 +11679,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this list.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
               description: 'The team targeting this list.'
               type: object
@@ -11707,15 +11755,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this list.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
               description: 'The team targeting this list.'
               type: object
@@ -12075,6 +12125,21 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the multi media was created.'
               type: integer
@@ -12230,6 +12295,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     multi-media-schema-create:
       allOf:
         - $ref: '#/components/schemas/multi-media-schema-common'
@@ -12337,6 +12413,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -12513,6 +12600,21 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the news was created.'
               type: integer
@@ -12635,6 +12737,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     news-schema-create:
       allOf:
         - $ref: '#/components/schemas/news-schema-common'
@@ -12726,6 +12839,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -12907,6 +13031,21 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the page was created.'
               type: integer
@@ -13029,6 +13168,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     page-schema-create:
       allOf:
         - $ref: '#/components/schemas/page-schema-common'
@@ -13120,6 +13270,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -13257,19 +13418,21 @@ components:
                   description: 'This is the name of the primary category.'
                   type: string
                   example: 'Involving staff training'
-            general_topic:
-              description: 'The general topic of this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'This is the name of the general topic.'
-                  type: string
-                  example: 'Darts'
+            general_topics:
+              description: 'The general topics of this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             country:
               description: 'The country of this policy.'
               type: object
@@ -13420,15 +13583,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             country:
               description: 'The country of this policy.'
               type: object
@@ -13541,15 +13706,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             country:
               description: 'The country of this policy.'
               type: object
@@ -13972,6 +14139,21 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the promotion was created.'
               type: integer
@@ -14079,6 +14261,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             schedule_date_timestamp:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
@@ -14163,6 +14356,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -14323,6 +14527,21 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the webform was created.'
               type: integer
@@ -14445,6 +14664,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     webform-schema-create:
       allOf:
         - $ref: '#/components/schemas/webform-schema-common'
@@ -14536,6 +14766,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
