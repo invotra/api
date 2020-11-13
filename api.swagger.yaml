@@ -14050,6 +14050,11 @@ components:
           type: string
           format: url
           example: 'https://dev.invotra.com/file/1234/download'
+        file_download_cropped:
+          description: 'The location of a cropped version when the file is an image if available.'
+          type: string
+          format: url
+          example: 'https://dev.invotra.com/file/1234/download-crop'
         type:
           description: The type of file
           type: string
