@@ -14935,6 +14935,10 @@ components:
           description: 'This is the timestamp (in seconds) of when the manual page was published.'
           type: integer
           example: 1510941696
+        published:
+          description: 'Published status for the manual page.'
+          type: boolean
+          example: true
         rating:
           description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual page.'
           type: integer
