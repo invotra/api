@@ -14051,10 +14051,23 @@ components:
           format: url
           example: 'https://dev.invotra.com/file/1234/download'
         file_download_cropped:
-          description: 'The location of a cropped version when the file is an image if available.'
-          type: string
-          format: url
-          example: 'https://dev.invotra.com/file/1234/download-crop'
+          description: 'Cropped versions of images if available.'
+          type: object
+          properties:
+            aspect:
+              description: 'Aspect ratio of cropped image.'
+              type: string
+              enum:
+                - 'manual'
+                - '1:1'
+                - '2:1'
+                - '4:3'
+                - '5:7'
+                - '16:9'
+            url:
+              description: 'Location of the cropped image.'
+              format: url
+              example: 'https://dev.invotra.com/file/1234/download-crop'
         type:
           description: The type of file
           type: string
