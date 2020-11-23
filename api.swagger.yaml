@@ -9423,6 +9423,21 @@ components:
           description: This is the colour for vertical tabs. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
+        widget_placeholder_content_uuid:
+          description: 'The uuid of the placeholder image for content used by widgets.'
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        widget_placeholder_user_uuid:
+          description: 'The uuid of the placeholder image for users used by widgets.'
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        widget_placeholder_taxonomy_uuid:
+          description: 'The uuid of the placeholder image for taxonomies used by widgets.'
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
     status-schema:
       type: object
