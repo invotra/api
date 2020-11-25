@@ -42,6 +42,7 @@ paths:
     get:
       tags:
         - configuration
+      security: [] # no authentication
       responses:
         '200':
           description: Branding returned.
