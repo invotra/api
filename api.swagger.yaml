@@ -823,6 +823,12 @@ paths:
           schema:
             type: boolean
             default: false
+        - in: query
+          name: since
+          required: false
+          description: 'Filter the feed to only include messages created since (greater than or equal to) the specified timestamp (in seconds).'
+          schema:
+            type: integer
       responses:
         '200':
           description: >
@@ -9131,6 +9137,12 @@ paths:
           schema:
             type: boolean
             default: false
+        - in: query
+          name: since
+          required: false
+          description: 'Filter the feed to only include messages created since (greater than or equal to) the specified timestamp (in seconds).'
+          schema:
+            type: integer
       responses:
         '200':
           description: Returns the feed for a user.
