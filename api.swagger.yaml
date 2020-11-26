@@ -840,12 +840,15 @@ paths:
                 type: object
                 required:
                   - count
+                  - storage
                   - results
                 properties:
                   count:
                     description: Count of results.
                     type: integer
                     example: 50
+                  storage:
+                    $ref: '#/components/schemas/feed-storage-schema'
                   results:
                     description: The results set.
                     type: array
@@ -9152,12 +9155,15 @@ paths:
                 type: object
                 required:
                   - count
+                  - storage
                   - results
                 properties:
                   count:
                     description: Count of results.
                     type: integer
                     example: 50
+                  storage:
+                    $ref: '#/components/schemas/feed-storage-schema'
                   results:
                     description: The results set.
                     type: array
@@ -9661,6 +9667,16 @@ components:
           enum:
             - 0
             - 1
+    feed-storage-schema:
+      description: 'Data storage options for the client.'
+      required:
+        - clear
+      type: object
+      properties:
+        clear:
+          description: 'Indicates to the client that it should clear all locally stored data.'
+          type: boolean
+          example: false
     notification-item-schema:
       required:
         - uuid
