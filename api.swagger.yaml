@@ -10707,6 +10707,10 @@ components:
           description: 'Title of the blog.'
           type: string
           example: 'Guidelines for creating a strong password'
+        summary:
+          description: 'Summary text of the blog.'
+          type: string
+          example: 'You can create strong passwords.'
         body:
           description: 'The body of the blog.'
           type: string
@@ -11105,6 +11109,10 @@ components:
           description: 'Title of the custom content.'
           type: string
           example: 'Guidelines for creating a strong password'
+        summary:
+          description: 'Summary text of the custom content'
+          type: string
+          example: 'You can create strong passwords.'
         body:
           description: 'The body of the custom content.'
           type: string
@@ -11340,6 +11348,10 @@ components:
           description: 'Title of the group document.'
           type: string
           example: 'Guidelines for creating a strong password'
+        summary:
+          description: 'Summary text of the group document.'
+          type: string
+          example: 'You can create strong passwords.'
         body:
           description: 'The body of the group document.'
           type: string
@@ -11758,6 +11770,10 @@ components:
           description: 'Title of the list.'
           type: string
           example: 'Guidelines for creating a strong password'
+        summary:
+          description: 'Summary text of the list.'
+          type: string
+          example: 'You can create strong passwords.'
         body:
           description: 'The body of the list.'
           type: string
@@ -12386,6 +12402,10 @@ components:
           description: 'Title of the multi media.'
           type: string
           example: 'Video showing the new car park.'
+        summary:
+          description: 'Summary text of the multi media.'
+          type: string
+          example: 'The car park is having the line markings repainted.'
         body:
           description: 'The body of the multi media.'
           type: string
@@ -12810,6 +12830,10 @@ components:
           description: 'Title of the news.'
           type: string
           example: 'Good news about the car park'
+        summary:
+          description: 'Summary text of the news.'
+          type: string
+          example: 'The car park is having the line markings repainted.'
         body:
           description: 'The body of the news.'
           type: string
@@ -13241,6 +13265,10 @@ components:
           description: 'Title of the page.'
           type: string
           example: 'Guidelines for creating a strong password'
+        summary:
+          description: 'Summary text of the page.'
+          type: string
+          example: 'You can create strong passwords.'
         body:
           description: 'The body of the page.'
           type: string
@@ -13731,6 +13759,10 @@ components:
           description: 'Title of the policy.'
           type: string
           example: 'Policy for creating passwords'
+        summary:
+          description: 'Summary text of the policy.'
+          type: string
+          example: 'You can create strong passwords.'
         body:
           description: 'The body of the policy.'
           type: string
@@ -14304,6 +14336,10 @@ components:
           description: 'Title of the promotion.'
           type: string
           example: 'Company talent competition'
+        summary:
+          description: 'Summary text of the promotion.'
+          type: string
+          example: 'Demonstrate your talent.'
         body:
           description: 'The body of the promotion.'
           type: string
@@ -14716,6 +14752,10 @@ components:
           description: 'Title of the webform.'
           type: string
           example: 'Guidelines for creating a strong password'
+        summary:
+          description: 'Summary text of the webform.'
+          type: string
+          example: 'Demonstrate your talent.'
         body:
           description: 'The body of the webform.'
           type: string
