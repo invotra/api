@@ -9423,21 +9423,39 @@ components:
           description: This is the colour for vertical tabs. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
-        widget_placeholder_content_uuid:
-          description: 'The uuid of the placeholder image for content used by widgets.'
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-        widget_placeholder_user_uuid:
-          description: 'The uuid of the placeholder image for users used by widgets.'
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-        widget_placeholder_taxonomy_uuid:
-          description: 'The uuid of the placeholder image for taxonomies used by widgets.'
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-1234-56789abcdef0
+        widget_placeholder_images:
+          description: 'Placeholder images used by widgets.'
+          type: array
+          items:
+            type: object
+            properties:
+              placeholder_type:
+                description: 'The placeholder entity type.'
+                type: string
+                enum:
+                  - content
+                  - taxonomy
+                  - user
+              image_aspects:
+                description: 'The aspects available for this placeholder image.'
+                type: array
+                items:
+                  type: object
+                  properties:
+                    aspect:
+                      description: 'Aspect ratio of cropped image.'
+                      type: string
+                      enum:
+                        - '1:1'
+                        - '2:1'
+                        - '4:3'
+                        - '5:7'
+                        - '16:9'
+                    url:
+                      description: 'Location of the cropped image.'
+                      type: string
+                      format: url
+                      example: 'https://dev.invotra.com/file/1234/download-crop'
       type: object
     status-schema:
       type: object
