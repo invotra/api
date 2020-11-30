@@ -10587,6 +10587,7 @@ components:
       type: object
     blog-schema:
       allOf:
+        - $ref: '#/components/schemas/blog-schema-common'
         - type: object
           properties:
             uuid:
@@ -10594,9 +10595,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/blog-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the blog.'
+              type: string
+              example: 'You can create strong passwords.'
             image:
               description: 'Blog Image.'
               type: object
@@ -10707,10 +10709,6 @@ components:
           description: 'Title of the blog.'
           type: string
           example: 'Guidelines for creating a strong password'
-        summary:
-          description: 'Summary text of the blog.'
-          type: string
-          example: 'You can create strong passwords.'
         body:
           description: 'The body of the blog.'
           type: string
@@ -10727,6 +10725,7 @@ components:
           example: 1510941596
     custom-content-schema:
       allOf:
+        - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
             uuid:
@@ -10734,9 +10733,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/custom-content-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the custom content'
+              type: string
+              example: 'You can create strong passwords.'
             schedule_date_timestamp:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
@@ -11109,10 +11109,6 @@ components:
           description: 'Title of the custom content.'
           type: string
           example: 'Guidelines for creating a strong password'
-        summary:
-          description: 'Summary text of the custom content'
-          type: string
-          example: 'You can create strong passwords.'
         body:
           description: 'The body of the custom content.'
           type: string
@@ -11190,6 +11186,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            summary:
+              description: 'Summary text of the group document.'
+              type: string
+              example: 'You can create strong passwords.'
             group:
               description: 'The group for this group document.'
               type: object
@@ -11348,10 +11348,6 @@ components:
           description: 'Title of the group document.'
           type: string
           example: 'Guidelines for creating a strong password'
-        summary:
-          description: 'Summary text of the group document.'
-          type: string
-          example: 'You can create strong passwords.'
         body:
           description: 'The body of the group document.'
           type: string
@@ -11474,6 +11470,7 @@ components:
           example: 'What is your favorite food?'
     list-schema:
       allOf:
+        - $ref: '#/components/schemas/list-schema-common'
         - type: object
           properties:
             uuid:
@@ -11481,9 +11478,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/list-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the list.'
+              type: string
+              example: 'You can create strong passwords.'
             site_section:
               description: 'The site section of this list.'
               type: object
@@ -11770,10 +11768,6 @@ components:
           description: 'Title of the list.'
           type: string
           example: 'Guidelines for creating a strong password'
-        summary:
-          description: 'Summary text of the list.'
-          type: string
-          example: 'You can create strong passwords.'
         body:
           description: 'The body of the list.'
           type: string
@@ -11977,6 +11971,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            summary:
+              description: 'Summary text of the multi media.'
+              type: string
+              example: 'The car park is having the line markings repainted.'
             workflow_schedule:
               description: 'The scheduled workflow state of the multi media. If present the content is scheduled for a workflow state change.'
               type: object
@@ -12402,10 +12400,6 @@ components:
           description: 'Title of the multi media.'
           type: string
           example: 'Video showing the new car park.'
-        summary:
-          description: 'Summary text of the multi media.'
-          type: string
-          example: 'The car park is having the line markings repainted.'
         body:
           description: 'The body of the multi media.'
           type: string
@@ -12483,6 +12477,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            summary:
+              description: 'Summary text of the news.'
+              type: string
+              example: 'The car park is having the line markings repainted.'
             site_section:
               description: 'The site section of this news.'
               type: object
@@ -12830,10 +12828,6 @@ components:
           description: 'Title of the news.'
           type: string
           example: 'Good news about the car park'
-        summary:
-          description: 'Summary text of the news.'
-          type: string
-          example: 'The car park is having the line markings repainted.'
         body:
           description: 'The body of the news.'
           type: string
@@ -12907,6 +12901,7 @@ components:
           example: 'ABC123'
     page-schema:
       allOf:
+        - $ref: '#/components/schemas/page-schema-common'
         - type: object
           properties:
             uuid:
@@ -12914,9 +12909,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/page-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the page.'
+              type: string
+              example: 'You can create strong passwords.'
             site_section:
               description: 'The site section of this page.'
               type: object
@@ -13265,10 +13261,6 @@ components:
           description: 'Title of the page.'
           type: string
           example: 'Guidelines for creating a strong password'
-        summary:
-          description: 'Summary text of the page.'
-          type: string
-          example: 'You can create strong passwords.'
         body:
           description: 'The body of the page.'
           type: string
@@ -13342,6 +13334,7 @@ components:
           example: 'ABC123'
     policy-schema:
       allOf:
+        - $ref: '#/components/schemas/policy-schema-common'
         - type: object
           properties:
             uuid:
@@ -13349,9 +13342,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/policy-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the policy.'
+              type: string
+              example: 'You can create strong passwords.'
             site_section:
               type: object
               description: 'The site section of this policy.'
@@ -13759,10 +13753,6 @@ components:
           description: 'Title of the policy.'
           type: string
           example: 'Policy for creating passwords'
-        summary:
-          description: 'Summary text of the policy.'
-          type: string
-          example: 'You can create strong passwords.'
         body:
           description: 'The body of the policy.'
           type: string
@@ -13989,6 +13979,7 @@ components:
           example: 'ABC123'
     promotion-schema:
       allOf:
+        - $ref: '#/components/schemas/promotion-schema-common'
         - type: object
           properties:
             uuid:
@@ -13996,9 +13987,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/promotion-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the promotion.'
+              type: string
+              example: 'Demonstrate your talent.'
             site_section:
               description: 'The site section of this promotion.'
               type: object
@@ -14336,10 +14328,6 @@ components:
           description: 'Title of the promotion.'
           type: string
           example: 'Company talent competition'
-        summary:
-          description: 'Summary text of the promotion.'
-          type: string
-          example: 'Demonstrate your talent.'
         body:
           description: 'The body of the promotion.'
           type: string
@@ -14373,6 +14361,7 @@ components:
           example: false
     webform-schema:
       allOf:
+        - $ref: '#/components/schemas/webform-schema-common'
         - type: object
           properties:
             uuid:
@@ -14380,9 +14369,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/webform-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the webform.'
+              type: string
+              example: 'Demonstrate your talent.'
             schedule_date_timestamp:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
@@ -14752,10 +14742,6 @@ components:
           description: 'Title of the webform.'
           type: string
           example: 'Guidelines for creating a strong password'
-        summary:
-          description: 'Summary text of the webform.'
-          type: string
-          example: 'Demonstrate your talent.'
         body:
           description: 'The body of the webform.'
           type: string
