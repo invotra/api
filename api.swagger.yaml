@@ -5072,7 +5072,7 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - $ref: '#/components/schemas/job-role-list-schema'
+                        - $ref: '#/components/schemas/job-role-schema'
         '403':
           description: 'User is not authorized to list job roles.'
       security:
@@ -15392,7 +15392,13 @@ components:
         - alt_text
         - type
     job-role-schema:
+      type: object
       properties:
+        uuid:
+          description: 'This is the Invotra UUID of the job role.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
         title:
           description: This is the name of the job role
           type: string
@@ -15405,23 +15411,6 @@ components:
           description: This is used to store the job role's external reference id
           type: string
           example: ABC123
-        parent_uuid:
-          description: 'This is the Invotra UUID of the parent job role, optional. Note you can create and update this property, but it will have no effect.'
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-          type: string
-          format: uuid
-          deprecated: true
-      type: object
-    job-role-list-schema:
-      allOf:
-        - $ref: '#/components/schemas/job-role-schema'
-      type: object
-      properties:
-        uuid:
-          description: 'This is the Invotra UUID of the job role.'
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-          type: string
-          format: uuid
         has_children:
           description: 'Indicates that this job role has children.'
           type: boolean
@@ -15434,6 +15423,12 @@ components:
           description: 'Determines the position of a job role in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+        parent_uuid:
+          description: 'This is the Invotra UUID of the parent job role, optional. Note you can create and update this property, but it will have no effect.'
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          type: string
+          format: uuid
+          deprecated: true
     job-role-schema-create:
       allOf:
         - $ref: '#/components/schemas/job-role-schema'
