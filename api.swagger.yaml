@@ -9613,7 +9613,7 @@ components:
           description: 'This is topic of the feed, used for filtering'
           type: string
           enum:
-            - people
+            - user
             - group
             - content
         category:
