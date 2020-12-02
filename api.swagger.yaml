@@ -10129,7 +10129,7 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/location-uuid-title-context-list-item-schema'
-            grades:
+            role_grades:
               description: "The user's grades. An array of grade objects."
               type: array
               items:
@@ -10340,7 +10340,7 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
-            grades:
+            role_grades:
               description: "The user's grades. An array of grade UUIDs."
               type: array
               items:
