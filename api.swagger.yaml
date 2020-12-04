@@ -9761,10 +9761,10 @@ components:
         - title
       type: object
     user-schema:
-      type: object
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
-        - properties:
+        - type: object
+          properties:
             authname:
               description: 'The authname (SSO unique ID) of the user.'
               type: object
