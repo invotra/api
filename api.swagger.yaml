@@ -9745,10 +9745,10 @@ components:
           example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
     team-list-schema:
-      type: object
       allOf:
         - $ref: '#/components/schemas/team-schema'
-        - properties:
+        - type: object
+          properties:
             context:
               description: 'Parent items of the team. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
               type: array
@@ -9781,6 +9781,55 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
+            teams:
+              description: "The user's teams. An array of team objects."
+              type: array
+              items:
+                $ref: '#/components/schemas/team-list-schema'
+            locations:
+              description: "The user's locations. An array of location objects."
+              type: array
+              items:
+                $ref: '#/components/schemas/location-uuid-title-context-list-item-schema'
+            role_grades:
+              description: "The user's grades. An array of grade objects."
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/grade-schema'
+                  - type: object
+                    properties:
+                      context:
+                        description: 'Parent items of the grade. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/grade-schema'
+            job_roles:
+              description: "The user's job roles. An array of job role objects."
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/job-role-schema'
+                  - type: object
+                    properties:
+                      context:
+                        description: 'Parent items of the job role. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/job-role-schema'
+            regions:
+              description: "The user's regions. An array of region objects."
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/region-schema'
+                  - type: object
+                    properties:
+                      context:
+                        description: 'Parent items of the region. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/region-schema'
             read_only:
               description: 'Users who are flagged as read-only are not able to create, update, or delete content.'
               type: boolean
