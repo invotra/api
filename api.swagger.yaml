@@ -9782,6 +9782,7 @@ components:
               description: "The user's teams. An array of team objects."
               type: array
               items:
+                type: object
                 allOf:
                   - $ref: '#/components/schemas/team-schema'
                   - properties:
