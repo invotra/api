@@ -9784,8 +9784,7 @@ components:
               items:
                 allOf:
                   - $ref: '#/components/schemas/team-schema'
-                  - type: object
-                    properties:
+                  - properties:
                       context:
                         description: 'Parent items of the team. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
                         type: array
