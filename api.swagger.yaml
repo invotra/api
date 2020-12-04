@@ -9749,6 +9749,7 @@ components:
         - $ref: '#/components/schemas/team-schema'
         - properties:
             context:
+              description: 'Parent items of the team. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
               type: array
               items:
                 $ref: '#/components/schemas/team-schema'
@@ -9782,15 +9783,7 @@ components:
               description: "The user's teams. An array of team objects."
               type: array
               items:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/team-schema'
-                  - properties:
-                      context:
-                        description: 'Parent items of the team. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/team-schema'
+                $ref: '#/components/schemas/team-list-schema'
             locations:
               description: "The user's locations. An array of location objects."
               type: array
