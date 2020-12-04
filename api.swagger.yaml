@@ -5223,7 +5223,7 @@ paths:
                     description: The results set.
                     type: array
                     items:
-                      $ref: '#/components/schemas/location-uuid-title-context-list-item-schema'
+                      $ref: '#/components/schemas/location-list-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
       security:
         - SessionCookieHeader: []
@@ -10081,6 +10081,7 @@ components:
         - type: object
           properties:
             context:
+              description: 'Parent items of the team. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
               type: array
               items:
                 $ref: '#/components/schemas/team-schema'
@@ -10115,59 +10116,27 @@ components:
               description: "The user's teams. An array of team objects."
               type: array
               items:
-                allOf:
-                  - $ref: '#/components/schemas/team-schema'
-                  - type: object
-                    properties:
-                      context:
-                        description: 'Parent items of the team. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/team-schema'
+                $ref: '#/components/schemas/team-list-schema'
             locations:
               description: "The user's locations. An array of location objects."
               type: array
               items:
-                $ref: '#/components/schemas/location-uuid-title-context-list-item-schema'
+                $ref: '#/components/schemas/location-list-schema'
             role_grades:
               description: "The user's grades. An array of grade objects."
               type: array
               items:
-                allOf:
-                  - $ref: '#/components/schemas/grade-schema'
-                  - type: object
-                    properties:
-                      context:
-                        description: 'Parent items of the grade. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/grade-schema'
+                $ref: '#/components/schemas/grade-list-schema'
             job_roles:
               description: "The user's job roles. An array of job role objects."
               type: array
               items:
-                allOf:
-                  - $ref: '#/components/schemas/job-role-schema'
-                  - type: object
-                    properties:
-                      context:
-                        description: 'Parent items of the job role. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/job-role-schema'
+                $ref: '#/components/schemas/job-role-list-schema'
             regions:
               description: "The user's regions. An array of region objects."
               type: array
               items:
-                allOf:
-                  - $ref: '#/components/schemas/region-schema'
-                  - type: object
-                    properties:
-                      context:
-                        description: 'Parent items of the region. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/region-schema'
+                $ref: '#/components/schemas/region-list-schema'
             read_only:
               description: 'Users who are flagged as read-only are not able to create, update, or delete content.'
               type: boolean
@@ -15434,6 +15403,16 @@ components:
         - $ref: '#/components/schemas/job-role-schema'
       required:
         - title
+    job-role-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/job-role-schema'
+        - type: object
+          properties:
+            context:
+              description: 'Parent items of the job role. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
+              type: array
+              items:
+                $ref: '#/components/schemas/job-role-schema'
     location-common-schema:
       type: object
       properties:
@@ -15641,7 +15620,7 @@ components:
       type: string
       format: uuid
       example: 01234567-89ab-cdef-12F34-56789abcdef0
-    location-uuid-title-context-list-item-schema:
+    location-list-schema:
       type: object
       properties:
         uuid:
@@ -16281,6 +16260,16 @@ components:
           description: 'Determines the position of a grade in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+    grade-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/grade-schema'
+        - type: object
+          properties:
+            context:
+              description: 'Parent items of the grade. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
+              type: array
+              items:
+                $ref: '#/components/schemas/grade-schema'
     group-category-schema:
       allOf:
         - type: object
@@ -16878,6 +16867,16 @@ components:
           description: 'Determines the position of a region in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+    region-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/region-schema'
+        - type: object
+          properties:
+            context:
+              description: 'Parent items of the region. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
+              type: array
+              items:
+                $ref: '#/components/schemas/region-schema'
     search-highlight-schema:
       allOf:
         - type: object
