@@ -9745,6 +9745,7 @@ components:
           example: 01234567-89ab-cdef-1234-56789abcdef0
       type: object
     team-list-schema:
+      type: object
       allOf:
         - $ref: '#/components/schemas/team-schema'
         - properties:
