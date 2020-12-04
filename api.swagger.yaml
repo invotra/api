@@ -9761,6 +9761,7 @@ components:
         - title
       type: object
     user-schema:
+      type: object
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
         - properties:
