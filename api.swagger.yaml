@@ -9663,6 +9663,21 @@ components:
             - Public
             - Private
             - Secret
+        group_members:
+          description: 'Users who are members of the group.'
+          type: object
+          required:
+            - uuid
+          properties:
+            uuid:
+              description: 'Invotra UUID of the user.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            user_avatar:
+              description: "The user's image."
+              type: string
+              example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
     feed-status-schema:
       required:
         - feed
