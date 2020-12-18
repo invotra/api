@@ -9518,6 +9518,7 @@ components:
         - app_id
         - log_message
     feed-schema:
+      type: object
       required:
         - user_uuid
         - user_image
@@ -9655,7 +9656,13 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
-      type: object
+        group_privacy_setting:
+          description: 'This is the privacy setting for the group.'
+          type: string
+          enum:
+            - Public
+            - Private
+            - Secret
     feed-status-schema:
       required:
         - feed
