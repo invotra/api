@@ -2974,6 +2974,40 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:write ]
+  '/group_polls/{group_poll_id}/vote':
+    parameters:
+      - description: 'The Invotra UUID of the group poll.'
+        in: path
+        name: group_poll_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      tags:
+        - 'group polls'
+      description: 'Vote in a group poll.'
+      responses:
+        '201':
+          description: 'The vote in a group poll was successfull.'
+        '400':
+          description: 'The vote in a group poll was not cast due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to vote in this group poll.'
+        '404':
+          description: 'The UUID does not correspond to an existing group poll.'
+        '422':
+          description: 'The group poll vote was not cast due to a Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-poll-vote-schema'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_polls:write ]
   '/lists':
     post:
       tags:
@@ -11607,6 +11641,15 @@ components:
           description: 'Title of the group poll.'
           type: string
           example: 'What is your favorite food?'
+    group-poll-vote-schema:
+      type: object
+      required:
+        - option
+      properties:
+        option:
+          description: 'The option being voted for in the group poll.'
+          type: string
+          example: 'Pork'
     list-schema:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
