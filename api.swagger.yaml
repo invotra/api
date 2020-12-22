@@ -11538,6 +11538,10 @@ components:
                   vote_count: 24
                 - option: 'Mutton'
                   vote_count: 48
+            current_user_voted:
+              description: 'Indicates that the current user has voted in this group poll.'
+              type: boolean
+              example: true
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the group poll was created.'
               type: integer
