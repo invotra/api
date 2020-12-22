@@ -312,6 +312,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: parent_uuid
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -328,8 +334,9 @@ paths:
                     example: 50
                   results:
                     description: The results set.
-                    allOf:
-                      - $ref: '#/components/schemas/team-list-schema'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/team-list-schema'
       description: Search for teams. An empty array is returned if no teams are found.
       security:
         - SessionCookieHeader: []
@@ -3015,6 +3022,11 @@ paths:
         - 'lists'
       description: 'Search for lists. An empty array is returned if no lists where found.'
       parameters:
+        - name: autocomplete
+          description: 'Autocomplete term. Matches on list name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
@@ -3328,6 +3340,185 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/messages:write ]
+  '/multi_media':
+    post:
+      tags:
+        - 'multi media'
+      description: 'Provision a new multi media.'
+      responses:
+        '201':
+          description: 'The multi media was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned multi media may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The multi media was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a multi media.'
+        '422':
+          description: 'The multi media was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/multi-media-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/multi_media:write ]
+  '/multi_media/list':
+    get:
+      tags:
+        - 'multi media'
+      description: 'Search for multi media. An empty array is returned if no multi media where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of multi media on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of multi media matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/multi-media-schema'
+        '403':
+          description: 'User is not authorized to list multi media.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/multi_media:read ]
+  '/multi_media/{multi_media_id}':
+    parameters:
+      - description: 'The Invotra UUID of the multi media.'
+        in: path
+        name: multi_media_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'multi media'
+      description: 'Get information about the multi media.'
+      responses:
+        '200':
+          description: 'Returns a single complete multi media object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/multi-media-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this multi media.'
+        '404':
+          description: 'The UUID does not correspond to an existing multi media.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/multi_media:read ]
+    put:
+      tags:
+        - 'multi media'
+      description: 'Update multi media information.'
+      responses:
+        '200':
+          description: 'The multi media information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this multi media.'
+        '404':
+          description: 'The UUID does not correspond to an existing multi media.'
+        '422':
+          description: 'The multi media was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/multi-media-schema-update'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/multi_media:write ]
+    delete:
+      tags:
+        - 'multi media'
+      description: 'Delete a multi media.'
+      responses:
+        '200':
+          description: 'The multi media was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this multi media.'
+        '404':
+          description: 'The UUID does not correspond to an existing multi media.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/multi_media:write ]
   '/news':
     post:
       tags:
@@ -4083,6 +4274,11 @@ paths:
         - 'promotions'
       description: 'Search for promotions. An empty array is returned if no promotions where found.'
       parameters:
+        - name: autocomplete
+          description: 'Autocomplete term. Matches on promotion name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
@@ -4655,7 +4851,7 @@ paths:
                     type: array
                     items:
                       allOf:
-                      - $ref: '#/components/schemas/comment-schema'
+                        - $ref: '#/components/schemas/comment-schema'
         '403':
           description: 'User is not authorized to list comments.'
       security:
@@ -4885,7 +5081,7 @@ paths:
                     type: array
                     items:
                       allOf:
-                        - $ref: '#/components/schemas/job-role-list-schema'
+                        - $ref: '#/components/schemas/job-role-schema'
         '403':
           description: 'User is not authorized to list job roles.'
       security:
@@ -5009,6 +5205,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: parent_uuid
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -5030,7 +5232,7 @@ paths:
                     description: The results set.
                     type: array
                     items:
-                      $ref: '#/components/schemas/location-uuid-title-context-list-item-schema'
+                      $ref: '#/components/schemas/location-list-schema'
       description: 'Search for locations. An empty array is returned if no locations are found.'
       security:
         - SessionCookieHeader: []
@@ -6476,6 +6678,12 @@ paths:
             type: string
         - name: valid_parents_for
           description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the grade.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: parent_uuid
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
           schema:
             type: string
@@ -8218,6 +8426,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: parent_uuid
+          description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -8632,6 +8846,89 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/security_classifications:write ]
+  '/site_sections/list':
+    get:
+      tags:
+        - 'site sections'
+      description: 'Search for site sections. An empty array is returned if no site sections are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of site sections on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the site sections.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of site sections matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/site-section-schema'
+        '403':
+          description: 'User is not authorized to list site sections.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:read ]
+  '/site_sections/{site_section_id}':
+    parameters:
+      - description: 'The Invotra UUID of the site section.'
+        in: path
+        name: site_section_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'site sections'
+      description: 'Get information about the site section.'
+      responses:
+        '200':
+          description: 'Returns a single complete site section object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/site-section-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this site section.'
+        '404':
+          description: 'The UUID does not correspond to an existing site section.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:read ]
   '/titles':
     post:
       tags:
@@ -9338,7 +9635,8 @@ components:
       type: object
       allOf:
         - $ref: '#/components/schemas/successful-post-response-schema'
-        - properties:
+        - type: object
+          properties:
             message:
               description: The message included in the response.
               type: string
@@ -9441,6 +9739,39 @@ components:
           description: This is the colour for vertical tabs. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
+        widget_placeholder_images:
+          description: 'Placeholder images used by widgets.'
+          type: array
+          items:
+            type: object
+            properties:
+              placeholder_type:
+                description: 'The placeholder entity type.'
+                type: string
+                enum:
+                  - content
+                  - taxonomy
+                  - user
+              image_aspects:
+                description: 'The aspects available for this placeholder image.'
+                type: array
+                items:
+                  type: object
+                  properties:
+                    aspect:
+                      description: 'Aspect ratio of cropped image.'
+                      type: string
+                      enum:
+                        - '1:1'
+                        - '2:1'
+                        - '4:3'
+                        - '5:7'
+                        - '16:9'
+                    url:
+                      description: 'Location of the cropped image.'
+                      type: string
+                      format: url
+                      example: 'https://dev.invotra.com/file/1234/download-crop'
       type: object
     status-schema:
       type: object
@@ -9804,8 +10135,10 @@ components:
     team-list-schema:
       allOf:
         - $ref: '#/components/schemas/team-schema'
-        - properties:
+        - type: object
+          properties:
             context:
+              description: 'Parent items of the team. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
               type: array
               items:
                 $ref: '#/components/schemas/team-schema'
@@ -9818,7 +10151,8 @@ components:
     user-schema:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
-        - properties:
+        - type: object
+          properties:
             authname:
               description: 'The authname (SSO unique ID) of the user.'
               type: object
@@ -9835,11 +10169,31 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
-            job_roles:
-              description: The user's job roles. An array of job role names and UUIDs.
+            teams:
+              description: "The user's teams. An array of team objects."
               type: array
               items:
-                $ref: '#/components/schemas/title-uuid-list-item-common-schema'
+                $ref: '#/components/schemas/team-list-schema'
+            locations:
+              description: "The user's locations. An array of location objects."
+              type: array
+              items:
+                $ref: '#/components/schemas/location-list-schema'
+            role_grades:
+              description: "The user's grades. An array of grade objects."
+              type: array
+              items:
+                $ref: '#/components/schemas/grade-list-schema'
+            job_roles:
+              description: "The user's job roles. An array of job role objects."
+              type: array
+              items:
+                $ref: '#/components/schemas/job-role-list-schema'
+            regions:
+              description: "The user's regions. An array of region objects."
+              type: array
+              items:
+                $ref: '#/components/schemas/region-list-schema'
             read_only:
               description: 'Users who are flagged as read-only are not able to create, update, or delete content.'
               type: boolean
@@ -9929,6 +10283,11 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
+        is_line_manager:
+          description: 'This user is a manager of other users.'
+          type: boolean
+          default: false
+          example: false
         firstname:
           description: The user's first name
           type: string
@@ -9972,21 +10331,6 @@ components:
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
           deprecated: true
-        teams:
-          description: The user's teams. An array of team names and UUIDs.
-          type: array
-          items:
-            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
-        locations:
-          description: The user's locations. An array of location names and UUIDs.
-          type: array
-          items:
-            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
-        role_grades:
-          description: The user's role grades. An array of role grade names and UUIDs.
-          type: array
-          items:
-            $ref: '#/components/schemas/title-uuid-list-item-common-schema'
         user_uuid:
           description: The UUID of the user
           type: string
@@ -9998,15 +10342,68 @@ components:
     user-schema-update:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
-        - properties:
-            job_roles:
+        - type: object
+          properties:
+            teams:
+              description: "The user's teams. An array of team UUIDs."
               type: array
               items:
-                $ref: '#/components/schemas/title-or-uuid-writable-list-item-schema'
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the team.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: "The user's locations. An array of location UUIDs."
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            role_grades:
+              description: "The user's grades. An array of grade UUIDs."
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the role grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            job_roles:
+              description: "The user's job roles. An array of job role UUIDs."
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the job role.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: "The user's regions. An array of region UUIDs."
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     user-schema-create:
       allOf:
         - $ref: '#/components/schemas/user-schema-update'
-        - properties:
+        - type: object
+          properties:
             password:
               description: The password that the user logs in with
               type: string
@@ -10382,6 +10779,7 @@ components:
       type: object
     blog-schema:
       allOf:
+        - $ref: '#/components/schemas/blog-schema-common'
         - type: object
           properties:
             uuid:
@@ -10389,9 +10787,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/blog-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the blog.'
+              type: string
+              example: 'You can create strong passwords.'
             image:
               description: 'Blog Image.'
               type: object
@@ -10402,24 +10801,31 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            general_topic:
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'This is the name of the general topic.'
-                  type: string
-                  example: 'Darts'
+            general_topics:
+              description: 'The general topics of this blog.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the blog was created.'
               type: integer
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the blog was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the blog was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -10448,15 +10854,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The genetal topic of this blog.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this blog.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     blog-schema-create:
       allOf:
         - $ref: '#/components/schemas/blog-schema-common'
@@ -10471,15 +10879,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this blog.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this blog.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - body
@@ -10507,6 +10917,7 @@ components:
           example: 1510941596
     custom-content-schema:
       allOf:
+        - $ref: '#/components/schemas/custom-content-schema-common'
         - type: object
           properties:
             uuid:
@@ -10514,9 +10925,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/custom-content-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the custom content'
+              type: string
+              example: 'You can create strong passwords.'
             schedule_date_timestamp:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
@@ -10619,12 +11031,31 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the content was created.'
               type: integer
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the content was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the content was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -10737,6 +11168,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     custom-content-schema-create:
       allOf:
         - $ref: '#/components/schemas/custom-content-schema-common'
@@ -10828,6 +11270,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this custom content.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -10925,6 +11378,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            summary:
+              description: 'Summary text of the group document.'
+              type: string
+              example: 'You can create strong passwords.'
             group:
               description: 'The group for this group document.'
               type: object
@@ -10958,6 +11415,10 @@ components:
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the group document was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the group document was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -11201,6 +11662,7 @@ components:
           example: 'What is your favorite food?'
     list-schema:
       allOf:
+        - $ref: '#/components/schemas/list-schema-common'
         - type: object
           properties:
             uuid:
@@ -11208,9 +11670,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/list-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the list.'
+              type: string
+              example: 'You can create strong passwords.'
             site_section:
               description: 'The site section of this list.'
               type: object
@@ -11229,19 +11692,21 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            general_topic:
-              description: 'The general topic of this list.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'This is the name of the general topic.'
-                  type: string
-                  example: 'Darts'
+            general_topics:
+              description: 'The general topics of this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             team:
               description: 'The team targeting this list.'
               type: object
@@ -11316,6 +11781,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the list was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the list was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the list.'
               type: integer
@@ -11351,15 +11820,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this list.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
               description: 'The team targeting this list.'
               type: object
@@ -11425,15 +11896,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this list.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this list.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
               description: 'The team targeting this list.'
               type: object
@@ -11508,74 +11981,75 @@ components:
           description: 'List of content and links in the list.'
           type: array
           items:
-            oneOf:
+            anyOf:
               - $ref: '#/components/schemas/list-list-content-schema'
               - $ref: '#/components/schemas/list-list-site-section-schema'
               - $ref: '#/components/schemas/list-list-link-schema'
             discriminator:
               propertyName: type
-              mapping:
-                content: '#/components/schemas/list-list-content-schema'
-                site_section: '#/components/schemas/list-list-site-section-schema'
-                link: '#/components/schemas/list-list-link-schema'
     list-list-common-schema:
       type: object
+      required:
+        - type
       properties:
         type:
           description: 'The type of content in the list.'
           type: string
-          enum:
-            - 'content'
-            - 'site_section'
-            - 'link'
         title:
           description: 'Title of the content or link.'
           type: string
           example: 'More information here.'
-      required:
-      - type
-      - content
     list-list-content-schema:
       allOf:
-      - $ref: '#/components/schemas/list-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'content'
-          content:
-            type: object
-            properties:
-              uuid:
-                description: 'Invotra UUID of the content.'
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/list-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'content'
+            content:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the content.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                uri:
+                  description: 'The API URI for the content.'
+                  type: string
+                  example: 'https://dev.invotra.com/api/0.3/blogs/01234567-89ab-cdef-1234-56789abcdef0'
+                  format: uri
     list-list-site-section-schema:
       allOf:
-      - $ref: '#/components/schemas/list-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'site_section'
-          content:
-            type: object
-            properties:
-              uuid:
-                description: 'Invotra UUID of the site section.'
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/list-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'site_section'
+            content:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                uri:
+                  description: 'The API URI for the site section.'
+                  type: string
+                  example: 'https://dev.invotra.com/api/0.3/site_sections/01234567-89ab-cdef-1234-56789abcdef0'
+                  format: uri
     list-list-link-schema:
       allOf:
-      - $ref: '#/components/schemas/list-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'link'
-          content:
-            type: string
-            description: 'The URL of the link.'
-            example: 'https://example.com'
+        - $ref: '#/components/schemas/list-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'link'
+            content:
+              type: string
+              description: 'The URL of the link.'
+              example: 'https://example.com'
     message-schema:
       allOf:
         - $ref: '#/components/schemas/message-schema-common'
@@ -11673,6 +12147,512 @@ components:
           description: 'The body of the message.'
           type: string
           example: 'It is my birthday next week so remember to get me a present.'
+    multi-media-schema:
+      allOf:
+        - $ref: '#/components/schemas/multi-media-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the multi media.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            summary:
+              description: 'Summary text of the multi media.'
+              type: string
+              example: 'The car park is having the line markings repainted.'
+            workflow_schedule:
+              description: 'The scheduled workflow state of the multi media. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the multi media.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
+            site_section:
+              description: 'The site section of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the site section.'
+                  type: string
+                  example: 'Finance'
+            image:
+              description: 'Multi media image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this multi media.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            media:
+              description: 'Multi media file.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            media_smil:
+              description: 'SMIL file for the Multi media.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            media_tta:
+              description: 'TTA file for the Multi media.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            owner:
+              description: 'The owner of this multi media.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            team:
+              description: 'The team targeting this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the team.'
+                  type: string
+                  example: 'Operations'
+            locations:
+              description: 'The locations targeting this multi media.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/location-trimmed-schema'
+            grades:
+              description: 'The grades targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the multi media was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the multi media was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the multi media was published.'
+              type: integer
+              example: 1510941696
+            rating:
+              description: 'The mean average rating as a percentage calculated from all the ratings cast against this multi media.'
+              type: integer
+              example: 63
+            comment_count:
+              description: 'Count of comments on the multi media.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the multi media.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the multi media.'
+              type: boolean
+              example: true
+    multi-media-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/multi-media-schema-common'
+        - type: object
+          properties:
+            workflow_schedule:
+              description: 'The scheduled workflow state of the multi media. If present the content is scheduled for a workflow state change.'
+              type: object
+              properties:
+                state:
+                  description: 'The scheduled workflow state of the multi media.'
+                  type: string
+                  enum:
+                    - 'draft'
+                    - 'needs_review'
+                    - 'reviewed'
+                    - 'published'
+                    - 'unpublished'
+                timestamp:
+                  description: 'The timestamp of the schedule date (in seconds).'
+                  type: integer
+                  example: 1510941596
+            site_section:
+              description: 'The site section of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media:
+              description: 'Multi media file.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media_smil:
+              description: 'SMIL file for the multi media. This is mandatory if a video file has been uploaded into the media field.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media_tta:
+              description: 'TTA file for the multi media. Used if you are uploading video that requires subtitles in the media field.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the owner user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this multi media item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+    multi-media-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/multi-media-schema-common'
+        - type: object
+          properties:
+            site_section:
+              description: 'The site section of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            image:
+              description: 'The image for this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media:
+              description: 'Multi media file.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media_smil:
+              description: 'SMIL file for the multi media. This is mandatory if a video file has been uploaded into the media field.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            media_tta:
+              description: 'TTA file for the multi media. Used if you are uploading video that requires subtitles in the media field.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the file.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            owner:
+              description: 'The owner of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the owner user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            team:
+              description: 'The team targeting of this multi media.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            locations:
+              description: 'The locations targeting this multi media item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the location.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            grades:
+              description: 'The grades targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            regions:
+              description: 'The regions targeting this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this multi media.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
+            - site_section
+            - review_date_timestamp
+            - owner
+    multi-media-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the multi media.'
+          type: string
+          example: 'Video showing the new car park.'
+        body:
+          description: 'The body of the multi media.'
+          type: string
+          example: 'The car park is having the line markings repainted, watch the paint dry.'
+        state:
+          description: 'Indicates the workflow state of the multi media. If present the workflow state will be changed immediately and the scheduled workflow state removed.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the multi media (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the multi media.'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the multi media.'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content'
+                  - 'site section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        featured:
+          description: 'Indicates that this multi media is featured.'
+          type: boolean
+          default: false
+          example: false
+        external_id:
+          description: 'The multi media external reference id.'
+          type: string
+          example: 'ABC123'
     news-schema:
       allOf:
         - $ref: '#/components/schemas/news-schema-common'
@@ -11683,6 +12663,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+            summary:
+              description: 'Summary text of the news.'
+              type: string
+              example: 'The car park is having the line markings repainted.'
             site_section:
               description: 'The site section of this news.'
               type: object
@@ -11765,12 +12749,31 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the news was created.'
               type: integer
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the news was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the news was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -11781,6 +12784,10 @@ components:
               description: 'Count of likes on the news.'
               type: integer
               example: 5
+            rating:
+              description: 'The mean average rating as a percentage calculated from all the ratings cast against this news item.'
+              type: integer
+              example: 63
             published:
               description: 'Published status for the news.'
               type: boolean
@@ -11879,6 +12886,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     news-schema-create:
       allOf:
         - $ref: '#/components/schemas/news-schema-common'
@@ -11973,6 +12991,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this news item.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - body
@@ -12058,6 +13087,7 @@ components:
           example: 'ABC123'
     page-schema:
       allOf:
+        - $ref: '#/components/schemas/page-schema-common'
         - type: object
           properties:
             uuid:
@@ -12065,9 +13095,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/page-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the page.'
+              type: string
+              example: 'You can create strong passwords.'
             site_section:
               description: 'The site section of this page.'
               type: object
@@ -12151,12 +13182,31 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the page was created.'
               type: integer
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the page was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the page was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -12167,6 +13217,10 @@ components:
               description: 'Count of likes on the page.'
               type: integer
               example: 5
+            rating:
+              description: 'The mean average rating as a percentage calculated from all the ratings cast against this page.'
+              type: integer
+              example: 63
             published:
               description: 'Published status for the page.'
               type: boolean
@@ -12265,6 +13319,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     page-schema-create:
       allOf:
         - $ref: '#/components/schemas/page-schema-common'
@@ -12359,6 +13424,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this page.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - body
@@ -12444,6 +13520,7 @@ components:
           example: 'ABC123'
     policy-schema:
       allOf:
+        - $ref: '#/components/schemas/policy-schema-common'
         - type: object
           properties:
             uuid:
@@ -12451,9 +13528,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/policy-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the policy.'
+              type: string
+              example: 'You can create strong passwords.'
             site_section:
               type: object
               description: 'The site section of this policy.'
@@ -12493,19 +13571,21 @@ components:
                   description: 'This is the name of the primary category.'
                   type: string
                   example: 'Involving staff training'
-            general_topic:
-              description: 'The general topic of this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the general topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'This is the name of the general topic.'
-                  type: string
-                  example: 'Darts'
+            general_topics:
+              description: 'The general topics of this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             country:
               description: 'The country of this policy.'
               type: object
@@ -12590,6 +13670,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this policy.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
             owner:
               description: 'The owner user of the policy.'
               type: object
@@ -12601,6 +13686,10 @@ components:
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the policy was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the policy was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -12647,15 +13736,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             country:
               description: 'The country of this policy.'
               type: object
@@ -12718,6 +13809,15 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this policy.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
               description: 'The owner of this policy.'
               type: object
@@ -12759,15 +13859,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            general_topic:
-              description: 'The general topic of this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the genetal topic.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             country:
               description: 'The country of this policy.'
               type: object
@@ -12830,6 +13932,15 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this policy. (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
               description: 'The owner of this policy. The owner is mandatory if configured to be in Invotra admin.'
               type: object
@@ -12974,6 +14085,10 @@ components:
               description: 'This is the timestamp (in seconds) of when the poll was last updated.'
               type: integer
               example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the poll was published.'
+              type: integer
+              example: 1510941696
             comment_count:
               description: 'Count of comments on the poll.'
               type: integer
@@ -13073,6 +14188,7 @@ components:
           example: 'ABC123'
     promotion-schema:
       allOf:
+        - $ref: '#/components/schemas/promotion-schema-common'
         - type: object
           properties:
             uuid:
@@ -13080,9 +14196,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/promotion-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the promotion.'
+              type: string
+              example: 'Demonstrate your talent.'
             site_section:
               description: 'The site section of this promotion.'
               type: object
@@ -13177,12 +14294,31 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the promotion was created.'
               type: integer
               example: 1510941596
             timestamp_updated:
               description: 'This is the timestamp (in seconds) of when the promotion was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the promotion was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -13280,6 +14416,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             schedule_date_timestamp:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
@@ -13367,6 +14514,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this promotion.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - title
             - body
@@ -13412,6 +14570,7 @@ components:
           example: false
     webform-schema:
       allOf:
+        - $ref: '#/components/schemas/webform-schema-common'
         - type: object
           properties:
             uuid:
@@ -13419,9 +14578,10 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/webform-schema-common'
-        - type: object
-          properties:
+            summary:
+              description: 'Summary text of the webform.'
+              type: string
+              example: 'Demonstrate your talent.'
             schedule_date_timestamp:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
@@ -13524,12 +14684,31 @@ components:
                     description: 'Name of the region.'
                     type: string
                     example: 'Midlands'
+            general_topics:
+              description: 'The general topics of this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
             timestamp_created:
-              description: 'This is the timestamp (in seconds) of when the content was created.'
+              description: 'This is the timestamp (in seconds) of when the webform was created.'
               type: integer
               example: 1510941596
             timestamp_updated:
-              description: 'This is the timestamp (in seconds) of when the content was last updated.'
+              description: 'This is the timestamp (in seconds) of when the webform was last updated.'
+              type: integer
+              example: 1510941696
+            timestamp_published:
+              description: 'This is the timestamp (in seconds) of when the webform was published.'
               type: integer
               example: 1510941696
             comment_count:
@@ -13642,6 +14821,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     webform-schema-create:
       allOf:
         - $ref: '#/components/schemas/webform-schema-common'
@@ -13733,6 +14923,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this webform.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -13888,6 +15089,14 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/file-schema'
+        timestamp_published:
+          description: 'This is the timestamp (in seconds) of when the manual was published.'
+          type: integer
+          example: 1510941696
+        rating:
+          description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual.'
+          type: integer
+          example: 63
     manual-page-listing-schema:
       type: object
       properties:
@@ -13928,6 +15137,12 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
+          deprecated: true
+        author:
+          description: 'The author of this manual page.'
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/user-trimmed-schema'
         title:
           description: Title of the manual page
           type: string
@@ -13940,6 +15155,11 @@ components:
           description: The main body text contents of the manual page
           type: string
           example: The full body describing Code of Conduct.
+        image:
+          description: 'Image for the manual page.'
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/file-schema'
         site_section:
           description: Invotra UUID of site section of the manual page
           type: string
@@ -13957,6 +15177,18 @@ components:
           description: This is the timestamp (in seconds) of when the manual page was last updated
           type: integer
           example: 1510941696
+        timestamp_published:
+          description: 'This is the timestamp (in seconds) of when the manual page was published.'
+          type: integer
+          example: 1510941696
+        published:
+          description: 'Published status for the manual page.'
+          type: boolean
+          example: true
+        rating:
+          description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual page.'
+          type: integer
+          example: 63
         attachments:
           description: List of attachments on manual page
           type: array
@@ -14107,6 +15339,27 @@ components:
           type: string
           format: url
           example: 'https://dev.invotra.com/file/1234/download'
+        file_download_cropped:
+          description: 'Cropped versions of images if available.'
+          type: array
+          items:
+            type: object
+            properties:
+              aspect:
+                description: 'Aspect ratio of cropped image.'
+                type: string
+                enum:
+                  - 'manual'
+                  - '1:1'
+                  - '2:1'
+                  - '4:3'
+                  - '5:7'
+                  - '16:9'
+              url:
+                description: 'Location of the cropped image.'
+                type: string
+                format: url
+                example: 'https://dev.invotra.com/file/1234/download-crop'
         type:
           description: The type of file
           type: string
@@ -14165,7 +15418,13 @@ components:
         - alt_text
         - type
     job-role-schema:
+      type: object
       properties:
+        uuid:
+          description: 'This is the Invotra UUID of the job role.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
         title:
           description: This is the name of the job role
           type: string
@@ -14178,23 +15437,6 @@ components:
           description: This is used to store the job role's external reference id
           type: string
           example: ABC123
-        parent_uuid:
-          description: 'This is the Invotra UUID of the parent job role, optional. Note you can create and update this property, but it will have no effect.'
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-          type: string
-          format: uuid
-          deprecated: true
-      type: object
-    job-role-list-schema:
-      allOf:
-        - $ref: '#/components/schemas/job-role-schema'
-      type: object
-      properties:
-        uuid:
-          description: 'This is the Invotra UUID of the job role.'
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-          type: string
-          format: uuid
         has_children:
           description: 'Indicates that this job role has children.'
           type: boolean
@@ -14207,11 +15449,27 @@ components:
           description: 'Determines the position of a job role in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+        parent_uuid:
+          description: 'This is the Invotra UUID of the parent job role, optional. Note you can create and update this property, but it will have no effect.'
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          type: string
+          format: uuid
+          deprecated: true
     job-role-schema-create:
       allOf:
         - $ref: '#/components/schemas/job-role-schema'
       required:
         - title
+    job-role-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/job-role-schema'
+        - type: object
+          properties:
+            context:
+              description: 'Parent items of the job role. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
+              type: array
+              items:
+                $ref: '#/components/schemas/job-role-schema'
     location-common-schema:
       type: object
       properties:
@@ -14419,7 +15677,7 @@ components:
       type: string
       format: uuid
       example: 01234567-89ab-cdef-12F34-56789abcdef0
-    location-uuid-title-context-list-item-schema:
+    location-list-schema:
       type: object
       properties:
         uuid:
@@ -15059,6 +16317,16 @@ components:
           description: 'Determines the position of a grade in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+    grade-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/grade-schema'
+        - type: object
+          properties:
+            context:
+              description: 'Parent items of the grade. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
+              type: array
+              items:
+                $ref: '#/components/schemas/grade-schema'
     group-category-schema:
       allOf:
         - type: object
@@ -15656,6 +16924,16 @@ components:
           description: 'Determines the position of a region in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+    region-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/region-schema'
+        - type: object
+          properties:
+            context:
+              description: 'Parent items of the region. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
+              type: array
+              items:
+                $ref: '#/components/schemas/region-schema'
     search-highlight-schema:
       allOf:
         - type: object
@@ -15733,45 +17011,45 @@ components:
       - content
     search-highlight-list-content-schema:
       allOf:
-      - $ref: '#/components/schemas/search-highlight-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'content'
-          content:
-            type: object
-            properties:
-              uuid:
-                description: 'Invotra UUID of the content.'
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/search-highlight-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'content'
+            content:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the content.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     search-highlight-list-site_section-schema:
       allOf:
-      - $ref: '#/components/schemas/search-highlight-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'site_section'
-          content:
-            type: object
-            properties:
-              uuid:
-                description: 'Invotra UUID of the site section.'
-                type: string
-                format: uuid
-                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - $ref: '#/components/schemas/search-highlight-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'site_section'
+            content:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     search-highlight-list-link-schema:
       allOf:
-      - $ref: '#/components/schemas/search-highlight-list-common-schema'
-      - type: object
-        properties:
-          type:
-            example: 'link'
-          content:
-            type: string
-            description: 'The URL of the link.'
-            example: 'https://example.com'
+        - $ref: '#/components/schemas/search-highlight-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'link'
+            content:
+              type: string
+              description: 'The URL of the link.'
+              example: 'https://example.com'
     security-classification-schema:
       allOf:
         - type: object
@@ -15821,6 +17099,53 @@ components:
           example: true
         weight:
           description: 'Determines the position of a security classification in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    site-section-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the site section.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            has_children:
+              description: 'Indicates that this site section has children.'
+              type: boolean
+              example: true
+            image:
+              description: 'Site section image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+        - $ref: '#/components/schemas/site-section-schema-common'
+    site-section-schema-common:
+      type: object
+      properties:
+        name:
+          description: 'Name of the site section.'
+          type: string
+          example: 'Top Secret'
+        description:
+          description: 'Description of the site section.'
+          type: string
+          example: 'Strictly only authorised access'
+        external_id:
+          description: 'The site section external reference id.'
+          type: string
+          example: 'ABC123'
+        parent_uuid:
+          description: 'Invotra UUID of the parent site section.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
+        published:
+          description: 'Indicates that this site section is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a site section in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
     title-schema:
