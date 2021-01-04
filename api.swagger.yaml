@@ -2986,12 +2986,12 @@ paths:
     post:
       tags:
         - 'group polls'
-      description: 'Vote in a group poll.'
+      description: 'Vote in the group poll.'
       responses:
         '201':
-          description: 'The vote in a group poll was successfull.'
+          description: 'The vote in the group poll was successful.'
         '400':
-          description: 'The vote in a group poll was not cast due to malformed JSON.'
+          description: 'The vote in the group poll was not cast due to malformed JSON.'
         '403':
           description: 'User is not authorized to vote in this group poll.'
         '404':
