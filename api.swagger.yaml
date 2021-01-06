@@ -236,6 +236,30 @@ paths:
           description: An incorrect or malformed token was provided.
         '404':
           description: A file was not found at the supplied S3 URL.
+  /opengraph:
+    post:
+      tags:
+        - open graph
+      description: 'Perform an Open Graph scrape.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/opengraph-request-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/opengraph:write ]
+      responses:
+        '200':
+          description: 'The Open Graph scrape was successful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/opengraph-schema'
+        '400':
+          description: 'The Open Graph scrape was not performed due to malformed JSON.'
   /teams:
     get:
       tags:
@@ -9627,6 +9651,17 @@ components:
       required:
         - message
         - uuid
+    opengraph-request-schema:
+      type: object
+      properties:
+        url:
+          description: 'The URL to perform the Open Graph scrape against.'
+          type: string
+          example: 'https://ogp.me/'
+      required:
+        - url
+    opengraph-schema:
+      description: 'The Open Graph result.'
     pdf-export-completion-schema:
       type: object
       properties:
