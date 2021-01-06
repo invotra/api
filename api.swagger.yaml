@@ -236,7 +236,7 @@ paths:
           description: An incorrect or malformed token was provided.
         '404':
           description: A file was not found at the supplied S3 URL.
-  /opengraph:
+  /open_graph:
     post:
       tags:
         - open graph
@@ -246,18 +246,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/opengraph-request-schema'
+              $ref: '#/components/schemas/open-graph-request-schema'
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
-        - CognitoJwt: [ invotra/opengraph:write ]
+        - CognitoJwt: [ invotra/open_graph:write ]
       responses:
         '200':
           description: 'The Open Graph scrape was successful.'
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/opengraph-schema'
+                $ref: '#/components/schemas/open-graph-schema'
         '400':
           description: 'The Open Graph scrape was not performed due to malformed JSON.'
   /teams:
@@ -9703,7 +9703,7 @@ components:
       required:
         - message
         - uuid
-    opengraph-request-schema:
+    open-graph-request-schema:
       type: object
       properties:
         url:
@@ -9712,8 +9712,48 @@ components:
           example: 'https://ogp.me/'
       required:
         - url
-    opengraph-schema:
+    open-graph-schema:
       description: 'The Open Graph result.'
+      type: object
+      properties:
+        ogTitle:
+          description: 'The Open Graph title.'
+          type: string
+          example: 'Open Graph protocol'
+        ogType:
+          description: 'The Open Graph type.'
+          type: string
+          example: 'website'
+        ogUrl:
+          description: 'The Open Graph URL.'
+          type: string
+          format: url
+          example: 'https://ogp.me/'
+        ogDescription:
+          description: 'The Open Graph description.'
+          type: string
+          example: 'The Open Graph protocol enables any web page to become a rich object in a social graph.'
+        ogImage:
+          description: 'The Open Graph image.'
+          type: object
+          properties:
+            url:
+              description: 'The location of the image.'
+              type: string
+              format: url
+              example: 'https://ogp.me/logo.png'
+            width:
+              description: 'The width of the image in pixels.'
+              type: integer
+              example: 300
+            height:
+              description: 'The height of the image in pixels.'
+              type: integer
+              example: 300
+            type:
+              description: 'The MIME type of the image.'
+              type: string
+              example: 'image/png'
     pdf-export-completion-schema:
       type: object
       properties:
