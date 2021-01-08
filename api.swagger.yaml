@@ -260,6 +260,12 @@ paths:
                 $ref: '#/components/schemas/open-graph-schema'
         '400':
           description: 'The Open Graph scrape was not performed due to malformed JSON.'
+        '422':
+          description: 'The Open Graph scrape failed due to a problem performing the request on the upstream server.'
+        '404':
+          description: 'The Open Graph scrape failed as the URL was not found.'
+        '504':
+          description: 'The Open Graph scrape timed out performing the request on the upstream server.'
   /teams:
     get:
       tags:
