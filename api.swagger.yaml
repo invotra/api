@@ -836,6 +836,23 @@ paths:
           description: 'Filter the feed to only include messages created since (greater than or equal to) the specified timestamp (in seconds).'
           schema:
             type: integer
+        - in: query
+          name: topic
+          required: false
+          description: 'Filter the feed to only include messages of a particular topic.'
+          schema:
+            type: string
+            enum:
+              - content
+              - group
+              - user
+        - in: query
+          name: post_category
+          required: false
+          description: 'Filter the feed to only include messages of a particular post category.'
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: >
@@ -9443,6 +9460,23 @@ paths:
           description: 'Filter the feed to only include messages created since (greater than or equal to) the specified timestamp (in seconds).'
           schema:
             type: integer
+        - in: query
+          name: topic
+          required: false
+          description: 'Filter the feed to only include messages of a particular topic.'
+          schema:
+            type: string
+            enum:
+              - content
+              - group
+              - user
+        - in: query
+          name: post_category
+          required: false
+          description: 'Filter the feed to only include messages of a particular post category.'
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: Returns the feed for a user.
