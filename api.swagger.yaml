@@ -10105,30 +10105,35 @@ components:
             type: object
             required:
               - facet_count
+              - data
             properties:
               facet_count:
                 description: 'The facet count for this topic.'
                 type: integer
                 example: 33
-              topic:
-                type: string
-                enum:
-                  - content
-                  - group
-                  - user
+              data:
+                type: object
+                properties:
+                  topic:
+                    type: string
+                    enum:
+                      - content
+                      - group
+                      - user
         post_categories:
           type: array
           items:
-            allOf:
-              - type: object
-                required:
-                  - facet_count
-                properties:
-                  facet_count:
-                    description: 'The facet count for this post category.'
-                    type: integer
-                    example: 33
-              - $ref: '#/components/schemas/post-category-schema'
+            type: object
+            required:
+              - facet_count
+              - data
+            properties:
+              facet_count:
+                description: 'The facet count for this post category.'
+                type: integer
+                example: 33
+              data:
+                $ref: '#/components/schemas/post-category-schema'
     notification-item-schema:
       required:
         - uuid
