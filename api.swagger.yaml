@@ -860,6 +860,23 @@ paths:
           description: 'Filter the feed to only include messages created since (greater than or equal to) the specified timestamp (in seconds).'
           schema:
             type: integer
+        - in: query
+          name: topic
+          required: false
+          description: 'Filter the feed to only include messages of a particular topic.'
+          schema:
+            type: string
+            enum:
+              - content
+              - group
+              - user
+        - in: query
+          name: post_category_uuid
+          required: false
+          description: 'Filter the feed to only include messages of a particular post category.'
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: >
@@ -872,6 +889,7 @@ paths:
                 required:
                   - count
                   - storage
+                  - facets
                   - results
                 properties:
                   count:
@@ -880,6 +898,8 @@ paths:
                     example: 50
                   storage:
                     $ref: '#/components/schemas/feed-storage-schema'
+                  facets:
+                    $ref: '#/components/schemas/feed-facets-schema'
                   results:
                     description: The results set.
                     type: array
@@ -9501,6 +9521,23 @@ paths:
           description: 'Filter the feed to only include messages created since (greater than or equal to) the specified timestamp (in seconds).'
           schema:
             type: integer
+        - in: query
+          name: topic
+          required: false
+          description: 'Filter the feed to only include messages of a particular topic.'
+          schema:
+            type: string
+            enum:
+              - content
+              - group
+              - user
+        - in: query
+          name: post_category_uuid
+          required: false
+          description: 'Filter the feed to only include messages of a particular post category.'
+          schema:
+            type: string
+            format: uuid
       responses:
         '200':
           description: Returns the feed for a user.
@@ -9511,6 +9548,7 @@ paths:
                 required:
                   - count
                   - storage
+                  - facets
                   - results
                 properties:
                   count:
@@ -9519,6 +9557,8 @@ paths:
                     example: 50
                   storage:
                     $ref: '#/components/schemas/feed-storage-schema'
+                  facets:
+                    $ref: '#/components/schemas/feed-facets-schema'
                   results:
                     description: The results set.
                     type: array
@@ -10161,6 +10201,48 @@ components:
           description: 'Indicates to the client that it should clear all locally stored data.'
           type: boolean
           example: false
+    feed-facets-schema:
+      description: 'Facets counts for the feed.'
+      type: object
+      required:
+        - topics
+        - post_categories
+      properties:
+        topics:
+          type: array
+          items:
+            type: object
+            required:
+              - facet_count
+              - data
+            properties:
+              facet_count:
+                description: 'The facet count for this topic.'
+                type: integer
+                example: 33
+              data:
+                type: object
+                properties:
+                  topic:
+                    type: string
+                    enum:
+                      - content
+                      - group
+                      - user
+        post_categories:
+          type: array
+          items:
+            type: object
+            required:
+              - facet_count
+              - data
+            properties:
+              facet_count:
+                description: 'The facet count for this post category.'
+                type: integer
+                example: 33
+              data:
+                $ref: '#/components/schemas/post-category-schema'
     notification-item-schema:
       required:
         - uuid
