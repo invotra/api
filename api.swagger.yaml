@@ -14811,6 +14811,7 @@ components:
           example: false
     query-schema:
       allOf:
+        - $ref: '#/components/schemas/query-schema-common'
         - type: object
           properties:
             uuid:
@@ -14818,9 +14819,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - $ref: '#/components/schemas/query-schema-common'
-        - type: object
-          properties:
             attachment:
               description: 'Query attachment.'
               type: object
