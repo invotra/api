@@ -2974,6 +2974,110 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:write ]
+  '/ideas/list':
+    get:
+      tags:
+        - 'ideas'
+      description: 'Search for ideas. An empty array is returned if no ideas where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of lists on a comma seperated list of states. Valid statuses are "draft", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of ideas matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/idea-schema'
+        '403':
+          description: 'User is not authorized to list ideas.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/ideas:read ]
+  '/ideas/{idea_id}':
+    parameters:
+      - description: 'The Invotra UUID of the idea.'
+        in: path
+        name: idea_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'ideas'
+      description: 'Get information about the idea.'
+      responses:
+        '200':
+          description: 'Returns a single complete idea object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/idea-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this idea.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/ideas:read ]
   '/lists':
     post:
       tags:
@@ -11603,6 +11707,96 @@ components:
           description: 'Title of the group poll.'
           type: string
           example: 'What is your favorite food?'
+    idea-schema:
+      allOf:
+        - $ref: '#/components/schemas/idea-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the idea.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            idea_status:
+              description: 'The idea status.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the idea status.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the idea status.'
+                  type: string
+                  example: 'Open'
+            idea_assignee:
+              description: 'The assignee user of the idea.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            idea_categories:
+              description: 'List of categories associated with the idea.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the idea category.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'The name of the idea category.'
+                    type: string
+                    example: 'Important'
+            author:
+              description: 'The author of this idea.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the idea was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the idea was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the idea.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the idea.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the idea.'
+              type: boolean
+              example: true
+    idea-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the idea.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the idea.'
+          type: string
+          example: 'You can create strong passwords using an online random password generator.'
+        idea_reference:
+          description: 'The idea reference.'
+          type: string
+          example: 'I123'
+        state:
+          description: 'Indicates the workflow state of the idea.'
+          type: string
+          enum:
+            - 'draft'
+            - 'published'
+            - 'unpublished'
     list-schema:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
