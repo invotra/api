@@ -4714,6 +4714,110 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/queries:read ]
+  '/support_tickets/list':
+    get:
+      tags:
+        - 'support tickets'
+      description: 'Search for support tickets. An empty array is returned if no support tickets where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of support tickets matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/support-ticket-schema'
+        '403':
+          description: 'User is not authorized to list support tickets.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/support_tickets:read ]
+  '/support_tickets/{support_ticket_id}':
+    parameters:
+      - description: 'The Invotra UUID of the support ticket.'
+        in: path
+        name: support_ticket_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'support tickets'
+      description: 'Get information about the support ticket.'
+      responses:
+        '200':
+          description: 'Returns a single complete support ticket object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/support-ticket-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this support ticket.'
+        '404':
+          description: 'The UUID does not correspond to an existing support ticket.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/support_tickets:read ]
   '/webforms':
     post:
       tags:
@@ -15193,6 +15297,72 @@ components:
             - 'unpublished'
         review_date_timestamp:
           description: 'The review date timestamp for the query (in seconds).'
+          type: integer
+          example: 1510941596
+    support-ticket-schema:
+      allOf:
+        - $ref: '#/components/schemas/support-ticket-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the support ticket.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            support_ticket_assignee:
+              description: 'The assignee user of the support ticket.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            author:
+              description: 'The author of this support ticket.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the support ticket was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the support ticket was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the support ticket.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the support ticket.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the support ticket.'
+              type: boolean
+              example: true
+    support-ticket-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the support ticket.'
+          type: string
+          example: 'Website broken'
+        body:
+          description: 'The body of the support ticket.'
+          type: string
+          example: 'The website is broken can someone please take a look.'
+        support_ticket_reference:
+          description: 'The support ticket reference.'
+          type: string
+          example: 'SUP123'
+        state:
+          description: 'Indicates the workflow state of the support ticket.'
+          type: string
+          enum:
+            - 'draft'
+            - 'published'
+            - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the support ticket (in seconds).'
           type: integer
           example: 1510941596
     webform-schema:
