@@ -15482,6 +15482,10 @@ components:
     location-site-schema-create:
       allOf:
         - $ref: '#/components/schemas/location-site-schema-common'
+        - type: object
+          properties:
+            published:
+              default: true
       required:
         - title
         - address1
@@ -15549,6 +15553,10 @@ components:
     location-building-schema-create:
       allOf:
         - $ref: '#/components/schemas/location-building-schema-common'
+        - type: object
+          properties:
+            published:
+              default: true
       required:
         - title
         - address1
@@ -15588,6 +15596,10 @@ components:
     location-floor-schema-create:
       allOf:
         - $ref: '#/components/schemas/location-floor-schema-common'
+        - type: object
+          properties:
+            published:
+              default: true
       required:
         - title
     location-floor-schema-update:
@@ -15626,6 +15638,10 @@ components:
     location-space-schema-create:
       allOf:
         - $ref: '#/components/schemas/location-space-schema-common'
+        - type: object
+          properties:
+            published:
+              default: true
       required:
         - title
     location-space-schema-update:
