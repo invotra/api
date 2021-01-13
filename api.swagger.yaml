@@ -840,9 +840,9 @@ paths:
           name: topic
           description: 'Filter the feed to only include messages of a particular topic.'
           required: false
-          explode: true
           schema:
             type: array
+            collectionFormat: multi
             items:
               type: string
               enum:
