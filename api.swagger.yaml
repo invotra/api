@@ -841,11 +841,13 @@ paths:
           required: false
           description: 'Filter the feed to only include messages of a particular topic.'
           schema:
-            type: string
-            enum:
-              - content
-              - group
-              - user
+            type: array
+            items:
+              type: string
+              enum:
+                - content
+                - group
+                - user
         - in: query
           name: post_category_uuid
           required: false
