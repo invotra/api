@@ -838,8 +838,9 @@ paths:
             type: integer
         - in: query
           name: topic
-          required: false
           description: 'Filter the feed to only include messages of a particular topic.'
+          required: false
+          explode: true
           schema:
             type: array
             items:
