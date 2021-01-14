@@ -840,15 +840,14 @@ paths:
           name: topic
           description: 'Filter the feed to only include messages of a particular topic.'
           required: false
-          schema:
-            type: array
-            collectionFormat: multi
-            items:
-              type: string
-              enum:
-                - content
-                - group
-                - user
+          type: array
+          collectionFormat: multi
+          items:
+            type: string
+            enum:
+              - content
+              - group
+              - user
         - in: query
           name: post_category_uuid
           required: false
