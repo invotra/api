@@ -838,10 +838,16 @@ paths:
             type: integer
         - in: query
           name: topic
-          type: array
-          collectionFormat: multi
-          items:
-            type: string
+          description: 'Filter the feed to only include messages of a particular topic. Multiple values may be supplied using a comma-separated list.'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - content
+                - group
+                - user
         - in: query
           name: post_category_uuid
           required: false
@@ -9461,14 +9467,16 @@ paths:
             type: integer
         - in: query
           name: topic
+          description: 'Filter the feed to only include messages of a particular topic. Multiple values may be supplied using a comma-separated list.'
           required: false
-          description: 'Filter the feed to only include messages of a particular topic.'
           schema:
-            type: string
-            enum:
-              - content
-              - group
-              - user
+            type: array
+            items:
+              type: string
+              enum:
+                - content
+                - group
+                - user
         - in: query
           name: post_category_uuid
           required: false
