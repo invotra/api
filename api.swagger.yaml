@@ -831,14 +831,20 @@ paths:
             type: boolean
             default: false
         - in: query
-          name: since
+          name: start_timestamp
           required: false
-          description: 'Filter the feed to only include messages created since (greater than or equal to) the specified timestamp (in seconds).'
+          description: 'Filter the feed to only include messages created after (greater than or equal to) the specified timestamp (in seconds).'
           schema:
             type: integer
         - in: query
-          name: topic
-          description: 'Filter the feed to only include messages of a particular topic. Multiple values may be supplied using a comma-separated list.'
+          name: end_timestamp
+          required: false
+          description: 'Filter the feed to only include messages created before (less than or equal to) the specified timestamp (in seconds).'
+          schema:
+            type: integer
+        - in: query
+          name: topics
+          description: 'Filter the feed to only include messages of a particular topic. Multiple values may be supplied.'
           required: false
           schema:
             type: array
@@ -849,12 +855,14 @@ paths:
                 - group
                 - user
         - in: query
-          name: post_category_uuid
+          name: post_category_uuids
+          description: 'Filter the feed to only include messages of a particular post category. Multiple values may be supplied.'
           required: false
-          description: 'Filter the feed to only include messages of a particular post category.'
           schema:
-            type: string
-            format: uuid
+            type: array
+            items:
+              type: string
+              format: uuid
       responses:
         '200':
           description: >
@@ -9460,14 +9468,20 @@ paths:
             type: boolean
             default: false
         - in: query
-          name: since
+          name: start_timestamp
           required: false
-          description: 'Filter the feed to only include messages created since (greater than or equal to) the specified timestamp (in seconds).'
+          description: 'Filter the feed to only include messages created after (greater than or equal to) the specified timestamp (in seconds).'
           schema:
             type: integer
         - in: query
-          name: topic
-          description: 'Filter the feed to only include messages of a particular topic. Multiple values may be supplied using a comma-separated list.'
+          name: end_timestamp
+          required: false
+          description: 'Filter the feed to only include messages created before (less than or equal to) the specified timestamp (in seconds).'
+          schema:
+            type: integer
+        - in: query
+          name: topics
+          description: 'Filter the feed to only include messages of a particular topic. Multiple values may be supplied.'
           required: false
           schema:
             type: array
@@ -9478,12 +9492,14 @@ paths:
                 - group
                 - user
         - in: query
-          name: post_category_uuid
+          name: post_category_uuids
+          description: 'Filter the feed to only include messages of a particular post category. Multiple values may be supplied.'
           required: false
-          description: 'Filter the feed to only include messages of a particular post category.'
           schema:
-            type: string
-            format: uuid
+            type: array
+            items:
+              type: string
+              format: uuid
       responses:
         '200':
           description: Returns the feed for a user.
