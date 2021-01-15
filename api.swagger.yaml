@@ -15245,10 +15245,6 @@ components:
               description: 'Count of comments on the support ticket.'
               type: integer
               example: 5
-            likes_count:
-              description: 'Count of likes on the support ticket.'
-              type: integer
-              example: 5
     support-ticket-schema-common:
       type: object
       properties:
