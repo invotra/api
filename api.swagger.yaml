@@ -12188,19 +12188,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-            idea_status:
-              description: 'The idea status.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the idea status.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: 'The name of the idea status.'
-                  type: string
-                  example: 'Open'
             idea_assignee:
               description: 'The assignee user of the idea.'
               type: object
