@@ -11734,12 +11734,6 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
-            gallery_items:
-              description: 'The gallery items.'
-              type: array
-              items:
-                allOf:
-                  - $ref: '#/components/schemas/multi-media-trimmed-schema'
             owner:
               description: 'The owner of this gallery.'
               type: object
