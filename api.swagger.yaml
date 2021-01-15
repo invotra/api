@@ -3144,6 +3144,10 @@ paths:
       - description: 'The Invotra UUID of the group poll.'
         in: path
         name: group_poll_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     post:
       tags:
         - 'group polls'
