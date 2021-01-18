@@ -191,7 +191,7 @@ paths:
   /layouts:
     post:
       tags:
-        - layouts
+        - 'layouts'
       description: 'Provision a new layout.'
       responses:
         '201':
@@ -221,6 +221,37 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/layouts:write ]
+  /layouts/list:
+    get:
+      tags:
+        - 'layouts'
+      description: 'Search for layouts. An empty array is returned if no layouts where found.'
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of layouts.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/layout-schema-create'
+        '403':
+          description: 'User is not authorized to list layouts.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/layouts:read ]
   /logs:
     post:
       tags:
@@ -9862,10 +9893,25 @@ components:
     layout-schema-create:
       type: object
       properties:
-        prop:
-          description: 'Some prop.'
+        name:
+          description: 'Layout name (limit of 14 chars).'
           type: string
-          example: 'fred'
+          example: 'My Layout'
+          minLength: 1
+          maxLength: 14
+        description:
+          description: 'Layout description.'
+          type: string
+          example: 'My Layout used by me.'
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              row_type:
+                description: 'Layout row type.'
+                type: string
+                example: '50/50'
     log-schema:
       type: object
       properties:
