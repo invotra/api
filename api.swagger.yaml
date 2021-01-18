@@ -188,6 +188,39 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /layouts:
+    post:
+      tags:
+        - layouts
+      description: 'Provision a new layout.'
+      responses:
+        '201':
+          description: 'The layout was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned layout may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The layout was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a layout.'
+        '422':
+          description: 'The layout was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/layout-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/layouts:write ]
   /logs:
     post:
       tags:
@@ -9826,6 +9859,13 @@ components:
         password:
           description: The password that the user logs in with
           type: string
+    layout-schema-create:
+      type: object
+      properties:
+        prop:
+          description: 'Some prop.'
+          type: string
+          example: 'fred'
     log-schema:
       type: object
       properties:
