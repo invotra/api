@@ -1366,16 +1366,60 @@ paths:
           schema:
             type: boolean
             default: false
+        - description: 'Filter groups that are administered by the user UUID.'
+          in: query
+          name: admin_uuid
+          schema:
+            type: string
+            format: uuid
+        - description: 'Filter groups that where created starting (greater than or equal) from the timestamp (in seconds).'
+          in: query
+          name: created_start_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Filter groups that where created ending (less than or equal) up to the timestamp (in seconds).'
+          in: query
+          name: created_end_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Filter groups with last posts starting (greater than or equal) from the timestamp (in seconds).'
+          in: query
+          name: last_post_start_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Filter groups with last posts ending (less than or equal) up to the timestamp (in seconds).'
+          in: query
+          name: last_post_end_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Filter groups on the privacy setting.'
+          in: query
+          name: privacy_setting
+          schema:
+            type: string
+            enum:
+              - Public
+              - Private
+              - Secret
         - description: Field to sort by.
           in: query
           name: sort
           schema:
             type: string
             enum:
-              - relevance
+              - group_name
               - likes
               - members_count
+              - members_name
+              - post_count_last_7_days
+              - privacy_setting
+              - relevance
               - timestamp_created
+              - timestamp_last_post
             default: relevance
         - description: Sort order.
           in: query
