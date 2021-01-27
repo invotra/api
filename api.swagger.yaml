@@ -10060,7 +10060,7 @@ components:
             - Private
             - Secret
         group_members:
-          description: 'Users who are members of the group.'
+          description: 'Users who are members of the group (a maximum of 8 will be returned).'
           type: array
           items:
             type: object
@@ -10076,6 +10076,10 @@ components:
                 description: "The user's image."
                 type: string
                 example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+        group_members_count:
+          description: 'Total count of the group members including administrators.'
+          type: integer
+          example: 16
         content_uuid:
           description: 'Invotra UUID of the content referenced by this feed message.'
           type: string
