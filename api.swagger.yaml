@@ -1366,12 +1366,14 @@ paths:
           schema:
             type: boolean
             default: false
-        - description: 'Filter groups that are administered by the user UUID.'
+        - description: 'Filter groups that are administered by the user UUID. Multiple values may be supplied.'
           in: query
           name: admin_uuid
           schema:
-            type: string
-            format: uuid
+            type: array
+            items:
+              type: string
+              format: uuid
         - description: 'Filter groups that where created starting (greater than or equal) from the timestamp (in seconds).'
           in: query
           name: created_start_timestamp
@@ -1396,15 +1398,43 @@ paths:
           schema:
             type: integer
             example: 1563357496
-        - description: 'Filter groups on the privacy setting.'
+        - description: 'Filter groups on the privacy setting. Multiple values may be supplied.'
           in: query
           name: privacy_setting
           schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - Public
+                - Private
+                - Secret
+        - description: 'Filter the members property array by member type.'
+          in: query
+          name: members_type
+          schema:
             type: string
             enum:
-              - Public
-              - Private
-              - Secret
+              - Administrators
+              - Members
+        - description: 'group_name_changes_timestamp.'
+          in: query
+          name: group_name_changes_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'new_admins_timestamp.'
+          in: query
+          name: new_admins_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'group_status_changes_timestamp.'
+          in: query
+          name: group_status_changes_timestamp
+          schema:
+            type: integer
+            example: 1563357496
         - description: Field to sort by.
           in: query
           name: sort
@@ -10556,12 +10586,40 @@ components:
         - type: object
           required:
             - group_uuid
+            - members
           properties:
             group_uuid:
               description: The UUID of the group.
               type: string
               format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
+            members:
+              description: 'Group Members.'
+              type: array
+              items:
+                type: object
+                properties:
+                  group_admin:
+                    description: 'Indicates the user is an administrator of the group.'
+                    type: boolean
+                    example: true
+                  joined_date:
+                    description: 'The timestamp (in seconds) of when the user joined the group.'
+                    type: integer
+                    example: 1510941596
+                  user:
+                    description: 'The user who is member of the group.'
+                    type: object
+                    properties:
+                      display_name:
+                        description: 'The display name of the user.'
+                        type: string
+                        example: Dorothy Whitehead
+                      user_avatar:
+                        description: "The user's image."
+                        type: string
+                        format: url
+                        example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
     group-membership-common-schema:
       type: object
       properties:
