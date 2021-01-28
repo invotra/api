@@ -10558,7 +10558,6 @@ components:
               type: integer
               example: 1510941596
             memberships:
-              description: 'Group membership details.'
               type: object
               properties:
                 admin_count:
@@ -10584,7 +10583,6 @@ components:
                         type: integer
                         example: 1510941596
                       user:
-                        description: 'The user who is member of the group.'
                         type: object
                         properties:
                           display_name:
