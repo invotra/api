@@ -1411,7 +1411,7 @@ paths:
                 - Secret
         - description: 'Filter groups with the membership types. Multiple values may be supplied.'
           in: query
-          name: membership_type
+          name: members_type
           schema:
             type: array
             items:
