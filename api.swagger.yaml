@@ -1292,7 +1292,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/group-schema'
+              $ref: '#/components/schemas/group-schema-create'
         required: true
       security:
         - SessionCookieHeader: []
@@ -1485,7 +1485,7 @@ paths:
                     description: The results set.
                     type: array
                     items:
-                      $ref: '#/components/schemas/group-search-schema'
+                      $ref: '#/components/schemas/group-schema'
       description: 'Search for groups. Returns group snippets. An empty array is returned if no groups are found.'
       security:
         - SessionCookieHeader: []
@@ -1606,7 +1606,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/group-schema'
+              $ref: '#/components/schemas/group-schema-update'
         required: true
       security:
         - SessionCookieHeader: []
@@ -10520,34 +10520,140 @@ components:
             - inactive
             - pending
     group-schema:
-      required:
-        - title
-        - description
-        - group_category
-        - group_category_uuid
-        - privacy_setting
-        - members_count
-        - likes
-        - author_uuid
+      allOf:
+        - $ref: '#/components/schemas/group-schema-common'
+        - type: object
+          properties:
+            group_uuid:
+              description: The UUID of the group.
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            group_category:
+              description: The category for the group.
+              type: string
+              example: Security
+            members_count:
+              description: A count of members in group
+              type: integer
+              example: 150
+            posts_count:
+              description: A count of posts in the group
+              type: integer
+              example: 180
+            likes:
+              description: Total likes for all content in the group.
+              type: integer
+              example: 200
+            timestamp_created:
+              description: 'The timestamp (in seconds) of when the group was created'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'The timestamp (in seconds) of when the group was updated'
+              type: integer
+              example: 1510941596
+            timestamp_last_post:
+              description: 'The timestamp (in seconds) of the last post in the group'
+              type: integer
+              example: 1510941596
+            memberships:
+              description: 'Group membership details.'
+              type: object
+              properties:
+                admin_count:
+                  description: 'The total count of administrators of this group.'
+                  type: integer
+                  example: 6
+                member_count:
+                  description: 'The total count of members in this group.'
+                  type: integer
+                  example: 180
+                members:
+                  description: 'Group members (limited to 25, administrators will be listed first).'
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      group_admin:
+                        description: 'Indicates the user is an administrator of the group.'
+                        type: boolean
+                        example: true
+                      joined_date:
+                        description: 'The timestamp (in seconds) of when the user joined the group.'
+                        type: integer
+                        example: 1510941596
+                      user:
+                        description: 'The user who is member of the group.'
+                        type: object
+                        properties:
+                          display_name:
+                            description: 'The display name of the user.'
+                            type: string
+                            example: Dorothy Whitehead
+                          user_avatar:
+                            description: "The user's image."
+                            type: string
+                            format: url
+                            example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+                        required:
+                          - display_name
+                          - user_avatar
+                    required:
+                      - group_admin
+                      - joined_date
+                      - user
+              required:
+                - admin_count
+                - member_count
+                - members
+          required:
+            - group_uuid
+            - title
+            - group_category_uuid
+            - group_category
+            - description
+            - privacy_setting
+            - author_uuid
+            - members_count
+            - posts_count
+            - likes
+            - timestamp_created
+            - timestamp_updated
+            - timestamp_last_post
+            - memberships
+    group-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/group-schema-update'
+        - type: object
+          properties:
+            author_uuid:
+              description: The uuid of the author (Will use the authenticated user if not supplied).
+          required:
+            - title
+            - group_category_uuid
+            - description
+            - privacy_setting
+    group-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/group-schema-common'
+        - type: object
+    group-schema-common:
+      type: object
       properties:
         title:
           description: This is the name of the group
           type: string
           example: Security awareness
-        description:
-          description: This is a description of the group.
-          type: string
-          example: A group to discuss security awareness.
-        group_category:
-          description: The category for the group.
-          type: string
-          example: Security
-          readOnly: true
         group_category_uuid:
           description: The uuid of the category
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
+        description:
+          description: This is a description of the group.
+          type: string
+          example: A group to discuss security awareness.
         privacy_setting:
           description: This is the privacy setting for the group.
           type: string
@@ -10555,75 +10661,15 @@ components:
             - Public
             - Private
             - Secret
-        members_count:
-          description: A count of members in group
-          type: integer
-          example: 150
-          readOnly: true
-        likes:
-          description: Total likes for all content in the group.
-          type: integer
-          example: 200
-          readOnly: true
         author_uuid:
           description: The uuid of the author
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
-          readOnly: true
         external_id:
           description: This is used to store the group's external reference ID.
           type: string
           example: ABC123
-        timestamp_created:
-          description: 'The timestamp (in seconds) of when the group was created'
-          type: integer
-          example: 1510941596
-        timestamp_updated:
-          description: 'The timestamp (in seconds) of when the group was updated'
-          type: integer
-          example: 1510941596
-      type: object
-    group-search-schema:
-      allOf:
-        - $ref: '#/components/schemas/group-schema'
-        - type: object
-          required:
-            - group_uuid
-            - members
-          properties:
-            group_uuid:
-              description: The UUID of the group.
-              type: string
-              format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-            members:
-              description: 'Group Members.'
-              type: array
-              items:
-                type: object
-                properties:
-                  group_admin:
-                    description: 'Indicates the user is an administrator of the group.'
-                    type: boolean
-                    example: true
-                  joined_date:
-                    description: 'The timestamp (in seconds) of when the user joined the group.'
-                    type: integer
-                    example: 1510941596
-                  user:
-                    description: 'The user who is member of the group.'
-                    type: object
-                    properties:
-                      display_name:
-                        description: 'The display name of the user.'
-                        type: string
-                        example: Dorothy Whitehead
-                      user_avatar:
-                        description: "The user's image."
-                        type: string
-                        format: url
-                        example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
     group-membership-common-schema:
       type: object
       properties:
