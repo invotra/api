@@ -1374,25 +1374,25 @@ paths:
             items:
               type: string
               format: uuid
-        - description: 'Filter groups that where created starting (greater than or equal) from the timestamp (in seconds).'
+        - description: 'Filter groups that where created after (greater than or equal) the timestamp (in seconds).'
           in: query
           name: created_start_timestamp
           schema:
             type: integer
             example: 1563357496
-        - description: 'Filter groups that where created ending (less than or equal) up to the timestamp (in seconds).'
+        - description: 'Filter groups that where created before (less than or equal) the timestamp (in seconds).'
           in: query
           name: created_end_timestamp
           schema:
             type: integer
             example: 1563357496
-        - description: 'Filter groups with last posts starting (greater than or equal) from the timestamp (in seconds).'
+        - description: 'Filter groups with last posts after (greater than or equal) the timestamp (in seconds).'
           in: query
           name: last_post_start_timestamp
           schema:
             type: integer
             example: 1563357496
-        - description: 'Filter groups with last posts ending (less than or equal) up to the timestamp (in seconds).'
+        - description: 'Filter groups with last posts before (less than or equal) the timestamp (in seconds).'
           in: query
           name: last_post_end_timestamp
           schema:
@@ -1409,29 +1409,32 @@ paths:
                 - Public
                 - Private
                 - Secret
-        - description: 'Filter the members property array by member type.'
+        - description: 'Filter groups with the membership types. Multiple values may be supplied.'
           in: query
-          name: members_type
+          name: membership_type
           schema:
-            type: string
-            enum:
+            type: array
+            items:
+              type: string
+              enum:
               - Administrators
               - Members
-        - description: 'group_name_changes_timestamp.'
+              - None
+        - description: 'Filter groups with name changes after (greater than or equal) the timestamp (in seconds).'
           in: query
-          name: group_name_changes_timestamp
+          name: name_change_start_timestamp
           schema:
             type: integer
             example: 1563357496
-        - description: 'new_admins_timestamp.'
+        - description: 'Filter groups that have had new administrators after (greater than or equal) the timestamp (in seconds).'
           in: query
-          name: new_admins_timestamp
+          name: new_admin_start_timestamp
           schema:
             type: integer
             example: 1563357496
-        - description: 'group_status_changes_timestamp.'
+        - description: 'Filter groups that have had privacy setting changes after (greater than or equal) the timestamp (in seconds).'
           in: query
-          name: group_status_changes_timestamp
+          name: privacy_setting_change_start_timestamp
           schema:
             type: integer
             example: 1563357496
@@ -1444,11 +1447,12 @@ paths:
               - group_name
               - likes
               - members_count
-              - members_name
-              - post_count_last_7_days
+              - members_type
+              - post_count
               - privacy_setting
               - relevance
               - timestamp_created
+              - timestamp_last_admin
               - timestamp_last_post
             default: relevance
         - description: Sort order.
