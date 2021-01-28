@@ -10635,7 +10635,6 @@ components:
     group-schema-update:
       allOf:
         - $ref: '#/components/schemas/group-schema-common'
-        - type: object
     group-schema-common:
       type: object
       properties:
