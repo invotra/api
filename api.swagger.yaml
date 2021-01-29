@@ -10805,14 +10805,12 @@ components:
     post-schema-create:
       allOf:
         - $ref: '#/components/schemas/post-schema-update'
-        - type: object
-          required:
-            - group_uuid
-            - author_uuid
-            - source
+        - required:
+          - group_uuid
+          - author_uuid
+          - source
     post-schema-update:
-      allOf:
-        - $ref: '#/components/schemas/post-schema-common'
+      $ref: '#/components/schemas/post-schema-common'
     post-schema-common:
       type: object
       properties:
