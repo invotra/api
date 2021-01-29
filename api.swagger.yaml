@@ -2071,7 +2071,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/post-schema-base'
+              $ref: '#/components/schemas/post-schema-update'
         required: true
       security:
         - SessionCookieHeader: []
@@ -11249,52 +11249,25 @@ components:
           example: 3
     post-schema:
       allOf:
-        - $ref: '#/components/schemas/post-schema-base'
+        - $ref: '#/components/schemas/post-schema-common'
         - type: object
-          required:
-            - uuid
-            - description
-            - author_uuid
-            - likes_count
-            - comment_count
-            - timestamp
           properties:
             uuid:
               type: string
               format: uuid
               description: This is the Invotra UUID of the post.
               example: 01234567-89ab-cdef-1234-56789abcdef0
-            parent_uuid:
-              type: string
-              format: uuid
-              description: This is the Invotra UUID of the parent of the post.
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-            thread_uuid:
-              type: string
-              format: uuid
-              description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-            group_uuid:
-              description: This is the Invotra UUID of the group that the post belongs to.
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-              type: string
-              format: uuid
             description:
               description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
               type: string
               example: 'Hey <a href="/users/username" data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John Smith</a>, check out the latest <a href="/apps/groups/chat?hashtag=security">#security</a> news in this group!'
-            pin:
-              description: Whether or not this post is pinned.
-              type: boolean
-            author_uuid:
-              description: The uuid of the author
-              type: string
-              format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
             display_name:
               description: The display name of the author
               type: string
               example: Dorothy Whitehead
+            pin:
+              description: Whether or not this post is pinned.
+              type: boolean
             likes_count:
               description: Count of likes on the post
               type: integer
@@ -11319,40 +11292,82 @@ components:
               description: A flag to determine if the current user has liked this post
               type: boolean
               example: true
+            post_attachments:
+              description: 'List of attachments to the post.'
+              type: array
+              items:
+                $ref: '#/components/schemas/file-schema'
+          required:
+            - uuid
+            - description
+            - display_name
+            - pin
+            - likes_count
+            - comment_count
+            - attachments_count
+            - timestamp
+            - depth
+            - current_user_liked
+            - group_uuid
+            - author_uuid
+            - thread_uuid
+            - source
     post-schema-create:
       allOf:
-        - $ref: '#/components/schemas/post-schema-base'
+        - $ref: '#/components/schemas/post-schema-update'
         - type: object
           properties:
-            parent_uuid:
-              type: string
-              format: uuid
-              description: This is the Invotra UUID of the parent of the post.
-              example: 01234567-89ab-cdef-1234-56789abcdef0
             author_uuid:
               description: The uuid of the author
-              type: string
-              format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-            group_uuid:
-              description: This is the Invotra UUID of the group that the post belongs to.
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-              type: string
-              format: uuid
-      required:
-        - description
-        - group_uuid
-        - author_uuid
-    post-schema-base:
+          required:
+            - group_uuid
+            - author_uuid
+            - source
+    post-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/post-schema-common'
+        - type: object
+          properties:
+            post_attachments:
+              description: 'The attached files to the post.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                required:
+                  - uuid
+    post-schema-common:
+      type: object
       properties:
+        group_uuid:
+          description: This is the Invotra UUID of the group that the post belongs to.
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          type: string
+          format: uuid
+        author_uuid:
+          description: The uuid of the author
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        parent_uuid:
+          type: string
+          format: uuid
+          description: This is the Invotra UUID of the parent of the post.
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        thread_uuid:
+          type: string
+          format: uuid
+          description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         source:
           description: The unrendered main body for the post. This value should be used only for editing and is *NOT* safe to display as-is in any HTML context.
           type: string
           example: 'Hey [@username], check out the latest #security news in this group!'
-        external_id:
-          description: This is used to store the post's external reference id
-          type: string
-          example: ABC123
         category:
           description: The category of a post
           type: string
@@ -11367,18 +11382,17 @@ components:
             - Problem / Risk
             - Agreed
             - Decision
-        featured_image:
-          description: The featured image for this post
-          type: object
-          allOf:
-            - $ref: '#/components/schemas/file-schema'
+        external_id:
+          description: This is used to store the post's external reference id
+          type: string
+          example: ABC123
         attachments:
-          description: A list of attachments for the post
+          description: A list of Invotra file UUID attachments for the post
+          deprecated: true
           type: array
           items:
-            allOf:
-              - $ref: '#/components/schemas/file-schema'
-      type: object
+            type: string
+            format: uuid
     post-report-schema-create:
       properties:
         reason:
