@@ -3,6 +3,6 @@
 
 
 "@openapitools/openapi-generator-cli@^1.0.10-4.2.3":
-  version "1.0.10-4.2.3"
-  resolved "https://registry.yarnpkg.com/@openapitools/openapi-generator-cli/-/openapi-generator-cli-1.0.10-4.2.3.tgz#4b934362efb9262fc236d4fb81b381e29bdb8245"
-  integrity sha512-Xo4rbz3aPiObpVS8oBUR0pHWYU5WBG/bmsJg16yCG7/vpGE8o1YsROTWMFfaMepWfxESrLP5XOqlBkZqbre7dw==
+  version "1.0.10-4.3.1"
+  resolved "https://registry.yarnpkg.com/@openapitools/openapi-generator-cli/-/openapi-generator-cli-1.0.10-4.3.1.tgz#e5d80a021cd70e582abb3205a74f40b6f1be6f23"
+  integrity sha512-Fdln3BAwKbIXKdO00YbRWPy3sPK2fWwSyXG+oDLEAHN/9AUNOsxoXP9O2UP5aNkQtep66VJOZ6zHVsbbS9jJOQ==
