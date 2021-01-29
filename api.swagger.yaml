@@ -10806,6 +10806,9 @@ components:
       allOf:
         - $ref: '#/components/schemas/post-schema-update'
         - type: object
+          properties:
+            author_uuid:
+              description: The uuid of the author
           required:
             - group_uuid
             - author_uuid
