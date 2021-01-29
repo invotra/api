@@ -10787,6 +10787,11 @@ components:
               description: A flag to determine if the current user has liked this post
               type: boolean
               example: true
+            post_attachments:
+              description: 'List of attachments to the post.'
+              type: array
+              items:
+                $ref: '#/components/schemas/file-schema'
           required:
             - uuid
             - description
@@ -10816,6 +10821,21 @@ components:
     post-schema-update:
       allOf:
         - $ref: '#/components/schemas/post-schema-common'
+        - type: object
+          properties:
+            post_attachments:
+              description: 'The attached files to the post.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                required:
+                  - uuid
     post-schema-common:
       type: object
       properties:
