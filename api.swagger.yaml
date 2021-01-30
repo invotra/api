@@ -9463,6 +9463,41 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/feeds:read ]
+  ## To be released
+  /test:
+    get:
+      tags:
+        - to be released
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+        #- in: query
+        #  name: required_parameters
+        #  required: true
+        #  description: 'Required parameters for list endpoints: offset, limit. Where applicable: created/updated date (from/to) - 4 parameters total, author, published state, site section' 
+        #  schema:
+        #    type: string
+        #    default: TBD
+      responses:
+        '200':
+          description: '2xx, 4xx, 5xx messages TBD'
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                  - results
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/feed-schema'
 components:
   securitySchemes:
     APIKeyHeader:
