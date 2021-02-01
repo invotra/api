@@ -10746,6 +10746,21 @@ components:
       allOf:
         - $ref: '#/components/schemas/post-schema-common'
         - type: object
+          required:
+            - uuid
+            - description
+            - display_name
+            - pin
+            - likes_count
+            - comment_count
+            - attachments_count
+            - timestamp
+            - depth
+            - current_user_liked
+            - group_uuid
+            - author_uuid
+            - thread_uuid
+            - source
           properties:
             uuid:
               type: string
@@ -10800,21 +10815,6 @@ components:
               type: string
             source:
               type: string
-          required:
-            - uuid
-            - description
-            - display_name
-            - pin
-            - likes_count
-            - comment_count
-            - attachments_count
-            - timestamp
-            - depth
-            - current_user_liked
-            - group_uuid
-            - author_uuid
-            - thread_uuid
-            - source
     post-schema-create:
       allOf:
         - $ref: '#/components/schemas/post-schema-update'
