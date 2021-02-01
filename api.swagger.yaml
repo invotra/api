@@ -11251,6 +11251,21 @@ components:
       allOf:
         - $ref: '#/components/schemas/post-schema-common'
         - type: object
+          required:
+            - uuid
+            - description
+            - display_name
+            - pin
+            - likes_count
+            - comment_count
+            - attachments_count
+            - timestamp
+            - depth
+            - current_user_liked
+            - group_uuid
+            - author_uuid
+            - thread_uuid
+            - source
           properties:
             uuid:
               type: string
@@ -11297,32 +11312,29 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/file-schema'
-          required:
-            - uuid
-            - description
-            - display_name
-            - pin
-            - likes_count
-            - comment_count
-            - attachments_count
-            - timestamp
-            - depth
-            - current_user_liked
-            - group_uuid
-            - author_uuid
-            - thread_uuid
-            - source
+            group_uuid:
+              type: string
+            author_uuid:
+              type: string
+            thread_uuid:
+              type: string
+            source:
+              type: string
     post-schema-create:
       allOf:
         - $ref: '#/components/schemas/post-schema-update'
         - type: object
-          properties:
-            author_uuid:
-              description: The uuid of the author
           required:
             - group_uuid
             - author_uuid
             - source
+          properties:
+            group_uuid:
+              type: string
+            author_uuid:
+              type: string
+            source:
+              type: string
     post-schema-update:
       allOf:
         - $ref: '#/components/schemas/post-schema-common'
