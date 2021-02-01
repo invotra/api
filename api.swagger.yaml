@@ -10792,6 +10792,14 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/file-schema'
+            group_uuid:
+              type: string
+            author_uuid:
+              type: string
+            thread_uuid:
+              type: string
+            source:
+              type: string
           required:
             - uuid
             - description
@@ -10811,13 +10819,17 @@ components:
       allOf:
         - $ref: '#/components/schemas/post-schema-update'
         - type: object
-          properties:
-            author_uuid:
-              description: The uuid of the author
           required:
             - group_uuid
             - author_uuid
             - source
+          properties:
+            group_uuid:
+              type: string
+            author_uuid:
+              type: string
+            source:
+              type: string
     post-schema-update:
       allOf:
         - $ref: '#/components/schemas/post-schema-common'
