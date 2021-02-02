@@ -1355,11 +1355,14 @@ paths:
           name: fulltext_search
           schema:
             type: string
-        - description: Filter by UUID of a category.
+        - description: 'Filter by UUID of a category. Multiple values may be supplied.'
           in: query
           name: category
           schema:
-            type: string
+            type: array
+            items:
+              type: string
+              format: uuid
         - description: Filter by groups the current user is a member of.
           in: query
           name: my_groups
