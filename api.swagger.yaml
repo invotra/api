@@ -10526,7 +10526,34 @@ components:
       allOf:
         - $ref: '#/components/schemas/group-schema-common'
         - type: object
+          required:
+            - group_uuid
+            - title
+            - group_category_uuid
+            - group_category
+            - description
+            - privacy_setting
+            - author_uuid
+            - members_count
+            - posts_count
+            - likes
+            - timestamp_created
+            - timestamp_updated
+            - timestamp_last_post
+            - memberships
           properties:
+            title:
+              type: string
+            group_category_uuid:
+              type: string
+            description:
+              type: string
+            privacy_setting:
+              type: string
+            author_uuid:
+              type: string
+            external_id:
+              type: string
             group_uuid:
               description: The UUID of the group.
               type: string
@@ -10562,6 +10589,10 @@ components:
               example: 1510941596
             memberships:
               type: object
+              required:
+                - admin_count
+                - member_count
+                - members
               properties:
                 admin_count:
                   description: 'The total count of administrators of this group.'
@@ -10576,6 +10607,10 @@ components:
                   type: array
                   items:
                     type: object
+                    required:
+                      - group_admin
+                      - joined_date
+                      - user
                     properties:
                       group_admin:
                         description: 'Indicates the user is an administrator of the group.'
@@ -10587,6 +10622,9 @@ components:
                         example: 1510941596
                       user:
                         type: object
+                        required:
+                          - display_name
+                          - user_avatar
                         properties:
                           display_name:
                             description: 'The display name of the user.'
@@ -10597,44 +10635,26 @@ components:
                             type: string
                             format: url
                             example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
-                        required:
-                          - display_name
-                          - user_avatar
-                    required:
-                      - group_admin
-                      - joined_date
-                      - user
-              required:
-                - admin_count
-                - member_count
-                - members
-          required:
-            - group_uuid
-            - title
-            - group_category_uuid
-            - group_category
-            - description
-            - privacy_setting
-            - author_uuid
-            - members_count
-            - posts_count
-            - likes
-            - timestamp_created
-            - timestamp_updated
-            - timestamp_last_post
-            - memberships
     group-schema-create:
       allOf:
         - $ref: '#/components/schemas/group-schema-update'
         - type: object
-          properties:
-            author_uuid:
-              description: The uuid of the author (Will use the authenticated user if not supplied).
           required:
             - title
             - group_category_uuid
             - description
             - privacy_setting
+          properties:
+            title:
+              type: string
+            group_category_uuid:
+              type: string
+            description:
+              type: string
+            privacy_setting:
+              type: string
+            author_uuid:
+              description: The uuid of the author (Will use the authenticated user if not supplied).
     group-schema-update:
       allOf:
         - $ref: '#/components/schemas/group-schema-common'
