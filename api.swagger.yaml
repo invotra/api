@@ -10654,6 +10654,7 @@ components:
             privacy_setting:
               type: string
             author_uuid:
+              type: string
               description: The uuid of the author (Will use the authenticated user if not supplied).
     group-schema-update:
       allOf:
