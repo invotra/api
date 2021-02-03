@@ -10539,7 +10539,6 @@ components:
             - likes
             - timestamp_created
             - timestamp_updated
-            - timestamp_last_post
             - memberships
           properties:
             title:
