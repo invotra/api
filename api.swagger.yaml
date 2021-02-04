@@ -1412,17 +1412,6 @@ paths:
                 - Public
                 - Private
                 - Secret
-        - description: 'Filter groups with the membership types. Multiple values may be supplied.'
-          in: query
-          name: members_type
-          schema:
-            type: array
-            items:
-              type: string
-              enum:
-              - Administrators
-              - Members
-              - None
         - description: 'Filter groups with name changes after (greater than or equal) the timestamp (in seconds).'
           in: query
           name: name_change_start_timestamp
@@ -1457,7 +1446,7 @@ paths:
               - timestamp_created
               - timestamp_last_admin
               - timestamp_last_post
-            default: relevance
+            default: timestamp_created
         - description: Sort order.
           in: query
           name: order
