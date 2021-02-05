@@ -9253,6 +9253,11 @@ paths:
           in: query
           schema:
             type: string
+        - name: autocomplete
+          description: 'Autocomplete matches on name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - description: 'Filter by external ID.'
           in: query
           name: external_id
