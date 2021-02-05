@@ -9254,7 +9254,7 @@ paths:
           schema:
             type: string
         - name: autocomplete
-          description: 'Autocomplete matches on name, per letter, from the start of the word.'
+          description: 'Autocomplete on name, matches per letter, from the start of the word.'
           in: query
           schema:
             type: string
