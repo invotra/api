@@ -82,6 +82,25 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/drupal_info ]
+  /file_types:
+    get:
+      tags:
+        - configuration
+      description: 'List the currently configured file types and extentions.'
+      responses:
+        '200':
+          description: 'List of file types and extentions.'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/file-type-configuration-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/drupal_info ]
   /entities/path-lookup:
     get:
       tags:
@@ -5802,30 +5821,106 @@ paths:
           in: query
           schema:
             type: string
-          example: 'wallpaper.jpeg'
+            example: 'wallpaper.jpeg'
         - name: type
           description: 'Filter by file type.'
           in: query
           schema:
-            type: string
-            enum:
-              - image
-              - document
-              - audio
-              - video
-          example: 'image'
+            type: array
+            items:
+              type: string
+              enum:
+                - image
+                - document
+                - audio
+                - video
         - name: filemime
           description: 'Filter by file MIME type.'
           in: query
           schema:
-            type: string
-          example: 'image/jpeg'
+            type: array
+            items:
+              type: string
+              example: 'image/jpeg'
+        - name: site_section_uuid
+          description: 'Filter on Invotra UUID of the site section.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          description: 'When filtering on site section also include all descendant site sections.'
+          in: query
+          schema:
+            type: boolean
+            example: true
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - description: 'Filter by external ID.'
           in: query
           name: external_id
           schema:
+            type: array
+            items:
+              type: string
+              example: 'ABC123'
+        - name: timestamp_created_start
+          description: 'Filter the results to only include messages created from (greater than or equal to) the specified timestamp (in seconds).'
+          in: query
+          schema:
+            type: integer
+            example: 1563357496
+        - name: timestamp_created_end
+          description: 'Filter the results to only include messages created up to (less than or equal to) the specified timestamp (in seconds).'
+          in: query
+          schema:
+            type: integer
+            example: 1563357496
+        - name: timestamp_updated_start
+          description: 'Filter the results to only include messages updated from (greater than or equal to) the specified timestamp (in seconds).'
+          in: query
+          schema:
+            type: integer
+            example: 1563357496
+        - name: timestamp_updated_end
+          description: 'Filter the results to only include messages updated up to (less than or equal to) the specified timestamp (in seconds).'
+          in: query
+          schema:
+            type: integer
+            example: 1563357496
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
             type: string
-          example: 'ABC123'
+            enum:
+              - author
+              - filemime
+              - filename
+              - type
+              - site_section
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -17126,9 +17221,9 @@ components:
       required:
         - uuid
         - filename
+        - author
         - file_download
         - type
-        - filemime
       properties:
         uuid:
           description: The UUID of the entity.
@@ -17139,6 +17234,26 @@ components:
           description: This is the filename
           type: string
           example: wallpaper.jpeg
+        author:
+          description: 'The author of this file.'
+          allOf:
+            - $ref: '#/components/schemas/user-trimmed-schema'
+        site_section:
+          description: 'The site section of this file.'
+          type: object
+          required:
+            - uuid
+            - name
+          properties:
+            uuid:
+              description: 'Invotra UUID of the site section.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            name:
+              description: 'The name of the site section.'
+              type: string
+              example: 'Operations'
         file_download:
           description: The location of the file
           type: string
@@ -17188,12 +17303,38 @@ components:
           description: The width of the image in pixels. Returned if and only if the type is an image.
           type: integer
           example: 200
+        timestamp_created:
+          description: 'This is the timestamp (in seconds) of when the file was created.'
+          type: integer
+          example: 1510941596
+        timestamp_updated:
+          description: 'This is the timestamp (in seconds) of when the file was last updated.'
+          type: integer
+          example: 1510941696
     file-schema-update:
       properties:
         filename:
           description: This is the filename. If using multipart/form-data this field may be omitted in favour of the 'filename' directive of the subpart Content-Disposition header.
           type: string
           example: wallpaper.jpeg
+        author:
+          description: 'The author of this file.'
+          type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the user.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        site_section:
+          description: 'The site section of this file.'
+          type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the site section.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         type:
           description: The type of file.
           type: string
@@ -17217,11 +17358,40 @@ components:
     file-schema-create:
       allOf:
         - $ref: '#/components/schemas/file-schema-update'
+        - type: object
+          required:
+            - file
+            - filename
+            - type
+          properties:
+            file:
+              type: string
+            filename:
+              type: string
+            type:
+              type: string
+            author:
+              description: 'The author of this file. (Will use the authenticated user if not supplied.'
+    file-type-configuration-schema:
+      type: object
       required:
-        - file
-        - filename
-        - alt_text
-        - type
+        - name
+        - extentions
+      properties:
+        name:
+          description: 'The name of the file type.'
+          type: string
+          enum:
+            - image
+            - document
+            - audio
+            - video
+        extentions:
+          description: 'The file extentions permitted within the file type.'
+          type: array
+          items:
+            type: string
+            example: '.jpg'
     job-role-schema:
       allOf:
         - type: object
