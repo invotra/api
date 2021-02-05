@@ -5136,6 +5136,70 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/files:write ]
+  '/files/list':
+    get:
+      tags:
+        - 'files'
+      description: 'Search for files. An empty array is returned if no files are found.'
+      parameters:
+        - name: filename
+          description: 'Filter by filename. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+          example: 'wallpaper.jpeg'
+        - name: type
+          description: 'Filter by file type.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - image
+              - document
+              - audio
+              - video
+          example: 'image'
+        - name: filemime
+          description: 'Filter by file MIME type.'
+          in: query
+          schema:
+            type: string
+          example: 'image/jpeg'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+          example: 'ABC123'
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of files matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                  - results
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/file-schema'
+        '403':
+          description: 'User is not authorized to list files.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/files:read ]
   '/files/{file_id}':
     parameters:
       - description: The Invotra UUID of the file.
@@ -5187,6 +5251,23 @@ paths:
           description: |
             The file was not updated due to a Drupal validation failure or a
             JSON schema validation failure.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/files:write ]
+    delete:
+      tags:
+        - files
+      description: 'Remove a file.'
+      responses:
+        '200':
+          description: 'The file was removed successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'The user does not have permission to remove this file.'
+        '404':
+          description: 'The UUID does not correspond to an existing file.'
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
