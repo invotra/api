@@ -2526,6 +2526,77 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+  '/content/list':
+    get:
+      tags:
+        - 'content'
+      description: 'Search for all content types. An empty array is returned if no content was found. Multiple values may be supplied.'
+      parameters:
+        - name: content_type
+          description: 'Filter on the type of content.'
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/content-type-enum'
+        - name: custom_content_type
+          description: 'Filter by the custom content type machine name. Use in conjunction with content_type=custom_content. Multiple values may be supplied.'
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'guideline'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of content matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                  - results
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/content-list-schema'
+        '403':
+          description: 'User is not authorized to list content.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/content:read ]
   '/blogs':
     post:
       tags:
@@ -11826,7 +11897,46 @@ components:
           description: Colour of the category. Any CSS colour allowed.
           type: string
           example: '#FFFFFF'
+    content-list-schema:
       type: object
+      required:
+        - uuid
+      properties:
+        uuid:
+          description: 'Invotra UUID of the content.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+    content-type-enum:
+      type: string
+      enum:
+        - blogs
+        - custom_content
+        - events
+        - forums
+        - galleries
+        - group_documents
+        - group_polls
+        - groups
+        - ideas
+        - lists
+        - manual_pages
+        - manuals
+        - messages
+        - multi_media
+        - news
+        - pages
+        - policies
+        - polls
+        - posts
+        - procedures
+        - processes
+        - promotions
+        - queries
+        - questions
+        - standard
+        - support_tickets
+        - webforms
     blog-schema:
       allOf:
         - $ref: '#/components/schemas/blog-schema-common'
