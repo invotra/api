@@ -12287,12 +12287,9 @@ components:
         - policies
         - polls
         - posts
-        - procedures
-        - processes
         - promotions
         - queries
         - questions
-        - standard
         - support_tickets
         - webforms
     blog-schema:
