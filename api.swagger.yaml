@@ -718,6 +718,12 @@ paths:
             type: string
             format: uuid
           description: UUID of the group to filter by.
+        - name: group_admins_only
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: 'Filter on users that are group administrators only.'
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
@@ -727,7 +733,45 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/user-search-schema'
+                  type: object
+                  properties:
+                    uuid:
+                      description: The UUID of the user
+                      type: string
+                      format: uuid
+                      example: 01234567-89ab-cdef-1234-56789abcdef0
+                    user_uuid:
+                      description: The UUID of the user
+                      type: string
+                      format: uuid
+                      example: 01234567-89ab-cdef-1234-56789abcdef0
+                      deprecated: true
+                    username:
+                      description: The user's username
+                      type: string
+                      example: Dorothy Whitehead
+                    firstname:
+                      description: The user's first name
+                      type: string
+                      example: Dorothy
+                    surname:
+                      description: The user's surname
+                      type: string
+                      example: Whitehead
+                    user_avatar:
+                      description: The user's image
+                      type: string
+                      example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+                    email:
+                      description: Users email address
+                      format: email
+                      type: string
+                      example: dorothy.whitehead@akagera.com
+                  required:
+                    - uuid
+                    - username
+                    - user_avatar
+                    - email
         '404':
           description: A group UUID was supplied but no existing group matches.
         '403':
