@@ -1445,6 +1445,12 @@ paths:
           schema:
             type: integer
             example: 1563357496
+        - description: 'The timestamp (in seconds) to count posts from (greater than or equal) for the "post_range_count" property.'
+          in: query
+          name: post_range_count_start_timestamp
+          schema:
+            type: integer
+            example: 1563357496
         - description: 'Filter groups on the privacy setting. Multiple values may be supplied.'
           in: query
           name: privacy_setting
@@ -10569,6 +10575,7 @@ components:
             - author_uuid
             - members_count
             - posts_count
+            - posts_range_count
             - likes
             - timestamp_created
             - timestamp_updated
@@ -10603,6 +10610,10 @@ components:
               description: A count of posts in the group
               type: integer
               example: 180
+            posts_range_count:
+              description: 'A count of posts in the group made since the "post_range_count_start_timestamp" parameter. If the parameter is not supplied the count will be all posts in the group.'
+              type: integer
+              example: 90
             likes:
               description: Total likes for all content in the group.
               type: integer
