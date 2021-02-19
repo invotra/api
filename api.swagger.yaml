@@ -188,6 +188,33 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /preview_mode:
+    post:
+      tags:
+        - preview mode
+      description: "Enable preview mode for the requesting user's session."
+      responses:
+        201:
+          description: "Preview mode for the user's session has been enabled."
+        403:
+          description: "User is not authorized to enable preview mode."
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/preview_mode:write ]
+    delete:
+      tags:
+        - preview mode
+      description: "Disable preview for the requesting user's session."
+      responses:
+        200:
+          description: "Preview mode for the user's session has been disabled."
+        404:
+          description: "User does not have preview mode enabled."
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/preview_mode:write ]
   /logs:
     post:
       tags:
@@ -10157,6 +10184,11 @@ components:
                 $ref: '#/components/schemas/region-list-schema'
             read_only:
               description: 'Users who are flagged as read-only are not able to create, update, or delete content.'
+              type: boolean
+              example: false
+              readOnly: true
+            preview_mode_enabled:
+              description: "Preview mode is enabled for the requesting user's session. Note that preview mode is associated with the user’s session not the user themselves. Users can be logged in on multiple devices, some with preview mode enabled, and others disabled."
               type: boolean
               example: false
               readOnly: true
