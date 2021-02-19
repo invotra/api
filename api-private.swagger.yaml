@@ -85,8 +85,8 @@ paths:
         description: The Invotra UUID of the user.
         required: true
         schema:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
       responses:
         200:
           description: All the user's sessions were destroyed, or the user had no
@@ -109,8 +109,8 @@ paths:
         description: The Invotra UUID of the notification recipient user.
         required: true
         schema:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
       responses:
         200:
           description: A list of the user's notifications, or an empty array if there
@@ -135,8 +135,8 @@ paths:
         description: The Invotra UUID of the notification recipient user.
         required: true
         schema:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
       requestBody:
         content:
           application/json:
@@ -173,8 +173,8 @@ paths:
         description: The Invotra UUID of the notification recipient user.
         required: true
         schema:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
       responses:
         200:
           description: The notifications were deleted, or the user had no notifications.
@@ -196,15 +196,15 @@ paths:
         description: The Invotra UUID of the user.
         required: true
         schema:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
       - name: notification_id
         in: path
         description: The UUID of the notification message.
         required: true
         schema:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
       responses:
         200:
           description: The notification was deleted.
@@ -226,8 +226,8 @@ paths:
         description: The Invotra UUID of the feed owner.
         required: true
         schema:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
       responses:
         200:
           description: The feed update status.
@@ -248,8 +248,8 @@ paths:
         description: The Invotra UUID of the feed owner.
         required: true
         schema:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
       requestBody:
         content:
           application/json:
@@ -278,8 +278,8 @@ paths:
         description: The UUID of the node to export.
         required: true
         schema:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
       requestBody:
         content:
           application/json:
@@ -312,8 +312,8 @@ components:
       type: object
       properties:
         user_id:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           description: The Invotra UUID of the user
           example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
         user_internal_id:
@@ -372,13 +372,13 @@ components:
         type: object
         properties:
           user_id:
-            pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             type: string
+            format: uuid
             description: The UUID of the user.
             example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
           notification_id:
-            pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
             type: string
+            format: uuid
             description: The UUID of the notification message.
             example: 52000da2-8513-4472-8395-4a080f662b48
     notification-list-schema:
@@ -396,8 +396,8 @@ components:
             the most recent item was added.
           example: false
         item_id:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           description: The UUID of the most recent item in the feed.
           example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
         timestamp:
@@ -414,13 +414,13 @@ components:
       type: object
       properties:
         job_uuid:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           description: The UUID of the PDF export job.
           example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
         user_uuid:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           description: The UUID of the user submitting the PDF export request.
           example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
         latest:
@@ -445,8 +445,8 @@ components:
       type: object
       properties:
         uuid:
-          pattern: ^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$
           type: string
+          format: uuid
           description: The UUID of the PDF export job.
           example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
   securitySchemes:
