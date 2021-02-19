@@ -15,6 +15,8 @@ tags:
   description: Feed update status
 - name: pdf export
   description: PDF export
+- name: preview mode
+  description: Preview Mode
 paths:
   /sessions/{session_hash}:
     put:
@@ -303,6 +305,58 @@ paths:
           description: A malformed UUID was supplied.
           content: {}
       x-codegen-request-body-name: body
+  /preview_mode/{user_id}:
+    post:
+      tags:
+        - preview mode
+      summary: "Comunicate that preview mode has been enabled for the specified user's session."
+      parameters:
+        - name: user_id
+          in: path
+          description: 'The Invotra UUID of the user.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      x-codegen-request-body-name: body
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/preview-mode-submission-schema' 
+      responses:
+        201:
+          description: "Acknowledged that preview mode for the user's session has been enabled."
+          content: {}
+        400:
+          description: 'A malformed UUID was supplied.'
+          content: {}
+        404:
+          description: 'The user was not found.'
+          content: {}
+    delete:
+      tags:
+        - preview mode
+      summary: "Comunicate that preview mode has been disabled for the specified user."
+      parameters:
+        - name: user_id
+          in: path
+          description: 'The Invotra UUID of the user.'
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: "Acknowledged that preview mode for the user has been disabled."
+          content: {}
+        400:
+          description: 'A malformed UUID was supplied.'
+          content: {}
+        404:
+          description: 'The user was not found.'
+          content: {}
 components:
   schemas:
     session-schema:
@@ -449,6 +503,15 @@ components:
           format: uuid
           description: The UUID of the PDF export job.
           example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+    preview-mode-submission-schema:
+      type: object
+      required:
+        - session
+      properties:
+        session:
+          type: string
+          description: "The user's session details."
+          example: 'SESS17c146f5cde051da0146f1d9fcb13014=KJSkpvaGdngF784RNk_xP6L4qGBZFmVK7vBpaenzXDI'
   securitySchemes:
     APIKeyHeader:
       type: apiKey
