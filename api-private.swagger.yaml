@@ -1,519 +1,376 @@
-openapi: 3.0.1
+swagger: '2.0'
 info:
   title: InvotraPrivateAPI
   version: v0.1
-servers:
-- url: http://dev.invotra.com/api/v0.1
+host: dev.invotra.com
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath: /api/v0.1
+schemes:
+  - http
 security:
-- APIKeyHeader: []
+  - APIKeyHeader: []
 tags:
-- name: sessions
-  description: Session management
-- name: notifications
-  description: Notification messages
-- name: feeds
-  description: Feed update status
-- name: pdf export
-  description: PDF export
-- name: preview mode
-  description: Preview Mode
+  - name: sessions
+    description: Session management
+  - name: notifications
+    description: Notification messages
+  - name: feeds
+    description: Feed update status
+  - name: pdf export
+    description: PDF export
 paths:
-  /sessions/{session_hash}:
+  '/sessions/{session_hash}':
+    parameters:
+      - name: session_hash
+        #description: >-
+        #  The SHA-256 hash of the session ID. This is hashed to prevent it being
+        #  useful if leaked, for example via web server logs. Hexadecimal
+        #  encoded, lowercase.
+        description: The session ID.
+        in: path
+        type: string
+        pattern: '^[a-f0-9]{64}$'
+        required: true
     put:
       tags:
-      - sessions
+        - sessions
       summary: Create or update a user session.
       parameters:
-      - name: session_hash
-        in: path
-        description: The session ID.
-        required: true
-        schema:
-          pattern: ^[a-f0-9]{64}$
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/session-schema'
-        required: true
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/session-schema'
+          required: true
       responses:
-        200:
+        '200':
           description: An existing session was updated.
-          content: {}
-        201:
+        '201':
           description: A new session was created.
-          content: {}
-        400:
+        '400':
           description: The JSON was malformed.
-          content: {}
-        422:
+        '422':
           description: JSON schema validation failed.
-          content: {}
-      x-codegen-request-body-name: body
     delete:
       tags:
-      - sessions
+        - sessions
       summary: Destroy a user session.
-      parameters:
-      - name: session_hash
-        in: path
-        description: The session ID.
-        required: true
-        schema:
-          pattern: ^[a-f0-9]{64}$
-          type: string
       responses:
-        200:
+        '200':
           description: The session was destroyed.
-          content: {}
-        400:
+        '400':
           description: The JSON was malformed.
-          content: {}
-        404:
+        '404':
           description: The session did not exist.
-          content: {}
-        422:
+        '422':
           description: JSON schema validation failed.
-          content: {}
-  /sessions/users/{user_id}:
-    delete:
-      tags:
-      - sessions
-      summary: Destroy all sessions of a user.
-      parameters:
+  '/sessions/users/{user_id}':
+    parameters:
       - name: user_id
         in: path
+        type: string
         description: The Invotra UUID of the user.
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         required: true
-        schema:
-          type: string
-          format: uuid
+    delete:
+      tags:
+        - sessions
+      summary: Destroy all sessions of a user.
       responses:
-        200:
-          description: All the user's sessions were destroyed, or the user had no
-            sessions.
-          content: {}
-        400:
+        '200':
+          description: 'All the user''s sessions were destroyed, or the user had no sessions.'
+        '400':
           description: The user UUID was malformed.
-          content: {}
-        404:
+        '404':
           description: The user did not exist.
-          content: {}
-  /notifications/{user_id}:
+  '/notifications/{user_id}':
+    parameters:
+      - name: user_id
+        in: path
+        type: string
+        description: The Invotra UUID of the notification recipient user.
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        required: true
     get:
       tags:
-      - notifications
+        - notifications
       summary: Get all notifications for a user.
-      parameters:
-      - name: user_id
-        in: path
-        description: The Invotra UUID of the notification recipient user.
-        required: true
-        schema:
-          type: string
-          format: uuid
       responses:
-        200:
-          description: A list of the user's notifications, or an empty array if there
-            are none.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/notification-list-schema'
-        400:
+        '200':
+          description: 'A list of the user''s notifications, or an empty array if there are none.'
+          schema:
+            $ref: '#/definitions/notification-list-schema'
+        '400':
           description: The UUID was malformed.
-          content: {}
-        404:
+        '404':
           description: The user was not found.
-          content: {}
     post:
       tags:
-      - notifications
+        - notifications
       summary: Add a notification.
       parameters:
-      - name: user_id
-        in: path
-        description: The Invotra UUID of the notification recipient user.
-        required: true
-        schema:
-          type: string
-          format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/notification-schema'
-        required: true
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/notification-schema'
+          required: true
       responses:
-        201:
+        '201':
           description: The notification was added.
           headers:
             Location:
+              type: string
               description: |
                 The URL of the newly added notification (.../notifications/{user_id}/{notification_id}).
-              schema:
-                type: string
-          content: {}
-        400:
+        '400':
           description: The UUID or JSON was malformed.
-          content: {}
-        404:
+        '404':
           description: The user was not found.
-          content: {}
-        422:
+        '422':
           description: JSON schema validation failed.
-          content: {}
-      x-codegen-request-body-name: body
     delete:
       tags:
-      - notifications
+        - notifications
       summary: Delete all notifications for a user.
-      parameters:
-      - name: user_id
-        in: path
-        description: The Invotra UUID of the notification recipient user.
-        required: true
-        schema:
-          type: string
-          format: uuid
       responses:
-        200:
-          description: The notifications were deleted, or the user had no notifications.
-          content: {}
-        400:
+        '200':
+          description: 'The notifications were deleted, or the user had no notifications.'
+        '400':
           description: The UUID was malformed.
-          content: {}
-        404:
+        '404':
           description: The user was not found.
-          content: {}
-  /notifications/{user_id}/{notification_id}:
+  '/notifications/{user_id}/{notification_id}':
     delete:
       tags:
-      - notifications
+        - notifications
       summary: Delete a notification.
       parameters:
+        - name: user_id
+          in: path
+          type: string
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+          description: The Invotra UUID of the user.
+          required: true
+        - name: notification_id
+          in: path
+          type: string
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+          description: The UUID of the notification message.
+          required: true
+      responses:
+        '200':
+          description: The notification was deleted.
+        '400':
+          description: One or both of the UUIDs was malformed.
+        '404':
+          description: The user or the notification was not found.
+  '/feeds/{user_id}':
+    parameters:
       - name: user_id
         in: path
-        description: The Invotra UUID of the user.
+        type: string
+        description: The Invotra UUID of the feed owner.
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
         required: true
-        schema:
-          type: string
-          format: uuid
-      - name: notification_id
-        in: path
-        description: The UUID of the notification message.
-        required: true
-        schema:
-          type: string
-          format: uuid
-      responses:
-        200:
-          description: The notification was deleted.
-          content: {}
-        400:
-          description: One or both of the UUIDs was malformed.
-          content: {}
-        404:
-          description: The user or the notification was not found.
-          content: {}
-  /feeds/{user_id}:
     get:
       tags:
-      - feeds
+        - feeds
       summary: Get the feed update status for a user.
-      parameters:
-      - name: user_id
-        in: path
-        description: The Invotra UUID of the feed owner.
-        required: true
-        schema:
-          type: string
-          format: uuid
       responses:
-        200:
+        '200':
           description: The feed update status.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/feed-schema'
-        404:
+          schema:
+            $ref: '#/definitions/feed-schema'
+        '404':
           description: The user was not found.
-          content: {}
     put:
       tags:
-      - feeds
+        - feeds
       summary: Set the feed update status for a user.
       parameters:
-      - name: user_id
-        in: path
-        description: The Invotra UUID of the feed owner.
-        required: true
-        schema:
-          type: string
-          format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/feed-schema'
-        required: true
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/feed-schema'
+          required: true
       responses:
-        200:
+        '200':
           description: The feed update status was updated.
-          content: {}
-        400:
+        '400':
           description: The JSON was malformed.
-          content: {}
-        422:
+        '422':
           description: JSON schema validation failed.
-          content: {}
-      x-codegen-request-body-name: body
-  /pdf-export/create-job/{content_id}:
+  '/pdf-export/create-job/{content_id}':
     post:
       tags:
-      - pdf export
+        - pdf export
       summary: Create a PDF export job.
       parameters:
-      - name: content_id
-        in: path
-        description: The UUID of the node to export.
-        required: true
-        schema:
+        - name: content_id
+          in: path
           type: string
-          format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/pdf-export-job-submission-schema'
-        required: true
+          description: The UUID of the node to export.
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+          required: true
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/pdf-export-job-submission-schema'
+          required: true
       responses:
-        200:
+        '200':
           description: An existing PDF export job was found and returned to the client.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/pdf-export-job-response-schema'
-        201:
+          schema:
+            $ref: '#/definitions/pdf-export-job-response-schema'
+        '201':
           description: A new PDF export job was created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/pdf-export-job-response-schema'
-        400:
+          schema:
+            $ref: '#/definitions/pdf-export-job-response-schema'
+        '400':
           description: A malformed UUID was supplied.
-          content: {}
-      x-codegen-request-body-name: body
-  /preview_mode/{user_id}:
-    post:
-      tags:
-        - preview mode
-      summary: "Comunicate that preview mode has been enabled for the specified user's session."
-      parameters:
-        - name: user_id
-          in: path
-          description: 'The Invotra UUID of the user.'
-          required: true
-          schema:
-            type: string
-            format: uuid
-      x-codegen-request-body-name: body
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/preview-mode-submission-schema' 
-      responses:
-        201:
-          description: "Acknowledged that preview mode for the user's session has been enabled."
-          content: {}
-        400:
-          description: 'A malformed UUID was supplied.'
-          content: {}
-        404:
-          description: 'The user was not found.'
-          content: {}
-    delete:
-      tags:
-        - preview mode
-      summary: "Comunicate that preview mode has been disabled for the specified user."
-      parameters:
-        - name: user_id
-          in: path
-          description: 'The Invotra UUID of the user.'
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        200:
-          description: "Acknowledged that preview mode for the user has been disabled."
-          content: {}
-        400:
-          description: 'A malformed UUID was supplied.'
-          content: {}
-        404:
-          description: 'The user was not found.'
-          content: {}
-components:
-  schemas:
-    session-schema:
-      required:
-      - expiry
+definitions:
+  session-schema:
+    properties:
+      user_id:
+        description: The Invotra UUID of the user
+        type: string
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+      user_internal_id:
+        description: The Drupal user ID
+        type: integer
+        example: 12345
+      expiry:
+        description: The number of seconds after which the session should expire
+        type: integer
+        example: 1209600
+    required:
       - user_id
-      type: object
-      properties:
-        user_id:
-          type: string
-          format: uuid
-          description: The Invotra UUID of the user
-          example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
-        user_internal_id:
-          type: integer
-          description: The Drupal user ID
-          example: 12345
-        expiry:
-          type: integer
-          description: The number of seconds after which the session should expire
-          example: 1209600
-    notification-schema:
-      required:
-      - image
-      - link
-      - message
-      - target_subtype
-      - target_type
-      - timestamp
+      - expiry
+  notification-schema:
+    properties:
+      type:
+        type: string
+        description: The type of notification.
+        example: invotra.user.mention
+      message:
+        type: string
+        description: 'The notification message text, which may contain HTML.'
+        example: Dorothy Whitehead mentioned you in a post
+      link:
+        type: string
+        description: The URL that the notification should link to.
+        example: 'https://www.example.com/post/interesting'
+      image:
+        type: string
+        description: The URL of an image associated with the notification.
+        example: 'https://www.example.com/sites/default/files/picture.jpg'
+      timestamp:
+        type: integer
+        description: The timestamp of the notification (in seconds).
+        example: 1442089320
+      target_type:
+        type: string
+        description: The type of the notification target entity.
+        example: node
+      target_subtype:
+        type: string
+        description: The subtype (or "bundle") of the notification target entity.
+        example: group_status
+    required:
       - type
-      type: object
-      properties:
-        type:
-          type: string
-          description: The type of notification.
-          example: invotra.user.mention
-        message:
-          type: string
-          description: The notification message text, which may contain HTML.
-          example: Dorothy Whitehead mentioned you in a post
-        link:
-          type: string
-          description: The URL that the notification should link to.
-          example: https://www.example.com/post/interesting
-        image:
-          type: string
-          description: The URL of an image associated with the notification.
-          example: https://www.example.com/sites/default/files/picture.jpg
-        timestamp:
-          type: integer
-          description: The timestamp of the notification (in seconds).
-          example: 1442089320
-        target_type:
-          type: string
-          description: The type of the notification target entity.
-          example: node
-        target_subtype:
-          type: string
-          description: The subtype (or "bundle") of the notification target entity.
-          example: group_status
-    notification-schema-retrieve:
-      allOf:
-      - $ref: '#/components/schemas/notification-schema'
-      - required:
-        - notification_id
-        - user_id
-        type: object
+      - message
+      - link
+      - image
+      - timestamp
+      - target_type
+      - target_subtype
+  notification-schema-retrieve:
+    allOf:
+      - $ref: '#/definitions/notification-schema'
+      - type: object
         properties:
           user_id:
-            type: string
-            format: uuid
             description: The UUID of the user.
+            type: string
+            pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
             example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
           notification_id:
-            type: string
-            format: uuid
             description: The UUID of the notification message.
+            type: string
+            pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
             example: 52000da2-8513-4472-8395-4a080f662b48
-    notification-list-schema:
-      type: array
-      items:
-        $ref: '#/components/schemas/notification-schema-retrieve'
-    feed-schema:
-      required:
+        required:
+          - user_id
+          - notification_id
+  notification-list-schema:
+    type: array
+    items:
+      $ref: '#/definitions/notification-schema-retrieve'
+  feed-schema:
+    type: object
+    properties:
+      read:
+        description: Boolean indicating whether the user has read the feed since the most recent item was added.
+        type: boolean
+        example: false
+      item_id:
+        description: The UUID of the most recent item in the feed.
+        type: string
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+      timestamp:
+        description: The Unix timestamp (in seconds) of when the most recent item was added to the feed.
+        type: integer
+        example: 1442089320
+    required:
       - read
-      type: object
-      properties:
-        read:
-          type: boolean
-          description: Boolean indicating whether the user has read the feed since
-            the most recent item was added.
-          example: false
-        item_id:
-          type: string
-          format: uuid
-          description: The UUID of the most recent item in the feed.
-          example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
-        timestamp:
-          type: integer
-          description: The Unix timestamp (in seconds) of when the most recent item
-            was added to the feed.
-          example: 1442089320
-    pdf-export-job-submission-schema:
-      required:
+  pdf-export-job-submission-schema:
+    type: object
+    properties:
+      job_uuid:
+        description: The UUID of the PDF export job.
+        type: string
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+      user_uuid:
+        description: The UUID of the user submitting the PDF export request.
+        type: string
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+      latest:
+        description: Whether to use the latest revision of each page.
+        type: boolean
+        default: false
+      node_grants:
+        description: The content's access grants.
+        type: object
+      secret_token:
+        description: The export job's secret token.
+        type: string
+      use_export_service:
+        description: Optionally specify an alternative PDF export service to use for testing purposes.
+        type: string
+        example: http://invotra-pdf-render-batch:3000/mock-render
+    required:
       - job_uuid
+      - user_uuid
       - node_grants
       - secret_token
-      - user_uuid
-      type: object
-      properties:
-        job_uuid:
-          type: string
-          format: uuid
-          description: The UUID of the PDF export job.
-          example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
-        user_uuid:
-          type: string
-          format: uuid
-          description: The UUID of the user submitting the PDF export request.
-          example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
-        latest:
-          type: boolean
-          description: Whether to use the latest revision of each page.
-          default: false
-        node_grants:
-          type: object
-          properties: {}
-          description: The content's access grants.
-        secret_token:
-          type: string
-          description: The export job's secret token.
-        use_export_service:
-          type: string
-          description: Optionally specify an alternative PDF export service to use
-            for testing purposes.
-          example: http://invotra-pdf-render-batch:3000/mock-render
-    pdf-export-job-response-schema:
-      required:
+  pdf-export-job-response-schema:
+    type: object
+    properties:
+      uuid:
+        description: The UUID of the PDF export job.
+        type: string
+        pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+        example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
+    required:
       - uuid
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          description: The UUID of the PDF export job.
-          example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
-    preview-mode-submission-schema:
-      type: object
-      required:
-        - session
-      properties:
-        session:
-          type: string
-          description: "The user's session details."
-          example: 'SESS17c146f5cde051da0146f1d9fcb13014=KJSkpvaGdngF784RNk_xP6L4qGBZFmVK7vBpaenzXDI'
-  securitySchemes:
-    APIKeyHeader:
-      type: apiKey
-      name: X-API-Key
-      in: header
+securityDefinitions:
+  APIKeyHeader:
+    type: apiKey
+    in: header
+    name: X-API-Key
