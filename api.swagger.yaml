@@ -342,6 +342,11 @@ paths:
           in: query
           schema:
             type: string
+        - name: status
+          description: 'Filter the list of teams on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
         - name: parent_uuid
           description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
@@ -419,7 +424,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/team-schema'
+              $ref: '#/components/schemas/team-common-schema'
         required: true
       security:
         - SessionCookieHeader: []
@@ -5619,7 +5624,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/job-role-schema'
+              $ref: '#/components/schemas/job-role-common-schema'
         required: true
       security:
         - SessionCookieHeader: []
@@ -5686,6 +5691,11 @@ paths:
             type: string
         - name: users_fulltext_search
           description: Filter the list of locations to those that include users matching a search term. This is useful when you have already searched for users and want to refine your search by location (like a faceted search). Like the fulltext_search parameter of /users/search, this matches on whole words.
+          in: query
+          schema:
+            type: string
+        - name: status
+          description: 'Filter the list of locations on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -10730,16 +10740,37 @@ components:
           example: mentioned you in a post
       type: object
     team-schema:
-      required:
-        - uuid
-        - title
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: The UUID of the team
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+        - $ref: '#/components/schemas/team-common-schema'
+    team-list-schema:
+      allOf:
+        - $ref: '#/components/schemas/team-schema'
+        - type: object
+          properties:
+            context:
+              description: 'Parent items of the team. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
+              type: array
+              items:
+                $ref: '#/components/schemas/team-schema'
+    team-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/team-common-schema'
+        - type: object
+          properties:
+            published:
+              default: true
+          required:
+            - title
+    team-common-schema:
+      type: object
       properties:
-        uuid:
-          description: The UUID of the team
-          type: string
-          format: uuid
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-          readOnly: true
         title:
           description: This is the name of the team
           type: string
@@ -10757,23 +10788,10 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
-      type: object
-    team-list-schema:
-      allOf:
-        - $ref: '#/components/schemas/team-schema'
-        - type: object
-          properties:
-            context:
-              description: 'Parent items of the team. Ordered from the immediate parent towards the root. Limited to 9 levels up.'
-              type: array
-              items:
-                $ref: '#/components/schemas/team-schema'
-    team-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/team-schema'
-      required:
-        - title
-      type: object
+        published:
+          description: 'Indicates that this team is published.'
+          type: boolean
+          example: true
     user-schema:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
@@ -16457,13 +16475,31 @@ components:
         - alt_text
         - type
     job-role-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'This is the Invotra UUID of the job role.'
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+              type: string
+              format: uuid
+            has_children:
+              description: 'Indicates that this job role has children.'
+              type: boolean
+              example: true
+        - $ref: '#/components/schemas/job-role-common-schema'
+    job-role-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/job-role-common-schema'
+        - type: object
+          properties:
+            published:
+              default: true
+          required:
+            - title
+    job-role-common-schema:
       type: object
       properties:
-        uuid:
-          description: 'This is the Invotra UUID of the job role.'
-          example: '01234567-89ab-cdef-1234-56789abcdef0'
-          type: string
-          format: uuid
         title:
           description: This is the name of the job role
           type: string
@@ -16476,10 +16512,6 @@ components:
           description: This is used to store the job role's external reference id
           type: string
           example: ABC123
-        has_children:
-          description: 'Indicates that this job role has children.'
-          type: boolean
-          example: true
         published:
           description: 'Indicates that this job role is published.'
           type: boolean
@@ -16494,11 +16526,6 @@ components:
           type: string
           format: uuid
           deprecated: true
-    job-role-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/job-role-schema'
-      required:
-        - title
     job-role-list-schema:
       allOf:
         - $ref: '#/components/schemas/job-role-schema'
@@ -16524,6 +16551,10 @@ components:
           description: This is used to store the location's external reference id.
           type: string
           example: ABC123
+        published:
+          description: 'Indicates that this location is published.'
+          type: boolean
+          example: true
     location-site-schema:
       allOf:
         - type: object
@@ -16547,6 +16578,10 @@ components:
     location-site-schema-create:
       allOf:
         - $ref: '#/components/schemas/location-site-schema-common'
+        - type: object
+          properties:
+            published:
+              default: true
       required:
         - title
         - address1
@@ -16614,6 +16649,10 @@ components:
     location-building-schema-create:
       allOf:
         - $ref: '#/components/schemas/location-building-schema-common'
+        - type: object
+          properties:
+            published:
+              default: true
       required:
         - title
         - address1
@@ -16653,6 +16692,10 @@ components:
     location-floor-schema-create:
       allOf:
         - $ref: '#/components/schemas/location-floor-schema-common'
+        - type: object
+          properties:
+            published:
+              default: true
       required:
         - title
     location-floor-schema-update:
@@ -16691,6 +16734,10 @@ components:
     location-space-schema-create:
       allOf:
         - $ref: '#/components/schemas/location-space-schema-common'
+        - type: object
+          properties:
+            published:
+              default: true
       required:
         - title
     location-space-schema-update:
@@ -16749,6 +16796,10 @@ components:
           description: 'The location external reference id.'
           type: string
           example: 'ABC123'
+        published:
+          description: 'Indicates that this location is published.'
+          type: boolean
+          example: true
         address1:
           description: The first line of the location's postal address.
           type: string
@@ -16856,6 +16907,10 @@ components:
           description: 'The location external reference id.'
           type: string
           example: 'ABC123'
+        published:
+          description: 'Indicates that this location is published.'
+          type: boolean
+          example: true
         address1:
           description: The first line of the location's postal address.
           type: string
