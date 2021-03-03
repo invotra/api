@@ -1615,6 +1615,7 @@ paths:
               - members_count
               - members_type
               - post_count
+              - post_range_count
               - privacy_setting
               - relevance
               - timestamp_created
@@ -11445,9 +11446,15 @@ components:
                       user:
                         type: object
                         required:
+                          - uuid
                           - display_name
                           - user_avatar
                         properties:
+                          uuid:
+                            description: 'The UUID of the user.'
+                            type: string
+                            format: uuid
+                            example: 01234567-89ab-cdef-1234-56789abcdef0
                           display_name:
                             description: 'The display name of the user.'
                             type: string
