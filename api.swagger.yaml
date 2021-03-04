@@ -1488,8 +1488,8 @@ paths:
             enum:
               - group_name
               - likes
+              - admins_count
               - members_count
-              - members_type
               - post_count
               - post_range_count
               - privacy_setting
@@ -10574,6 +10574,7 @@ components:
             - description
             - privacy_setting
             - author_uuid
+            - admins_count
             - members_count
             - posts_count
             - posts_range_count
@@ -10604,9 +10605,13 @@ components:
               type: string
               example: Security
             members_count:
-              description: A count of members in group
+              description: A count of members in the group
               type: integer
               example: 150
+            admins_count:
+              description: A count of administrators in the group
+              type: integer
+              example: 3
             posts_count:
               description: A count of posts in the group
               type: integer
