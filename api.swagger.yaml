@@ -11353,7 +11353,6 @@ components:
             - description
             - privacy_setting
             - author_uuid
-            - admins_count
             - members_count
             - posts_count
             - posts_range_count
@@ -11387,10 +11386,7 @@ components:
               description: A count of members in the group
               type: integer
               example: 150
-            admins_count:
-              description: A count of administrators in the group
-              type: integer
-              example: 3
+              deprecated: true
             posts_count:
               description: A count of posts in the group
               type: integer
@@ -11418,15 +11414,15 @@ components:
             memberships:
               type: object
               required:
-                - admin_count
-                - member_count
+                - admins_count
+                - members_count
                 - members
               properties:
-                admin_count:
+                admins_count:
                   description: 'The total count of administrators of this group.'
                   type: integer
                   example: 6
-                member_count:
+                members_count:
                   description: 'The total count of members in this group.'
                   type: integer
                   example: 180
