@@ -3515,6 +3515,12 @@ paths:
           schema:
             type: string
             example: 'unpublished'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4751,6 +4757,12 @@ paths:
       tags:
         - manuals
       parameters:
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -4958,6 +4970,12 @@ paths:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -15301,6 +15319,10 @@ components:
           description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual.'
           type: integer
           example: 63
+        external_id:
+          description: 'The manual external reference id.'
+          type: string
+          example: 'ABC123'
     manual-page-listing-schema:
       type: object
       properties:
@@ -15393,6 +15415,10 @@ components:
           description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual page.'
           type: integer
           example: 63
+        external_id:
+          description: 'The manual page external reference id.'
+          type: string
+          example: 'ABC123'
         attachments:
           description: List of attachments on manual page
           type: array
@@ -15520,6 +15546,10 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
+        external_id:
+          description: 'The comment external reference id.'
+          type: string
+          example: 'ABC123'
     file-schema:
       type: object
       required:
