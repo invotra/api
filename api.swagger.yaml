@@ -323,6 +323,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -1372,6 +1378,12 @@ paths:
           schema:
             type: boolean
             default: false
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - description: Field to sort by.
           in: query
           name: sort
@@ -1919,6 +1931,12 @@ paths:
       tags:
         - posts
       parameters:
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - description: Field to sort by
           in: query
           name: sort
@@ -2331,6 +2349,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of blogs on a comma-separated list of states. Valid states are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -2708,6 +2732,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of group documents on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
           in: query
@@ -2895,6 +2925,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -3048,6 +3084,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of lists on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -3227,6 +3269,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -3579,6 +3627,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of news on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -3758,6 +3812,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of pages on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -3937,6 +3997,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of policies on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -4116,6 +4182,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of polls on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -4300,6 +4372,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of promotions on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -4479,6 +4557,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of webforms on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -5218,6 +5302,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -10892,6 +10982,10 @@ components:
           description: 'The review date timestamp for the blog (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
+        external_id:
+          description: 'The blog external reference id.'
+          type: string
+          example: 'ABC123'
     custom-content-schema:
       allOf:
         - $ref: '#/components/schemas/custom-content-schema-common'
@@ -11531,6 +11625,10 @@ components:
           description: 'The review date timestamp for the group document (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
+        external_id:
+          description: 'The group document external reference id.'
+          type: string
+          example: 'ABC123'
     group-poll-schema:
       allOf:
         - $ref: '#/components/schemas/group-poll-schema-common'
@@ -11637,6 +11735,10 @@ components:
           description: 'Title of the group poll.'
           type: string
           example: 'What is your favorite food?'
+        external_id:
+          description: 'The group poll external reference id.'
+          type: string
+          example: 'ABC123'
     list-schema:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
@@ -11954,6 +12056,10 @@ components:
           description: 'The review date timestamp for the list (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
+        external_id:
+          description: 'The list external reference id.'
+          type: string
+          example: 'ABC123'
         list:
           description: 'List of content and links in the list.'
           type: array
@@ -14545,6 +14651,10 @@ components:
           type: boolean
           default: false
           example: false
+        external_id:
+          description: 'The promotion external reference id.'
+          type: string
+          example: 'ABC123'
     webform-schema:
       allOf:
         - $ref: '#/components/schemas/webform-schema-common'
