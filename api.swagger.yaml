@@ -651,6 +651,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - description: Field to sort by
           in: query
           name: sort
