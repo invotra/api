@@ -238,6 +238,7 @@ paths:
           description: A file was not found at the supplied S3 URL.
   /teams:
     get:
+      deprecated: true
       tags:
         - teams
       parameters:
@@ -523,6 +524,7 @@ paths:
         - CognitoJwt: [ invotra/teams:write, invotra/users:read ]
   /users:
     get:
+      deprecated: true
       tags:
         - users
       parameters:
@@ -1254,6 +1256,7 @@ paths:
         - CognitoJwt: [ invotra/users:write ]
   /groups:
     get:
+      deprecated: true
       tags:
         - groups
       parameters:
@@ -1869,6 +1872,7 @@ paths:
         - CognitoJwt: [ invotra/groups:write ]
   /posts:
     get:
+      deprecated: true
       tags:
         - posts
       parameters:
@@ -5082,6 +5086,7 @@ paths:
         - CognitoJwt: [ invotra/files:write ]
   /job_roles:
     get:
+      deprecated: true
       tags:
         - job roles
       parameters:
@@ -5264,6 +5269,7 @@ paths:
         - CognitoJwt: [ invotra/job_roles:write ]
   /locations:
     get:
+      deprecated: true
       tags:
         - locations
       parameters:
