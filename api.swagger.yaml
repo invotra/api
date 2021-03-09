@@ -10461,10 +10461,18 @@ components:
           description: The user's first name
           type: string
           example: Dorothy
+        middle_name:
+          description: The user's middle name
+          type: string
+          example: 'Papadopoulos'
         surname:
           description: The user's surname
           type: string
           example: Whitehead
+        known_as:
+          description: The user's known as name
+          type: string
+          example: 'Dot'
         person_type:
           description: This is the Invotra UUID of the user's person type.
           type: string
