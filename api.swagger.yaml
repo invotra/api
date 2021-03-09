@@ -2599,6 +2599,12 @@ paths:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: fulltext_search
+          description: 'Search within content title or body. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+            example: 'parking'
         - name: external_id
           description: 'Filter by external ID.'
           in: query
