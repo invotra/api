@@ -10333,6 +10333,11 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
+            title:
+              description: "The user's title. A title object."
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/title-schema'
             teams:
               description: "The user's teams. An array of team objects."
               type: array
@@ -10460,18 +10465,6 @@ components:
           description: The user's surname
           type: string
           example: Whitehead
-        title:
-          default: ''
-          description: The user's title
-          enum:
-            - ''
-            - Dr
-            - Mr
-            - Miss
-            - Mrs
-            - Ms
-          type: string
-          example: Mr
         person_type:
           description: This is the Invotra UUID of the user's person type.
           type: string
@@ -10508,6 +10501,15 @@ components:
         - $ref: '#/components/schemas/user-schema-common'
         - type: object
           properties:
+            title:
+              description: "The user's title."
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the title.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             teams:
               description: "The user's teams. An array of team UUIDs."
               type: array
