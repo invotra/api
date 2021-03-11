@@ -10316,24 +10316,25 @@ components:
             default: Organisational user
             description: This is the default Invotra user role
             enum:
-              - Organisational user
-              - Webmaster
               - Author
-              - Moderator
-              - Editor
-              - Publisher
-              - Content reviewer
-              - Section manager
-              - Previewer
-              - Redacted
-              - Brand manager
               - Blogger
-              - Ideas administrator
-              - OU administrator
-              - Location admin
+              - Brand manager
               - Content layout manager
+              - Content reviewer
+              - Editor
               - External user
+              - Groups manager
+              - Ideas administrator
+              - Location admin
+              - Moderator
+              - Organisational user
+              - OU administrator
+              - Previewer
+              - Publisher
               - Queries administrator
+              - Redacted
+              - Section manager
+              - Webmaster
             type: string
           type: array
           example:
