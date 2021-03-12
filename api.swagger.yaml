@@ -206,7 +206,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/layout-schema'
+              $ref: '#/components/schemas/layout-schema-create'
         required: true
       security:
         - SessionCookieHeader: []
@@ -9882,6 +9882,17 @@ components:
           description: The password that the user logs in with
           type: string
     layout-schema:
+      allOf:
+        - $ref: '#/components/schemas/layout-schema-create'
+        - type: object
+          properties:
+            machine_name:
+              description: 'The machine name of this layout.'
+              type: string
+              example: 'head_1_body_4'
+          required:
+            - machine_name
+    layout-schema-create:
       type: object
       required:
         - title
@@ -9891,7 +9902,7 @@ components:
         title:
           description: 'Layout title (limit of 120 characters must only contain alphanumeric and underscores).'
           type: string
-          example: 'head_1_body_4'
+          example: 'Head 1 Body 4'
           minLength: 1
           maxLength: 120
         description:
