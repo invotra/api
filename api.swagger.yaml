@@ -11469,6 +11469,7 @@ components:
                           - uuid
                           - display_name
                           - user_avatar
+                          - status
                         properties:
                           uuid:
                             description: 'The UUID of the user.'
