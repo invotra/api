@@ -1480,6 +1480,13 @@ paths:
           schema:
             type: integer
             example: 1563357496
+        - description: 'Show blocked users in the group memberships.'
+          in: query
+          name: show_blocked_members
+          schema:
+            type: integer
+            example: true
+            default: false
         - description: Field to sort by.
           in: query
           name: sort
@@ -10687,6 +10694,12 @@ components:
                             type: string
                             format: url
                             example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+                          status:
+                            type: string
+                            description: 'Flag to indicate whether account is active or blocked.'
+                            enum:
+                              - Active
+                              - Blocked
     group-schema-create:
       allOf:
         - $ref: '#/components/schemas/group-schema-update'
