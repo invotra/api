@@ -2915,6 +2915,127 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/custom_content:write ]
+  '/galleries/list':
+    get:
+      tags:
+        - 'galleries'
+      description: 'Search for galleries. An empty array is returned if no galleries where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of galleries on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of galleries matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/gallery-schema'
+        '403':
+          description: 'User is not authorized to list galleries.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/galleries:read ]
+  '/galleries/{gallery_id}':
+    parameters:
+      - description: 'The Invotra UUID of the gallery.'
+        in: path
+        name: gallery_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'galleries'
+      description: 'Get information about the gallery.'
+      responses:
+        '200':
+          description: 'Returns a single complete gallery object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gallery-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this gallery.'
+        '404':
+          description: 'The UUID does not correspond to an existing gallery.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/galleries:read ]
+    delete:
+      tags:
+        - galleries
+      responses:
+        '200':
+          description: 'The gallery was deleted successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'The user does not have permission to delete the gallery.'
+        '404':
+          description: 'The UUID does not correspond to an existing gallery.'
+      description: Delete a gallery.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/galleries:write ]
   '/group_documents':
     post:
       tags:
@@ -3257,6 +3378,155 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:write ]
+  '/group_polls/{group_poll_id}/vote':
+    parameters:
+      - description: 'The Invotra UUID of the group poll.'
+        in: path
+        name: group_poll_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      tags:
+        - 'group polls'
+      description: 'Vote in the group poll.'
+      responses:
+        '201':
+          description: 'The vote in the group poll was successful.'
+        '400':
+          description: 'The vote in the group poll was not cast due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to vote in this group poll.'
+        '404':
+          description: 'The UUID does not correspond to an existing group poll.'
+        '422':
+          description: 'The group poll vote was not cast due to a Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-poll-vote-schema'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_polls:write ]
+  '/ideas/list':
+    get:
+      tags:
+        - 'ideas'
+      description: 'Search for ideas. An empty array is returned if no ideas where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of ideas matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/idea-schema'
+        '403':
+          description: 'User is not authorized to list ideas.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/ideas:read ]
+  '/ideas/{idea_id}':
+    parameters:
+      - description: 'The Invotra UUID of the idea.'
+        in: path
+        name: idea_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'ideas'
+      description: 'Get information about the idea.'
+      responses:
+        '200':
+          description: 'Returns a single complete idea object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/idea-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this idea.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/ideas:read ]
+    delete:
+      tags:
+        - 'ideas'
+      responses:
+        '200':
+          description: 'The idea was deleted successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'The user does not have permission to delete the idea.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea.'
+      description: Delete an idea.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/ideas:write ]
   '/lists':
     post:
       tags:
@@ -4693,6 +4963,236 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
+  '/queries/list':
+    get:
+      tags:
+        - 'queries'
+      description: 'Search for queries. An empty array is returned if no queries where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of queries matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/query-schema'
+        '403':
+          description: 'User is not authorized to list queries.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:read ]
+  '/queries/{query_id}':
+    parameters:
+      - description: 'The Invotra UUID of the query.'
+        in: path
+        name: query_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'queries'
+      description: 'Get information about the query.'
+      responses:
+        '200':
+          description: 'Returns a single complete query object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/query-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this query.'
+        '404':
+          description: 'The UUID does not correspond to an existing query.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:read ]
+    delete:
+      tags:
+        - 'queries'
+      responses:
+        '200':
+          description: 'The query was deleted successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'The user does not have permission to delete the query.'
+        '404':
+          description: 'The UUID does not correspond to an existing query.'
+      description: Delete a query.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:write ]
+  '/support_tickets/list':
+    get:
+      tags:
+        - 'support tickets'
+      description: 'Search for support tickets. An empty array is returned if no support tickets where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of support tickets matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/support-ticket-schema'
+        '403':
+          description: 'User is not authorized to list support tickets.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/support_tickets:read ]
+  '/support_tickets/{support_ticket_id}':
+    parameters:
+      - description: 'The Invotra UUID of the support ticket.'
+        in: path
+        name: support_ticket_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'support tickets'
+      description: 'Get information about the support ticket.'
+      responses:
+        '200':
+          description: 'Returns a single complete support ticket object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/support-ticket-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this support ticket.'
+        '404':
+          description: 'The UUID does not correspond to an existing support ticket.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/support_tickets:read ]
+    delete:
+      tags:
+        - 'support tickets'
+      responses:
+        '200':
+          description: 'The support ticket was deleted successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'The user does not have permission to delete the support ticket.'
+        '404':
+          description: 'The UUID does not correspond to an existing support ticket.'
+      description: Delete a support ticket.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/support_tickets:write ]
   '/webforms':
     post:
       tags:
