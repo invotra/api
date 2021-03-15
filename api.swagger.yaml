@@ -803,6 +803,12 @@ paths:
             type: string
             format: uuid
           description: UUID of the group to filter by.
+        - name: group_admins_only
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: 'Filter on users that are group administrators only.'
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
@@ -812,7 +818,45 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/user-search-schema'
+                  type: object
+                  properties:
+                    uuid:
+                      description: The UUID of the user
+                      type: string
+                      format: uuid
+                      example: 01234567-89ab-cdef-1234-56789abcdef0
+                    user_uuid:
+                      description: The UUID of the user
+                      type: string
+                      format: uuid
+                      example: 01234567-89ab-cdef-1234-56789abcdef0
+                      deprecated: true
+                    username:
+                      description: The user's username
+                      type: string
+                      example: Dorothy Whitehead
+                    firstname:
+                      description: The user's first name
+                      type: string
+                      example: Dorothy
+                    surname:
+                      description: The user's surname
+                      type: string
+                      example: Whitehead
+                    user_avatar:
+                      description: The user's image
+                      type: string
+                      example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+                    email:
+                      description: Users email address
+                      format: email
+                      type: string
+                      example: dorothy.whitehead@akagera.com
+                  required:
+                    - uuid
+                    - username
+                    - user_avatar
+                    - email
         '404':
           description: A group UUID was supplied but no existing group matches.
         '403':
@@ -1416,7 +1460,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/group-schema'
+              $ref: '#/components/schemas/group-schema-create'
         required: true
       security:
         - SessionCookieHeader: []
@@ -1479,16 +1523,93 @@ paths:
           name: fulltext_search
           schema:
             type: string
-        - description: Filter by UUID of a category.
+        - description: 'Filter by UUID of a category. Multiple values may be supplied.'
           in: query
           name: category
           schema:
-            type: string
+            type: array
+            items:
+              type: string
+              format: uuid
         - description: Filter by groups the current user is a member of.
           in: query
           name: my_groups
           schema:
             type: boolean
+            default: false
+        - description: 'Filter groups that are administered by the user UUID. Multiple values may be supplied.'
+          in: query
+          name: admin_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - description: 'Filter groups that where created after (greater than or equal) the timestamp (in seconds).'
+          in: query
+          name: created_start_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Filter groups that where created before (less than or equal) the timestamp (in seconds).'
+          in: query
+          name: created_end_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Filter groups with last posts after (greater than or equal) the timestamp (in seconds).'
+          in: query
+          name: last_post_start_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Filter groups with last posts before (less than or equal) the timestamp (in seconds).'
+          in: query
+          name: last_post_end_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'The timestamp (in seconds) to count posts from (greater than or equal) for the "post_range_count" property.'
+          in: query
+          name: post_range_count_start_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Filter groups on the privacy setting. Multiple values may be supplied.'
+          in: query
+          name: privacy_setting
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - Public
+                - Private
+                - Secret
+        - description: 'Filter groups with name changes after (greater than or equal) the timestamp (in seconds).'
+          in: query
+          name: name_change_start_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Filter groups that have had new administrators after (greater than or equal) the timestamp (in seconds).'
+          in: query
+          name: new_admin_start_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Filter groups that have had privacy setting changes after (greater than or equal) the timestamp (in seconds).'
+          in: query
+          name: privacy_setting_change_start_timestamp
+          schema:
+            type: integer
+            example: 1563357496
+        - description: 'Show blocked users in the group memberships.'
+          in: query
+          name: show_blocked_members
+          schema:
+            type: boolean
+            example: true
             default: false
         - description: Field to sort by.
           in: query
@@ -1496,11 +1617,18 @@ paths:
           schema:
             type: string
             enum:
-              - relevance
+              - group_name
               - likes
+              - admins_count
               - members_count
+              - post_count
+              - post_range_count
+              - privacy_setting
+              - relevance
               - timestamp_created
-            default: relevance
+              - timestamp_last_admin
+              - timestamp_last_post
+            default: timestamp_created
         - description: Sort order.
           in: query
           name: order
@@ -1531,7 +1659,7 @@ paths:
                     description: The results set.
                     type: array
                     items:
-                      $ref: '#/components/schemas/group-search-schema'
+                      $ref: '#/components/schemas/group-schema'
       description: 'Search for groups. Returns group snippets. An empty array is returned if no groups are found.'
       security:
         - SessionCookieHeader: []
@@ -1652,7 +1780,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/group-schema'
+              $ref: '#/components/schemas/group-schema-update'
         required: true
       security:
         - SessionCookieHeader: []
@@ -10985,24 +11113,25 @@ components:
             default: Organisational user
             description: This is the default Invotra user role
             enum:
-              - Organisational user
-              - Webmaster
               - Author
-              - Moderator
-              - Editor
-              - Publisher
-              - Content reviewer
-              - Section manager
-              - Previewer
-              - Redacted
-              - Brand manager
               - Blogger
-              - Ideas administrator
-              - OU administrator
-              - Location admin
+              - Brand manager
               - Content layout manager
+              - Content reviewer
+              - Editor
               - External user
+              - Groups manager
+              - Ideas administrator
+              - Location admin
+              - Moderator
+              - Organisational user
+              - OU administrator
+              - Previewer
+              - Publisher
               - Queries administrator
+              - Redacted
+              - Section manager
+              - Webmaster
             type: string
           type: array
           example:
@@ -11232,34 +11361,176 @@ components:
             - inactive
             - pending
     group-schema:
-      required:
-        - title
-        - description
-        - group_category
-        - group_category_uuid
-        - privacy_setting
-        - members_count
-        - likes
-        - author_uuid
+      allOf:
+        - $ref: '#/components/schemas/group-schema-common'
+        - type: object
+          required:
+            - group_uuid
+            - title
+            - group_category_uuid
+            - group_category
+            - description
+            - privacy_setting
+            - author_uuid
+            - members_count
+            - posts_count
+            - posts_range_count
+            - likes
+            - timestamp_created
+            - timestamp_updated
+            - memberships
+          properties:
+            title:
+              type: string
+            group_category_uuid:
+              type: string
+            description:
+              type: string
+            privacy_setting:
+              type: string
+            author_uuid:
+              type: string
+            external_id:
+              type: string
+            group_uuid:
+              description: The UUID of the group.
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+            group_category:
+              description: The category for the group.
+              type: string
+              example: Security
+            members_count:
+              description: A count of members in the group
+              type: integer
+              example: 150
+              deprecated: true
+            posts_count:
+              description: A count of posts in the group
+              type: integer
+              example: 180
+            posts_range_count:
+              description: 'A count of posts in the group made since the "post_range_count_start_timestamp" parameter. If the parameter is not supplied the count will be all posts in the group.'
+              type: integer
+              example: 90
+            likes:
+              description: Total likes for all content in the group.
+              type: integer
+              example: 200
+            timestamp_created:
+              description: 'The timestamp (in seconds) of when the group was created'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'The timestamp (in seconds) of when the group was updated'
+              type: integer
+              example: 1510941596
+            timestamp_last_post:
+              description: 'The timestamp (in seconds) of the last post in the group'
+              type: integer
+              example: 1510941596
+            memberships:
+              type: object
+              required:
+                - admins_count
+                - members_count
+                - members
+              properties:
+                admins_count:
+                  description: 'The total count of administrators of this group.'
+                  type: integer
+                  example: 6
+                members_count:
+                  description: 'The total count of members in this group.'
+                  type: integer
+                  example: 180
+                members:
+                  description: 'Group members (limited to 25, administrators will be listed first).'
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - group_admin
+                      - joined_date
+                      - user
+                    properties:
+                      group_admin:
+                        description: 'Indicates the user is an administrator of the group.'
+                        type: boolean
+                        example: true
+                      joined_date:
+                        description: 'The timestamp (in seconds) of when the user joined the group.'
+                        type: integer
+                        example: 1510941596
+                      user:
+                        type: object
+                        required:
+                          - uuid
+                          - display_name
+                          - user_avatar
+                          - status
+                        properties:
+                          uuid:
+                            description: 'The UUID of the user.'
+                            type: string
+                            format: uuid
+                            example: 01234567-89ab-cdef-1234-56789abcdef0
+                          display_name:
+                            description: 'The display name of the user.'
+                            type: string
+                            example: Dorothy Whitehead
+                          user_avatar:
+                            description: "The user's image."
+                            type: string
+                            format: url
+                            example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+                          status:
+                            type: string
+                            description: 'Flag to indicate whether account is active or blocked.'
+                            enum:
+                              - Active
+                              - Blocked
+    group-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/group-schema-update'
+        - type: object
+          required:
+            - title
+            - group_category_uuid
+            - description
+            - privacy_setting
+          properties:
+            title:
+              type: string
+            group_category_uuid:
+              type: string
+            description:
+              type: string
+            privacy_setting:
+              type: string
+            author_uuid:
+              type: string
+              description: The uuid of the author (Will use the authenticated user if not supplied).
+    group-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/group-schema-common'
+    group-schema-common:
+      type: object
       properties:
         title:
           description: This is the name of the group
           type: string
           example: Security awareness
-        description:
-          description: This is a description of the group.
-          type: string
-          example: A group to discuss security awareness.
-        group_category:
-          description: The category for the group.
-          type: string
-          example: Security
-          readOnly: true
         group_category_uuid:
           description: The uuid of the category
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
+        description:
+          description: This is a description of the group.
+          type: string
+          example: A group to discuss security awareness.
         privacy_setting:
           description: This is the privacy setting for the group.
           type: string
@@ -11267,47 +11538,15 @@ components:
             - Public
             - Private
             - Secret
-        members_count:
-          description: A count of members in group
-          type: integer
-          example: 150
-          readOnly: true
-        likes:
-          description: Total likes for all content in the group.
-          type: integer
-          example: 200
-          readOnly: true
         author_uuid:
           description: The uuid of the author
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
-          readOnly: true
         external_id:
           description: This is used to store the group's external reference ID.
           type: string
           example: ABC123
-        timestamp_created:
-          description: 'The timestamp (in seconds) of when the group was created'
-          type: integer
-          example: 1510941596
-        timestamp_updated:
-          description: 'The timestamp (in seconds) of when the group was updated'
-          type: integer
-          example: 1510941596
-      type: object
-    group-search-schema:
-      allOf:
-        - $ref: '#/components/schemas/group-schema'
-        - type: object
-          required:
-            - group_uuid
-          properties:
-            group_uuid:
-              description: The UUID of the group.
-              type: string
-              format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
     group-membership-common-schema:
       type: object
       properties:
