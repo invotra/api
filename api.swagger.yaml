@@ -207,6 +207,61 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /layouts:
+    post:
+      tags:
+        - 'layouts'
+      description: 'Provision a new layout.'
+      responses:
+        '201':
+          description: 'The layout was created successfully.'
+        '400':
+          description: 'The layout was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a layout.'
+        '422':
+          description: 'The layout was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/layout-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/layouts:write ]
+  /layouts/list:
+    get:
+      tags:
+        - 'layouts'
+      description: 'Search for layouts. An empty array is returned if no layouts where found.'
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of layouts.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/layout-schema'
+        '403':
+          description: 'User is not authorized to list layouts.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/layouts:read ]
   /logs:
     post:
       tags:
@@ -255,6 +310,36 @@ paths:
           description: An incorrect or malformed token was provided.
         '404':
           description: A file was not found at the supplied S3 URL.
+  /open_graph:
+    post:
+      tags:
+        - open graph
+      description: 'Perform an Open Graph scrape.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/open-graph-request-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/open_graph:write ]
+      responses:
+        '200':
+          description: 'The Open Graph scrape was successful.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/open-graph-schema'
+        '400':
+          description: 'The Open Graph scrape was not performed due to malformed JSON.'
+        '422':
+          description: 'The Open Graph scrape failed due to a problem performing the request on the upstream server.'
+        '404':
+          description: 'The Open Graph scrape failed as the URL was not found.'
+        '504':
+          description: 'The Open Graph scrape timed out performing the request on the upstream server.'
   /teams:
     get:
       tags:
@@ -854,6 +939,39 @@ paths:
           schema:
             type: boolean
             default: false
+        - in: query
+          name: start_timestamp
+          required: false
+          description: 'Filter the feed to only include messages created after (greater than or equal to) the specified timestamp (in seconds).'
+          schema:
+            type: integer
+        - in: query
+          name: end_timestamp
+          required: false
+          description: 'Filter the feed to only include messages created before (less than or equal to) the specified timestamp (in seconds).'
+          schema:
+            type: integer
+        - in: query
+          name: topics
+          description: 'Filter the feed to only include messages of a particular topic. Multiple values may be supplied.'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - content
+                - group
+                - user
+        - in: query
+          name: post_category_uuids
+          description: 'Filter the feed to only include messages of a particular post category. Multiple values may be supplied.'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
       responses:
         '200':
           description: >
@@ -865,12 +983,18 @@ paths:
                 type: object
                 required:
                   - count
+                  - storage
+                  - facets
                   - results
                 properties:
                   count:
                     description: Count of results.
                     type: integer
                     example: 50
+                  storage:
+                    $ref: '#/components/schemas/feed-storage-schema'
+                  facets:
+                    $ref: '#/components/schemas/feed-facets-schema'
                   results:
                     description: The results set.
                     type: array
@@ -2043,7 +2167,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/post-schema-base'
+              $ref: '#/components/schemas/post-schema-update'
         required: true
       security:
         - SessionCookieHeader: []
@@ -2860,6 +2984,102 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/custom_content:write ]
+  '/galleries/list':
+    get:
+      tags:
+        - 'galleries'
+      description: 'Search for galleries. An empty array is returned if no galleries where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of galleries on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of galleries matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/gallery-schema'
+        '403':
+          description: 'User is not authorized to list galleries.'
+  '/galleries/{gallery_id}':
+    parameters:
+      - description: 'The Invotra UUID of the gallery.'
+        in: path
+        name: gallery_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'galleries'
+      description: 'Get information about the gallery.'
+      responses:
+        '200':
+          description: 'Returns a single complete gallery object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/gallery-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this gallery.'
+        '404':
+          description: 'The UUID does not correspond to an existing gallery.'
   '/group_documents':
     post:
       tags:
@@ -3202,6 +3422,138 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:write ]
+  '/group_polls/{group_poll_id}/vote':
+    parameters:
+      - description: 'The Invotra UUID of the group poll.'
+        in: path
+        name: group_poll_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      tags:
+        - 'group polls'
+      description: 'Vote in the group poll.'
+      responses:
+        '201':
+          description: 'The vote in the group poll was successful.'
+        '400':
+          description: 'The vote in the group poll was not cast due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to vote in this group poll.'
+        '404':
+          description: 'The UUID does not correspond to an existing group poll.'
+        '422':
+          description: 'The group poll vote was not cast due to a Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/group-poll-vote-schema'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/group_polls:write ]
+  '/ideas/list':
+    get:
+      tags:
+        - 'ideas'
+      description: 'Search for ideas. An empty array is returned if no ideas where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of ideas matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/idea-schema'
+        '403':
+          description: 'User is not authorized to list ideas.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/ideas:read ]
+  '/ideas/{idea_id}':
+    parameters:
+      - description: 'The Invotra UUID of the idea.'
+        in: path
+        name: idea_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'ideas'
+      description: 'Get information about the idea.'
+      responses:
+        '200':
+          description: 'Returns a single complete idea object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/idea-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this idea.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/ideas:read ]
   '/lists':
     post:
       tags:
@@ -4638,6 +4990,202 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
+  '/queries/list':
+    get:
+      tags:
+        - 'queries'
+      description: 'Search for queries. An empty array is returned if no queries where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of queries matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/query-schema'
+        '403':
+          description: 'User is not authorized to list queries.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:read ]
+  '/queries/{query_id}':
+    parameters:
+      - description: 'The Invotra UUID of the query.'
+        in: path
+        name: query_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'queries'
+      description: 'Get information about the query.'
+      responses:
+        '200':
+          description: 'Returns a single complete query object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/query-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this query.'
+        '404':
+          description: 'The UUID does not correspond to an existing query.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:read ]
+  '/support_tickets/list':
+    get:
+      tags:
+        - 'support tickets'
+      description: 'Search for support tickets. An empty array is returned if no support tickets where found.'
+      parameters:
+        - name: author_uuid
+          description: 'Filter on Invotra UUID of the author.'
+          in: query
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: created_date
+          description: 'Filter on date created. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: updated_date
+          description: 'Filter on date updated. Format: YYYY-MM-DD.'
+          in: query
+          schema:
+            type: string
+            example: '2012-12-25'
+        - name: sort
+          description: 'Field to sort by.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - name: order
+          description: 'Sort order.'
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of support tickets matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/support-ticket-schema'
+        '403':
+          description: 'User is not authorized to list support tickets.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/support_tickets:read ]
+  '/support_tickets/{support_ticket_id}':
+    parameters:
+      - description: 'The Invotra UUID of the support ticket.'
+        in: path
+        name: support_ticket_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'support tickets'
+      description: 'Get information about the support ticket.'
+      responses:
+        '200':
+          description: 'Returns a single complete support ticket object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/support-ticket-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this support ticket.'
+        '404':
+          description: 'The UUID does not correspond to an existing support ticket.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/support_tickets:read ]
   '/webforms':
     post:
       tags:
@@ -9840,6 +10388,39 @@ paths:
           schema:
             type: boolean
             default: false
+        - in: query
+          name: start_timestamp
+          required: false
+          description: 'Filter the feed to only include messages created after (greater than or equal to) the specified timestamp (in seconds).'
+          schema:
+            type: integer
+        - in: query
+          name: end_timestamp
+          required: false
+          description: 'Filter the feed to only include messages created before (less than or equal to) the specified timestamp (in seconds).'
+          schema:
+            type: integer
+        - in: query
+          name: topics
+          description: 'Filter the feed to only include messages of a particular topic. Multiple values may be supplied.'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - content
+                - group
+                - user
+        - in: query
+          name: post_category_uuids
+          description: 'Filter the feed to only include messages of a particular post category. Multiple values may be supplied.'
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
       responses:
         '200':
           description: Returns the feed for a user.
@@ -9849,12 +10430,18 @@ paths:
                 type: object
                 required:
                   - count
+                  - storage
+                  - facets
                   - results
                 properties:
                   count:
                     description: Count of results.
                     type: integer
                     example: 50
+                  storage:
+                    $ref: '#/components/schemas/feed-storage-schema'
+                  facets:
+                    $ref: '#/components/schemas/feed-facets-schema'
                   results:
                     description: The results set.
                     type: array
@@ -10039,6 +10626,57 @@ components:
       required:
         - message
         - uuid
+    open-graph-request-schema:
+      type: object
+      properties:
+        url:
+          description: 'The URL to perform the Open Graph scrape against.'
+          type: string
+          example: 'https://ogp.me/'
+      required:
+        - url
+    open-graph-schema:
+      description: 'The Open Graph result.'
+      type: object
+      properties:
+        ogTitle:
+          description: 'The Open Graph title.'
+          type: string
+          example: 'Open Graph protocol'
+        ogType:
+          description: 'The Open Graph type.'
+          type: string
+          example: 'website'
+        ogUrl:
+          description: 'The Open Graph URL.'
+          type: string
+          format: url
+          example: 'https://ogp.me/'
+        ogDescription:
+          description: 'The Open Graph description.'
+          type: string
+          example: 'The Open Graph protocol enables any web page to become a rich object in a social graph.'
+        ogImage:
+          description: 'The Open Graph image.'
+          type: object
+          properties:
+            url:
+              description: 'The location of the image.'
+              type: string
+              format: url
+              example: 'https://ogp.me/logo.png'
+            width:
+              description: 'The width of the image in pixels.'
+              type: integer
+              example: 300
+            height:
+              description: 'The height of the image in pixels.'
+              type: integer
+              example: 300
+            type:
+              description: 'The MIME type of the image.'
+              type: string
+              example: 'image/png'
     pdf-export-completion-schema:
       type: object
       properties:
@@ -10228,6 +10866,58 @@ components:
         password:
           description: The password that the user logs in with
           type: string
+    layout-schema:
+      allOf:
+        - $ref: '#/components/schemas/layout-schema-create'
+        - type: object
+          properties:
+            machine_name:
+              description: 'The machine name of this layout.'
+              type: string
+              example: 'head_1_body_4'
+          required:
+            - machine_name
+    layout-schema-create:
+      type: object
+      required:
+        - title
+        - description
+        - rows
+      properties:
+        title:
+          description: 'Layout title (limit of 120 characters).'
+          type: string
+          example: 'Head 1 Body 4'
+          minLength: 1
+          maxLength: 120
+        description:
+          description: 'Layout description.'
+          type: string
+          example: 'This layout has a full width header row, followed by a 4 part body row.'
+        rows:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: object
+            required:
+              - row_type
+            properties:
+              row_type:
+                description: 'Layout row type. Column width percentages within the row.'
+                type: string
+                enum:
+                  - '100'
+                  - '50/50'
+                  - '33/66'
+                  - '66/33'
+                  - '33/33/33'
+                  - '25/75'
+                  - '75/25'
+                  - '50/25/25'
+                  - '25/25/50'
+                  - '25/25/25/25'
+                  - '25/50/25'
     log-schema:
       type: object
       properties:
@@ -10243,6 +10933,7 @@ components:
         - app_id
         - log_message
     feed-schema:
+      type: object
       required:
         - user_uuid
         - user_image
@@ -10299,6 +10990,11 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
+        entity_location:
+          description: 'The API URI for the entity that the feed message is about.'
+          type: string
+          example: 'https://dev.invotra.com/api/0.3/blogs/01234567-89ab-cdef-1234-56789abcdef0'
+          format: uri
         entity_title:
           description: The title of the entity that the feed message is about
           type: string
@@ -10338,8 +11034,8 @@ components:
           description: 'This is topic of the feed, used for filtering'
           type: string
           enum:
-            - people
-            - groups
+            - user
+            - group
             - content
         category:
           description: The category of a post
@@ -10380,7 +11076,49 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
-      type: object
+        group_privacy_setting:
+          description: 'This is the privacy setting for the group.'
+          type: string
+          enum:
+            - Public
+            - Private
+            - Secret
+        group_members:
+          description: 'Users who are members of the group (a maximum of 8 will be returned).'
+          type: array
+          items:
+            type: object
+            required:
+              - uuid
+            properties:
+              uuid:
+                description: 'Invotra UUID of the user.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+              user_avatar:
+                description: "The user's image."
+                type: string
+                example: "https://dev.invotra.com/sites/default/files/styles/large_avatar/public/Dorothy%20Whitehead.jpg?itok=6p19"
+        group_members_count:
+          description: 'Total count of the group members including administrators.'
+          type: integer
+          example: 16
+        content_uuid:
+          description: 'Invotra UUID of the content referenced by this feed message.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_location:
+          description: 'The API URI of the content referenced by this feed message.'
+          type: string
+          example: 'https://dev.invotra.com/api/0.3/blogs/01234567-89ab-cdef-1234-56789abcdef0'
+          format: uri
+        content_link:
+          description: 'The URL of the content referenced by this feed message.'
+          type: string
+          format: url
+          example: 'https://dev.invotra.com/uuid/node/1f0c6cb5-a3c3-4197-bebc-b3e44462dc26'
     feed-status-schema:
       required:
         - feed
@@ -10392,6 +11130,58 @@ components:
           enum:
             - 0
             - 1
+    feed-storage-schema:
+      description: 'Data storage options for the client.'
+      required:
+        - clear
+      type: object
+      properties:
+        clear:
+          description: 'Indicates to the client that it should clear all locally stored data.'
+          type: boolean
+          example: false
+    feed-facets-schema:
+      description: 'Facets counts for the feed.'
+      type: object
+      required:
+        - topics
+        - post_categories
+      properties:
+        topics:
+          type: array
+          items:
+            type: object
+            required:
+              - facet_count
+              - data
+            properties:
+              facet_count:
+                description: 'The facet count for this topic.'
+                type: integer
+                example: 33
+              data:
+                type: object
+                properties:
+                  topic:
+                    type: string
+                    enum:
+                      - content
+                      - group
+                      - user
+        post_categories:
+          type: array
+          items:
+            type: object
+            required:
+              - facet_count
+              - data
+            properties:
+              facet_count:
+                description: 'The facet count for this post category.'
+                type: integer
+                example: 33
+              data:
+                $ref: '#/components/schemas/post-category-schema'
     notification-item-schema:
       required:
         - uuid
@@ -10986,52 +11776,40 @@ components:
           example: 3
     post-schema:
       allOf:
-        - $ref: '#/components/schemas/post-schema-base'
+        - $ref: '#/components/schemas/post-schema-common'
         - type: object
           required:
             - uuid
             - description
-            - author_uuid
+            - display_name
+            - pin
             - likes_count
             - comment_count
+            - attachments_count
             - timestamp
+            - depth
+            - current_user_liked
+            - group_uuid
+            - author_uuid
+            - thread_uuid
+            - source
           properties:
             uuid:
               type: string
               format: uuid
               description: This is the Invotra UUID of the post.
               example: 01234567-89ab-cdef-1234-56789abcdef0
-            parent_uuid:
-              type: string
-              format: uuid
-              description: This is the Invotra UUID of the parent of the post.
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-            thread_uuid:
-              type: string
-              format: uuid
-              description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-            group_uuid:
-              description: This is the Invotra UUID of the group that the post belongs to.
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-              type: string
-              format: uuid
             description:
               description: The HTML-rendered main body of the post. Do not use this value for editing - use the value in the source field instead.
               type: string
               example: 'Hey <a href="/users/username" data-mentioned-uuid="1f1397e1-c263-4477-84a0-ca6c1c1560fe">@John Smith</a>, check out the latest <a href="/apps/groups/chat?hashtag=security">#security</a> news in this group!'
-            pin:
-              description: Whether or not this post is pinned.
-              type: boolean
-            author_uuid:
-              description: The uuid of the author
-              type: string
-              format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
             display_name:
               description: The display name of the author
               type: string
               example: Dorothy Whitehead
+            pin:
+              description: Whether or not this post is pinned.
+              type: boolean
             likes_count:
               description: Count of likes on the post
               type: integer
@@ -11056,40 +11834,79 @@ components:
               description: A flag to determine if the current user has liked this post
               type: boolean
               example: true
+            post_attachments:
+              description: 'List of attachments to the post.'
+              type: array
+              items:
+                $ref: '#/components/schemas/file-schema'
+            group_uuid:
+              type: string
+            author_uuid:
+              type: string
+            thread_uuid:
+              type: string
+            source:
+              type: string
     post-schema-create:
       allOf:
-        - $ref: '#/components/schemas/post-schema-base'
+        - $ref: '#/components/schemas/post-schema-update'
+        - type: object
+          required:
+            - group_uuid
+            - author_uuid
+            - source
+          properties:
+            group_uuid:
+              type: string
+            author_uuid:
+              type: string
+            source:
+              type: string
+    post-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/post-schema-common'
         - type: object
           properties:
-            parent_uuid:
-              type: string
-              format: uuid
-              description: This is the Invotra UUID of the parent of the post.
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-            author_uuid:
-              description: The uuid of the author
-              type: string
-              format: uuid
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-            group_uuid:
-              description: This is the Invotra UUID of the group that the post belongs to.
-              example: 01234567-89ab-cdef-1234-56789abcdef0
-              type: string
-              format: uuid
-      required:
-        - description
-        - group_uuid
-        - author_uuid
-    post-schema-base:
+            post_attachments:
+              description: 'The attached files to the post.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                required:
+                  - uuid
+    post-schema-common:
+      type: object
       properties:
+        group_uuid:
+          description: This is the Invotra UUID of the group that the post belongs to.
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          type: string
+          format: uuid
+        author_uuid:
+          description: The uuid of the author
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        parent_uuid:
+          type: string
+          format: uuid
+          description: This is the Invotra UUID of the parent of the post.
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        thread_uuid:
+          type: string
+          format: uuid
+          description: This is the Invotra UUID of the root post of this thread (same as uuid if this is the root post).
+          example: 01234567-89ab-cdef-1234-56789abcdef0
         source:
           description: The unrendered main body for the post. This value should be used only for editing and is *NOT* safe to display as-is in any HTML context.
           type: string
           example: 'Hey [@username], check out the latest #security news in this group!'
-        external_id:
-          description: This is used to store the post's external reference id
-          type: string
-          example: ABC123
         category:
           description: The category of a post
           type: string
@@ -11104,18 +11921,17 @@ components:
             - Problem / Risk
             - Agreed
             - Decision
-        featured_image:
-          description: The featured image for this post
-          type: object
-          allOf:
-            - $ref: '#/components/schemas/file-schema'
+        external_id:
+          description: This is used to store the post's external reference id
+          type: string
+          example: ABC123
         attachments:
-          description: A list of attachments for the post
+          description: A list of Invotra file UUID attachments for the post
+          deprecated: true
           type: array
           items:
-            allOf:
-              - $ref: '#/components/schemas/file-schema'
-      type: object
+            type: string
+            format: uuid
     post-report-schema-create:
       properties:
         reason:
@@ -11851,6 +12667,191 @@ components:
           description: 'The custom content external reference id.'
           type: string
           example: 'ABC123'
+    gallery-schema:
+      allOf:
+        - $ref: '#/components/schemas/gallery-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the gallery.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            site_section:
+              description: 'The site section of this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the site section.'
+                  type: string
+                  example: 'Finance'
+            image:
+              description: 'Gallery image.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/file-schema'
+            author:
+              description: 'The author of this gallery.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            owner:
+              description: 'The owner of this gallery.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            team:
+              description: 'The team targeting this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the team.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the team.'
+                  type: string
+                  example: 'Operations'
+            locations:
+              description: 'The locations targeting this gallery.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/location-trimmed-schema'
+            grades:
+              description: 'The grades targeting this gallery.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the grade.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the grade.'
+                    type: string
+                    example: 'Grade 3'
+            regions:
+              description: 'The regions targeting this gallery.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'Name of the region.'
+                    type: string
+                    example: 'Midlands'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the gallery was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the gallery was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the gallery.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the gallery.'
+              type: integer
+              example: 5
+            published:
+              description: 'Published status for the gallery.'
+              type: boolean
+              example: true
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
+    gallery-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the gallery.'
+          type: string
+          example: 'Gallery showing the new car park.'
+        body:
+          description: 'The body of the gallery.'
+          type: string
+          example: 'The car park is having the line markings repainted, see the pictures.'
+        state:
+          description: 'Indicates the workflow state of the gallery.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
+        review_date_timestamp:
+          description: 'The review date timestamp for the gallery (in seconds).'
+          type: integer
+          example: 1510941596
+        related_external_links:
+          description: 'Related external links for the gallery.'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the gallery.'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content'
+                  - 'site section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+        enable_comments:
+          description: 'Indicates that comments are enabled for this content.'
+          type: boolean
+          default: true
+          example: true
+        featured:
+          description: 'Indicates that this gallery is featured.'
+          type: boolean
+          default: false
+          example: false
+        external_id:
+          description: 'The gallery external reference id.'
+          type: string
+          example: 'ABC123'
     group-document-schema:
       allOf:
         - $ref: '#/components/schemas/group-document-schema-common'
@@ -12078,6 +13079,10 @@ components:
                   vote_count: 24
                 - option: 'Mutton'
                   vote_count: 48
+            current_user_voted:
+              description: 'Indicates that the current user has voted in this group poll.'
+              type: boolean
+              example: true
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the group poll was created.'
               type: integer
@@ -12143,6 +13148,79 @@ components:
           description: 'Title of the group poll.'
           type: string
           example: 'What is your favorite food?'
+    group-poll-vote-schema:
+      type: object
+      required:
+        - option
+      properties:
+        option:
+          description: 'The option being voted for in the group poll.'
+          type: string
+          example: 'Pork'
+    idea-schema:
+      allOf:
+        - $ref: '#/components/schemas/idea-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the idea.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            idea_assignee:
+              description: 'The assignee user of the idea.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            idea_category:
+              description: 'The idea category.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the idea category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the idea category.'
+                  type: string
+                  example: 'Important'
+            author:
+              description: 'The author of this idea.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the idea was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the idea was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the idea.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the idea.'
+              type: integer
+              example: 5
+    idea-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the idea.'
+          type: string
+          example: 'Guidelines for creating a strong password'
+        body:
+          description: 'The body of the idea.'
+          type: string
+          example: 'You can create strong passwords using an online random password generator.'
+        idea_reference:
+          description: 'The idea reference.'
+          type: string
+          example: 'I123'
     list-schema:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
@@ -15051,6 +16129,120 @@ components:
           type: boolean
           default: false
           example: false
+    query-schema:
+      allOf:
+        - $ref: '#/components/schemas/query-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the query.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_assignee:
+              description: 'The assignee user of the query.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            query_category:
+              description: 'The category of the query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the query category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the query category.'
+                  type: string
+                  example: 'Important'
+            author:
+              description: 'The author of this query.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the query was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the query was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the query.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the query.'
+              type: integer
+              example: 5
+    query-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the query.'
+          type: string
+          example: 'Company talent competition'
+        body:
+          description: 'The body of the query.'
+          type: string
+          example: 'Demonstrate your talent at the company talent competition.'
+        query_reference:
+          description: 'The query reference.'
+          type: string
+          example: 'Q123'
+        review_date_timestamp:
+          description: 'The review date timestamp for the query (in seconds).'
+          type: integer
+          example: 1510941596
+    support-ticket-schema:
+      allOf:
+        - $ref: '#/components/schemas/support-ticket-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the support ticket.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this support ticket.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the support ticket was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the support ticket was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the support ticket.'
+              type: integer
+              example: 5
+    support-ticket-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the support ticket.'
+          type: string
+          example: 'Website broken'
+        body:
+          description: 'The body of the support ticket.'
+          type: string
+          example: 'The website is broken can someone please take a look.'
+        support_ticket_reference:
+          description: 'The support ticket reference.'
+          type: string
+          example: 'SUP123'
+        review_date_timestamp:
+          description: 'The review date timestamp for the support ticket (in seconds).'
+          type: integer
+          example: 1510941596
     webform-schema:
       allOf:
         - $ref: '#/components/schemas/webform-schema-common'
@@ -15520,6 +16712,17 @@ components:
             - building
             - floor
             - space
+    multi-media-trimmed-schema:
+      properties:
+        uuid:
+          description: 'Invotra UUID of the multi media.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        title:
+          description: 'The title of the multi media.'
+          type: string
+          example: 'Video of car park renovation.'
     user-trimmed-schema:
       properties:
         uuid:
