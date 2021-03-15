@@ -2104,6 +2104,23 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+    delete:
+      tags:
+        - posts
+      responses:
+        '200':
+          description: 'The post was deleted successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'The user does not have permission to delete the post.'
+        '404':
+          description: 'The UUID does not correspond to an existing post.'
+      description: Delete a post.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   '/posts/{post_id}/replies':
     parameters:
       - description: The Invotra UUID of the parent post. Currently this must be a top-level post in its group. This restriction may be relaxed in a future API version.
@@ -4916,6 +4933,23 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/manuals:read ]
+    delete:
+      tags:
+        - manuals
+      description: 'Delete a manual page, including the root manual page.'
+      responses:
+        '200':
+          description: 'The manual page was deleted successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'The user does not have permission to delete the manual page.'
+        '404':
+          description: 'The UUID does not correspond to an existing manual page.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/manuals:write ]
   '/manuals/pages':
     get:
       description: Get all pages in a manual or manual page.
