@@ -1812,6 +1812,23 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+    delete:
+      tags:
+        - groups
+      responses:
+        '200':
+          description: 'The group was deleted successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'The user does not have permission to delete the group.'
+        '404':
+          description: 'The UUID does not correspond to an existing group.'
+      description: Delete a group.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:write ]
   '/groups/{group_id}/members':
     parameters:
       - description: The Invotra UUID of the group.
