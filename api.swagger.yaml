@@ -1484,7 +1484,7 @@ paths:
           in: query
           name: show_blocked_members
           schema:
-            type: integer
+            type: boolean
             example: true
             default: false
         - description: Field to sort by.
