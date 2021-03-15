@@ -188,6 +188,61 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /layouts:
+    post:
+      tags:
+        - 'layouts'
+      description: 'Provision a new layout.'
+      responses:
+        '201':
+          description: 'The layout was created successfully.'
+        '400':
+          description: 'The layout was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a layout.'
+        '422':
+          description: 'The layout was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/layout-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/layouts:write ]
+  /layouts/list:
+    get:
+      tags:
+        - 'layouts'
+      description: 'Search for layouts. An empty array is returned if no layouts where found.'
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of layouts.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/layout-schema'
+        '403':
+          description: 'User is not authorized to list layouts.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/layouts:read ]
   /logs:
     post:
       tags:
@@ -10409,6 +10464,58 @@ components:
         password:
           description: The password that the user logs in with
           type: string
+    layout-schema:
+      allOf:
+        - $ref: '#/components/schemas/layout-schema-create'
+        - type: object
+          properties:
+            machine_name:
+              description: 'The machine name of this layout.'
+              type: string
+              example: 'head_1_body_4'
+          required:
+            - machine_name
+    layout-schema-create:
+      type: object
+      required:
+        - title
+        - description
+        - rows
+      properties:
+        title:
+          description: 'Layout title (limit of 120 characters).'
+          type: string
+          example: 'Head 1 Body 4'
+          minLength: 1
+          maxLength: 120
+        description:
+          description: 'Layout description.'
+          type: string
+          example: 'This layout has a full width header row, followed by a 4 part body row.'
+        rows:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: object
+            required:
+              - row_type
+            properties:
+              row_type:
+                description: 'Layout row type. Column width percentages within the row.'
+                type: string
+                enum:
+                  - '100'
+                  - '50/50'
+                  - '33/66'
+                  - '66/33'
+                  - '33/33/33'
+                  - '25/75'
+                  - '75/25'
+                  - '50/25/25'
+                  - '25/25/50'
+                  - '25/25/25/25'
+                  - '25/50/25'
     log-schema:
       type: object
       properties:
