@@ -5283,6 +5283,39 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
+  '/queries':
+    post:
+      tags:
+        - 'queries'
+      description: 'Provision a new query.'
+      responses:
+        '201':
+          description: 'The query was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned query may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The query was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a query.'
+        '422':
+          description: 'The query was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:write ]
   '/queries/list':
     get:
       tags:
@@ -5381,6 +5414,31 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/queries:read ]
+    put:
+      tags:
+        - 'queries'
+      description: 'Update query information.'
+      responses:
+        '200':
+          description: 'The query information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this query.'
+        '404':
+          description: 'The UUID does not correspond to an existing query.'
+        '422':
+          description: 'The query was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query-schema-update'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:write ]
     delete:
       tags:
         - 'queries'
@@ -16891,6 +16949,75 @@ components:
               description: 'Count of likes on the query.'
               type: integer
               example: 5
+    query-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/query-schema-common'
+        - type: object
+          properties:
+            query_assignee:
+              description: 'The assignee user of the query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_category:
+              description: 'The category of the query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    query-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/query-schema-common'
+        - type: object
+          required:
+            - title
+            - body
+            - query_assignee
+            - query_category
+          properties:
+            query_assignee:
+              description: 'The assignee user of the query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_category:
+              description: 'The category of the query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     query-schema-common:
       type: object
       properties:
