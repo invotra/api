@@ -5079,6 +5079,39 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
+  '/queries':
+    post:
+      tags:
+        - 'queries'
+      description: 'Provision a new query.'
+      responses:
+        '201':
+          description: 'The query was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned query may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The query was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a query.'
+        '422':
+          description: 'The query was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:write ]
   '/queries/list':
     get:
       tags:
@@ -5177,6 +5210,31 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/queries:read ]
+    put:
+      tags:
+        - 'queries'
+      description: 'Update query information.'
+      responses:
+        '200':
+          description: 'The query information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this query.'
+        '404':
+          description: 'The UUID does not correspond to an existing query.'
+        '422':
+          description: 'The query was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query-schema-update'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/queries:write ]
     delete:
       tags:
         - 'queries'
@@ -16288,6 +16346,189 @@ components:
           type: boolean
           default: false
           example: false
+    query-schema:
+      allOf:
+        - $ref: '#/components/schemas/query-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the query.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_assignee:
+              description: 'The assignee user of the query.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            query_category:
+              description: 'The category of the query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the query category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'The name of the query category.'
+                  type: string
+                  example: 'Important'
+            author:
+              description: 'The author of this query.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the query was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the query was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the query.'
+              type: integer
+              example: 5
+            likes_count:
+              description: 'Count of likes on the query.'
+              type: integer
+              example: 5
+    query-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/query-schema-common'
+        - type: object
+          properties:
+            query_assignee:
+              description: 'The assignee user of the query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_category:
+              description: 'The category of the query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    query-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/query-schema-common'
+        - type: object
+          required:
+            - title
+            - body
+            - query_assignee
+            - query_category
+          properties:
+            query_assignee:
+              description: 'The assignee user of the query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            query_category:
+              description: 'The category of the query.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    query-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the query.'
+          type: string
+          example: 'Company talent competition'
+        body:
+          description: 'The body of the query.'
+          type: string
+          example: 'Demonstrate your talent at the company talent competition.'
+        query_reference:
+          description: 'The query reference.'
+          type: string
+          example: 'Q123'
+        review_date_timestamp:
+          description: 'The review date timestamp for the query (in seconds).'
+          type: integer
+          example: 1510941596
+    support-ticket-schema:
+      allOf:
+        - $ref: '#/components/schemas/support-ticket-schema-common'
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the support ticket.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this support ticket.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
+            timestamp_created:
+              description: 'This is the timestamp (in seconds) of when the support ticket was created.'
+              type: integer
+              example: 1510941596
+            timestamp_updated:
+              description: 'This is the timestamp (in seconds) of when the support ticket was last updated.'
+              type: integer
+              example: 1510941696
+            comment_count:
+              description: 'Count of comments on the support ticket.'
+              type: integer
+              example: 5
+    support-ticket-schema-common:
+      type: object
+      properties:
+        title:
+          description: 'Title of the support ticket.'
+          type: string
+          example: 'Website broken'
+        body:
+          description: 'The body of the support ticket.'
+          type: string
+          example: 'The website is broken can someone please take a look.'
+        support_ticket_reference:
+          description: 'The support ticket reference.'
+          type: string
+          example: 'SUP123'
+        review_date_timestamp:
+          description: 'The review date timestamp for the support ticket (in seconds).'
+          type: integer
+          example: 1510941596
     webform-schema:
       allOf:
         - $ref: '#/components/schemas/webform-schema-common'
