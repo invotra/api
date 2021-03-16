@@ -3539,6 +3539,39 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:write ]
+  '/ideas':
+    post:
+      tags:
+        - 'ideas'
+      description: 'Provision a new idea.'
+      responses:
+        '201':
+          description: 'The idea was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned idea may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The idea was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a idea.'
+        '422':
+          description: 'The idea was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/idea-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/ideas:write ]
   '/ideas/list':
     get:
       tags:
@@ -3637,6 +3670,31 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/ideas:read ]
+    put:
+      tags:
+        - 'ideas'
+      description: 'Update idea information.'
+      responses:
+        '200':
+          description: 'The idea information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this idea.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea.'
+        '422':
+          description: 'The idea was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/idea-schema-update'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/ideas:write ]
     delete:
       tags:
         - 'ideas'
@@ -13519,6 +13577,83 @@ components:
               description: 'Count of likes on the idea.'
               type: integer
               example: 5
+    idea-schema-update:
+      allOf:
+        - $ref: '#/components/schemas/idea-schema-common'
+        - type: object
+          properties:
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
+            idea_category:
+              description: 'The idea category.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the idea category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this idea. (Will use the authenticated user if not supplied.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            idea_assignee:
+              description: 'The assignee user of the idea.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    idea-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/idea-schema-common'
+        - type: object
+          required:
+            - title
+            - body
+            - state
+            - site_section
+          properties:
+            schedule_date_timestamp:
+              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
+              type: integer
+              example: 1510941596
+            idea_category:
+              description: 'The idea category.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the idea category.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            author:
+              description: 'The author of this idea. (Will use the authenticated user if not supplied.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            idea_assignee:
+              description: 'The assignee user of the idea.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     idea-schema-common:
       type: object
       properties:
