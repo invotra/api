@@ -1738,6 +1738,13 @@ paths:
         schema:
           type: string
           format: uuid
+      - description: 'Show blocked users in the group memberships.'
+        in: query
+        name: show_blocked_members
+        schema:
+          type: boolean
+          example: true
+          default: false
     get:
       tags:
         - groups
