@@ -15277,17 +15277,10 @@ components:
           type: string
           example: Dorothy Whitehead
         title:
-          default: ''
-          description: The user's title
-          enum:
-            - ''
-            - Dr
-            - Mr
-            - Miss
-            - Mrs
-            - Ms
-          type: string
-          example: Ms
+          description: "The user's title. A title object."
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/title-schema'
         firstname:
           description: The user's first name
           type: string
