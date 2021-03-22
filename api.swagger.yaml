@@ -3149,12 +3149,6 @@ paths:
           schema:
             type: string
             example: 'ABC123'
-        - name: state
-          description: 'Filter the list of lists on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
-          in: query
-          schema:
-            type: string
-            example: 'unpublished'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4634,12 +4628,6 @@ paths:
           schema:
             type: string
             example: 'ABC123'
-        - name: state
-          description: 'Filter the list of webforms on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
-          in: query
-          schema:
-            type: string
-            example: 'unpublished'
         - name: sort
           description: 'Field to sort by.'
           in: query
