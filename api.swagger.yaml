@@ -1552,9 +1552,14 @@ paths:
       tags:
         - groups
       parameters:
-        - description: Search term. Matches on whole words.
+        - description: Search groups where term matches title or body. Matches on whole words.
           in: query
           name: fulltext_search
+          schema:
+            type: string
+        - description: Search groups where term matches title. Matches on whole words.
+          in: query
+          name: title_fulltext_search
           schema:
             type: string
         - description: 'Filter by UUID of a category. Multiple values may be supplied.'
