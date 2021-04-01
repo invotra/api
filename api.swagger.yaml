@@ -13973,6 +13973,10 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
+            idea_reference:
+              description: 'The idea reference (read only automatically generated).'
+              type: string
+              example: 'I123'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the idea was created.'
               type: integer
@@ -14077,10 +14081,6 @@ components:
           description: 'The body of the idea.'
           type: string
           example: 'You can create strong passwords using an online random password generator.'
-        idea_reference:
-          description: 'The idea reference.'
-          type: string
-          example: 'I123'
     list-schema:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
@@ -17022,6 +17022,10 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
+            query_reference:
+              description: 'The query reference (read only automatically generated).'
+              type: string
+              example: 'Q123'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the query was created.'
               type: integer
@@ -17118,10 +17122,6 @@ components:
           description: 'The body of the query.'
           type: string
           example: 'Demonstrate your talent at the company talent competition.'
-        query_reference:
-          description: 'The query reference.'
-          type: string
-          example: 'Q123'
         review_date_timestamp:
           description: 'The review date timestamp for the query (in seconds).'
           type: integer
@@ -17141,6 +17141,10 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
+            support_ticket_reference:
+              description: 'The support ticket reference.'
+              type: string
+              example: 'SUP123'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the support ticket was created.'
               type: integer
@@ -17195,10 +17199,6 @@ components:
           description: 'The body of the support ticket.'
           type: string
           example: 'The website is broken can someone please take a look.'
-        support_ticket_reference:
-          description: 'The support ticket reference.'
-          type: string
-          example: 'SUP123'
         review_date_timestamp:
           description: 'The review date timestamp for the support ticket (in seconds).'
           type: integer
