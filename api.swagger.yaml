@@ -3700,7 +3700,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of group documents on a comma seperated list of statuses. Valid statuses are "draft", "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of ideas on a comma seperated list of statuses. Valid statuses are "draft", "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -5256,39 +5256,6 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
-  '/queries':
-    post:
-      tags:
-        - 'queries'
-      description: 'Provision a new query.'
-      responses:
-        '201':
-          description: 'The query was created successfully.'
-          headers:
-            Location:
-              description: 'The URL at which the newly provisioned query may be retrieved.'
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/successful-post-response-schema'
-        '400':
-          description: 'The query was not saved due to malformed JSON.'
-        '403':
-          description: 'User is not authorized to create a query.'
-        '422':
-          description: 'The query was not saved due to Drupal validation failure or JSON schema validation failure.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/query-schema-create'
-        required: true
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/queries:write ]
   '/queries/list':
     get:
       tags:
@@ -5314,6 +5281,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of queries on a comma-separated list of states. Valid statuses are "draft", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -16932,74 +16905,24 @@ components:
               type: integer
               example: 5
     query-schema-update:
-      allOf:
-        - $ref: '#/components/schemas/query-schema-common'
-        - type: object
+      type: object
+      properties:
+        author:
+          description: 'The author of this query. (Will use the authenticated user if not supplied.'
+          type: object
           properties:
-            query_assignee:
-              description: 'The assignee user of the query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            author:
-              description: 'The author of this query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            query_category:
-              description: 'The category of the query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the category.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-    query-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/query-schema-common'
-        - type: object
-          required:
-            - title
-            - body
-            - query_assignee
-            - query_category
-          properties:
-            query_assignee:
-              description: 'The assignee user of the query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            author:
-              description: 'The author of this query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            query_category:
-              description: 'The category of the query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the category.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            uuid:
+              description: 'Invotra UUID of the user.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        state:
+          description: 'Indicates the workflow state of the query.'
+          type: string
+          enum:
+            - 'draft'
+            - 'published'
+            - 'unpublished'
     query-schema-common:
       type: object
       properties:
@@ -17011,6 +16934,15 @@ components:
           description: 'The body of the query.'
           type: string
           example: 'Demonstrate your talent at the company talent competition.'
+        state:
+          description: 'Indicates the workflow state of the query.'
+          type: string
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
         review_date_timestamp:
           description: 'The review date timestamp for the query (in seconds).'
           type: integer
