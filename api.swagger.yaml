@@ -5456,39 +5456,6 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/queries:write ]
-  '/support_tickets':
-    post:
-      tags:
-        - 'support tickets'
-      description: 'Provision a new support ticket.'
-      responses:
-        '201':
-          description: 'The support ticket was created successfully.'
-          headers:
-            Location:
-              description: 'The URL at which the newly provisioned support ticket may be retrieved.'
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/successful-post-response-schema'
-        '400':
-          description: 'The support ticket was not saved due to malformed JSON.'
-        '403':
-          description: 'User is not authorized to create a support ticket.'
-        '422':
-          description: 'The support ticket was not saved due to Drupal validation failure or JSON schema validation failure.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/support-ticket-schema-create'
-        required: true
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/support_tickets:write ]
   '/support_tickets/list':
     get:
       tags:
@@ -17142,7 +17109,7 @@ components:
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
             support_ticket_reference:
-              description: 'The support ticket reference.'
+              description: 'The support ticket reference (read only automatically generated).'
               type: string
               example: 'SUP123'
             timestamp_created:
@@ -17158,36 +17125,17 @@ components:
               type: integer
               example: 5
     support-ticket-schema-update:
-      allOf:
-        - $ref: '#/components/schemas/support-ticket-schema-common'
-        - type: object
+      type: object
+      properties:
+        author:
+          description: 'The author of this support ticket.'
+          type: object
           properties:
-            author:
-              description: 'The author of this support ticket.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-    support-ticket-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/support-ticket-schema-common'
-        - type: object
-          required:
-            - title
-            - body
-          properties:
-            author:
-              description: 'The author of this support ticket.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            uuid:
+              description: 'Invotra UUID of the user.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
     support-ticket-schema-common:
       type: object
       properties:
