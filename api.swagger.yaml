@@ -3718,39 +3718,6 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:write ]
-  '/ideas':
-    post:
-      tags:
-        - 'ideas'
-      description: 'Provision a new idea.'
-      responses:
-        '201':
-          description: 'The idea was created successfully.'
-          headers:
-            Location:
-              description: 'The URL at which the newly provisioned idea may be retrieved.'
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/successful-post-response-schema'
-        '400':
-          description: 'The idea was not saved due to malformed JSON.'
-        '403':
-          description: 'User is not authorized to create a idea.'
-        '422':
-          description: 'The idea was not saved due to Drupal validation failure or JSON schema validation failure.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/idea-schema-create'
-        required: true
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/ideas:write ]
   '/ideas/list':
     get:
       tags:
@@ -3782,6 +3749,12 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: state
+          description: 'Filter the list of ideas on a comma seperated list of statuses. Valid statuses are "draft", "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -5375,39 +5348,6 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
-  '/queries':
-    post:
-      tags:
-        - 'queries'
-      description: 'Provision a new query.'
-      responses:
-        '201':
-          description: 'The query was created successfully.'
-          headers:
-            Location:
-              description: 'The URL at which the newly provisioned query may be retrieved.'
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/successful-post-response-schema'
-        '400':
-          description: 'The query was not saved due to malformed JSON.'
-        '403':
-          description: 'User is not authorized to create a query.'
-        '422':
-          description: 'The query was not saved due to Drupal validation failure or JSON schema validation failure.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/query-schema-create'
-        required: true
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/queries:write ]
   '/queries/list':
     get:
       tags:
@@ -5433,6 +5373,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - name: state
+          description: 'Filter the list of queries on a comma-separated list of states. Valid statuses are "draft", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          in: query
+          schema:
+            type: string
+            example: 'unpublished'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -5548,39 +5494,6 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/queries:write ]
-  '/support_tickets':
-    post:
-      tags:
-        - 'support tickets'
-      description: 'Provision a new support ticket.'
-      responses:
-        '201':
-          description: 'The support ticket was created successfully.'
-          headers:
-            Location:
-              description: 'The URL at which the newly provisioned support ticket may be retrieved.'
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/successful-post-response-schema'
-        '400':
-          description: 'The support ticket was not saved due to malformed JSON.'
-        '403':
-          description: 'User is not authorized to create a support ticket.'
-        '422':
-          description: 'The support ticket was not saved due to Drupal validation failure or JSON schema validation failure.'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/support-ticket-schema-create'
-        required: true
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/support_tickets:write ]
   '/support_tickets/list':
     get:
       tags:
@@ -14094,6 +14007,10 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
+            idea_reference:
+              description: 'The idea reference (read only automatically generated).'
+              type: string
+              example: 'I123'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the idea was created.'
               type: integer
@@ -14111,82 +14028,24 @@ components:
               type: integer
               example: 5
     idea-schema-update:
-      allOf:
-        - $ref: '#/components/schemas/idea-schema-common'
-        - type: object
+      type: object
+      properties:
+        author:
+          description: 'The author of this idea. (Will use the authenticated user if not supplied.'
+          type: object
           properties:
-            schedule_date_timestamp:
-              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
-              type: integer
-              example: 1510941596
-            idea_category:
-              description: 'The idea category.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the idea category.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            author:
-              description: 'The author of this idea. (Will use the authenticated user if not supplied.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            idea_assignee:
-              description: 'The assignee user of the idea.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-    idea-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/idea-schema-common'
-        - type: object
-          required:
-            - title
-            - body
-            - state
-            - site_section
-          properties:
-            schedule_date_timestamp:
-              description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
-              type: integer
-              example: 1510941596
-            idea_category:
-              description: 'The idea category.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the idea category.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            author:
-              description: 'The author of this idea. (Will use the authenticated user if not supplied.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            idea_assignee:
-              description: 'The assignee user of the idea.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            uuid:
+              description: 'Invotra UUID of the user.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        state:
+          description: 'Indicates the workflow state of the idea.'
+          type: string
+          enum:
+            - 'draft'
+            - 'published'
+            - 'unpublished'
     idea-schema-common:
       type: object
       properties:
@@ -14198,10 +14057,13 @@ components:
           description: 'The body of the idea.'
           type: string
           example: 'You can create strong passwords using an online random password generator.'
-        idea_reference:
-          description: 'The idea reference.'
+        state:
+          description: 'Indicates the workflow state of the idea.'
           type: string
-          example: 'I123'
+          enum:
+            - 'draft'
+            - 'published'
+            - 'unpublished'
     list-schema:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
@@ -17155,6 +17017,10 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
+            query_reference:
+              description: 'The query reference (read only automatically generated).'
+              type: string
+              example: 'Q123'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the query was created.'
               type: integer
@@ -17172,74 +17038,24 @@ components:
               type: integer
               example: 5
     query-schema-update:
-      allOf:
-        - $ref: '#/components/schemas/query-schema-common'
-        - type: object
+      type: object
+      properties:
+        author:
+          description: 'The author of this query. (Will use the authenticated user if not supplied.'
+          type: object
           properties:
-            query_assignee:
-              description: 'The assignee user of the query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            author:
-              description: 'The author of this query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            query_category:
-              description: 'The category of the query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the category.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-    query-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/query-schema-common'
-        - type: object
-          required:
-            - title
-            - body
-            - query_assignee
-            - query_category
-          properties:
-            query_assignee:
-              description: 'The assignee user of the query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            author:
-              description: 'The author of this query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-            query_category:
-              description: 'The category of the query.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the category.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            uuid:
+              description: 'Invotra UUID of the user.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        state:
+          description: 'Indicates the workflow state of the query.'
+          type: string
+          enum:
+            - 'draft'
+            - 'published'
+            - 'unpublished'
     query-schema-common:
       type: object
       properties:
@@ -17251,10 +17067,15 @@ components:
           description: 'The body of the query.'
           type: string
           example: 'Demonstrate your talent at the company talent competition.'
-        query_reference:
-          description: 'The query reference.'
+        state:
+          description: 'Indicates the workflow state of the query.'
           type: string
-          example: 'Q123'
+          enum:
+            - 'draft'
+            - 'needs_review'
+            - 'reviewed'
+            - 'published'
+            - 'unpublished'
         review_date_timestamp:
           description: 'The review date timestamp for the query (in seconds).'
           type: integer
@@ -17274,6 +17095,10 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
+            support_ticket_reference:
+              description: 'The support ticket reference (read only automatically generated).'
+              type: string
+              example: 'SUP123'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the support ticket was created.'
               type: integer
@@ -17287,36 +17112,17 @@ components:
               type: integer
               example: 5
     support-ticket-schema-update:
-      allOf:
-        - $ref: '#/components/schemas/support-ticket-schema-common'
-        - type: object
+      type: object
+      properties:
+        author:
+          description: 'The author of this support ticket.'
+          type: object
           properties:
-            author:
-              description: 'The author of this support ticket.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-    support-ticket-schema-create:
-      allOf:
-        - $ref: '#/components/schemas/support-ticket-schema-common'
-        - type: object
-          required:
-            - title
-            - body
-          properties:
-            author:
-              description: 'The author of this support ticket.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the user.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            uuid:
+              description: 'Invotra UUID of the user.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
     support-ticket-schema-common:
       type: object
       properties:
@@ -17328,10 +17134,6 @@ components:
           description: 'The body of the support ticket.'
           type: string
           example: 'The website is broken can someone please take a look.'
-        support_ticket_reference:
-          description: 'The support ticket reference.'
-          type: string
-          example: 'SUP123'
         review_date_timestamp:
           description: 'The review date timestamp for the support ticket (in seconds).'
           type: integer
