@@ -5539,6 +5539,44 @@ paths:
         schema:
           type: string
           format: uuid
+    get:
+      tags:
+        - comments
+      description: 'Get a comment.'
+      responses:
+        '200':
+          description: Returns a single comment object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment-schema'
+        '404':
+          description: The UUID does not correspond to an existing comment.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/comments:read ]
+    put:
+      tags:
+        - comments
+      description: 'Update a comment.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/comment-schema-common'
+        required: true
+      responses:
+        '200':
+          description: The comment was successfully updated.
+        '403':
+          description: User is not authorized to update this comment.
+        '404':
+          description: The UUID does not correspond to an existing comment.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/comments:write ]
     delete:
       tags:
         - 'comments'
