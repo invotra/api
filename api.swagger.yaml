@@ -4649,6 +4649,32 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:write ]
+  '/webforms/{webform_id}/results':
+    parameters:
+      - description: 'The Invotra UUID of the webform.'
+        in: path
+        name: webform_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      tags:
+        - 'webforms'
+      description: 'Clear all the webform results.'
+      responses:
+        '200':
+          description: 'The webform results where successfully cleared.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to clear the results of this webform.'
+        '404':
+          description: 'The UUID does not correspond to an existing webform.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:write ]
   '/manuals':
     get:
       description: Get a listing of all manuals
