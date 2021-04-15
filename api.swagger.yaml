@@ -4661,7 +4661,7 @@ paths:
     delete:
       tags:
         - 'webforms'
-      description: 'Clear all the webform submissions.'
+      description: 'Clear all the webform submissions for all users.'
       responses:
         '200':
           description: 'The webform submissions where successfully cleared.'
