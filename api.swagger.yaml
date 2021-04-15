@@ -4649,7 +4649,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:write ]
-  '/webforms/{webform_id}/results':
+  '/webforms/{webform_id}/submissions':
     parameters:
       - description: 'The Invotra UUID of the webform.'
         in: path
@@ -4661,14 +4661,14 @@ paths:
     delete:
       tags:
         - 'webforms'
-      description: 'Clear all the webform results.'
+      description: 'Clear all the webform submissions.'
       responses:
         '200':
-          description: 'The webform results where successfully cleared.'
+          description: 'The webform submissions where successfully cleared.'
         '400':
           description: 'The supplied UUID was malformed.'
         '403':
-          description: 'User is not authorized to clear the results of this webform.'
+          description: 'User is not authorized to clear the submissions of this webform.'
         '404':
           description: 'The UUID does not correspond to an existing webform.'
       security:
