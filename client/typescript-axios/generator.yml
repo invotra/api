@@ -8,7 +8,7 @@ generateAliasAsModel: true
 modelPropertyNaming: 'original'
 apiPackage: 'client'
 modelPackage: 'model'
-useSingleRequestParameter: BADtrue
+useSingleRequestParameter: true
 
 # export TS_POST_PROCESS_FILE="`pwd`/node_modules/.bin/prettier --write"
 
