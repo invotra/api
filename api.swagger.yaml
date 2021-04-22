@@ -38,6 +38,25 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/administration:read ]
+    put:
+      tags:
+        - configuration
+      description: 'Update the administration configuration.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/administration-schema-update'
+        required: true
+      responses:
+        '200':
+          description: 'Administration configuration was updated.'
+        '403':
+          description: 'The user does not have permission to update administration configuration.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/administration:write ]
   /branding:
     get:
       tags:
@@ -10429,12 +10448,18 @@ components:
         - error
     administration-schema:
       type: object
+      required:
+        - mandatory_content_review
+        - feed_messages
       properties:
         mandatory_content_review:
           description: 'Mandatory configuration for the "content_review" property.'
           type: array
           items:
             type: object
+            required:
+              - content_type
+              - mandatory
             properties:
               content_type:
                 description: 'Content type name.'
@@ -10444,6 +10469,23 @@ components:
                 description: 'Flag indicating the property is mandatory.'
                 type: boolean
                 example: true
+        feed_messages:
+          description: 'Configuration for feed messages.'
+          type: object
+          required:
+            - join_group_display
+          properties:
+            join_group_display:
+              description: 'The level of detail displayed in a join group feed message.'
+              type: string
+              enum:
+                - full_description
+                - short_description
+                - one_line
+                - none
+    administration-schema-update:
+      type: object
+      properties:
         feed_messages:
           description: 'Configuration for feed messages.'
           type: object
