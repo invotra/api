@@ -12454,18 +12454,6 @@ components:
           type: string
           example: '#FFFFFF'
       type: object
-
-
-
-
-
-
-
-
-
-
-
-
     content-schema:
       type: object
       required:
