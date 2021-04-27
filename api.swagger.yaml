@@ -3496,7 +3496,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of ideas on a comma seperated list of statuses. Valid statuses are "draft", "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
+          description: 'Filter the list of ideas on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -5078,7 +5078,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of queries on a comma-separated list of states. Valid statuses are "draft", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of queries on a comma-separated list of states. Valid statuses are "published" and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
           schema:
             type: string
@@ -13368,7 +13368,6 @@ components:
           description: 'Indicates the workflow state of the idea.'
           type: string
           enum:
-            - 'draft'
             - 'published'
             - 'unpublished'
     idea-schema-common:
@@ -13386,7 +13385,6 @@ components:
           description: 'Indicates the workflow state of the idea.'
           type: string
           enum:
-            - 'draft'
             - 'published'
             - 'unpublished'
     list-schema:
@@ -16366,7 +16364,6 @@ components:
           description: 'Indicates the workflow state of the query.'
           type: string
           enum:
-            - 'draft'
             - 'published'
             - 'unpublished'
     query-schema-common:
@@ -16384,9 +16381,6 @@ components:
           description: 'Indicates the workflow state of the query.'
           type: string
           enum:
-            - 'draft'
-            - 'needs_review'
-            - 'reviewed'
             - 'published'
             - 'unpublished'
         review_date_timestamp:
