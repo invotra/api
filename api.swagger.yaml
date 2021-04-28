@@ -5408,18 +5408,21 @@ paths:
           description: No content with that UUID was found.
   '/saved/{content_id}':
     parameters:
-      - description: 'The UUID of the content or comment.'
+      - name: content_id
+        description: The Invotra UUID of content.
         in: path
-        name: content_id
-        example: '01234567-89ab-cdef-1234-56789abcdef0'
         required: true
+        schema:
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
     post:
       tags:
         - saved
       description: 'Mark a piece of content or a comment as Saved.'
       responses:
         '200':
-          description: 'The content/comment' was saved successfully.'
+          description: 'The content/comment was saved successfully.'
         '400':
           description: 'The content was not saved due to malformed JSON.'
         '403':
@@ -5455,13 +5458,13 @@ paths:
         - saved
       parameters:
         - name: content_id
-          description: 'The Invotra UUID of content.''
+          description: 'The Invotra UUID of content.'
           in: path
           required: true
           schema:
             type: string
             format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            example: 01234567-89ab-cdef-1234-56789abcdef0
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
@@ -5470,7 +5473,7 @@ paths:
         '200':
           description: 'Saved status returned successfully.'
           content:
-            application/json:
+            text/html:
               schema:
                 $ref: '#/components/schemas/content-saved-get-response-schema'
         '400':
@@ -18845,6 +18848,7 @@ components:
         </html>
     content-saved-get-response-schema:
       type: object
-        properties:
-          content_saved:
-            default: false
+      properties:
+        content_saved:
+          type: boolean
+          default: false
