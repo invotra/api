@@ -13924,12 +13924,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        state:
-          description: 'Indicates the workflow state of the idea.'
-          type: string
-          enum:
-            - 'published'
-            - 'unpublished'
     idea-schema-common:
       type: object
       properties:
@@ -13941,12 +13935,6 @@ components:
           description: 'The body of the idea.'
           type: string
           example: 'You can create strong passwords using an online random password generator.'
-        state:
-          description: 'Indicates the workflow state of the idea.'
-          type: string
-          enum:
-            - 'published'
-            - 'unpublished'
         idea_reference:
           description: 'The idea reference.'
           type: string
@@ -16924,12 +16912,6 @@ components:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        state:
-          description: 'Indicates the workflow state of the query.'
-          type: string
-          enum:
-            - 'published'
-            - 'unpublished'
     query-schema-common:
       type: object
       properties:
@@ -16941,12 +16923,6 @@ components:
           description: 'The body of the query.'
           type: string
           example: 'Demonstrate your talent at the company talent competition.'
-        state:
-          description: 'Indicates the workflow state of the query.'
-          type: string
-          enum:
-            - 'published'
-            - 'unpublished'
         review_date_timestamp:
           description: 'The review date timestamp for the query (in seconds).'
           type: integer
