@@ -5810,7 +5810,7 @@ paths:
     delete:
       tags:
         - manuals
-      description: 'Delete a manual page, including the root manual page.'
+      description: 'Delete a manual page or a manual.'
       responses:
         '200':
           description: 'The manual page was deleted successfully.'
@@ -12553,8 +12553,6 @@ components:
       enum:
         - blogs
         - custom_content
-        - events
-        - forums
         - galleries
         - group_documents
         - group_polls
@@ -13953,6 +13951,16 @@ components:
               description: 'Summary text of the list.'
               type: string
               example: 'You can create strong passwords.'
+            list:
+              description: 'List of content and links in the list.'
+              type: array
+              items:
+                anyOf:
+                  - $ref: '#/components/schemas/list-list-content-schema'
+                  - $ref: '#/components/schemas/list-list-site-section-schema'
+                  - $ref: '#/components/schemas/list-list-link-schema'
+                discriminator:
+                  propertyName: type
             site_section:
               description: 'The site section of this list.'
               type: object
@@ -14081,6 +14089,16 @@ components:
         - $ref: '#/components/schemas/list-schema-common'
         - type: object
           properties:
+            list:
+              description: 'List of content and links in the list.'
+              type: array
+              items:
+                anyOf:
+                  - $ref: '#/components/schemas/list-list-content-schema-write'
+                  - $ref: '#/components/schemas/list-list-site-section-schema-write'
+                  - $ref: '#/components/schemas/list-list-link-schema'
+                discriminator:
+                  propertyName: type
             site_section:
               description: 'The site section of this list.'
               type: object
@@ -14157,6 +14175,16 @@ components:
         - $ref: '#/components/schemas/list-schema-common'
         - type: object
           properties:
+            list:
+              description: 'List of content and links in the list.'
+              type: array
+              items:
+                anyOf:
+                  - $ref: '#/components/schemas/list-list-content-schema-write'
+                  - $ref: '#/components/schemas/list-list-site-section-schema-write'
+                  - $ref: '#/components/schemas/list-list-link-schema'
+                discriminator:
+                  propertyName: type
             site_section:
               description: 'The site section of this list.'
               type: object
@@ -14256,16 +14284,6 @@ components:
           description: 'The review date timestamp for the list (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
-        list:
-          description: 'List of content and links in the list.'
-          type: array
-          items:
-            anyOf:
-              - $ref: '#/components/schemas/list-list-content-schema'
-              - $ref: '#/components/schemas/list-list-site-section-schema'
-              - $ref: '#/components/schemas/list-list-link-schema'
-            discriminator:
-              propertyName: type
     list-list-common-schema:
       type: object
       required:
@@ -14298,6 +14316,21 @@ components:
                   type: string
                   example: 'https://dev.invotra.com/api/0.3/blogs/01234567-89ab-cdef-1234-56789abcdef0'
                   format: uri
+    list-list-content-schema-write:
+      allOf:
+        - $ref: '#/components/schemas/list-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'content'
+            content:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the content.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     list-list-site-section-schema:
       allOf:
         - $ref: '#/components/schemas/list-list-common-schema'
@@ -14318,6 +14351,21 @@ components:
                   type: string
                   example: 'https://dev.invotra.com/api/0.3/site_sections/01234567-89ab-cdef-1234-56789abcdef0'
                   format: uri
+    list-list-site-section-schema-write:
+      allOf:
+        - $ref: '#/components/schemas/list-list-common-schema'
+        - type: object
+          properties:
+            type:
+              example: 'site_section'
+            content:
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     list-list-link-schema:
       allOf:
         - $ref: '#/components/schemas/list-list-common-schema'
