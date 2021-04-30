@@ -342,6 +342,7 @@ paths:
           description: 'The Open Graph scrape timed out performing the request on the upstream server.'
   /teams:
     get:
+      deprecated: true
       tags:
         - teams
       parameters:
@@ -427,6 +428,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -621,6 +628,7 @@ paths:
         - CognitoJwt: [ invotra/teams:write, invotra/users:read ]
   /users:
     get:
+      deprecated: true
       tags:
         - users
       parameters:
@@ -755,6 +763,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - description: Field to sort by
           in: query
           name: sort
@@ -1429,6 +1443,7 @@ paths:
         - CognitoJwt: [ invotra/users:write ]
   /groups:
     get:
+      deprecated: true
       tags:
         - groups
       parameters:
@@ -1556,6 +1571,12 @@ paths:
           schema:
             type: boolean
             default: false
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - description: 'Filter groups that are administered by the user UUID. Multiple values may be supplied.'
           in: query
           name: admin_uuid
@@ -2146,6 +2167,7 @@ paths:
         - CognitoJwt: [ invotra/groups:write ]
   /posts:
     get:
+      deprecated: true
       tags:
         - posts
       parameters:
@@ -2208,6 +2230,12 @@ paths:
       tags:
         - posts
       parameters:
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - description: Field to sort by
           in: query
           name: sort
@@ -2807,6 +2835,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of blogs on a comma-separated list of states. Valid states are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
           in: query
@@ -3363,6 +3397,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of group documents on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
           in: query
@@ -3550,6 +3590,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -3705,6 +3751,12 @@ paths:
           schema:
             type: string
             example: 'unpublished'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4062,6 +4114,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4241,6 +4299,12 @@ paths:
           schema:
             type: string
             example: 'unpublished'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4414,6 +4478,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of news on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -4593,6 +4663,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of pages on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -4772,6 +4848,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of policies on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -4951,6 +5033,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of polls on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -5135,6 +5223,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of promotions on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -5427,6 +5521,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -5727,6 +5827,12 @@ paths:
       tags:
         - manuals
       parameters:
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -5976,6 +6082,12 @@ paths:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -6325,6 +6437,7 @@ paths:
         - CognitoJwt: [ invotra/files:write ]
   /job_roles:
     get:
+      deprecated: true
       tags:
         - job roles
       parameters:
@@ -6507,6 +6620,7 @@ paths:
         - CognitoJwt: [ invotra/job_roles:write ]
   /locations:
     get:
+      deprecated: true
       tags:
         - locations
       parameters:
@@ -6563,6 +6677,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -11728,6 +11848,11 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
+            title:
+              description: "The user's title. A title object."
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/title-schema'
             teams:
               description: "The user's teams. An array of team objects."
               type: array
@@ -11852,22 +11977,18 @@ components:
           description: The user's first name
           type: string
           example: Dorothy
+        middle_name:
+          description: The user's middle name
+          type: string
+          example: 'Papadopoulos'
         surname:
           description: The user's surname
           type: string
           example: Whitehead
-        title:
-          default: ''
-          description: The user's title
-          enum:
-            - ''
-            - Dr
-            - Mr
-            - Miss
-            - Mrs
-            - Ms
+        known_as:
+          description: The user's known as name
           type: string
-          example: Mr
+          example: 'Dot'
         person_type:
           description: This is the Invotra UUID of the user's person type.
           type: string
@@ -11904,6 +12025,15 @@ components:
         - $ref: '#/components/schemas/user-schema-common'
         - type: object
           properties:
+            title:
+              description: "The user's title."
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the title.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             teams:
               description: "The user's teams. An array of team UUIDs."
               type: array
@@ -12730,6 +12860,10 @@ components:
           description: 'The review date timestamp for the blog (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
+        external_id:
+          description: 'The blog external reference id.'
+          type: string
+          example: 'ABC123'
     custom-content-schema:
       allOf:
         - $ref: '#/components/schemas/custom-content-schema-common'
@@ -13757,6 +13891,10 @@ components:
           description: 'The review date timestamp for the group document (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
+        external_id:
+          description: 'The group document external reference id.'
+          type: string
+          example: 'ABC123'
     group-poll-schema:
       allOf:
         - $ref: '#/components/schemas/group-poll-schema-common'
@@ -13867,6 +14005,10 @@ components:
           description: 'Title of the group poll.'
           type: string
           example: 'What is your favorite food?'
+        external_id:
+          description: 'The group poll external reference id.'
+          type: string
+          example: 'ABC123'
     group-poll-vote-schema:
       type: object
       required:
@@ -14303,6 +14445,20 @@ components:
           description: 'The review date timestamp for the list (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
+        external_id:
+          description: 'The list external reference id.'
+          type: string
+          example: 'ABC123'
+        list:
+          description: 'List of content and links in the list.'
+          type: array
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/list-list-content-schema'
+              - $ref: '#/components/schemas/list-list-site-section-schema'
+              - $ref: '#/components/schemas/list-list-link-schema'
+            discriminator:
+              propertyName: type
     list-list-common-schema:
       type: object
       required:
@@ -14493,6 +14649,10 @@ components:
           description: 'The body of the message.'
           type: string
           example: 'It is my birthday next week so remember to get me a present.'
+        external_id:
+          description: 'The message external reference id.'
+          type: string
+          example: 'ABC123'
     multi-media-schema:
       allOf:
         - $ref: '#/components/schemas/multi-media-schema-common'
@@ -16914,6 +17074,10 @@ components:
           type: boolean
           default: false
           example: false
+        external_id:
+          description: 'The promotion external reference id.'
+          type: string
+          example: 'ABC123'
     query-schema:
       allOf:
         - $ref: '#/components/schemas/query-schema-common'
@@ -17549,17 +17713,10 @@ components:
           type: string
           example: Dorothy Whitehead
         title:
-          default: ''
-          description: The user's title
-          enum:
-            - ''
-            - Dr
-            - Mr
-            - Miss
-            - Mrs
-            - Ms
-          type: string
-          example: Ms
+          description: "The user's title. A title object."
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/title-schema'
         firstname:
           description: The user's first name
           type: string
@@ -17597,6 +17754,10 @@ components:
           description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual.'
           type: integer
           example: 63
+        external_id:
+          description: 'The manual external reference id.'
+          type: string
+          example: 'ABC123'
     manual-page-listing-schema:
       type: object
       properties:
@@ -17757,6 +17918,41 @@ components:
           description: Reference for the manual page
           type: string
           example: 'CCM-1'
+        timestamp_created:
+          description: This is the timestamp (in seconds) of when the manual page was created
+          type: integer
+          example: 1510941596
+        timestamp_updated:
+          description: This is the timestamp (in seconds) of when the manual page was last updated
+          type: integer
+          example: 1510941696
+        timestamp_published:
+          description: 'This is the timestamp (in seconds) of when the manual page was published.'
+          type: integer
+          example: 1510941696
+        published:
+          description: 'Published status for the manual page.'
+          type: boolean
+          example: true
+        rating:
+          description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual page.'
+          type: integer
+          example: 63
+        external_id:
+          description: 'The manual page external reference id.'
+          type: string
+          example: 'ABC123'
+        attachments:
+          description: List of attachments on manual page
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/file-schema'
+        parent_page_uuid:
+          description: Invotra UUID of the parent manual page (empty at root).
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
         state:
           description: 'Indicates the workflow state of the manual page.'
           type: string
@@ -17853,6 +18049,10 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
+        external_id:
+          description: 'The comment external reference id.'
+          type: string
+          example: 'ABC123'
     file-schema:
       type: object
       required:
