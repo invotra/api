@@ -2,12 +2,13 @@
 # rm -rf src/api; mkdir -p src/api/; yarn openapi-generator generate -i ../api.swagger.yaml -g typescript-axios -o src/api/ -c generator.yml
 
 supportsES6: true
-withInterfaces: true
+withInterfaces: false
 withSeparateModelsAndApi: true
 generateAliasAsModel: true
 modelPropertyNaming: 'original'
 apiPackage: 'client'
 modelPackage: 'model'
+useSingleRequestParameter: true
 
 # export TS_POST_PROCESS_FILE="`pwd`/node_modules/.bin/prettier --write"
 
