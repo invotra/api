@@ -5448,6 +5448,8 @@ paths:
           description: 'User is not authorized to unsave this content/comment.'
         '422':
           description: 'The content/comment was not unsaved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content: {}
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
