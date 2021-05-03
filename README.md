@@ -47,3 +47,4 @@ yarn add @invotra/api@VERSION
 
 Replace `VERSION` with the actual version string, e.g. `4.48.0`. A list of versions may be found at
 [GitHub Packages](https://github.com/invotra/api/packages) page.
+
