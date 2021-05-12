@@ -16671,6 +16671,14 @@ components:
         - $ref: '#/components/schemas/comment-schema-common'
         - type: object
           properties:
+            author:
+              description: 'The author of the comment.'
+              type: object
+              required:
+                - uuid
+                - display_name
+              allOf:
+                - $ref: '#/components/schemas/comment-author-schema'
             uuid:
               description: 'Invotra UUID of the comment.'
               type: string
@@ -16769,14 +16777,6 @@ components:
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           deprecated: true
-        author:
-          description: 'The author of the comment.'
-          type: object
-          required:
-            - uuid
-            - display_name
-          allOf:
-            - $ref: '#/components/schemas/comment-author-schema'
     file-schema:
       type: object
       required:
