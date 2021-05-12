@@ -16750,7 +16750,7 @@ components:
         display_name:
           type: string
           description: 'The display name of the comment author'
-          example: 'Gary Barlow'
+          example: 'Dorothy Whitehead'
     comment-schema-common:
       type: object
       properties:
@@ -16763,6 +16763,12 @@ components:
           format: uuid
           description: "The Invotra UUID of the comment's parent, content UUID for a top level comment, or comment UUID for a reply."
           example: '01234567-89ab-cdef-1234-56789abcdef0'
+        author_uuid:
+          description: 'Invotra UUID of the author.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          deprecated: true
         author:
           description: 'The author of the comment.'
           type: object
