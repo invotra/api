@@ -897,6 +897,14 @@ paths:
     get:
       tags:
         - users
+      parameters:
+        - name: trimmed_detail
+          description: 'When true taxonomy details and the is_line_manager flag will not be present.'
+          in: query
+          schema:
+            type: boolean
+            default: false
+          required: false
       responses:
         '200':
           description: Returns a single complete user object.
