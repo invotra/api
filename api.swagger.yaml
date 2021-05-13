@@ -930,6 +930,14 @@ paths:
     get:
       tags:
         - users
+      parameters:
+        - name: trimmed_detail
+          description: 'When true returns a trimmed user schema.'
+          in: query
+          schema:
+            type: boolean
+            default: false
+          required: false
       responses:
         '200':
           description: Returns a single complete user object.
