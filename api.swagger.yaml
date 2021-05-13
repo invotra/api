@@ -899,7 +899,7 @@ paths:
         - users
       parameters:
         - name: trimmed_detail
-          description: 'When true taxonomy details and the is_line_manager flag will not be present.'
+          description: 'When true returns a trimmed user schema.'
           in: query
           schema:
             type: boolean
