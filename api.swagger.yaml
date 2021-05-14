@@ -15644,6 +15644,7 @@ components:
           required:
             - state
             - title
+            - site_section
             - options
     poll-schema-common:
       type: object
