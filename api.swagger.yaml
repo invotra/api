@@ -5433,42 +5433,42 @@ paths:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
     post:
       tags:
-        - like
-      description: 'Mark a piece of content/comment as like.'
+        - likes
+      description: 'Like a piece of content/comment.'
       responses:
         '200':
-          description: 'The content/comment was like successfully.'
+          description: 'Liked the content/comment successfully.'
         '400':
-          description: 'The content/comment was not like due to malformed JSON.'
+          description: 'The content/comment was not liked due to malformed JSON.'
         '403':
-          description: 'User is not authorized to save a content/comment.'
+          description: 'User is not authorized to like this content/comment.'
         '422':
-          description: 'The content/comment was not like due to Drupal validation failure or JSON schema validation failure.'
+          description: 'The content/comment was not liked due to Drupal validation failure or JSON schema validation failure.'
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/like:write ]
     delete:
       tags:
-        - like
-      description: 'Unsave a piece of content/comment.'
+        - likes
+      description: 'Unlike a piece of content/comment.'
       responses:
         '200':
-          description: 'The content/comment was unlike.'
+          description: 'Like removed successfully.'
         '400':
-          description: 'Could not unsave this content/comment due to malformed JSON.'
+          description: 'Could not unlike this content/comment due to malformed JSON.'
         '403':
-          description: 'User is not authorized to unsave this content/comment.'
+          description: 'User is not authorized to unlike this content/comment.'
         '422':
-          description: 'The content/comment was not unlike due to Drupal validation failure or JSON schema validation failure.'
+          description: 'The like could not be removed due to Drupal validation failure or JSON schema validation failure.'
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/like:write ]
     get:
-      description: 'Check if a piece of content/comment is like or not.'
+      description: 'Check if a piece of content/comment is liked or not.'
       tags:
-        - like
+        - likes
       parameters:
         - name: content_id
           description: 'The Invotra UUID of the content/comment.'
@@ -18881,6 +18881,6 @@ components:
     content-like-get-response-schema:
       type: object
       properties:
-        current_user_like:
+        current_user_liked:
           type: boolean
           default: false
