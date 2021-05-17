@@ -5421,7 +5421,7 @@ paths:
           description: The user does not have access to the requested content.
         '404':
           description: No content with that UUID was found.
-  '/like/{content_id}':
+  '/likes/{content_id}':
     parameters:
       - name: content_id
         description: The Invotra UUID of content/comment.
