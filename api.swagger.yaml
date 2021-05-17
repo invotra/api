@@ -5556,11 +5556,11 @@ paths:
           format: uuid
     get:
       tags:
-        - 'comments'
-      description: 'Get information about a comment.'
+        - comments
+      description: 'Get a comment.'
       responses:
         '200':
-          description: 'Returns a single complete comment object.'
+          description: Returns a single comment object.
           content:
             application/json:
               schema:
@@ -5568,11 +5568,32 @@ paths:
         '400':
           description: The supplied UUID was malformed.
         '404':
-          description: 'The UUID does not correspond to an existing comment.'
+          description: The UUID does not correspond to an existing comment.
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/comments:read ]
+    put:
+      tags:
+        - comments
+      description: 'Update a comment.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/comment-schema-common'
+        required: true
+      responses:
+        '200':
+          description: The comment was successfully updated.
+        '403':
+          description: User is not authorized to update this comment.
+        '404':
+          description: The UUID does not correspond to an existing comment.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/comments:write ]
     delete:
       tags:
         - 'comments'
@@ -16753,6 +16774,12 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
+        attachments:
+          description: 'List of attachments on the comment.'
+          type: array
+          items:
+            type: string
+            format: uuid
     file-schema:
       type: object
       required:
