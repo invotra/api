@@ -5537,7 +5537,7 @@ paths:
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
-    post:
+    put:
       tags:
         - follows
       description: 'Follow a piece of content/comment.'
