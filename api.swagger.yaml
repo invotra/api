@@ -16778,8 +16778,13 @@ components:
           description: 'List of attachments on the comment.'
           type: array
           items:
-            type: string
-            format: uuid
+            type: object
+            properties:
+              uuid:
+                description: 'Invotra UUID of the file.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
     file-schema:
       type: object
       required:
