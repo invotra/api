@@ -5820,6 +5820,8 @@ paths:
           description: 'The user does not have permission to delete the manual page.'
         '404':
           description: 'The UUID does not correspond to an existing manual page.'
+        '422':
+          description: 'The manual was not deleted due to it having pages.'
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
@@ -17555,6 +17557,10 @@ components:
           type: object
           allOf:
             - $ref: '#/components/schemas/file-schema'
+        child_pages_count:
+          description: Total count of child pages at the top level of the manual.
+          type: integer
+          example: 50
         timestamp_published:
           description: 'This is the timestamp (in seconds) of when the manual was published.'
           type: integer
