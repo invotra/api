@@ -5421,6 +5421,82 @@ paths:
           description: The user does not have access to the requested content.
         '404':
           description: No content with that UUID was found.
+  '/follows/{content_id}':
+    parameters:
+      - name: content_id
+        description: The Invotra UUID of content/comment.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+    put:
+      tags:
+        - follows
+      description: 'Follow a piece of content/comment.'
+      responses:
+        '200':
+          description: 'Followed the content/comment successfully.'
+        '400':
+          description: 'The content/comment was not followed due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to follow this content/comment.'
+        '422':
+          description: 'The content/comment was not followed due to Drupal validation failure or JSON schema validation failure.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/follow:write ]
+    delete:
+      tags:
+        - follows
+      description: 'Unfollow a piece of content/comment.'
+      responses:
+        '200':
+          description: 'Follow removed successfully.'
+        '400':
+          description: 'Could not unfollow this content/comment due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to unfollow this content/comment.'
+        '422':
+          description: 'The follow could not be removed due to Drupal validation failure or JSON schema validation failure.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/follow:write ]
+    get:
+      description: 'Check if a piece of content/comment is followed or not.'
+      tags:
+        - follows
+      parameters:
+        - name: content_id
+          description: 'The Invotra UUID of the content/comment.'
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/follow:read ]
+      responses:
+        '200':
+          description: 'Follow status returned successfully.'
+          content:
+            text/html:
+              schema:
+                $ref: '#/components/schemas/content-follow-get-response-schema'
+        '400':
+          description: The UUID or request body JSON was malformed.
+        '401':
+          description: An incorrect or malformed token was provided.
+        '403':
+          description: The user does not have access to the requested content/comment.
+        '404':
+          description: No content/comment with that UUID was found.
   /comments:
     post:
       tags:
@@ -18802,3 +18878,9 @@ components:
         <html>
           ...
         </html>
+    content-follow-get-response-schema:
+      type: object
+      properties:
+        current_user_followed:
+          type: boolean
+          default: false
