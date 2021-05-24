@@ -5433,7 +5433,7 @@ paths:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
     put:
       tags:
-        - follows
+        - follow
       description: 'Follow a piece of content/user.'
       responses:
         '200':
@@ -18881,6 +18881,6 @@ components:
     content-follow-get-response-schema:
       type: object
       properties:
-        current_user_followed:
+        current_user_follows:
           type: boolean
           default: false
