@@ -11796,7 +11796,6 @@ components:
             - attachments_count
             - timestamp
             - depth
-            - current_user_liked
             - group_uuid
             - author_uuid
             - thread_uuid
