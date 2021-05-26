@@ -5555,7 +5555,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/successful-post-response-with-message-schema'
+                $ref: '#/components/schemas/successful-response-message-schema'
         '400':
           description: 'The content/comment was not saved due to malformed JSON.'
         '403':
@@ -5576,7 +5576,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/successful-post-response-with-message-schema'
+                $ref: '#/components/schemas/successful-response-message-schema'
         '400':
           description: 'Could not unsave this content/comment due to malformed JSON.'
         '403':
@@ -10598,6 +10598,15 @@ components:
       required:
         - message
         - uuid
+    successful-response-message-schema:
+      type: object
+      properties:
+        message:
+          description: The message included in the response.
+          type: string
+          example: The action was created successfully.
+      required:
+        - message
     open-graph-request-schema:
       type: object
       properties:
