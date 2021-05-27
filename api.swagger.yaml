@@ -19033,7 +19033,7 @@ components:
     content-follow-get-response-schema:
       type: object
       properties:
-        current_user_followed:
+        current_user_follows:
           type: boolean
           default: false
     content-like-get-response-schema:
