@@ -5619,7 +5619,12 @@ paths:
           content:
             text/html:
               schema:
-                $ref: '#/components/schemas/successful-post-response-with-message-schema'
+                type: object
+                properties:
+                  message:
+                    description: The message included in the response.
+                    type: string
+                    example: The post was created successfully.
         '400':
           description: 'The content/comment was not saved due to malformed JSON.'
         '403':
