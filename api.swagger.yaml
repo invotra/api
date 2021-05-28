@@ -5642,6 +5642,15 @@ paths:
       responses:
         '200':
           description: 'The content/comment was unsaved.'
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  message:
+                    description: The message included in the response.
+                    type: string
+                    example: The post was created successfully.
         '400':
           description: 'Could not unsave this content/comment due to malformed JSON.'
         '403':
