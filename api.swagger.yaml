@@ -5617,7 +5617,7 @@ paths:
         '200':
           description: 'The content/comment was saved successfully.'
           content:
-            application/json:
+            text/html:
               schema:
                 $ref: '#/components/schemas/successful-post-response-with-message-schema'
         '400':
