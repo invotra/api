@@ -12647,7 +12647,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -12832,7 +12832,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -14194,7 +14194,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -14626,7 +14626,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -15059,7 +15059,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -15578,7 +15578,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -16705,7 +16705,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
