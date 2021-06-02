@@ -2601,13 +2601,32 @@ paths:
         - 'blogs'
       description: 'Search for blogs. An empty array is returned if no blogs where found.'
       parameters:
+        - name: title
+          description: 'Filter on the blog title.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: general_topic_uuid
+          description: 'Filter on Invotra UUID of the general topic.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
