@@ -2602,13 +2602,18 @@ paths:
       description: 'Search for blogs. An empty array is returned if no blogs where found.'
       parameters:
         - name: title
-          description: 'Filter on the blog title.'
+          description: 'Filter on the blog title. Matches on whole words.'
           in: query
           schema:
             type: array
             items:
               type: string
               example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on blog name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
