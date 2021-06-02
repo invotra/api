@@ -6693,6 +6693,57 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:read ]
+  '/locations/{location_id}/members':
+    parameters:
+      - description: The Invotra UUID of the location.
+        in: path
+        name: location_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - locations
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Returns an array of user UUIDs at the location.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                  - results
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uuid:
+                          description: The Invotra UUID of the user.
+                          type: string
+                          format: uuid
+                      required:
+                        - uuid
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing location.
+      description: Get user members at the location.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:read ]
   '/badges':
     post:
       tags:
