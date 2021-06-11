@@ -5641,14 +5641,14 @@ paths:
     delete:
       tags:
         - report
-      description: 'Unreport a piece of content/comment.'
+      description: 'Remove report flag from a piece of content/comment.'
       responses:
         '200':
           description: 'Report removed successfully.'
         '400':
-          description: 'Could not unreport this content/comment due to malformed JSON.'
+          description: 'Could not remove report flag due to malformed JSON.'
         '403':
-          description: 'User is not authorized to unreport this content/comment.'
+          description: 'User is not authorized to remove report flag.'
         '422':
           description: 'The report could not be removed due to Drupal validation failure or JSON schema validation failure.'
       security:
@@ -5656,7 +5656,7 @@ paths:
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/report:write ]
     get:
-      description: 'Check if a piece of content/comment is reported or not.'
+      description: 'Check if a piece of content/comment has been reported or not.'
       tags:
         - report
       parameters:
