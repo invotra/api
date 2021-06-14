@@ -14707,6 +14707,12 @@ components:
           description: 'The news item external reference id.'
           type: string
           example: 'ABC123'
+        external_connectors:
+          description: 'The external connectors that the news item is published to.'
+          type: array
+          items:
+            type: string
+            example: 'external'
     page-schema:
       allOf:
         - $ref: '#/components/schemas/page-schema-common'
