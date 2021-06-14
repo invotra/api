@@ -11011,9 +11011,9 @@ components:
           type: string
           example: 'This news item is about the new annual leave structure.'
         content_timestamp:
-          description: Content timestamp
-          type: string
-          example: 'The created date of the timestamp.'
+          description: This is the timestamp (in seconds) of when the feed message content was created
+            type: integer
+            example: 1510941596
         content_location:
           description: 'The API URI of the content referenced by this feed message.'
           type: string
