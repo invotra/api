@@ -10997,6 +10997,11 @@ components:
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_author_uuid:
+          description: 'The uuid of the content author.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
         content_title:
           description: The title of the content that the feed message is about
           type: string
@@ -11004,7 +11009,11 @@ components:
         content_body:
           description: The Body of the content that the feed message is about
           type: string
-          example: 'This news articale is about the new annual leave structure.'
+          example: 'This news item is about the new annual leave structure.'
+        content_timestamp:
+          description: Content timestamp
+          type: string
+          example: 'The created date of the timestamp.'
         content_location:
           description: 'The API URI of the content referenced by this feed message.'
           type: string
