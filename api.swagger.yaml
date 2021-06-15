@@ -11002,6 +11002,20 @@ components:
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_author_image:
+          description: 'The user image url of the content author.'
+          type: string
+          format: url
+          example: >-
+            https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
+        content_author_display_name:
+          description: 'The content author display name.'
+          type: string
+          example: 'Dorothy Whitehead'
+        content_author_username:
+          description: 'The content author username'
+          type: string
+          example: 'dorothy-whitehead'
         content_title:
           description: The title of the content that the feed message is about
           type: string
