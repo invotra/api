@@ -17871,6 +17871,11 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
+            owner:
+              description: 'The owner of this manual page.'
+              type: object
+              allOf:
+                - $ref: '#/components/schemas/user-trimmed-schema'
             image:
               description: 'Image for the manual page.'
               type: object
@@ -17941,8 +17946,8 @@ components:
         - $ref: '#/components/schemas/manual-page-schema-common'
         - type: object
           properties:
-            author:
-              description: 'The author of this manual page.'
+            owner:
+              description: 'The owner of this manual page.'
               type: object
               properties:
                 uuid:
