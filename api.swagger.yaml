@@ -16799,11 +16799,6 @@ components:
           description: The user's username
           type: string
           example: Dorothy Whitehead
-        title:
-          description: "The user's title. A title object."
-          type: object
-          allOf:
-            - $ref: '#/components/schemas/title-schema'
         firstname:
           description: The user's first name
           type: string
