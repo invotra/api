@@ -6346,13 +6346,13 @@ paths:
           in: query
           schema:
             type: string
-            example: 'wallpaper.jpeg'
+            example: 'recording.mp3'
         - description: 'Search within filename. Matches on whole words.'
           in: query
           name: filename_fulltext_search
           schema:
             type: string
-            example: 'wallpaper'
+            example: 'recording'
         - name: type
           description: 'Filter by file type.'
           in: query
@@ -6362,7 +6362,6 @@ paths:
               type: string
               enum:
                 - audio
-                - document
                 - image
                 - ms_excel
                 - ms_powerpoint
@@ -6378,7 +6377,7 @@ paths:
             type: array
             items:
               type: string
-              example: 'image/jpeg'
+              example: 'audio/mpeg'
         - name: site_section_uuid
           description: 'Filter on Invotra UUID of the site section.'
           in: query
@@ -18113,7 +18112,7 @@ components:
         filename:
           description: This is the filename
           type: string
-          example: wallpaper.jpeg
+          example: recording.mp3
         author:
           description: 'The author of this file.'
           allOf:
@@ -18165,7 +18164,6 @@ components:
           type: string
           enum:
             - audio
-            - document
             - image
             - ms_excel
             - ms_powerpoint
@@ -18177,7 +18175,7 @@ components:
         filemime:
           description: The MIME type for the file
           type: string
-          example: image/jpeg
+          example: audio/mpeg
         alt_text:
           description: Alt text for an image. Returned if and only if the type is an image.
           type: string
@@ -18202,7 +18200,7 @@ components:
         filename:
           description: This is the filename. If using multipart/form-data this field may be omitted in favour of the 'filename' directive of the subpart Content-Disposition header.
           type: string
-          example: wallpaper.jpeg
+          example: recording.mp3
         author:
           description: 'The author of this file.'
           type: object
@@ -18226,7 +18224,6 @@ components:
           type: string
           enum:
             - audio
-            - document
             - image
             - ms_excel
             - ms_powerpoint
@@ -18238,7 +18235,7 @@ components:
         filemime:
           description: The MIME type for the file. If using multipart/form-data this field may be omitted in favour of the subpart Content-Type header.
           type: string
-          example: image/jpeg
+          example: audio/mpeg
         file:
           description: Base64 encoded version of the file.
           type: string
@@ -18275,7 +18272,6 @@ components:
           type: string
           enum:
             - audio
-            - document
             - image
             - ms_excel
             - ms_powerpoint
@@ -18289,7 +18285,7 @@ components:
           type: array
           items:
             type: string
-            example: '.jpg'
+            example: '.mp3'
     job-role-schema:
       allOf:
         - type: object
