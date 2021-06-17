@@ -5721,6 +5721,32 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:write ]
+  '/webforms/{webform_id}/submissions':
+    parameters:
+      - description: 'The Invotra UUID of the webform.'
+        in: path
+        name: webform_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      tags:
+        - 'webforms'
+      description: 'Clear all the webform submissions for all users.'
+      responses:
+        '200':
+          description: 'The webform submissions where successfully cleared.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to clear the submissions of this webform.'
+        '404':
+          description: 'The UUID does not correspond to an existing webform.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:write ]
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -6070,6 +6096,15 @@ paths:
       responses:
         '200':
           description: 'The content/comment was saved successfully.'
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  message:
+                    description: The message included in the response.
+                    type: string
+                    example: The post was created successfully.
         '400':
           description: 'The content/comment was not saved due to malformed JSON.'
         '403':
@@ -6087,6 +6122,15 @@ paths:
       responses:
         '200':
           description: 'The content/comment was unsaved.'
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  message:
+                    description: The message included in the response.
+                    type: string
+                    example: The post was created successfully.
         '400':
           description: 'Could not unsave this content/comment due to malformed JSON.'
         '403':
@@ -11750,6 +11794,37 @@ components:
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_author_uuid:
+          description: 'The uuid of the content author.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_author_image:
+          description: 'The user image url of the content author.'
+          type: string
+          format: url
+          example: >-
+            https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
+        content_author_display_name:
+          description: 'The content author display name.'
+          type: string
+          example: 'Dorothy Whitehead'
+        content_author_username:
+          description: 'The content author username'
+          type: string
+          example: 'dorothy-whitehead'
+        content_title:
+          description: The title of the content that the feed message is about
+          type: string
+          example: News about annual leave
+        content_body:
+          description: The Body of the content that the feed message is about
+          type: string
+          example: 'This news item is about the new annual leave structure.'
+        content_timestamp:
+          description: This is the timestamp (in seconds) of when the feed message content was created
+          type: integer
+          example: 1510941596
         content_location:
           description: 'The API URI of the content referenced by this feed message.'
           type: string
@@ -13392,7 +13467,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -13756,7 +13831,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -15180,7 +15255,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -15612,7 +15687,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -16045,7 +16120,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -16564,7 +16639,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -17715,7 +17790,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
