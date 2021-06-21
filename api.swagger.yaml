@@ -6434,12 +6434,7 @@ paths:
               enum:
                 - audio
                 - image
-                - ms_excel
-                - ms_powerpoint
-                - ms_word
-                - open_format_document
-                - other_document_types
-                - pdf
+                - document
                 - video
         - name: filemime
           description: 'Filter by file MIME type.'
@@ -18272,12 +18267,7 @@ components:
           enum:
             - audio
             - image
-            - ms_excel
-            - ms_powerpoint
-            - ms_word
-            - open_format_document
-            - other_document_types
-            - pdf
+            - document
             - video
         filemime:
           description: The MIME type for the file
@@ -18332,12 +18322,7 @@ components:
           enum:
             - audio
             - image
-            - ms_excel
-            - ms_powerpoint
-            - ms_word
-            - open_format_document
-            - other_document_types
-            - pdf
+            - document
             - video
         filemime:
           description: The MIME type for the file. If using multipart/form-data this field may be omitted in favour of the subpart Content-Type header.
@@ -18380,12 +18365,7 @@ components:
           enum:
             - audio
             - image
-            - ms_excel
-            - ms_powerpoint
-            - ms_word
-            - open_format_document
-            - other_document_types
-            - pdf
+            - document
             - video
         extentions:
           description: 'The file extentions permitted within the file type.'
