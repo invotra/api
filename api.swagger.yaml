@@ -6433,8 +6433,8 @@ paths:
               type: string
               enum:
                 - audio
-                - image
                 - document
+                - image
                 - video
         - name: filemime
           description: 'Filter by file MIME type.'
@@ -18266,8 +18266,8 @@ components:
           type: string
           enum:
             - audio
-            - image
             - document
+            - image
             - video
         filemime:
           description: The MIME type for the file
@@ -18321,8 +18321,8 @@ components:
           type: string
           enum:
             - audio
-            - image
             - document
+            - image
             - video
         filemime:
           description: The MIME type for the file. If using multipart/form-data this field may be omitted in favour of the subpart Content-Type header.
@@ -18364,8 +18364,8 @@ components:
           type: string
           enum:
             - audio
-            - image
             - document
+            - image
             - video
         extentions:
           description: 'The file extentions permitted within the file type.'
