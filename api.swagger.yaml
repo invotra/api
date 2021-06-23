@@ -11802,6 +11802,7 @@ components:
             - timestamp_created
             - timestamp_updated
             - memberships
+            - feed_messages
           properties:
             title:
               type: string
@@ -11970,6 +11971,20 @@ components:
           description: This is used to store the group's external reference ID.
           type: string
           example: ABC123
+        feed_messages:
+          description: 'Configuration for feed messages for this group.'
+          type: object
+          required:
+            - join_group_display
+          properties:
+            join_group_display:
+              description: 'The level of detail displayed in a join group feed message.'
+              type: string
+              enum:
+                - full_description
+                - short_description
+                - one_line
+                - none
     group-membership-common-schema:
       type: object
       properties:
