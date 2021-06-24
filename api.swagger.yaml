@@ -6545,6 +6545,8 @@ paths:
                     description: 'Count of results.'
                     type: integer
                     example: 50
+                  facets:
+                    $ref: '#/components/schemas/file-facets-schema'
                   results:
                     description: 'The results set.'
                     type: array
@@ -18368,6 +18370,39 @@ components:
               type: string
             author:
               description: 'The author of this file. (Will use the authenticated user if not supplied.'
+    file-facets-schema:
+      description: 'Facet counts for the list of files.'
+      type: object
+      required:
+        - types
+      properties:
+        types:
+          type: array
+          items:
+            type: object
+            required:
+              - facet_count
+              - data
+            properties:
+              facet_count:
+                description: 'The facet count for this file type.'
+                type: integer
+                example: 33
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - audio
+                      - image
+                      - ms_excel
+                      - ms_powerpoint
+                      - ms_word
+                      - open_document_format
+                      - other_document_types
+                      - pdf
+                      - video
     file-type-configuration-schema:
       type: object
       required:
