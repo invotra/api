@@ -86,10 +86,10 @@ paths:
     get:
       tags:
         - configuration
-      description: 'List the currently configured file types and extentions.'
+      description: 'List the currently configured file types and extensions.'
       responses:
         '200':
-          description: 'List of file types and extentions.'
+          description: 'List of file types and extensions.'
           content:
             application/json:
               schema:
@@ -18357,7 +18357,7 @@ components:
       type: object
       required:
         - name
-        - extentions
+        - extensions
       properties:
         name:
           description: 'The name of the file type.'
@@ -18367,8 +18367,8 @@ components:
             - document
             - image
             - video
-        extentions:
-          description: 'The file extentions permitted within the file type.'
+        extensions:
+          description: 'The file extensions permitted within the file type.'
           type: array
           items:
             type: string
