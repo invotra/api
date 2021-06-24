@@ -2802,6 +2802,12 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - description: 'Filter by group UUID.'
+          in: query
+          name: group_uuid
+          schema:
+            type: string
+            example: 'ABC123'
         - name: state
           description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
