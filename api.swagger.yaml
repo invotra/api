@@ -18391,6 +18391,8 @@ components:
                 example: 33
               data:
                 type: object
+                required:
+                  - type
                 properties:
                   type:
                     type: string
