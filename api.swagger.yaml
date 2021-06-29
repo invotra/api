@@ -11116,6 +11116,14 @@ components:
           description: The main body text of the entity
           type: string
           example: I'm taking annual leave next Thursday. Cover to be announced shortly
+        join_group_display:
+          description: 'If the feed message type is a join group this is the level of detail configured for displaying the group description.'
+          type: string
+          enum:
+            - full_description
+            - short_description
+            - one_line
+            - none
         entity_type:
           description: The type of entity that the feed message is about
           type: string
