@@ -10776,7 +10776,7 @@ components:
       type: object
       required:
         - mandatory_content_review
-        - notification_messages
+        - feed_messages
       properties:
         mandatory_content_review:
           description: 'Mandatory configuration for the "content_review" property.'
@@ -10795,14 +10795,14 @@ components:
                 description: 'Flag indicating the property is mandatory.'
                 type: boolean
                 example: true
-        notification_messages:
-          description: 'Configuration for notification messages.'
+        feed_messages:
+          description: 'Configuration for feed messages.'
           type: object
           required:
             - join_group_display
           properties:
             join_group_display:
-              description: 'The level of detail displayed in a join group notification message.'
+              description: 'The level of detail displayed in a join group feed message.'
               type: string
               enum:
                 - full_description
@@ -10812,12 +10812,12 @@ components:
     administration-schema-update:
       type: object
       properties:
-        notification_messages:
-          description: 'Configuration for notification messages.'
+        feed_messages:
+          description: 'Configuration for feed messages.'
           type: object
           properties:
             join_group_display:
-              description: 'The level of detail displayed in a join group notification message.'
+              description: 'The level of detail displayed in a join group feed message.'
               type: string
               enum:
                 - full_description
@@ -11802,7 +11802,7 @@ components:
             - timestamp_created
             - timestamp_updated
             - memberships
-            - notification_messages
+            - feed_messages
           properties:
             title:
               type: string
@@ -11971,14 +11971,14 @@ components:
           description: This is used to store the group's external reference ID.
           type: string
           example: ABC123
-        notification_messages:
-          description: 'Configuration for notification messages for this group.'
+        feed_messages:
+          description: 'Configuration for feed messages for this group.'
           type: object
           required:
             - join_group_display
           properties:
             join_group_display:
-              description: 'The level of detail displayed in a join group notification message.'
+              description: 'The level of detail displayed in a join group feed message.'
               type: string
               enum:
                 - full_description
