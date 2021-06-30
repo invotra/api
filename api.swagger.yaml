@@ -2923,6 +2923,39 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/custom_content:write ]
+  '/galleries':
+    post:
+      tags:
+        - 'galleries'
+      description: 'Provision a new gallery.'
+      responses:
+        '201':
+          description: 'The gallery was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned gallery may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The gallery was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a gallery.'
+        '422':
+          description: 'The gallery was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/gallery-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/galleries:write ]
   '/galleries/list':
     get:
       tags:
@@ -12864,6 +12897,24 @@ components:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
               example: 1510941596
+    gallery-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/gallery-schema-common'
+        - type: object
+          properties:
+            image:
+              description: 'The image for this gallery.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - title
+            - body
+            - state
     gallery-schema-common:
       type: object
       properties:
