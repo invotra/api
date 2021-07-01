@@ -9939,6 +9939,72 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/site_sections:read ]
+  '/site_sections/{site_section_id}/widgets':
+    parameters:
+      - description: The Invotra UUID of the site section.
+        in: path
+        name: site_section_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      tags:
+        - 'site sections'
+      description: 'Update information about the widgets in site section.'
+      responses:
+        '200':
+          description: 'The widgets in the site section is successfully updated.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this site section.'
+        '404':
+          description: 'The UUID does not correspond to an existing site section.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/widget-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:write ]
+    get:
+      tags:
+        - 'site sections'
+      description: 'Get widgets in the site section.'
+      responses:
+        '200':
+          description: 'List of widgets matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/widget-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this site section.'
+        '404':
+          description: 'The UUID does not correspond to an existing site section.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:read ]
   '/titles':
     post:
       tags:
@@ -19187,3 +19253,44 @@ components:
         current_user_saved:
           type: boolean
           default: false
+    widget-schema:
+      type: object
+      properties:
+        display_uuid:
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        widget_uuid:
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        title:
+          type: string
+          example: Header 1
+        display_id:
+          type: string
+        widget_id:
+          type: string
+        position:
+          type: string
+          example: "0"
+        panel:
+          type: string
+          example: "center"
+      required:
+        - widget_uuid
+    update-widget-schema:
+      type: object
+      properties:
+        widget_uuid:
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        position:
+          type: string
+          example: "0"
+        panel:
+          type: string
+          example: "center"
+      required:
+        - widget_uuid
