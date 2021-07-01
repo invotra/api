@@ -6533,7 +6533,6 @@ paths:
               - author
               - filemime
               - filename
-              - type
               - site_section
               - timestamp_created
               - timestamp_updated
