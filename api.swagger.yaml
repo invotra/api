@@ -11489,6 +11489,7 @@ components:
               - Content reviewer
               - Editor
               - External user
+              - Ghostwriter
               - Groups manager
               - Ideas administrator
               - Location admin
