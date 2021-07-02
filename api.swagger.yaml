@@ -16852,18 +16852,6 @@ components:
           description: The user's username
           type: string
           example: Dorothy Whitehead
-        title:
-          default: ''
-          description: The user's title
-          enum:
-            - ''
-            - Dr
-            - Mr
-            - Miss
-            - Mrs
-            - Ms
-          type: string
-          example: Ms
         firstname:
           description: The user's first name
           type: string
