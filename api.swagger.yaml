@@ -11437,6 +11437,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/region-list-schema'
+            is_line_manager:
+              description: 'This user is a manager of other users.'
+              type: boolean
+              example: false
+              readOnly: true
             read_only:
               description: 'Users who are flagged as read-only are not able to create, update, or delete content.'
               type: boolean
@@ -11532,11 +11537,6 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
-        is_line_manager:
-          description: 'This user is a manager of other users.'
-          type: boolean
-          default: false
-          example: false
         firstname:
           description: The user's first name
           type: string
