@@ -188,6 +188,33 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /preview_mode:
+    post:
+      tags:
+        - preview mode
+      description: "Enable preview mode for the requesting user's session."
+      responses:
+        201:
+          description: "Preview mode for the user's session has been enabled."
+        403:
+          description: "User is not authorized to enable preview mode."
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/preview_mode:write ]
+    delete:
+      tags:
+        - preview mode
+      description: "Disable preview for the requesting user's session."
+      responses:
+        200:
+          description: "Preview mode for the user's session has been disabled."
+        404:
+          description: "User does not have preview mode enabled."
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/preview_mode:write ]
   /layouts:
     post:
       tags:
@@ -323,7 +350,6 @@ paths:
           description: 'The Open Graph scrape timed out performing the request on the upstream server.'
   /teams:
     get:
-      deprecated: true
       tags:
         - teams
       parameters:
@@ -399,7 +425,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of teams on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of teams on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -409,12 +435,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -609,7 +629,6 @@ paths:
         - CognitoJwt: [ invotra/teams:write, invotra/users:read ]
   /users:
     get:
-      deprecated: true
       tags:
         - users
       parameters:
@@ -744,12 +763,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - description: Field to sort by
           in: query
           name: sort
@@ -911,14 +924,6 @@ paths:
     get:
       tags:
         - users
-      parameters:
-        - name: trimmed_detail
-          description: 'When true returns a trimmed user schema.'
-          in: query
-          schema:
-            type: boolean
-            default: false
-          required: false
       responses:
         '200':
           description: Returns a single complete user object.
@@ -1432,7 +1437,6 @@ paths:
         - CognitoJwt: [ invotra/users:write ]
   /groups:
     get:
-      deprecated: true
       tags:
         - groups
       parameters:
@@ -1560,12 +1564,6 @@ paths:
           schema:
             type: boolean
             default: false
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - description: 'Filter groups that are administered by the user UUID. Multiple values may be supplied.'
           in: query
           name: admin_uuid
@@ -2139,7 +2137,6 @@ paths:
         - CognitoJwt: [ invotra/groups:write ]
   /posts:
     get:
-      deprecated: true
       tags:
         - posts
       parameters:
@@ -2202,12 +2199,6 @@ paths:
       tags:
         - posts
       parameters:
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - description: Field to sort by
           in: query
           name: sort
@@ -2644,14 +2635,8 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: state
-          description: 'Filter the list of blogs on a comma-separated list of states. Valid states are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of blogs on a comma-separated list of states. Valid states are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -2842,7 +2827,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -2988,7 +2973,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of galleries on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of galleries on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -3131,12 +3116,6 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: state
           description: 'Filter the list of group documents on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
           in: query
@@ -3324,12 +3303,6 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -3479,12 +3452,6 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -3800,12 +3767,6 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -3980,17 +3941,11 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of multi media on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of multi media on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
             example: 'unpublished'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4164,14 +4119,8 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: state
-          description: 'Filter the list of news on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of news on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -4349,14 +4298,8 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: state
-          description: 'Filter the list of pages on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of pages on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -4534,14 +4477,8 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: state
-          description: 'Filter the list of policies on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of policies on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -4719,14 +4656,8 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: state
-          description: 'Filter the list of polls on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of polls on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -4909,12 +4840,6 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: state
           description: 'Filter the list of promotions on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -5159,12 +5084,6 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -5297,7 +5216,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of webforms on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of webforms on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -5417,18 +5336,38 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:write ]
+  '/webforms/{webform_id}/submissions':
+    parameters:
+      - description: 'The Invotra UUID of the webform.'
+        in: path
+        name: webform_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    delete:
+      tags:
+        - 'webforms'
+      description: 'Clear all the webform submissions for all users.'
+      responses:
+        '200':
+          description: 'The webform submissions where successfully cleared.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to clear the submissions of this webform.'
+        '404':
+          description: 'The UUID does not correspond to an existing webform.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:write ]
   '/manuals':
     get:
       description: Get a listing of all manuals
       tags:
         - manuals
       parameters:
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -5559,6 +5498,82 @@ paths:
           description: The user does not have access to the requested content.
         '404':
           description: No content with that UUID was found.
+  '/follow/{content_id}':
+    parameters:
+      - name: content_id
+        description: The Invotra UUID of content/user.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+    put:
+      tags:
+        - follow
+      description: 'Follow a piece of content/user.'
+      responses:
+        '200':
+          description: 'Followed the content/user successfully.'
+        '400':
+          description: 'The content/user was not followed due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to follow this content/user.'
+        '422':
+          description: 'The content/user was not followed due to Drupal validation failure or JSON schema validation failure.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/follow:write ]
+    delete:
+      tags:
+        - follow
+      description: 'Unfollow a piece of content/user.'
+      responses:
+        '200':
+          description: 'Follow removed successfully.'
+        '400':
+          description: 'Could not unfollow this content/user due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to unfollow this content/user.'
+        '422':
+          description: 'The follow could not be removed due to Drupal validation failure or JSON schema validation failure.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/follow:write ]
+    get:
+      description: 'Check if a piece of content/user is followed or not.'
+      tags:
+        - follow
+      parameters:
+        - name: content_id
+          description: 'The Invotra UUID of the content/user.'
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/follow:read ]
+      responses:
+        '200':
+          description: 'Follow status returned successfully.'
+          content:
+            text/html:
+              schema:
+                $ref: '#/components/schemas/content-follow-get-response-schema'
+        '400':
+          description: The UUID or request body JSON was malformed.
+        '401':
+          description: An incorrect or malformed token was provided.
+        '403':
+          description: The user does not have access to the requested content/user.
+        '404':
+          description: No content/user with that UUID was found.
   '/likes/{content_id}':
     parameters:
       - name: content_id
@@ -5652,6 +5667,15 @@ paths:
       responses:
         '200':
           description: 'The content/comment was saved successfully.'
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  message:
+                    description: The message included in the response.
+                    type: string
+                    example: The post was created successfully.
         '400':
           description: 'The content/comment was not saved due to malformed JSON.'
         '403':
@@ -5669,6 +5693,15 @@ paths:
       responses:
         '200':
           description: 'The content/comment was unsaved.'
+          content:
+            text/html:
+              schema:
+                type: object
+                properties:
+                  message:
+                    description: The message included in the response.
+                    type: string
+                    example: The post was created successfully.
         '400':
           description: 'Could not unsave this content/comment due to malformed JSON.'
         '403':
@@ -5788,12 +5821,6 @@ paths:
             type: string
             format: uuid
             example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -5980,7 +6007,6 @@ paths:
         - CognitoJwt: [ invotra/files:write ]
   /job_roles:
     get:
-      deprecated: true
       tags:
         - job roles
       parameters:
@@ -6055,7 +6081,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of job roles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of job roles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -6163,7 +6189,6 @@ paths:
         - CognitoJwt: [ invotra/job_roles:write ]
   /locations:
     get:
-      deprecated: true
       tags:
         - locations
       parameters:
@@ -6210,7 +6235,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of locations on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of locations on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -6220,12 +6245,6 @@ paths:
           schema:
             type: string
             format: uuid
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -6739,7 +6758,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of badges on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of badges on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -6897,7 +6916,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of content categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of content categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7055,7 +7074,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of content types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of content types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7213,7 +7232,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of countries on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of countries on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7371,7 +7390,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of free skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of free skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7529,7 +7548,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of general topics on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of general topics on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7687,7 +7706,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of grades on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of grades on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7851,7 +7870,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of group categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of group categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8009,7 +8028,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of idea categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of idea categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8167,7 +8186,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of interests on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of interests on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8325,7 +8344,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of message types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of message types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8483,7 +8502,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of organisational skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of organisational skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8641,7 +8660,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of person types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of person types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8799,7 +8818,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of policy types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of policy types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8957,7 +8976,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of primary categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of primary categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9115,7 +9134,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of projects on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of projects on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9273,7 +9292,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of query categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of query categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9431,7 +9450,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of regions on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of regions on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9595,7 +9614,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of search highlights on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of search highlights on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9753,7 +9772,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of security classifications on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of security classifications on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9878,7 +9897,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of site sections on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of site sections on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9994,7 +10013,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of titles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of titles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -10152,7 +10171,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of user categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of user categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -11173,6 +11192,37 @@ components:
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_author_uuid:
+          description: 'The uuid of the content author.'
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        content_author_image:
+          description: 'The user image url of the content author.'
+          type: string
+          format: url
+          example: >-
+            https://dev.invotra.com/system/files/user-picture/large_avatar/1f0c6cb5-a3c3-4197-bebc-b3e44462dc24/profile.png
+        content_author_display_name:
+          description: 'The content author display name.'
+          type: string
+          example: 'Dorothy Whitehead'
+        content_author_username:
+          description: 'The content author username'
+          type: string
+          example: 'dorothy-whitehead'
+        content_title:
+          description: The title of the content that the feed message is about
+          type: string
+          example: News about annual leave
+        content_body:
+          description: The Body of the content that the feed message is about
+          type: string
+          example: 'This news item is about the new annual leave structure.'
+        content_timestamp:
+          description: This is the timestamp (in seconds) of when the feed message content was created
+          type: integer
+          example: 1510941596
         content_location:
           description: 'The API URI of the content referenced by this feed message.'
           type: string
@@ -11386,11 +11436,6 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
-            title:
-              description: "The user's title. A title object."
-              type: object
-              allOf:
-                - $ref: '#/components/schemas/title-schema'
             teams:
               description: "The user's teams. An array of team objects."
               type: array
@@ -11418,6 +11463,11 @@ components:
                 $ref: '#/components/schemas/region-list-schema'
             read_only:
               description: 'Users who are flagged as read-only are not able to create, update, or delete content.'
+              type: boolean
+              example: false
+              readOnly: true
+            preview_mode_enabled:
+              description: "Preview mode is enabled for the requesting user's session. Note that preview mode is associated with the user’s session not the user themselves. Users can be logged in on multiple devices, some with preview mode enabled, and others disabled."
               type: boolean
               example: false
               readOnly: true
@@ -11515,18 +11565,22 @@ components:
           description: The user's first name
           type: string
           example: Dorothy
-        middle_name:
-          description: The user's middle name
-          type: string
-          example: 'Papadopoulos'
         surname:
           description: The user's surname
           type: string
           example: Whitehead
-        known_as:
-          description: The user's known as name
+        title:
+          default: ''
+          description: The user's title
+          enum:
+            - ''
+            - Dr
+            - Mr
+            - Miss
+            - Mrs
+            - Ms
           type: string
-          example: 'Dot'
+          example: Mr
         person_type:
           description: This is the Invotra UUID of the user's person type.
           type: string
@@ -11563,15 +11617,6 @@ components:
         - $ref: '#/components/schemas/user-schema-common'
         - type: object
           properties:
-            title:
-              description: "The user's title."
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the title.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             teams:
               description: "The user's teams. An array of team UUIDs."
               type: array
@@ -12279,10 +12324,6 @@ components:
           description: 'The review date timestamp for the blog (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
-        external_id:
-          description: 'The blog external reference id.'
-          type: string
-          example: 'ABC123'
     custom-content-schema:
       allOf:
         - $ref: '#/components/schemas/custom-content-schema-common'
@@ -12711,7 +12752,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -12896,7 +12937,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -13107,10 +13148,6 @@ components:
           description: 'The review date timestamp for the group document (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
-        external_id:
-          description: 'The group document external reference id.'
-          type: string
-          example: 'ABC123'
     group-poll-schema:
       allOf:
         - $ref: '#/components/schemas/group-poll-schema-common'
@@ -13221,10 +13258,6 @@ components:
           description: 'Title of the group poll.'
           type: string
           example: 'What is your favorite food?'
-        external_id:
-          description: 'The group poll external reference id.'
-          type: string
-          example: 'ABC123'
     group-poll-vote-schema:
       type: object
       required:
@@ -13615,10 +13648,6 @@ components:
           description: 'The review date timestamp for the list (in seconds). The review date is mandatory if configured to be in Invotra admin.'
           type: integer
           example: 1510941596
-        external_id:
-          description: 'The list external reference id.'
-          type: string
-          example: 'ABC123'
         list:
           description: 'List of content and links in the list.'
           type: array
@@ -13789,10 +13818,6 @@ components:
           description: 'The body of the message.'
           type: string
           example: 'It is my birthday next week so remember to get me a present.'
-        external_id:
-          description: 'The message external reference id.'
-          type: string
-          example: 'ABC123'
     multi-media-schema:
       allOf:
         - $ref: '#/components/schemas/multi-media-schema-common'
@@ -14274,7 +14299,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -14706,7 +14731,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -15139,7 +15164,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -15658,7 +15683,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -15702,6 +15727,19 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/user-trimmed-schema'
+            site_section:
+              description: 'The site section of this poll.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+                name:
+                  description: 'This is the name of the site section.'
+                  type: string
+                  example: 'Finance'
             options:
               description: 'The options for this group poll, with vote counts.'
               type: array
@@ -15761,6 +15799,15 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            site_section:
+              description: 'The site section of this poll.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     poll-schema-create:
       allOf:
         - $ref: '#/components/schemas/poll-schema-common'
@@ -15776,6 +15823,15 @@ components:
               properties:
                 uuid:
                   description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+            site_section:
+              description: 'The site section of this poll.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the site section.'
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -15797,6 +15853,7 @@ components:
           required:
             - state
             - title
+            - site_section
             - options
     poll-schema-common:
       type: object
@@ -16214,10 +16271,6 @@ components:
           type: boolean
           default: false
           example: false
-        external_id:
-          description: 'The promotion external reference id.'
-          type: string
-          example: 'ABC123'
     query-schema:
       allOf:
         - $ref: '#/components/schemas/query-schema-common'
@@ -16757,7 +16810,7 @@ components:
                 type: string
                 enum:
                   - 'content'
-                  - 'site section'
+                  - 'site_section'
                   - 'file'
               title:
                 description: 'The title for the related content.'
@@ -16823,11 +16876,6 @@ components:
           description: The user's username
           type: string
           example: Dorothy Whitehead
-        title:
-          description: "The user's title. A title object."
-          type: object
-          allOf:
-            - $ref: '#/components/schemas/title-schema'
         firstname:
           description: The user's first name
           type: string
@@ -16865,10 +16913,6 @@ components:
           description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual.'
           type: integer
           example: 63
-        external_id:
-          description: 'The manual external reference id.'
-          type: string
-          example: 'ABC123'
     manual-page-listing-schema:
       type: object
       properties:
@@ -16961,10 +17005,6 @@ components:
           description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual page.'
           type: integer
           example: 63
-        external_id:
-          description: 'The manual page external reference id.'
-          type: string
-          example: 'ABC123'
         attachments:
           description: List of attachments on manual page
           type: array
@@ -17092,10 +17132,6 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
-        external_id:
-          description: 'The comment external reference id.'
-          type: string
-          example: 'ABC123'
     file-schema:
       type: object
       required:
@@ -19145,6 +19181,12 @@ components:
         <html>
           ...
         </html>
+    content-follow-get-response-schema:
+      type: object
+      properties:
+        current_user_follows:
+          type: boolean
+          default: false
     content-like-get-response-schema:
       type: object
       properties:
