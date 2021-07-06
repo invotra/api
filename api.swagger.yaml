@@ -19283,6 +19283,9 @@ components:
         panel:
           type: string
           example: "center"
+        region_locked:
+          type: boolean
+          example: false
       required:
         - widget_uuid
     update-widget-schema:
