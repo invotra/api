@@ -13431,6 +13431,10 @@ components:
           description: 'The idea reference.'
           type: string
           example: 'I123'
+        external_id:
+          description: 'The idea external reference id.'
+          type: string
+          example: 'ABC123'
     list-schema:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
