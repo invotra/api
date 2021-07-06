@@ -17067,6 +17067,10 @@ components:
           description: 'The mean average rating as a percentage calculated from all the ratings cast against this manual.'
           type: integer
           example: 63
+        external_id:
+          description: 'The manual external reference id.'
+          type: string
+          example: 'ABC123'
     manual-page-listing-schema:
       type: object
       properties:
