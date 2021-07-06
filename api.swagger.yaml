@@ -5049,6 +5049,12 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - name: sort
           description: 'Field to sort by.'
           in: query
