@@ -323,6 +323,7 @@ paths:
           description: 'The Open Graph scrape timed out performing the request on the upstream server.'
   /teams:
     get:
+      deprecated: true
       tags:
         - teams
       parameters:
@@ -408,6 +409,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -602,6 +609,7 @@ paths:
         - CognitoJwt: [ invotra/teams:write, invotra/users:read ]
   /users:
     get:
+      deprecated: true
       tags:
         - users
       parameters:
@@ -736,6 +744,12 @@ paths:
           schema:
             type: string
             format: uuid
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - description: Field to sort by
           in: query
           name: sort
@@ -897,6 +911,14 @@ paths:
     get:
       tags:
         - users
+      parameters:
+        - name: trimmed_detail
+          description: 'When true returns a trimmed user schema.'
+          in: query
+          schema:
+            type: boolean
+            default: false
+          required: false
       responses:
         '200':
           description: Returns a single complete user object.
@@ -1410,6 +1432,7 @@ paths:
         - CognitoJwt: [ invotra/users:write ]
   /groups:
     get:
+      deprecated: true
       tags:
         - groups
       parameters:
@@ -1537,6 +1560,12 @@ paths:
           schema:
             type: boolean
             default: false
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - description: 'Filter groups that are administered by the user UUID. Multiple values may be supplied.'
           in: query
           name: admin_uuid
@@ -2110,6 +2139,7 @@ paths:
         - CognitoJwt: [ invotra/groups:write ]
   /posts:
     get:
+      deprecated: true
       tags:
         - posts
       parameters:
@@ -2172,6 +2202,12 @@ paths:
       tags:
         - posts
       parameters:
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+            example: 'ABC123'
         - description: Field to sort by
           in: query
           name: sort
