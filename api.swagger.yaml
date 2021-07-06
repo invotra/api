@@ -19275,7 +19275,7 @@ components:
           example: Header 1
         display_id:
           type: string
-        id:
+        widget_id:
           type: string
         position:
           type: string
