@@ -17294,6 +17294,10 @@ components:
           example: '01234567-89ab-cdef-1234-56789abcdef0'
           type: string
           format: uuid
+        external_id:
+          description: 'The comment page external reference id.'
+          type: string
+          example: 'ABC123'
     file-schema:
       type: object
       required:
