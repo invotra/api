@@ -16517,6 +16517,10 @@ components:
           description: 'The review date timestamp for the support ticket (in seconds).'
           type: integer
           example: 1510941596
+        external_id:
+          description: 'The support ticket external reference id.'
+          type: string
+          example: 'ABC123'
     webform-schema:
       allOf:
         - $ref: '#/components/schemas/webform-schema-common'
