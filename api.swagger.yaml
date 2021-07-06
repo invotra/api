@@ -9939,7 +9939,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/site_sections:read ]
-  '/site_sections/{site_section_id}/widgets':
+  '/site_sections/{type_id}/{site_section_id}/widgets':
     parameters:
       - description: The Invotra UUID of the site section.
         in: path
@@ -9948,6 +9948,12 @@ paths:
         schema:
           type: string
           format: uuid
+      - description: The type of site_section.
+        in: path
+        name: type_id
+        required: true
+        schema:
+          type: string
     put:
       tags:
         - 'site sections'
@@ -19269,7 +19275,7 @@ components:
           example: Header 1
         display_id:
           type: string
-        widget_id:
+        id:
           type: string
         position:
           type: string
