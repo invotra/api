@@ -188,6 +188,33 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+  /preview_mode:
+    post:
+      tags:
+        - preview mode
+      description: "Enable preview mode for the requesting user's session."
+      responses:
+        201:
+          description: "Preview mode for the user's session has been enabled."
+        403:
+          description: "User is not authorized to enable preview mode."
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/preview_mode:write ]
+    delete:
+      tags:
+        - preview mode
+      description: "Disable preview for the requesting user's session."
+      responses:
+        200:
+          description: "Preview mode for the user's session has been disabled."
+        404:
+          description: "User does not have preview mode enabled."
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/preview_mode:write ]
   /layouts:
     post:
       tags:
@@ -399,7 +426,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of teams on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of teams on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -2627,7 +2654,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: state
-          description: 'Filter the list of blogs on a comma-separated list of states. Valid states are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of blogs on a comma-separated list of states. Valid states are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -2818,7 +2845,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: state
-          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -2970,7 +2997,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: state
-          description: 'Filter the list of galleries on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of galleries on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -3968,7 +3995,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of multi media on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of multi media on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -4159,7 +4186,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: state
-          description: 'Filter the list of news on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of news on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -4344,7 +4371,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: state
-          description: 'Filter the list of pages on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of pages on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -4529,7 +4556,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: state
-          description: 'Filter the list of policies on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of policies on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -4714,7 +4741,7 @@ paths:
             type: string
             example: 'ABC123'
         - name: state
-          description: 'Filter the list of polls on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of polls on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -5291,7 +5318,7 @@ paths:
             type: string
             example: '2012-12-25'
         - name: state
-          description: 'Filter the list of webforms on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
+          description: 'Filter the list of webforms on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -6175,7 +6202,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of job roles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of job roles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -6330,7 +6357,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of locations on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of locations on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -6859,7 +6886,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of badges on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of badges on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7017,7 +7044,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of content categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of content categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7175,7 +7202,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of content types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of content types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7333,7 +7360,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of countries on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of countries on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7491,7 +7518,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of free skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of free skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7649,7 +7676,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of general topics on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of general topics on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7807,7 +7834,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of grades on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of grades on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -7971,7 +7998,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of group categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of group categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8129,7 +8156,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of idea categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of idea categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8287,7 +8314,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of interests on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of interests on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8445,7 +8472,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of message types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of message types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8603,7 +8630,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of organisational skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of organisational skills on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8761,7 +8788,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of person types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of person types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -8919,7 +8946,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of policy types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of policy types on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9077,7 +9104,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of primary categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of primary categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9235,7 +9262,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of projects on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of projects on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9393,7 +9420,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of query categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of query categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9551,7 +9578,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of regions on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of regions on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9715,7 +9742,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of search highlights on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of search highlights on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9873,7 +9900,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of security classifications on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of security classifications on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -9998,7 +10025,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of site sections on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of site sections on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -10114,7 +10141,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of titles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of titles on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -10272,7 +10299,7 @@ paths:
           schema:
             type: string
         - name: status
-          description: 'Filter the list of user categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only.'
+          description: 'Filter the list of user categories on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
           schema:
             type: string
@@ -11569,6 +11596,11 @@ components:
                 $ref: '#/components/schemas/region-list-schema'
             read_only:
               description: 'Users who are flagged as read-only are not able to create, update, or delete content.'
+              type: boolean
+              example: false
+              readOnly: true
+            preview_mode_enabled:
+              description: "Preview mode is enabled for the requesting user's session. Note that preview mode is associated with the user’s session not the user themselves. Users can be logged in on multiple devices, some with preview mode enabled, and others disabled."
               type: boolean
               example: false
               readOnly: true
