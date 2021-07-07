@@ -11147,10 +11147,17 @@ components:
       type: object
       required:
         - user_uuid
+        - user_image
         - username
+        - entity_uuid
+        - entity_title
+        - entity_body
         - timestamp
+        - link
         - short_text
         - topic
+        - category
+        - category_colour
         - likes
         - comment_count
         - current_user_liked
