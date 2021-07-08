@@ -10746,6 +10746,69 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/site_sections:read ]
+  '/site_sections/template/{entity_type}/{bundle}/{template_machine_name}':
+    parameters:
+      - in: path
+        name: entity_type
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: bundle
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: template_machine_name
+        required: true
+        schema:
+          type: string
+    put:
+      tags:
+        - 'site sections'
+      description: 'Update information about the template in site section.'
+      responses:
+        '200':
+          description: 'The template in the site section is successfully updated.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this site section.'
+        '404':
+          description: 'The UUID does not correspond to an existing site section.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/template-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:write ]
+    get:
+      tags:
+        - 'site sections'
+      description: 'Get template in the site section.'
+      responses:
+        '200':
+          description: 'List of template matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/template-get-response-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this site section.'
+        '404':
+          description: 'The UUID does not correspond to an existing site section.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:read ]
   '/titles':
     post:
       tags:
@@ -20639,3 +20702,210 @@ components:
         current_user_saved:
           type: boolean
           default: false
+    template-schema:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Header 1
+        description:
+          type: string
+          example: Description 1
+        display:
+          type: object
+          properties:
+            layout:
+              type: string
+            layout_settings:
+              type: object
+              properties:
+                max_width:
+                  type: string
+            panels:
+              type: object
+              properties:
+                sidebar:
+                  type: array
+                  items:
+                    type: string
+                header:
+                  type: array
+                  items:
+                    type: string
+                contentmain:
+                  type: array
+                  items:
+                    type: string
+    template-get-response-schema:
+      type: object
+      properties:
+        pnid:
+          type: string
+        title:
+          type: string
+        panelizer_type:
+          type: string
+        panelizer_key:
+          type: string
+        access:
+          type: array
+          items:
+            type: string
+        view_mode:
+          type: string
+        did:
+          type: string
+        name:
+          type: string
+        css_id:
+          type: string
+        css_class:
+          type: string
+        css:
+          type: string
+        no_blocks:
+          type: string
+        title_element:
+          type: string
+        link_to_entity:
+          type: string
+        extra:
+          type: object
+          properties:
+            description:
+              type: string
+            created:
+              type: string
+        pipeline:
+          type: string
+        contexts:
+          type: array
+          items:
+            type: string
+        relationships:
+          type: array
+          items:
+            type: string
+        table:
+          type: string
+        type:
+          type: string
+        export_type:
+          type: number
+        display:
+          type: object
+          properties:
+            args:
+              type: array
+              items:
+                type: string
+            content:
+              type: object
+              additionalProperties:
+                type: object
+                properties:
+                  pid:
+                    type: string
+                  did:
+                    type: string
+                  panel:
+                    type: string
+                  type:
+                    type: string
+                  subtype:
+                    type: string
+                  shown:
+                    type: string
+                  access:
+                    type: array
+                    items:
+                      type: string
+                  configuration:
+                    type: object
+                    properties:
+                      label:
+                        type: string
+                      formatter:
+                        type: integer
+                      delta_limit:
+                        type: string
+                      delta_offset:
+                        type: string
+                      delta_reversed:
+                        type: boolean
+                      formatter_settings:
+                        type: object
+                      context:
+                        type: string
+                      cache:
+                        type: array
+                        items:
+                          type: string
+                      style:
+                        type: array
+                        items:
+                          type: string
+                      css:
+                        type: array
+                        items:
+                          type: string
+                      extras:
+                        type: array
+                        items:
+                          type: string
+                      position:
+                        type: string
+                      locks:
+                        type: array
+                        items:
+                          type: string
+                      uuid:
+                        type: string
+                        format: uuid
+            panels:
+              type: object
+              properties:
+                contentmain:
+                  type: array
+                  items:
+                    type: string
+            incoming_content:
+              type: string
+            css_id:
+              type: string
+            context:
+              type: array
+              items:
+                type: string
+            did:
+              type: string
+            renderer:
+              type: string
+            layout:
+              type: string
+            layout_settings:
+              type: object
+              properties:
+                max_width:
+                  type: string
+            panel_settings:
+              type: array
+              items:
+                type: string
+            cache:
+              type: array
+              items:
+                type: string
+            title:
+              type: string
+            hide_title:
+              type: string
+            title_pane:
+              type: string
+            uuid:
+              type: string
+              format: uuid
+            storage_type:
+              type: string
+            storage_id:
+              type: string
