@@ -11811,8 +11811,6 @@ components:
         - link
         - short_text
         - topic
-        - category
-        - category_colour
         - likes
         - comment_count
         - current_user_liked
@@ -11907,16 +11905,17 @@ components:
           description: The category of a post
           type: string
           enum:
-            - Comment
-            - Note
-            - Done
-            - News / Event
-            - Suggestion
-            - Question
-            - To Do
-            - Problem / Risk
             - Agreed
+            - Comment
             - Decision
+            - Done
+            - Idea
+            - News / Event
+            - Note
+            - Problem / Risk
+            - Question
+            - Suggestion
+            - To Do
         category_colour:
           description: Colour for the category. Any CSS colour allowed.
           type: string
@@ -12934,16 +12933,17 @@ components:
           description: The category of a post
           type: string
           enum:
-            - Comment
-            - Note
-            - Done
-            - News / Event
-            - Suggestion
-            - Question
-            - To Do
-            - Problem / Risk
             - Agreed
+            - Comment
             - Decision
+            - Done
+            - Idea
+            - News / Event
+            - Note
+            - Problem / Risk
+            - Question
+            - Suggestion
+            - To Do
         external_id:
           description: This is used to store the post's external reference id
           type: string
