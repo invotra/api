@@ -12064,6 +12064,7 @@ components:
                       - content
                       - group
                       - user
+                      - ''
         post_categories:
           type: array
           items:
