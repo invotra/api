@@ -12299,6 +12299,7 @@ components:
             description: This is the default Invotra user role
             enum:
               - Author
+              - Badge manager
               - Blogger
               - Brand manager
               - Content layout manager
