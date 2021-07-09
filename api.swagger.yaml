@@ -264,6 +264,12 @@ paths:
         - 'layouts'
       description: 'Search for layouts. An empty array is returned if no layouts where found.'
       parameters:
+        - description: 'Category'
+          in: query
+          name: category
+          schema:
+            type: string
+            enum: [ default, custom ]
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
