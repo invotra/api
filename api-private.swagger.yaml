@@ -230,6 +230,57 @@ paths:
             $ref: '#/definitions/pdf-export-job-response-schema'
         '400':
           description: A malformed UUID was supplied.
+  '/preview_mode/{user_id}':
+    post:
+      tags:
+        - preview mode
+      summary: "Comunicate that preview mode has been enabled for the specified user's session."
+      parameters:
+        - name: user_id
+          in: path
+          type: string
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+          description: 'The Invotra UUID of the user.'
+          required: true
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/preview-mode-submission-schema' 
+          required: true
+      responses:
+        201:
+          description: "Acknowledged that preview mode for the user's session has been enabled."
+        400:
+          description: 'A malformed UUID was supplied.'
+        404:
+          description: 'The user was not found.'
+        422:
+          description: 'JSON body schema validation failed.'
+    put:
+      tags:
+        - preview mode
+      summary: "Comunicate that preview mode has been disabled for the specified user."
+      parameters:
+        - name: user_id
+          in: path
+          type: string
+          description: 'The Invotra UUID of the user.'
+          pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$'
+          required: true
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/preview-mode-submission-schema' 
+          required: true
+      responses:
+        200:
+          description: "Acknowledged that preview mode for the user has been disabled."
+        400:
+          description: 'A malformed UUID was supplied.'
+        404:
+          description: 'The user was not found.'
+        422:
+          description: 'JSON body schema validation failed.'
 definitions:
   session-schema:
     properties:
@@ -369,6 +420,15 @@ definitions:
         example: 2df46a6e-6f73-4b09-b340-7cea68b6e5f6
     required:
       - uuid
+  preview-mode-submission-schema:
+    type: object
+    required:
+      - session
+    properties:
+      session:
+        type: string
+        description: "The user's session details."
+        example: 'SESS17c146f5cde051da0146f1d9fcb13014=KJSkpvaGdngF784RNk_xP6L4qGBZFmVK7vBpaenzXDI'
 securityDefinitions:
   APIKeyHeader:
     type: apiKey
