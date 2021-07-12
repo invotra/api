@@ -5625,6 +5625,19 @@ paths:
       tags:
         - rate
       description: 'Rate a piece of content/comment.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+              required:
+                - rating
       responses:
         '200':
           description: 'Rated the content/comment successfully.'
