@@ -12489,6 +12489,11 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
+            organisational_unit:
+              type: array
+              items:
+                type: string
+                format: uuid
       required:
         - email
         - username
