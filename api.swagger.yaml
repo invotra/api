@@ -266,9 +266,19 @@ paths:
       parameters:
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
+        - description: Category type
+          in: query
+          name: category
+          required: false
+          schema:
+            type: string
+            enum:
+              - default
+              - custom
+            default: custom
       responses:
         '200':
-          description: 'List of layouts.'
+          description: 'List of layouts. Click schema to see details response type'
           content:
             application/json:
               schema:
@@ -279,7 +289,7 @@ paths:
                     type: integer
                     example: 50
                   results:
-                    description: 'The results set.'
+                    description: 'The results set'
                     type: array
                     items:
                       $ref: '#/components/schemas/layout-schema'
@@ -11732,7 +11742,49 @@ components:
         password:
           description: The password that the user logs in with
           type: string
-    layout-schema:
+    default-layout-schema:
+      type: object
+      properties:
+        title:
+          type: string
+        icon:
+          type: string
+        category:
+          type: string
+        theme:
+          type: string
+        module:
+          type: string
+        name:
+          type: string
+        path:
+          type: string
+        file:
+          type: string
+        plugin module:
+          type: string
+        plugin type:
+          type: string
+        description:
+          type: string
+        regions:
+          type: object
+          additionalProperties: 
+            type: string
+      required:
+        - title
+        - icon
+        - category
+        - theme
+        - module
+        - name
+        - path
+        - file
+        - plugin module
+        - plugin type
+        - description
+        - regions
+    custom-layout-schema:
       allOf:
         - $ref: '#/components/schemas/layout-schema-create'
         - type: object
@@ -11742,7 +11794,11 @@ components:
               type: string
               example: 'head_1_body_4'
           required:
-            - machine_name
+              - machine_name    
+    layout-schema:
+      oneOf:
+        - $ref: '#/components/schemas/default-layout-schema'
+        - $ref: '#/components/schemas/custom-layout-schema'
     layout-schema-create:
       type: object
       required:
