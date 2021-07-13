@@ -5621,7 +5621,7 @@ paths:
           type: string
           format: uuid
           example: '01234567-89ab-cdef-1234-56789abcdef0'
-    put:
+    post:
       tags:
         - report
       description: 'Report a piece of content/comment.'
@@ -5638,6 +5638,21 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/report:write ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason_for_flagging:
+                  type: string
+                text_format:
+                  type: string
+                  enum: [author, webmaster, organisational_user, authorised_user, plain_text]
+              required:
+                - reason_for_flagging
+                - text_format
+        required: true
     delete:
       tags:
         - report
