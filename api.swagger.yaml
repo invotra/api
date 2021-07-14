@@ -12248,6 +12248,28 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/region-list-schema'
+            site_sections:
+              description: The user's site sections and site section roles.
+              type: array
+              items:
+                type: object
+                properties:
+                  site_section_roles:
+                    description: The user's site section roles within this site section. 
+                    type: array
+                    items:
+                      type: string
+                      enum:
+                        - 'Section manager'
+                        - 'Section moderator'
+                        - 'Section publisher'
+                        - 'Section editor'
+                        - 'Section author'
+                        - 'Section content reviewer'
+                  site_section:
+                    type: object
+                    allOf:
+                      - $ref: '#/components/schemas/site-section-schema'
             is_line_manager:
               description: 'This user is a manager of other users.'
               type: boolean
