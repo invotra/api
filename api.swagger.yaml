@@ -12268,8 +12268,12 @@ components:
                         - 'Section content reviewer'
                   site_section:
                     type: object
-                    allOf:
-                      - $ref: '#/components/schemas/site-section-schema'
+                    properties:
+                      uuid:
+                        description: The UUID of the site section
+                        type: string
+                        format: uuid
+                        example: 01234567-89ab-cdef-1234-56789abcdef0
             is_line_manager:
               description: 'This user is a manager of other users.'
               type: boolean
