@@ -12263,6 +12263,31 @@ components:
               type: boolean
               example: false
               readOnly: true
+            birthday:
+              type: string
+            free_skills:
+              type: array
+              items:
+                type: string
+            interests:
+              type: array
+              items:
+                type: string
+            social_media:
+              type: object
+              properties:
+                facebook:
+                  type: string
+                linkedin:
+                  type: string
+                twitter:
+                  type: string
+            about_me:
+              type: string
+            organizational_skills:
+              type: array
+              items:
+                type: string
     user-schema-common:
       properties:
         uuid:
@@ -12489,6 +12514,31 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
+            birthday:
+              type: string
+            free_skills:
+              type: array
+              items:
+                type: string
+            interests:
+              type: array
+              items:
+                type: string
+            social_media:
+              type: object
+              properties:
+                facebook:
+                  type: string
+                linkedin:
+                  type: string
+                twitter:
+                  type: string
+            about_me:
+              type: string
+            organizational_skills:
+              type: array
+              items:
+                type: string
       required:
         - email
         - username
