@@ -11624,7 +11624,7 @@ components:
           type: object
           properties:
             join_group_display:
-              description: 'The level of detail displayed in a join group feed message.'
+              description: 'The level of detail displayed in a join group feed message. Note that when this setting is changed then all individual groups will have there setting cleared.'
               type: string
               enum:
                 - full_description
