@@ -12220,8 +12220,8 @@ components:
                     type: string
             title:
               description: "The user's title. A title object."
-              type: object
-              allOf:
+              oneOf:
+                - type: string
                 - $ref: '#/components/schemas/title-schema'
             teams:
               description: "The user's teams. An array of team objects."
@@ -12263,13 +12263,13 @@ components:
               type: boolean
               example: false
               readOnly: true
-            birthday:
-              type: string
             free_skills:
+              description: Free Skills
               type: array
               items:
                 type: string
             interests:
+              description: Personal Interests
               type: array
               items:
                 type: string
@@ -12285,10 +12285,12 @@ components:
             about_me:
               type: string
             organizational_skills:
+              description: Organizational Skills
               type: array
               items:
                 type: string
     user-schema-common:
+      type: object
       properties:
         uuid:
           description: The UUID of the user
@@ -12419,7 +12421,6 @@ components:
           example: 01234567-89ab-cdef-1234-56789abcdef0
           deprecated: true
           readOnly: true
-      type: object
     user-schema-update:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
@@ -12514,31 +12515,51 @@ components:
                   example: ['internal:9a9f0894-8c7e-4854-a30b-2d3e127507b7', 'external:d869e002-5567-47cc-9fc1-5dcdd8280632']
                   items:
                     type: string
-            birthday:
-              type: string
             free_skills:
+              description: Free Skills
               type: array
               items:
-                type: string
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             interests:
+              description: Personal Interests
               type: array
               items:
-                type: string
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             social_media:
               type: object
               properties:
                 facebook:
                   type: string
+                  example: "https://www.facebook.com/Akagera.Brooke.Bean"
                 linkedin:
                   type: string
+                  example: "https://www.linkedin.com/user/Akagera.Brooke.Bean"
                 twitter:
                   type: string
+                  example: "https://twitter.com/Akagera.Brooke.Bean"
             about_me:
               type: string
+              example: "This is a description"
             organizational_skills:
+              description: Organisational Skills
               type: array
               items:
-                type: string
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
       required:
         - email
         - username
