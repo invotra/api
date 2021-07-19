@@ -1011,14 +1011,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write ]
-  '/users/{user_id}/activity':
-    parameters:
-      - in: path
-        name: user_id
-        description: The Invotra UUID of the user.
-        required: true
-        schema:
-          type: string
+  '/users/activity':
     get:
       tags:
         - users
@@ -12220,8 +12213,8 @@ components:
                     type: string
             title:
               description: "The user's title. A title object."
-              type: object
-              allOf:
+              oneOf:
+                - type: string
                 - $ref: '#/components/schemas/title-schema'
             teams:
               description: "The user's teams. An array of team objects."
@@ -12263,7 +12256,34 @@ components:
               type: boolean
               example: false
               readOnly: true
+            free_skills:
+              description: Free Skills
+              type: array
+              items:
+                type: string
+            interests:
+              description: Personal Interests
+              type: array
+              items:
+                type: string
+            social_media:
+              type: object
+              properties:
+                facebook:
+                  type: string
+                linkedin:
+                  type: string
+                twitter:
+                  type: string
+            about_me:
+              type: string
+            organizational_skills:
+              description: Organizational Skills
+              type: array
+              items:
+                type: string
     user-schema-common:
+      type: object
       properties:
         uuid:
           description: The UUID of the user
@@ -12394,7 +12414,6 @@ components:
           example: 01234567-89ab-cdef-1234-56789abcdef0
           deprecated: true
           readOnly: true
-      type: object
     user-schema-update:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
@@ -12461,6 +12480,51 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            free_skills:
+              description: Free Skills
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            interests:
+              description: Personal Interests
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            social_media:
+              type: object
+              properties:
+                facebook:
+                  type: string
+                  example: "https://www.facebook.com/Akagera.Brooke.Bean"
+                linkedin:
+                  type: string
+                  example: "https://www.linkedin.com/user/Akagera.Brooke.Bean"
+                twitter:
+                  type: string
+                  example: "https://twitter.com/Akagera.Brooke.Bean"
+            about_me:
+              type: string
+              example: "This is a description"
+            organizational_skills:
+              description: Organisational Skills
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
