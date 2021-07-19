@@ -1011,14 +1011,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write ]
-  '/users/{user_id}/activity':
-    parameters:
-      - in: path
-        name: user_id
-        description: The Invotra UUID of the user.
-        required: true
-        schema:
-          type: string
+  '/users/activity':
     get:
       tags:
         - users
