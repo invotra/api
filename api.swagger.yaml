@@ -12316,7 +12316,6 @@ components:
               - Location admin
               - Moderator
               - Organisational user
-              - OU administrator
               - Previewer
               - Publisher
               - Queries administrator
