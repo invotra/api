@@ -12248,6 +12248,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/region-list-schema'
+            badges:
+              description: "The user's badges. An array of badge objects."
+              type: array
+              items:
+                $ref: '#/components/schemas/badge-schema'
             is_line_manager:
               description: 'This user is a manager of other users.'
               type: boolean
@@ -12299,6 +12304,7 @@ components:
             description: This is the default Invotra user role
             enum:
               - Author
+              - Badge manager
               - Blogger
               - Brand manager
               - Content layout manager
@@ -12310,7 +12316,6 @@ components:
               - Location admin
               - Moderator
               - Organisational user
-              - OU administrator
               - Previewer
               - Publisher
               - Queries administrator
@@ -12461,6 +12466,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            badges:
+              description: "The user's badges. An array of badge UUIDs."
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the badge.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
