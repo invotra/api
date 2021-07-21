@@ -14056,6 +14056,14 @@ components:
           description: 'The gallery external reference id.'
           type: string
           example: 'ABC123'
+        gallery_items:
+          type: array
+          items:
+            type: object
+            properties:
+              uuid: 
+                type: string
+                format: uuid
     group-document-schema:
       allOf:
         - $ref: '#/components/schemas/group-document-schema-common'
