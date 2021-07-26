@@ -13803,6 +13803,16 @@ components:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
               example: 1510941596
+            gallery_items:
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid: 
+                    type: string
+                    format: uuid
+                  title:
+                    type: string
     gallery-schema-update:
       allOf:
         - $ref: '#/components/schemas/gallery-schema-common'
@@ -13899,6 +13909,7 @@ components:
             - body
             - state
             - site_section
+            - owner
           properties:
             schedule_date_timestamp:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
