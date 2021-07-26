@@ -1011,7 +1011,14 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write ]
-  '/users/activity':
+  '/users/{user_id}/activity':
+    parameters:
+      - in: path
+        name: user_id
+        description: The Invotra UUID of the user.
+        required: true
+        schema:
+          type: string
     get:
       tags:
         - users
@@ -12213,8 +12220,8 @@ components:
                     type: string
             title:
               description: "The user's title. A title object."
-              oneOf:
-                - type: string
+              type: object
+              allOf:
                 - $ref: '#/components/schemas/title-schema'
             teams:
               description: "The user's teams. An array of team objects."
@@ -12260,12 +12267,44 @@ components:
               description: Free Skills
               type: array
               items:
-                type: string
-            interests:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  external_id:
+                    type: string
+                  has_children:
+                    type: boolean
+                  published:
+                    type: boolean
+                  weight:
+                    type: number
+            personal_interests:
               description: Personal Interests
               type: array
               items:
-                type: string
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  external_id:
+                    type: string
+                  has_children:
+                    type: boolean
+                  published:
+                    type: boolean
+                  weight:
+                    type: number
             social_media:
               type: object
               properties:
@@ -12281,7 +12320,23 @@ components:
               description: Organizational Skills
               type: array
               items:
-                type: string
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  external_id:
+                    type: string
+                  has_children:
+                    type: boolean
+                  published:
+                    type: boolean
+                  weight:
+                    type: number
     user-schema-common:
       type: object
       properties:
@@ -12493,7 +12548,7 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
-            interests:
+            personal_interests:
               description: Personal Interests
               type: array
               items:
