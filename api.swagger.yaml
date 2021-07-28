@@ -20716,15 +20716,34 @@ components:
         uuid:
           type: string
           format: uuid
+          description: 'Invotra UUID of the personal interest.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
         name:
           type: string
+          description: 'Name of the personal interest.'
+          example: 'Personal Interest'
         description:
           type: string
+          description: 'Description of the personal interest.'
+          example: 'Personal interest'
         external_id:
           type: string
+          description: 'The personal interest external reference id.'
+          example: 'ABC123'
         has_children:
           type: boolean
+          description: 'Indicates that this personal interest has children.'
+          example: false
+        parent_uuid:
+          type: string
+          format: uuid
+          description: 'Invotra UUID of the personal interest skill.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
         published:
+          description: 'Indicates that this personal interest is published.'
           type: boolean
+          example: true
         weight:
-          type: number
+          description: 'Determines the position of an personal interest in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 1
