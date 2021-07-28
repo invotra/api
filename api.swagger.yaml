@@ -12267,44 +12267,12 @@ components:
               description: Free Skills
               type: array
               items:
-                type: object
-                properties:
-                  uuid:
-                    type: string
-                    format: uuid
-                  name:
-                    type: string
-                  description:
-                    type: string
-                  external_id:
-                    type: string
-                  has_children:
-                    type: boolean
-                  published:
-                    type: boolean
-                  weight:
-                    type: number
+                $ref: '#/components/schemas/free-skill-schema'
             personal_interests:
               description: Personal Interests
               type: array
               items:
-                type: object
-                properties:
-                  uuid:
-                    type: string
-                    format: uuid
-                  name:
-                    type: string
-                  description:
-                    type: string
-                  external_id:
-                    type: string
-                  has_children:
-                    type: boolean
-                  published:
-                    type: boolean
-                  weight:
-                    type: number
+                $ref: '#/components/schemas/personal-interest-schema'
             social_media:
               type: object
               properties:
@@ -12316,27 +12284,11 @@ components:
                   type: string
             about_me:
               type: string
-            organizational_skills:
+            organisational_skills:
               description: Organizational Skills
               type: array
               items:
-                type: object
-                properties:
-                  uuid:
-                    type: string
-                    format: uuid
-                  name:
-                    type: string
-                  description:
-                    type: string
-                  external_id:
-                    type: string
-                  has_children:
-                    type: boolean
-                  published:
-                    type: boolean
-                  weight:
-                    type: number
+                $ref: '#/components/schemas/organisational-skill-schema'
     user-schema-common:
       type: object
       properties:
@@ -12573,7 +12525,7 @@ components:
             about_me:
               type: string
               example: "This is a description"
-            organizational_skills:
+            organisational_skills:
               description: Organisational Skills
               type: array
               items:
@@ -20758,3 +20710,21 @@ components:
         current_user_saved:
           type: boolean
           default: false
+    personal-interest-schema:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        external_id:
+          type: string
+        has_children:
+          type: boolean
+        published:
+          type: boolean
+        weight:
+          type: number
