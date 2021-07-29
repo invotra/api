@@ -13806,13 +13806,7 @@ components:
             gallery_items:
               type: array
               items:
-                type: object
-                properties:
-                  uuid: 
-                    type: string
-                    format: uuid
-                  title:
-                    type: string
+                $ref: '#/components/schemas/multi-media-schema'
     gallery-schema-update:
       allOf:
         - $ref: '#/components/schemas/gallery-schema-common'
