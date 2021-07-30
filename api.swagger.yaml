@@ -5815,8 +5815,11 @@ paths:
         name: webform_id
         required: true
         schema:
-          type: string
-          format: uuid
+          oneOf:
+            - type: string
+              format: uuid
+            - type: string
+              format: string
     get:
       tags:
         - 'webforms'
@@ -5906,6 +5909,86 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:write ]
+  '/webforms/submissions':
+    post:
+      tags:
+        - 'webforms'
+      summary: 'Create a webform submission for Ideas/Queries.'
+      description: 'Create a webform submission for Ideas/Queries.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webform-submission-schema-create'
+        required: true
+      responses:
+        '200':
+          description: 'The webform submission was created successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to create the submissions of this webform.'
+        '404':
+          description: 'The UUID does not correspond to an existing webform.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:write ]
+  '/webforms/submissions/{submission_id}':
+    parameters:
+      - description: 'The Invotra UUID of the webform submission.'
+        in: path
+        name: submission_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      tags:
+        - 'webforms'
+      summary: 'Update a webform submission for Ideas/Queries.'
+      description: 'Update a webform submission for Ideas/Queries.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webform-submission-schema'
+        required: true
+      responses:
+        '200':
+          description: 'The webform submission was updated successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to update the submissions of this webform.'
+        '404':
+          description: 'The UUID does not correspond to an existing webform.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:write ]
+    get:
+      tags:
+        - 'webforms'
+      summary: 'Get webform submission details for Ideas/Queries.'
+      description: 'Get webform submission details for Ideas/Queries.'
+      responses:
+        '200':
+          description: 'Get the webform submissions success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webform-submission-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to get the submissions of this webform.'
+        '404':
+          description: 'The UUID does not correspond to an existing webform.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/webforms:read ]
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -20639,3 +20722,42 @@ components:
         current_user_saved:
           type: boolean
           default: false
+    webform-submission-schema:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [idea, query]
+          description: The type of webform submission
+          example: idea
+        title:
+          type: string
+          description: The title of webform submission
+          example: idea title
+        summary:
+          type: string
+          description: The title of webform submission
+          example: idea summary
+        state:
+          type: string
+          enum:
+            - draft
+            - needs_review
+            - published
+            - reviewed
+            - unpublished
+          description: 'Indicates the state of the webform submission.'
+          example: draft
+        external_id:
+          type: string
+          description: The submission's external reference ID
+          example: ABC123
+    webform-submission-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/webform-submission-schema'
+        - type: object
+          required:
+            - type
+            - title
+            - summary
+            - state
