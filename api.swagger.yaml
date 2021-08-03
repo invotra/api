@@ -18543,7 +18543,6 @@ components:
       required:
         - uuid
         - filename
-        - author
         - file_download
         - type
       properties:
