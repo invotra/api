@@ -12278,19 +12278,8 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/personal-interest-schema'
-            social_media:
-              type: object
-              properties:
-                facebook:
-                  type: string
-                linkedin:
-                  type: string
-                twitter:
-                  type: string
-            about_me:
-              type: string
             organisational_skills:
-              description: Organizational Skills
+              description: Organisational Skills
               type: array
               items:
                 $ref: '#/components/schemas/organisational-skill-schema'
@@ -12426,6 +12415,25 @@ components:
           example: 01234567-89ab-cdef-1234-56789abcdef0
           deprecated: true
           readOnly: true
+        social_media:
+          type: object
+          properties:
+            facebook:
+              type: string
+              description: Facebook Url
+              example: "https://www.facebook.com/Akagera.Brooke.Bean"
+            linkedin:
+              type: string
+              description: Linkedin Url
+              example: "https://www.linkedin.com/user/Akagera.Brooke.Bean"
+            twitter:
+              type: string
+              description: Twitter Url
+              example: "https://twitter.com/Akagera.Brooke.Bean"
+        about_me:
+          type: string
+          description: The brief introduction.
+          example: "I am a driven individual that wants to make sure we are the best ..."
     user-schema-update:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
@@ -12515,21 +12523,6 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
-            social_media:
-              type: object
-              properties:
-                facebook:
-                  type: string
-                  example: "https://www.facebook.com/Akagera.Brooke.Bean"
-                linkedin:
-                  type: string
-                  example: "https://www.linkedin.com/user/Akagera.Brooke.Bean"
-                twitter:
-                  type: string
-                  example: "https://twitter.com/Akagera.Brooke.Bean"
-            about_me:
-              type: string
-              example: "This is a description"
             organisational_skills:
               description: Organisational Skills
               type: array
