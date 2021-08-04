@@ -2914,6 +2914,9 @@ paths:
             enum:
               - timestamp_created
               - timestamp_updated
+              - timestamp_published
+              - title
+              - comment_count
             default: timestamp_created
         - name: order
           description: 'Sort order.'
