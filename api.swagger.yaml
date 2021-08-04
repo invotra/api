@@ -2870,13 +2870,37 @@ paths:
         - 'blogs'
       description: 'Search for blogs. An empty array is returned if no blogs where found.'
       parameters:
+        - name: title
+          description: 'Filter on the blog title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on blog name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: general_topic_uuid
+          description: 'Filter on Invotra UUID of the general topic.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -2909,6 +2933,9 @@ paths:
             enum:
               - timestamp_created
               - timestamp_updated
+              - timestamp_published
+              - title
+              - comment_count
             default: timestamp_created
         - name: order
           description: 'Sort order.'
@@ -3055,13 +3082,28 @@ paths:
         - 'custom content'
       description: 'Search for custom content. An empty array is returned if no custom content was found.'
       parameters:
+        - name: title
+          description: 'Filter on the custom content title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on custom content name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -3246,13 +3288,28 @@ paths:
         - 'galleries'
       description: 'Search for galleries. An empty array is returned if no galleries where found.'
       parameters:
+        - name: title
+          description: 'Filter on the gallery title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on gallery name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -3431,13 +3488,28 @@ paths:
         - 'group documents'
       description: 'Search for group documents. An empty array is returned if no group documents where found.'
       parameters:
+        - name: title
+          description: 'Filter on the group document title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on group document name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: group_uuid
           description: 'Filter on Invotra UUID of the group.'
           in: query
@@ -3624,13 +3696,28 @@ paths:
         - 'group polls'
       description: 'Search for group polls. An empty array is returned if no group polls where found.'
       parameters:
+        - name: title
+          description: 'Filter on the group poll title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on group poll name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: group_uuid
           description: 'Filter on Invotra UUID of the group.'
           in: query
@@ -3786,13 +3873,28 @@ paths:
         - 'ideas'
       description: 'Search for ideas. An empty array is returned if no ideas where found.'
       parameters:
+        - name: title
+          description: 'Filter on the idea title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on idea name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -3971,6 +4073,19 @@ paths:
         - 'lists'
       description: 'Search for lists. An empty array is returned if no lists where found.'
       parameters:
+        - name: title
+          description: 'Filter on the list title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on list name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: autocomplete
           description: 'Autocomplete term. Matches on list name, per letter, from the start of the word.'
           in: query
@@ -3980,9 +4095,11 @@ paths:
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -4161,13 +4278,28 @@ paths:
         - 'messages'
       description: 'Search for messages. An empty array is returned if no messages where found.'
       parameters:
+        - name: title
+          description: 'Filter on the message title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on message name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -4340,13 +4472,28 @@ paths:
         - 'multi media'
       description: 'Search for multi media. An empty array is returned if no multi media where found.'
       parameters:
+        - name: title
+          description: 'Filter on the multi media title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on multi media name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -4525,13 +4672,28 @@ paths:
         - 'news'
       description: 'Search for news. An empty array is returned if no news where found.'
       parameters:
+        - name: title
+          description: 'Filter on the news title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on news name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -4710,13 +4872,28 @@ paths:
         - 'pages'
       description: 'Search for pages. An empty array is returned if no pages where found.'
       parameters:
+        - name: title
+          description: 'Filter on the page title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on page name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -4895,13 +5072,28 @@ paths:
         - 'policies'
       description: 'Search for policies. An empty array is returned if no policies where found.'
       parameters:
+        - name: title
+          description: 'Filter on the policy title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on policy name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -5080,13 +5272,28 @@ paths:
         - 'polls'
       description: 'Search for polls. An empty array is returned if no polls where found.'
       parameters:
+        - name: title
+          description: 'Filter on the poll title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on poll name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -5265,6 +5472,19 @@ paths:
         - 'promotions'
       description: 'Search for promotions. An empty array is returned if no promotions where found.'
       parameters:
+        - name: title
+          description: 'Filter on the promotion title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on promotion name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: autocomplete
           description: 'Autocomplete term. Matches on promotion name, per letter, from the start of the word.'
           in: query
@@ -5274,9 +5494,11 @@ paths:
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -5422,13 +5644,28 @@ paths:
         - 'queries'
       description: 'Search for queries. An empty array is returned if no queries where found.'
       parameters:
+        - name: title
+          description: 'Filter on the query title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on query name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -5578,9 +5815,11 @@ paths:
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
@@ -5753,13 +5992,28 @@ paths:
         - 'webforms'
       description: 'Search for webforms. An empty array is returned if no webforms where found.'
       parameters:
+        - name: title
+          description: 'Filter on the web form title. Matches on whole words.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'Guidelines for creating a strong password'
+        - name: title_autocomplete
+          description: 'Autocomplete term. Matches on web form name, per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
         - name: author_uuid
           description: 'Filter on Invotra UUID of the author.'
           in: query
           schema:
-            type: string
-            format: uuid
-            example: '01234567-89ab-cdef-1234-56789abcdef0'
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
