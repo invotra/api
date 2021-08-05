@@ -12218,6 +12218,14 @@ components:
           description: The subject of the notification
           type: string
           example: mentioned you in a post
+        user:
+          description: The user details
+          type: object
+          $ref: '#/components/schemas/user-schema'
+        content:
+          description: The content details
+          type: object
+          $ref: '#/components/schemas/feed-schema'
       type: object
     team-schema:
       allOf:
