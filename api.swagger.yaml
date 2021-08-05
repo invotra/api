@@ -20729,9 +20729,3 @@ components:
         current_user_saved:
           type: boolean
           default: false
-    dummy-schema:
-      type: object
-      properties:
-        current_user_saved:
-          type: boolean
-          default: false
