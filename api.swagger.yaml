@@ -5634,6 +5634,8 @@ paths:
               properties:
                 rating:
                   type: integer
+                  description: The rating for content/comment.
+                  example: 3
                   minimum: 1
                   maximum: 5
               required:
