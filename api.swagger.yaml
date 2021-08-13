@@ -2218,6 +2218,13 @@ paths:
               - asc
               - desc
             default: desc
+        - description: 'Filter by group UUID.'
+          in: query
+          name: group_uuid
+          schema:
+            type: string
+            format: uuid
+            example: '01234567-89ab-cdef-1234-56789abcdef0'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -2799,12 +2806,6 @@ paths:
         - description: 'Filter by external ID.'
           in: query
           name: external_id
-          schema:
-            type: string
-            example: 'ABC123'
-        - description: 'Filter by group UUID.'
-          in: query
-          name: group_uuid
           schema:
             type: string
             example: 'ABC123'
