@@ -2906,6 +2906,12 @@ paths:
           schema:
             type: string
             example: 'unpublished'
+        - name: archived
+          description: 'Filter the list of blogs on there archived status. You may include both. The default when not supplied is un-archived only.'
+          in: query
+          schema:
+            type: boolean
+            default: false
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -13503,6 +13509,10 @@ components:
               example: 5
             published:
               description: 'Published status of the blog.'
+              type: boolean
+              example: true
+            archived:
+              description: 'Archived status of the blog.'
               type: boolean
               example: true
     blog-schema-update:
