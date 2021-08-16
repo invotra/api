@@ -2926,11 +2926,11 @@ paths:
             type: string
             example: 'unpublished'
         - name: archived
-          description: 'Filter the list of blogs on there archived status. You may include both. The default when not supplied is un-archived only.'
+          description: 'Filter the list of blogs on there archived status. The default when not supplied is both, archived and un-archived.'
           in: query
           schema:
             type: boolean
-            default: false
+            example: false
         - name: sort
           description: 'Field to sort by.'
           in: query
