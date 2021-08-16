@@ -13253,6 +13253,15 @@ components:
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
                 required:
                   - uuid
+            author:
+              description: "The post's author."
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the author user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     post-schema-common:
       type: object
       properties:
@@ -13263,6 +13272,7 @@ components:
           format: uuid
         author_uuid:
           description: The uuid of the author
+          deprecated: true
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
