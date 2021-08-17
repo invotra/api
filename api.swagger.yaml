@@ -20829,7 +20829,17 @@ components:
       properties:
         current_user_rated:
           type: boolean
-          default: false
+          description: Indicates the current user has rated the content/comment.
+          example: false
+        rating:
+          type: integer
+          description: The rating the current user has left for the content/comment. Zero indicates current user has not rated.
+          example: 3
+          minimum: 0
+          maximum: 5
+      required:
+        - current_user_rated
+        - rating
     content-saved-get-response-schema:
       type: object
       properties:
