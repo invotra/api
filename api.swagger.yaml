@@ -13715,6 +13715,7 @@ components:
             - body
             - state
             - site_section
+            - owner
     custom-content-schema-common:
       type: object
       properties:
@@ -15969,6 +15970,7 @@ components:
             - body
             - state
             - site_section
+            - owner
     news-schema-common:
       type: object
       properties:
@@ -16402,6 +16404,7 @@ components:
             - body
             - state
             - site_section
+            - owner
     page-schema-common:
       type: object
       properties:
@@ -16917,6 +16920,7 @@ components:
             - body
             - state
             - site_section
+            - owner
     policy-schema-common:
       type: object
       properties:
@@ -17524,6 +17528,7 @@ components:
             - body
             - state
             - site_section
+            - owner
     promotion-schema-common:
       type: object
       properties:
