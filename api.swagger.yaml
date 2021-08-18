@@ -6352,7 +6352,7 @@ paths:
         '200':
           description: 'Rated the content/comment successfully.'
         '400':
-          description: 'The content/comment was not rated due to malformed JSON.'
+          description: 'The content/comment was not rated as it has already been rated.'
         '403':
           description: 'User is not authorized to rate this content/comment.'
         '422':
@@ -6369,7 +6369,7 @@ paths:
         '200':
           description: 'Rate removed successfully.'
         '400':
-          description: 'Could not unrate this content/comment due to malformed JSON.'
+          description: 'Could not unrate this content/comment as it is not already rated.'
         '403':
           description: 'User is not authorized to unrate this content/comment.'
         '422':
