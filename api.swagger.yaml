@@ -14929,7 +14929,7 @@ components:
           type: string
           example: 'More information here.'
     list-list-content-schema:
-      allOf:
+      anyOf:
         - $ref: '#/components/schemas/list-list-common-schema'
         - type: object
           properties:
@@ -14964,7 +14964,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
     list-list-site-section-schema:
-      allOf:
+      anyOf:
         - $ref: '#/components/schemas/list-list-common-schema'
         - type: object
           properties:
@@ -14999,7 +14999,7 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
     list-list-link-schema:
-      allOf:
+      anyOf:
         - $ref: '#/components/schemas/list-list-common-schema'
         - type: object
           properties:
