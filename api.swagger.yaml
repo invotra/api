@@ -6055,6 +6055,81 @@ paths:
           description: The user does not have access to the requested manual page.
         '404':
           description: No manual page with that UUID was found.
+  '/manual_pages/{manual_page_id}':
+    parameters:
+      - description: The Invotra UUID of a manual page.
+        in: path
+        name: manual_page_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+    get:
+      description: Get a manual page, including the root manual page
+      tags:
+        - manual pages
+      responses:
+        '200':
+          description: Returns a single complete manual page object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/manual-page-schema'
+        '400':
+          description: The UUID or request body JSON was malformed.
+        '403':
+          description: User is not authorized to show this manual.
+        '404':
+          description: No manual page with that UUID was found.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/manual_pages:read ]
+    put:
+      tags:
+        - 'manual pages'
+      description: 'Update manual page information, including the root manual page.'
+      responses:
+        '200':
+          description: 'The manual page information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this manual page.'
+        '404':
+          description: 'The UUID does not correspond to an existing manual page.'
+        '422':
+          description: 'The manual page was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/manual-page-schema-update'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/manual_pages:write ]
+    delete:
+      tags:
+        - manual pages
+      description: 'Delete a manual page or a manual.'
+      responses:
+        '200':
+          description: 'The manual page was deleted successfully.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'The user does not have permission to delete the manual page.'
+        '404':
+          description: 'The UUID does not correspond to an existing manual page.'
+        '422':
+          description: 'The manual was not deleted due to it having pages.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/manual_pages:write ]
   '/pdf-export/{content_id}':
     get:
       description: Get content in HTML for PDF export.
@@ -12248,6 +12323,11 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/region-list-schema'
+            badges:
+              description: "The user's badges. An array of badge objects."
+              type: array
+              items:
+                $ref: '#/components/schemas/badge-schema'
             is_line_manager:
               description: 'This user is a manager of other users.'
               type: boolean
@@ -12299,6 +12379,7 @@ components:
             description: This is the default Invotra user role
             enum:
               - Author
+              - Badge manager
               - Blogger
               - Brand manager
               - Content layout manager
@@ -12310,7 +12391,6 @@ components:
               - Location admin
               - Moderator
               - Organisational user
-              - OU administrator
               - Previewer
               - Publisher
               - Queries administrator
@@ -12461,6 +12541,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            badges:
+              description: "The user's badges. An array of badge UUIDs."
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the badge.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -12902,6 +12993,15 @@ components:
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
                 required:
                   - uuid
+            author:
+              description: "The post's author."
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the author user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
     post-schema-common:
       type: object
       properties:
@@ -12912,6 +13012,7 @@ components:
           format: uuid
         author_uuid:
           description: The uuid of the author
+          deprecated: true
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
@@ -18465,7 +18566,6 @@ components:
       required:
         - uuid
         - filename
-        - author
         - file_download
         - type
       properties:
