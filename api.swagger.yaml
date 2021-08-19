@@ -12218,13 +12218,22 @@ components:
           description: The subject of the notification
           type: string
           example: mentioned you in a post
-        user:
-          $ref: '#/components/schemas/user-schema'
-        content:
-          description: The content details
-          oneOf:
-            - $ref: '#/components/schemas/content-schema'
-            - $ref: '#/components/schemas/comment-schema'
+        target:
+          type: object
+          properties:
+            target_type:
+              description: This is the type of the entity that the notification links to
+              type: string
+              enum:
+                - node
+                - user
+                - comment
+            target_entity:
+              description: This is a details of entity
+              oneOf:
+              - $ref: '#/components/schemas/content-schema'
+              - $ref: '#/components/schemas/comment-schema'
+              - $ref: '#/components/schemas/user-schema'
       type: object
     team-schema:
       allOf:
