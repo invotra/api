@@ -6361,23 +6361,6 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/rate:write ]
-    delete:
-      tags:
-        - rate
-      description: 'Unrate a piece of content/comment.'
-      responses:
-        '200':
-          description: 'Rate removed successfully.'
-        '400':
-          description: 'Could not unrate this content/comment as it is not already rated.'
-        '403':
-          description: 'User is not authorized to unrate this content/comment.'
-        '422':
-          description: 'The rate could not be removed due to Drupal validation failure or JSON schema validation failure.'
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/rate:write ]
     get:
       description: 'Check if a piece of content/comment is rated or not.'
       tags:
