@@ -835,6 +835,24 @@ paths:
               - asc
               - desc
             default: desc
+        - description: 'Filter by free skill'
+          in: query
+          name: free_skill
+          schema:
+            type: string
+            example: 'free skill1'
+        - description: 'Filter by personal interest'
+          in: query
+          name: personal_interest
+          schema:
+            type: string
+            example: 'archery'
+        - description: 'Filter by organisational skill'
+          in: query
+          name: organisational_skill
+          schema:
+            type: string
+            example: 'cashflow'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
