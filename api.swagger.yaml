@@ -17289,7 +17289,6 @@ components:
         - timestamp_updated
         - content_uuid
         - content_type
-        - category
         - likes_count
     comment-schema-create:
       allOf:
