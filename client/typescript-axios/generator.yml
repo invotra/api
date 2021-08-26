@@ -1,8 +1,8 @@
 # RUN: 
-# rm -rf src/api; mkdir -p src/api/; yarn openapi-generator-cli generate -i ../api.swagger.yaml -g typescript-axios -o src/api/ -c generator.yml
+# rm -rf src/api; mkdir -p src/api/; yarn openapi-generator-cli generate -i ../../api.swagger.yaml -g typescript-axios -o src/api/ -c generator.yml
 
 supportsES6: true
-withInterfaces: true
+withInterfaces: false
 withSeparateModelsAndApi: true
 generateAliasAsModel: true
 modelPropertyNaming: 'original'
