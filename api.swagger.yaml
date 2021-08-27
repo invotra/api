@@ -8546,6 +8546,83 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/countries:write ]
+  '/external_connectors/list':
+    get:
+      tags:
+        - 'external connectors'
+      description: 'Search for external connectors. An empty array is returned if no external connectors are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - name: autocomplete
+          description: 'Autocomplete on name, matches per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of external connectors matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/external-connector-schema'
+        '403':
+          description: 'User is not authorized to list external connectors.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/external_connectors:read ]
+  '/external_connectors/{external_connector_id}':
+    parameters:
+      - description: 'The Invotra UUID of the external connector.'
+        in: path
+        name: external_connector_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'external connectors'
+      description: 'Get information about the external connector.'
+      responses:
+        '200':
+          description: 'Returns a single complete external connector object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/external-connector-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this external connector.'
+        '404':
+          description: 'The UUID does not correspond to an existing external connector.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/external_connectors:read ]
   '/free_skills':
     post:
       tags:
@@ -16167,6 +16244,12 @@ components:
                     description: 'This is the name of the general topic.'
                     type: string
                     example: 'Darts'
+            external_connectors:
+              description: 'The external connectors that the news item is published to.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/external-connector-schema'
             timestamp_created:
               description: 'This is the timestamp (in seconds) of when the news was created.'
               type: integer
@@ -16300,6 +16383,17 @@ components:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
+            external_connectors:
+              description: 'The external connectors that the news item is published to.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the external connector.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     news-schema-create:
       allOf:
         - $ref: '#/components/schemas/news-schema-common'
@@ -16402,6 +16496,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            external_connectors:
+              description: 'The external connectors that the news item is published to.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the external connector.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -19996,6 +20101,43 @@ components:
           example: true
         weight:
           description: 'Determines the position of a country in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+    external-connector-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the external connector section.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            machine_name:
+              description: 'The machine name of this external connector.'
+              type: string
+              example: 'external_web_site'
+        - $ref: '#/components/schemas/external-connector-schema-common'
+    external-connector-schema-common:
+      type: object
+      properties:
+        name:
+          description: 'Name of the external connector.'
+          type: string
+          example: 'Web Site'
+        description:
+          description: 'Description of the external connector.'
+          type: string
+          example: 'Web site external connector.'
+        external_id:
+          description: 'The external connector external reference id.'
+          type: string
+          example: 'ABC123'
+        published:
+          description: 'Indicates that this external connector is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of a external connector in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
     free-skill-schema:
