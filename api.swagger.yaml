@@ -6608,6 +6608,80 @@ paths:
           description: The user does not have access to the requested content/comment.
         '404':
           description: No content/comment with that UUID was found.
+  '/rate/{content_id}':
+    parameters:
+      - name: content_id
+        description: The Invotra UUID of content/comment.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+    put:
+      tags:
+        - rate
+      description: 'Rate a piece of content/comment.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                  description: The rating for content/comment.
+                  example: 3
+                  minimum: 1
+                  maximum: 5
+              required:
+                - rating
+      responses:
+        '200':
+          description: 'Rated the content/comment successfully.'
+        '400':
+          description: 'The content/comment was not rated as it has already been rated.'
+        '403':
+          description: 'User is not authorized to rate this content/comment.'
+        '422':
+          description: 'The content/comment was not rated due to Drupal validation failure or JSON schema validation failure.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/rate:write ]
+    get:
+      description: 'Check if a piece of content/comment is rated or not.'
+      tags:
+        - rate
+      parameters:
+        - name: content_id
+          description: 'The Invotra UUID of the content/comment.'
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: 01234567-89ab-cdef-1234-56789abcdef0
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/rate:read ]
+      responses:
+        '200':
+          description: 'Rate status returned successfully.'
+          content:
+            text/html:
+              schema:
+                $ref: '#/components/schemas/content-rate-get-response-schema'
+        '400':
+          description: The UUID or request body JSON was malformed.
+        '401':
+          description: An incorrect or malformed token was provided.
+        '403':
+          description: The user does not have access to the requested content/comment.
+        '404':
+          description: No content/comment with that UUID was found.
   '/saved/{content_id}':
     parameters:
       - name: content_id
@@ -21156,6 +21230,22 @@ components:
         current_user_liked:
           type: boolean
           default: false
+    content-rate-get-response-schema:
+      type: object
+      properties:
+        current_user_rated:
+          type: boolean
+          description: Indicates the current user has rated the content/comment.
+          example: false
+        rating:
+          type: integer
+          description: The rating the current user has left for the content/comment. Zero indicates current user has not rated.
+          example: 3
+          minimum: 0
+          maximum: 5
+      required:
+        - current_user_rated
+        - rating
     content-saved-get-response-schema:
       type: object
       properties:
