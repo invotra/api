@@ -297,18 +297,18 @@ paths:
             default: custom
       responses:
         '200':
-          description: 'List of layouts. Click schema to see details response type'
+          description: List of layouts
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   count:
-                    description: 'Count of results.'
+                    description: Count of results
                     type: integer
                     example: 50
                   results:
-                    description: 'The results set'
+                    description: The results set
                     type: array
                     items:
                       $ref: '#/components/schemas/layout-schema'
@@ -12210,30 +12210,64 @@ components:
       properties:
         title:
           type: string
+          description: The title of layout
+          example: Bartlett
         icon:
           type: string
+          description: The icon of layout
+          example: bartlett.png
         category:
           type: string
+          description: The category of layout
+          example: Invotra
         theme:
           type: string
+          description: The theme of layout
+          example: bartlett
         module:
           type: string
+          description: The module of layout
+          example: madonna
         name:
           type: string
+          description: The layout name
+          example: bartlett
         path:
           type: string
+          description: The layout path
+          example: sites/all/themes/madonna/panels-layouts/bartlett
         file:
           type: string
-        plugin module:
-          type: string
-        plugin type:
-          type: string
+          description: The file of layout
+          example: bartlett.inc
+        plugin:
+          type: object
+          properties:
+            module:
+              type: string
+              description: The plugin module of layout
+              example: panels
+            type:
+              type: string
+              description: The plugin type of layout
+              example: layouts
         description:
           type: string
+          description: Layout description.
+          example: This layout has a full width header row, followed by a 4 part body row.
         regions:
-          type: object
-          additionalProperties: 
-            type: string
+          type: array
+          items:
+            type: object
+            properties:
+              region:
+                type: string
+                description: The region of layout
+                example: sidebar
+              region_label: 
+                type: string
+                description: The label of region
+                example: Region 1
       required:
         - title
         - icon
@@ -12243,8 +12277,7 @@ components:
         - name
         - path
         - file
-        - plugin module
-        - plugin type
+        - plugin
         - description
         - regions
     custom-layout-schema:
