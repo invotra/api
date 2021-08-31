@@ -4700,6 +4700,15 @@ paths:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: external_connector
+          description: 'Filter on Invotra UUID of the external connector.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: created_date
           description: 'Filter on date created. Format: YYYY-MM-DD.'
           in: query
