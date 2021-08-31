@@ -4700,7 +4700,7 @@ paths:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
-        - name: external_connector
+        - name: external_connector_uuid
           description: 'Filter on Invotra UUID of the external connector.'
           in: query
           schema:
