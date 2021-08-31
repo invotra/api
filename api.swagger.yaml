@@ -7914,7 +7914,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
-  '/locations/any/{location_id}':
+  '/locations/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
         in: path
