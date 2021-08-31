@@ -14246,6 +14246,7 @@ components:
               type: integer
               example: 1510941596
             gallery_items:
+              description: List of multi media
               type: array
               items:
                 $ref: '#/components/schemas/multi-media-schema'
@@ -14504,13 +14505,16 @@ components:
           type: string
           example: 'ABC123'
         gallery_items:
+          description: Invotra UUIDs of the multi media
           type: array
           items:
             type: object
             properties:
               uuid: 
+                description: Invotra UUID of the multi media.
                 type: string
                 format: uuid
+                example: 01234567-89ab-cdef-1234-56789abcdef0
     group-document-schema:
       allOf:
         - $ref: '#/components/schemas/group-document-schema-common'
