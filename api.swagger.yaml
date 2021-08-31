@@ -11142,6 +11142,31 @@ paths:
       tags:
         - notifications
       parameters:
+        - in: query
+          name: start_timestamp
+          required: false
+          description: Filter the notification to only include messages created after (greater than or equal to) the specified timestamp (in seconds).
+          schema:
+            type: integer
+        - in: query
+          name: end_timestamp
+          required: false
+          description: Filter the notification to only include messages created before (less than or equal to) the specified timestamp (in seconds).
+          schema:
+            type: integer
+        - in: query
+          name: activities
+          description: Filter the notification to only include messages of a particular topic. Multiple values may be supplied.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - follower
+                - mention
+                - comment
+                - like
         - description: Filter the notifications for the mobile app. If true, this will return notifications with entity type user, and entity type node and bundle type post only.
           in: query
           name: app_notifications_only
@@ -11162,6 +11187,8 @@ paths:
                     description: Count of results.
                     type: integer
                     example: 50
+                  facets:
+                    $ref: '#/components/schemas/notification-facets-schema'
                   results:
                     description: The results set.
                     type: array
@@ -12231,9 +12258,11 @@ components:
             target_entity:
               description: This is a details of entity
               oneOf:
-              - $ref: '#/components/schemas/content-schema'
-              - $ref: '#/components/schemas/comment-schema'
-              - $ref: '#/components/schemas/user-schema'
+              - $ref: '#/components/schemas/notification-target-node-schema'
+              - $ref: '#/components/schemas/notification-target-comment-schema'
+              - $ref: '#/components/schemas/notification-target-user-schema'
+              discriminator:
+                propertyName: type
       type: object
     team-schema:
       allOf:
@@ -20745,3 +20774,61 @@ components:
         current_user_saved:
           type: boolean
           default: false
+    notification-facets-schema:
+      description: Facets counts for the notification.
+      type: object
+      required:
+        - activities
+      properties:
+        activities:
+          type: array
+          items:
+            type: object
+            required:
+              - facet_count
+              - data
+            properties:
+              facet_count:
+                description: 'The facet count for this activity.'
+                type: integer
+                example: 33
+              data:
+                type: object
+                properties:
+                  activity:
+                    type: string
+                    enum:
+                      - follower
+                      - mention
+                      - comment
+                      - like
+    notification-target-common-schema:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          description: This is the type of the entity that the notification links to
+          type: string
+          enum:
+            - node
+            - user
+            - comment
+      discriminator:
+        propertyName: type
+        mapping:
+          node: '#/components/schemas/content-schema'
+          comment: '#/components/schemas/comment-schema'
+          user: '#/components/schemas/user-schema'
+    notification-target-node-schema:
+      allOf:
+      - $ref: '#/components/schemas/notification-target-common-schema'
+      - $ref: '#/components/schemas/content-schema'
+    notification-target-comment-schema:
+      allOf:
+      - $ref: '#/components/schemas/notification-target-common-schema'
+      - $ref: '#/components/schemas/comment-schema'
+    notification-target-user-schema:
+      allOf:
+      - $ref: '#/components/schemas/notification-target-common-schema'
+      - $ref: '#/components/schemas/user-schema'
