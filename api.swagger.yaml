@@ -2729,6 +2729,15 @@ paths:
             items:
               type: string
               example: 'ABC123'
+        - name: external_connector_uuid
+          description: 'Filter on Invotra UUID of the external connector.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: workflow_state
           description: 'Filter the list on workflow state. The default when not supplied is "published" only.'
           in: query
