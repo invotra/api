@@ -386,6 +386,83 @@ paths:
           description: 'The Open Graph scrape failed as the URL was not found.'
         '504':
           description: 'The Open Graph scrape timed out performing the request on the upstream server.'
+  '/external_connectors/list':
+    get:
+      tags:
+        - 'external connectors'
+      description: 'Search for external connectors. An empty array is returned if no external connectors are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - name: autocomplete
+          description: 'Autocomplete on name, matches per letter, from the start of the word.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of external connectors matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/external-connector-schema'
+        '403':
+          description: 'User is not authorized to list external connectors.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/external_connectors:read ]
+  '/external_connectors/{external_connector_id}':
+    parameters:
+      - description: 'The Invotra UUID of the external connector.'
+        in: path
+        name: external_connector_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'external connectors'
+      description: 'Get information about the external connector.'
+      responses:
+        '200':
+          description: 'Returns a single complete external connector object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/external-connector-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this external connector.'
+        '404':
+          description: 'The UUID does not correspond to an existing external connector.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/external_connectors:read ]
   /teams:
     get:
       deprecated: true
@@ -8564,83 +8641,6 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/countries:write ]
-  '/external_connectors/list':
-    get:
-      tags:
-        - 'external connectors'
-      description: 'Search for external connectors. An empty array is returned if no external connectors are found.'
-      parameters:
-        - name: name
-          description: 'Filter by name. Matches on whole words.'
-          in: query
-          schema:
-            type: string
-        - name: autocomplete
-          description: 'Autocomplete on name, matches per letter, from the start of the word.'
-          in: query
-          schema:
-            type: string
-        - description: 'Filter by external ID.'
-          in: query
-          name: external_id
-          schema:
-            type: string
-        - $ref: '#/components/parameters/offsetParam'
-        - $ref: '#/components/parameters/limitParam'
-      responses:
-        '200':
-          description: 'List of external connectors matching the filter criteria.'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  count:
-                    description: 'Count of results.'
-                    type: integer
-                    example: 50
-                  results:
-                    description: 'The results set.'
-                    type: array
-                    items:
-                      allOf:
-                        - $ref: '#/components/schemas/external-connector-schema'
-        '403':
-          description: 'User is not authorized to list external connectors.'
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/external_connectors:read ]
-  '/external_connectors/{external_connector_id}':
-    parameters:
-      - description: 'The Invotra UUID of the external connector.'
-        in: path
-        name: external_connector_id
-        required: true
-        schema:
-          type: string
-          format: uuid
-    get:
-      tags:
-        - 'external connectors'
-      description: 'Get information about the external connector.'
-      responses:
-        '200':
-          description: 'Returns a single complete external connector object.'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/external-connector-schema'
-        '400':
-          description: 'The supplied UUID was malformed.'
-        '403':
-          description: 'User is not authorized to show this external connector.'
-        '404':
-          description: 'The UUID does not correspond to an existing external connector.'
-      security:
-        - SessionCookieHeader: []
-        - APIKeyHeader: []
-        - CognitoJwt: [ invotra/external_connectors:read ]
   '/free_skills':
     post:
       tags:
@@ -13668,6 +13668,12 @@ components:
               description: 'The name of the site section.'
               type: string
               example: 'Operations'
+        external_connectors:
+          description: 'The external connectors that the news item is published to.'
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/external-connector-schema'
         state:
           description: 'Indicates the workflow state of the content.'
           type: string
