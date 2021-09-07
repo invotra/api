@@ -12269,7 +12269,6 @@ components:
         - username
         - entity_uuid
         - entity_title
-        - entity_body
         - timestamp
         - link
         - short_text
