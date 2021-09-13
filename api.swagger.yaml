@@ -2831,7 +2831,6 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content:read ]
-
   '/revisions/{content_id}':
     parameters:
       - description: 'The Invotra UUID of the content.'
@@ -2845,7 +2844,26 @@ paths:
       tags:
         - 'revisions'
       description: 'List the revisions available for a piece of content.'
-
+      responses:
+        '200':
+          description: 'List of revisions available for this piece of content.'
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                  - results
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/revision-schema'
   '/blogs':
     post:
       tags:
@@ -19236,6 +19254,16 @@ components:
           items:
             type: string
             example: '.mp3'
+    revision-schema:
+      type: object
+      required:
+        - uuid
+      properties:
+        uuid:
+          description: 'This is the Invotra UUID of the revision.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+          type: string
+          format: uuid
     job-role-schema:
       allOf:
         - type: object
