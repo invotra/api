@@ -13163,6 +13163,7 @@ components:
             - likes
             - timestamp_created
             - timestamp_updated
+            - internal_id
             - memberships
             - feed_messages
           properties:
@@ -13216,6 +13217,10 @@ components:
               description: 'The timestamp (in seconds) of the last post in the group'
               type: integer
               example: 1510941596
+            internal_id:
+              description: 'The internal ID of the group. This is used internally by various applications.'
+              type: integer
+              example: 1234
             memberships:
               type: object
               required:
@@ -13430,6 +13435,7 @@ components:
             - author_uuid
             - thread_uuid
             - source
+            - internal_id
           properties:
             uuid:
               type: string
@@ -13484,6 +13490,10 @@ components:
               type: string
             source:
               type: string
+            internal_id:
+              description: 'The internal ID of the post. This is used internally by various applications.'
+              type: integer
+              example: 1234
     post-schema-create:
       allOf:
         - $ref: '#/components/schemas/post-schema-update'
