@@ -13623,6 +13623,7 @@ components:
         - timestamp_created
         - comment_count
         - likes_count
+        - internal_id
       properties:
         uuid:
           description: 'Invotra UUID of the content.'
@@ -13707,6 +13708,10 @@ components:
           description: 'Published status of the content.'
           type: boolean
           example: true
+        internal_id:
+          description: 'The internal ID of the content. This is used internally by various applications.'
+          type: integer
+          example: 1234
     content-type-enum:
       type: string
       enum:
@@ -13799,6 +13804,10 @@ components:
               description: 'Archived status of the blog.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     blog-schema-update:
       allOf:
         - $ref: '#/components/schemas/blog-schema-common'
@@ -14033,6 +14042,10 @@ components:
               description: 'Published status for the custom content.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     custom-content-schema-update:
       allOf:
         - $ref: '#/components/schemas/custom-content-schema-common'
@@ -14442,6 +14455,10 @@ components:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
               example: 1510941596
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     gallery-schema-update:
       allOf:
         - $ref: '#/components/schemas/gallery-schema-common'
@@ -14764,6 +14781,10 @@ components:
               description: 'Indicates that this group document has comments enabled.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     group-document-schema-update:
       allOf:
         - $ref: '#/components/schemas/group-document-schema-common'
@@ -14946,6 +14967,10 @@ components:
               description: 'Count of likes on the group poll.'
               type: integer
               example: 5
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     group-poll-schema-create:
       allOf:
         - $ref: '#/components/schemas/group-poll-schema-common'
@@ -15061,6 +15086,10 @@ components:
               description: 'Count of likes on the idea.'
               type: integer
               example: 5
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     idea-schema-update:
       type: object
       properties:
@@ -15239,6 +15268,10 @@ components:
               description: 'Published status of the list.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     list-schema-update:
       allOf:
         - $ref: '#/components/schemas/list-schema-common'
@@ -15589,6 +15622,10 @@ components:
               description: 'Count of likes on the message.'
               type: integer
               example: 5
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     message-schema-update:
       allOf:
         - $ref: '#/components/schemas/message-schema-common'
@@ -15813,6 +15850,10 @@ components:
               description: 'Published status for the multi media.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     multi-media-schema-update:
       allOf:
         - $ref: '#/components/schemas/multi-media-schema-common'
@@ -16292,6 +16333,10 @@ components:
               description: 'Published status for the news.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     news-schema-update:
       allOf:
         - $ref: '#/components/schemas/news-schema-common'
@@ -16725,6 +16770,10 @@ components:
               description: 'Published status for the page.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     page-schema-update:
       allOf:
         - $ref: '#/components/schemas/page-schema-common'
@@ -17204,6 +17253,10 @@ components:
               description: 'Published status for the policy.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     policy-schema-update:
       allOf:
         - $ref: '#/components/schemas/policy-schema-common'
@@ -17614,6 +17667,10 @@ components:
               description: 'Published status for the poll.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     poll-schema-update:
       allOf:
         - $ref: '#/components/schemas/poll-schema-common'
@@ -17865,6 +17922,10 @@ components:
               description: 'Published status for the promotion.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     promotion-schema-update:
       allOf:
         - $ref: '#/components/schemas/promotion-schema-common'
@@ -18157,6 +18218,10 @@ components:
               description: 'Count of likes on the query.'
               type: integer
               example: 5
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     query-schema-update:
       type: object
       properties:
@@ -18219,6 +18284,10 @@ components:
               description: 'Count of comments on the support ticket.'
               type: integer
               example: 5
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     support-ticket-schema-update:
       type: object
       properties:
@@ -18405,6 +18474,10 @@ components:
               description: 'Published status for the webform.'
               type: boolean
               example: true
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     webform-schema-update:
       allOf:
         - $ref: '#/components/schemas/webform-schema-common'
