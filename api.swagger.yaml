@@ -12847,6 +12847,11 @@ components:
               type: boolean
               example: false
               readOnly: true
+            internal_id:
+              description: "The internal ID of the user. This is used internally by various applications."
+              type: integer
+              example: 1234
+              readOnly: true
     user-schema-common:
       properties:
         uuid:
