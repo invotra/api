@@ -18859,6 +18859,10 @@ components:
           description: 'The manual external reference id.'
           type: string
           example: 'ABC123'
+        internal_id:
+          description: 'The internal ID of the content. This is used internally by various applications.'
+          type: integer
+          example: 1234
     manual-page-listing-schema:
       type: object
       properties:
@@ -18971,6 +18975,10 @@ components:
                           description: Title of child manual page
                           type: string
                           example: Appendix A - Acronyms
+            internal_id:
+              description: 'The internal ID of the content. This is used internally by various applications.'
+              type: integer
+              example: 1234
     manual-page-schema-update:
       allOf:
         - $ref: '#/components/schemas/manual-page-schema-common'
