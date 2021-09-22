@@ -20978,6 +20978,9 @@ components:
       allOf:
         - $ref: '#/components/schemas/query-status-schema-common'
         - type: object
+          properties:
+            published:
+              default: true
           required:
             - name
             - colour
