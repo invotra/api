@@ -20966,6 +20966,7 @@ components:
           example: '#4BB88B'
     query-status-schema:
       allOf:
+        - $ref: '#/components/schemas/query-status-schema-common'
         - type: object
           properties:
             uuid:
@@ -20975,7 +20976,6 @@ components:
               example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - uuid
-        - $ref: '#/components/schemas/query-status-schema-common'
     query-status-schema-create:
       allOf:
         - $ref: '#/components/schemas/query-status-schema-common'
