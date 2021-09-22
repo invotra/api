@@ -20975,6 +20975,8 @@ components:
               example: '01234567-89ab-cdef-1234-56789abcdef0'
           required:
             - uuid
+            - name
+            - colour
         - $ref: '#/components/schemas/query-status-schema-common'
     query-status-schema-create:
       allOf:
