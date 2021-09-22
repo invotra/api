@@ -9425,6 +9425,153 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/idea_categories:write ]
+  '/idea_statuses':
+    post:
+      tags:
+        - 'idea statuses'
+      description: 'Provision a new idea status.'
+      responses:
+        '201':
+          description: 'The idea status was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned idea status may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The idea status was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a idea status.'
+        '422':
+          description: 'The idea status was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/idea-status-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/idea_statuses:write ]
+  '/idea_statuses/list':
+    get:
+      tags:
+        - 'idea statuses'
+      description: 'Search for idea statuses. An empty array is returned if no idea statuses are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of idea statuses matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/idea-status-schema'
+        '403':
+          description: 'User is not authorized to list idea statuses.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/idea_statuses:read ]
+  '/idea_statuses/{idea_status_id}':
+    parameters:
+      - description: 'The Invotra UUID of the idea status.'
+        in: path
+        name: idea_status_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'idea statuses'
+      description: 'Get information about the idea status.'
+      responses:
+        '200':
+          description: 'Returns a single complete idea status object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/idea-status-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this idea status.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea status.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/idea_statuses:read ]
+    put:
+      tags:
+        - 'idea statuses'
+      description: 'Update idea status information.'
+      responses:
+        '200':
+          description: 'The idea status information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this idea status.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea status.'
+        '422':
+          description: 'The idea status was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/idea-status-schema-common'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/idea_statuses:write ]
+    delete:
+      tags:
+        - 'idea statuses'
+      description: 'Delete a idea status.'
+      responses:
+        '200':
+          description: 'The idea status was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this idea status.'
+        '404':
+          description: 'The UUID does not correspond to an existing idea status.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/idea_statuses:write ]
   '/interests':
     post:
       tags:
@@ -20371,6 +20518,53 @@ components:
           example: 'Idea category facet'
         colour:
           description: 'Colour of the idea category. Any CSS colour allowed.'
+          type: string
+          example: '#4BB88B'
+    idea-status-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the idea status.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - uuid
+            - name
+            - colour
+        - $ref: '#/components/schemas/idea-status-schema-common'
+    idea-status-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/idea-status-schema-common'
+        - type: object
+          properties:
+            name:
+              type: string
+          required:
+            - name
+            - colour
+    idea-status-schema-common:
+      type: object
+      properties:
+        name:
+          description: 'Name of the idea status.'
+          type: string
+          example: 'Open'
+        description:
+          description: 'Description of the idea status.'
+          type: string
+          example: 'This idea is open.'
+        external_id:
+          description: 'The idea status external reference id.'
+          type: string
+          example: 'ABC123'
+        weight:
+          description: 'Determines the position of a idea status in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
+        colour:
+          description: 'Colour of the idea status. Any CSS colour allowed.'
           type: string
           example: '#4BB88B'
     interest-schema:
