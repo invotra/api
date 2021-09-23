@@ -19360,10 +19360,15 @@ components:
     location-common-schema:
       type: object
       properties:
+        name:
+          description: This is the name of the location.
+          type: string
+          example: Dublin
         title:
           description: This is the name of the location.
           type: string
           example: Dublin
+          deprecated: true
         description:
           description: This is a description of the location.
           type: string
@@ -19373,9 +19378,136 @@ components:
           type: string
           example: ABC123
         published:
-          description: 'Indicates that this location is published.'
+          description: Indicates that this location is published.
           type: boolean
           example: true
+        archived:
+          description: Archived status of the location.
+          type: boolean
+          example: true
+        weight:
+          description: Determines the position of a location in the hierarchy in relation to its siblings.
+          type: integer
+          example: 3
+        parent_uuid:
+          description: 'The Invotra UUID of the parent location. This location must be a <override>.'
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+    location-common-read-schema:
+      type: object
+      properties:
+        has_children:
+          description: 'Indicates that this location has children.'
+          type: boolean
+          example: true
+        timestamp_created:
+          description: 'The timestamp (in seconds) of when the location was created'
+          type: integer
+          example: 1510941596
+        timestamp_updated:
+          description: 'The timestamp (in seconds) of when the location was updated'
+          type: integer
+          example: 1510941596
+        context:
+          description: 'Parent items of the location that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
+          type: array
+          items:
+            $ref: '#/components/schemas/location-context-list-item-schema'
+    location-common-site-building-schema:
+      type: object
+      properties:
+        address1:
+          description: The first line of the location's postal address.
+          type: string
+          example: 1 Main Street
+        address2:
+          description: The second line of the location's postal address.
+          type: string
+          example: Littleton Village
+        address3:
+          description: The third line of the location's postal address.
+          type: string
+          example: Northern District
+        town:
+          description: The town where the location is.
+          type: string
+          example: Metropolis
+        postcode:
+          description: 'The location''s postal code or zip code, if any.'
+          type: string
+          example: ABC 123
+        phone:
+          description: The location's telephone number.
+          type: string
+          example: +1-23-456-789
+        email:
+          description: The location's email address.
+          type: string
+          format: email
+        team:
+          description: A team associated with the location.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          deprecated: true
+    location-common-site-building-write-schema:
+      type: object
+      properties:
+        country:
+          type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the country.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - uuid
+        region:
+          type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the region.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - uuid
+        teams:
+          description: 'Teams associated with the location.'
+          type: array
+          items:
+            type: object
+            properties:
+              uuid:
+                description: 'Invotra UUID of the team.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+            required:
+              - uuid
+    location-common-site-building-read-schema:
+      type: object
+      properties:
+        country:
+          description: "The location's country."
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/country-schema'
+        region:
+          description: "The location's region."
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/region-schema'
+        teams:
+          description: 'Teams associated with the location.'
+          type: array
+          items:
+            type: object
+            allOf:
+              - $ref: '#/components/schemas/team-schema'
+
     location-site-schema:
       allOf:
         - type: object
@@ -19390,29 +19522,33 @@ components:
               type: string
               enum:
                 - site
-            context:
-              description: 'Parent items of the entity that was returned. Ordered from the immediate parent, 3 levels up, towards the root.'
-              type: array
-              items:
-                $ref: '#/components/schemas/location-context-list-item-schema'
           required:
             - uuid
             - type
             - context
-        - $ref: '#/components/schemas/location-site-schema-common'
+        - $ref: '#/components/schemas/location-common-schema'
+        - $ref: '#/components/schemas/location-common-read-schema'
+        - $ref: '#/components/schemas/location-common-site-building-schema'
+        - $ref: '#/components/schemas/location-common-site-building-read-schema'
     location-site-schema-create:
       allOf:
-        - $ref: '#/components/schemas/location-site-schema-common'
         - type: object
           properties:
-            published:
-              default: true
-      required:
-        - title
-        - address1
+            name:
+              type: string
+          required:
+            - name
+            - address1
+        - $ref: '#/components/schemas/location-common-schema'
+        - $ref: '#/components/schemas/location-common-site-building-schema'
+        - $ref: '#/components/schemas/location-common-site-building-write-schema'
     location-site-schema-update:
       allOf:
-        - $ref: '#/components/schemas/location-site-schema-common'
+        - $ref: '#/components/schemas/location-common-schema'
+        - $ref: '#/components/schemas/location-common-site-building-schema'
+        - $ref: '#/components/schemas/location-common-site-building-write-schema'
+
+
     location-site-schema-common:
       allOf:
         - $ref: '#/components/schemas/location-common-schema'
@@ -19451,6 +19587,9 @@ components:
               description: The location's email address.
               type: string
               format: email
+
+
+
     location-building-schema:
       allOf:
         - type: object
