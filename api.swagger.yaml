@@ -13331,8 +13331,6 @@ components:
         feed_messages:
           description: 'Configuration for feed messages for this group.'
           type: object
-          required:
-            - join_group_display
           properties:
             join_group_display:
               description: 'The level of detail displayed in a join group feed message.'
