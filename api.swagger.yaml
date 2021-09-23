@@ -19725,7 +19725,7 @@ components:
         - $ref: '#/components/schemas/location-common-schema'
         - $ref: '#/components/schemas/location-space-common-schema'
     location-any-schema:
-      oneOf:
+      anyOf:
         - $ref: '#/components/schemas/location-site-schema'
         - $ref: '#/components/schemas/location-building-schema'
         - $ref: '#/components/schemas/location-floor-schema'
