@@ -7419,8 +7419,14 @@ paths:
       tags:
         - locations
       parameters:
+        - name: name
+          description: Filter by name. Matches on whole words.
+          in: query
+          schema:
+            type: string
         - name: title
-          description: Filter by title. Matches on whole words.
+          deprecated: true
+          description: Filter by title (name). Matches on whole words.
           in: query
           schema:
             type: string
@@ -7445,12 +7451,23 @@ paths:
           schema:
             type: string
             format: uuid
-        - description: 'Filter by external ID.'
+        - description: 'Filter by archived status. You may filter on true and false, the default is false (not achived).'
+          in: query
+          name: archived
+          schema:
+            type: array
+            default: [ false ]
+            items:
+              type: boolean
+              example: false
+        - description: 'Filter by external IDs.'
           in: query
           name: external_id
           schema:
-            type: string
-            example: 'ABC123'
+            type: array
+            items:
+              type: string
+              example: 'ABC123'
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
