@@ -7445,6 +7445,12 @@ paths:
           in: query
           schema:
             type: string
+        - name: valid_parents_for
+          description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the location.'
+          in: query
+          schema:
+            type: string
+            format: uuid
         - name: parent_uuid
           description: 'Filter the list to only those with the specified immediate parent. Use a nil UUID to specify no parent (top level).'
           in: query
