@@ -7440,11 +7440,33 @@ paths:
           in: query
           schema:
             type: string
-        - name: status
-          description: 'Filter the list of locations on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
+        - name: country_uuid
+          description: 'Filter on Invotra UUID of the country.'
           in: query
           schema:
-            type: string
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: region_uuid
+          description: 'Filter on Invotra UUID of the region.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: team_uuid
+          description: 'Filter on Invotra UUID of the team.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - name: valid_parents_for
           description: 'Filter out invalid parents (self and children) for the specified Invotra UUID of the location.'
           in: query
@@ -7457,6 +7479,11 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: status
+          description: 'Filter the list of locations on a comma-separated list of statuses. Valid statuses are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
+          in: query
+          schema:
+            type: string
         - description: 'Filter by archived status. You may filter on true and false, the default is false (not achived).'
           in: query
           name: archived
