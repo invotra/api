@@ -18889,7 +18889,7 @@ components:
         - type: object
           properties:
             author:
-              description: 'The author of this manual page. (Will use the authenticated user if not supplied.'
+              description: 'The author of this manual page. (Will use the authenticated user if not supplied).'
               type: object
               properties:
                 uuid:
