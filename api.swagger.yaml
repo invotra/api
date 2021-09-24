@@ -18888,6 +18888,15 @@ components:
         - $ref: '#/components/schemas/manual-page-schema-common'
         - type: object
           properties:
+            author:
+              description: 'The author of this manual page. (Will use the authenticated user if not supplied.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
               description: 'The owner of this manual page.'
               type: object
