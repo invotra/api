@@ -1611,6 +1611,11 @@ paths:
           name: fulltext_search
           schema:
             type: string
+        - description: Autocomplete term. Matches on group name, per letter, from the start of the word.
+          in: query
+          name: autocomplete
+          schema:
+            type: string
         - description: 'Filter by UUID of a category. Multiple values may be supplied.'
           in: query
           name: category
