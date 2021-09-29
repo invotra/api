@@ -1909,6 +1909,96 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+  '/groups/{group_id}/content':
+    parameters:
+      - description: The Invotra UUID of the group.
+        in: path
+        name: group_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - groups
+      description: Get a list of group content.
+      parameters:
+        - description: 'Filter group content by type. Multiple values may be supplied.'
+          in: query
+          name: content_type
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - group_documents
+                - group_polls
+                - posts
+        - in: query
+          name: post_category_uuid
+          description: 'Filter the results to only include posts of a particular post category. Multiple values may be supplied.'
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - description: 'Return pinned content at the start of the results.'
+          in: query
+          name: pinned
+          schema:
+            type: boolean
+            default: false
+            example: true
+        - description: Field to sort by
+          in: query
+          name: sort
+          schema:
+            type: string
+            enum:
+              - timestamp_created
+              - timestamp_updated
+            default: timestamp_created
+        - description: Sort order
+          in: query
+          name: order
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of group content. If there is no content, an empty array.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                  - results
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/content-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '403':
+          description: The group is private or secret and the user is not a member.
+        '404':
+          description: The UUID does not correspond to an existing group.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/groups:read ]
   '/groups/{group_id}/members':
     parameters:
       - description: The Invotra UUID of the group.
