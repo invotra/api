@@ -11591,6 +11591,20 @@ paths:
           schema:
             type: integer
         - in: query
+          name: include_facets
+          required: false
+          description: Include facets for "Followers", "Mentions", "Comments" and "Likes".
+          schema:
+            type: boolean
+            default: false
+        - in: query
+          name: include_content
+          required: false
+          description: Return detailed content for target content/comment/user of notification.
+          schema:
+            type: boolean
+            default: false
+        - in: query
           name: activities
           description: Filter the notification to only include messages of a particular topic. Multiple values may be supplied.
           required: false
