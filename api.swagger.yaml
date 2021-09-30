@@ -13508,6 +13508,10 @@ components:
               description: 'The machine name of the post category.'
               type: string
               example: 'note'
+        pinned:
+          description: Whether or not this post is pinned.
+          type: boolean
+          example: true
         state:
           description: 'Indicates the workflow state of the content.'
           type: string
