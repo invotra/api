@@ -7263,6 +7263,36 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/job_roles:write ]
+  '/job_roles/merge':
+    post:
+      tags:
+        - job roles
+      responses:
+        '200':
+          description: Job roles were merged successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-merge-job-roles-with-count-schema'
+        '400':
+          description: Job roles were not merged due to malformed JSON.
+        '403':
+          description: 'User is not authorized to merge job roles.'
+        '422':
+          description: |
+            The job roles were not merged due to Drupal validation failure or JSON
+            schema validation failure.
+      description: Provision a new job role.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/job-role-schema-merge'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/job_roles:write ]
   '/job_roles/list':
     get:
       tags:
@@ -19325,6 +19355,19 @@ components:
               default: true
           required:
             - title
+    job-role-schema-merge:
+      type: object
+      properties:
+        master_uuid:
+          description: This is the Invotra UUID of the master job role
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+          type: string
+          format: uuid
+        merge_uuids:
+            description: The list of job roles which shall be merged into master job role.
+            type: array
+            items:
+              $ref: '#/components/schemas/uuid-list-schema'
     job-role-common-schema:
       type: object
       properties:
@@ -21313,3 +21356,10 @@ components:
         current_user_saved:
           type: boolean
           default: false
+    successful-merge-job-roles-with-count-schema:
+      type: object
+      properties:
+        merged_count:
+          type: integer
+          description: The number of merged job roles.
+          example: 3
