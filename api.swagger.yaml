@@ -7263,8 +7263,16 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/job_roles:write ]
-  '/job_roles/merge':
-    post:
+  '/job_roles​/{job_role_id}/merge':
+    parameters:
+      - description: The Invotra UUID of the Job role.
+        in: path
+        name: job_role_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
       tags:
         - job roles
       responses:
@@ -7279,9 +7287,7 @@ paths:
         '403':
           description: 'User is not authorized to merge job roles.'
         '422':
-          description: |
-            The job roles were not merged due to Drupal validation failure or JSON
-            schema validation failure.
+          description: Job roles were not merged due to Drupal validation failure or JSON schema validation failure.
       description: Provision a new job role.
       requestBody:
         content:
@@ -19358,11 +19364,6 @@ components:
     job-role-schema-merge:
       type: object
       properties:
-        master_uuid:
-          description: This is the Invotra UUID of the master job role
-          example: 01234567-89ab-cdef-1234-56789abcdef0
-          type: string
-          format: uuid
         merge_uuids:
             description: The list of job roles which shall be merged into master job role.
             type: array
