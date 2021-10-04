@@ -7288,7 +7288,7 @@ paths:
           description: 'User is not authorized to merge job roles.'
         '422':
           description: Job roles were not merged due to Drupal validation failure or JSON schema validation failure.
-      description: Provision a new job role.
+      description: Merge Job roles into one.
       requestBody:
         content:
           application/json:
