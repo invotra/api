@@ -7924,6 +7924,89 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+  '/locations/{location_id}':
+    parameters:
+      - description: The Invotra UUID of the location.
+        in: path
+        name: location_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - locations
+      responses:
+        '200':
+          description: Returns a single complete location object of any type.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/location-any-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '403':
+          description: The user does not have permission to view this location.
+        '404':
+          description: The UUID does not correspond to an existing location.
+      description: Get information about the location.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:read ]
+  '/locations/{location_id}/members':
+    parameters:
+      - description: The Invotra UUID of the location.
+        in: path
+        name: location_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - locations
+      parameters:
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Returns an array of user UUIDs at the location.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                  - results
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uuid:
+                          description: The Invotra UUID of the user.
+                          type: string
+                          format: uuid
+                      required:
+                        - uuid
+        '400':
+          description: The supplied UUID was malformed.
+        '403':
+          description: The user does not have permission to view the members at this location.
+        '404':
+          description: The UUID does not correspond to an existing location.
+      description: Get user members at the location.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/locations:read ]
   '/badges':
     post:
       tags:
@@ -12358,7 +12441,6 @@ components:
         - username
         - entity_uuid
         - entity_title
-        - entity_body
         - timestamp
         - link
         - short_text
@@ -13338,8 +13420,6 @@ components:
         feed_messages:
           description: 'Configuration for feed messages for this group.'
           type: object
-          required:
-            - join_group_display
           properties:
             join_group_display:
               description: 'The level of detail displayed in a join group feed message.'
@@ -18895,6 +18975,15 @@ components:
         - $ref: '#/components/schemas/manual-page-schema-common'
         - type: object
           properties:
+            author:
+              description: 'The author of this manual page. (Will use the authenticated user if not supplied).'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the user.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
             owner:
               description: 'The owner of this manual page.'
               type: object
@@ -19048,7 +19137,6 @@ components:
         - timestamp_updated
         - content_uuid
         - content_type
-        - category
         - likes_count
     comment-schema-create:
       allOf:
@@ -19403,6 +19491,10 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/location-context-list-item-schema'
+          required:
+            - uuid
+            - type
+            - context
         - $ref: '#/components/schemas/location-site-schema-common'
     location-site-schema-create:
       allOf:
@@ -19474,6 +19566,10 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/location-context-list-item-schema'
+          required:
+            - uuid
+            - type
+            - context
         - $ref: '#/components/schemas/location-building-schema-common'
     location-building-schema-create:
       allOf:
@@ -19517,6 +19613,10 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/location-context-list-item-schema'
+          required:
+            - uuid
+            - type
+            - context
         - $ref: '#/components/schemas/location-floor-schema-common'
     location-floor-schema-create:
       allOf:
@@ -19559,6 +19659,10 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/location-context-list-item-schema'
+          required:
+            - uuid
+            - type
+            - context
         - $ref: '#/components/schemas/location-space-schema-common'
     location-space-schema-create:
       allOf:
@@ -19773,6 +19877,19 @@ components:
           description: The location's email address.
           type: string
           format: email
+    location-any-schema:
+      oneOf:
+        - $ref: '#/components/schemas/location-site-schema'
+        - $ref: '#/components/schemas/location-building-schema'
+        - $ref: '#/components/schemas/location-floor-schema'
+        - $ref: '#/components/schemas/location-space-schema'
+      discriminator:
+        propertyName: type
+        mapping:
+          site: '#/components/schemas/location-site-schema'
+          building: '#/components/schemas/location-building-schema'
+          floor: '#/components/schemas/location-floor-schema'
+          space: '#/components/schemas/location-space-schema'
     team-membership-common-schema:
       type: object
       properties:
