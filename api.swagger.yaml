@@ -14425,6 +14425,11 @@ components:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
               example: 1510941596
+            gallery_items:
+              description: List of multi media
+              type: array
+              items:
+                $ref: '#/components/schemas/multi-media-schema'
     gallery-schema-update:
       allOf:
         - $ref: '#/components/schemas/gallery-schema-common'
@@ -14521,6 +14526,7 @@ components:
             - body
             - state
             - site_section
+            - owner
           properties:
             schedule_date_timestamp:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
@@ -14678,6 +14684,17 @@ components:
           description: 'The gallery external reference id.'
           type: string
           example: 'ABC123'
+        gallery_items:
+          description: Invotra UUIDs of the multi media
+          type: array
+          items:
+            type: object
+            properties:
+              uuid: 
+                description: Invotra UUID of the multi media.
+                type: string
+                format: uuid
+                example: 01234567-89ab-cdef-1234-56789abcdef0
     group-document-schema:
       allOf:
         - $ref: '#/components/schemas/group-document-schema-common'
