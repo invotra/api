@@ -12357,10 +12357,10 @@ components:
                   type: object
                   properties:
                     desktop:
-                      type: integer
+                      type: string
                       example: 1
                     mobile:
-                      type: integer
+                      type: string
                       example: 2
         connect:
           description: Configuration settings for integration connections.
