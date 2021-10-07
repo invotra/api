@@ -12362,6 +12362,21 @@ components:
                     mobile:
                       type: integer
                       example: 2
+        connect:
+          description: Configuration settings for integration connections.
+          type: object
+          properties:
+            jira:
+              description: Configuration settings for Jira integration.
+              type: object
+              properties:
+                connected:
+                  description: Indicates that the Jira integration is connected.
+                  type: boolean
+                subdomain:
+                  description: Jira sub domain.
+                  type: string
+                  example: 'my-subdomain'
     session-schema:
       required:
         - username
