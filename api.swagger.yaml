@@ -13522,6 +13522,27 @@ components:
               description: 'The machine name of the post category.'
               type: string
               example: 'note'
+        poll_options:
+          description: 'The options for this group poll, with vote counts.'
+          type: array
+          minItems: 2
+          maxItems: 26
+          items:
+            type: object
+            properties:
+              option:
+                description: 'The option text.'
+                type: string
+              vote_count:
+                description: 'The current vote count for this option.'
+                type: integer
+          example:
+            - option: 'Pork'
+              vote_count: 12
+            - option: 'Beef'
+              vote_count: 24
+            - option: 'Mutton'
+              vote_count: 48
         pinned:
           description: Whether or not this post is pinned.
           type: boolean
