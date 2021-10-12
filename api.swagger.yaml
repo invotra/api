@@ -12414,6 +12414,17 @@ components:
                   description: Jira sub domain.
                   type: string
                   example: 'my-subdomain'
+            microsoft365:
+              description: Configuration settings for Microsoft 365 integration.
+              type: object
+              properties:
+                connected:
+                  description: Indicates that Microsoft 365 integration is connected.
+                  type: boolean
+                azure_application_id:
+                  description: Azure application ID.
+                  type: string
+                  example: 'my-azure-application-id'
     session-schema:
       required:
         - username
