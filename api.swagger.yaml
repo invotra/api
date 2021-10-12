@@ -20647,7 +20647,6 @@ components:
           required:
             - uuid
             - name
-            - colour
         - $ref: '#/components/schemas/idea-status-schema-common'
     idea-status-schema-create:
       allOf:
@@ -20658,7 +20657,6 @@ components:
               type: string
           required:
             - name
-            - colour
     idea-status-schema-common:
       type: object
       properties:
@@ -20678,10 +20676,6 @@ components:
           description: 'Determines the position of a idea status in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
-        colour:
-          description: 'Colour of the idea status. Any CSS colour allowed.'
-          type: string
-          example: '#4BB88B'
     interest-schema:
       allOf:
         - type: object
