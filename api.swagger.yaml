@@ -10863,6 +10863,153 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/query_categories:write ]
+  '/query_statuses':
+    post:
+      tags:
+        - 'query statuses'
+      description: 'Provision a new query statuses.'
+      responses:
+        '201':
+          description: 'The query status was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned query status may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The query status was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a query status.'
+        '422':
+          description: 'The query status was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query-status-schema-create'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/query_statuses:write ]
+  '/query_statuses/list':
+    get:
+      tags:
+        - 'query statuses'
+      description: 'Search for query statuses. An empty array is returned if no query statuses are found.'
+      parameters:
+        - name: name
+          description: 'Filter by name. Matches on whole words.'
+          in: query
+          schema:
+            type: string
+        - description: 'Filter by external ID.'
+          in: query
+          name: external_id
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: 'List of query statuses matching the filter criteria.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: 'Count of results.'
+                    type: integer
+                    example: 50
+                  results:
+                    description: 'The results set.'
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: '#/components/schemas/query-status-schema'
+        '403':
+          description: 'User is not authorized to list query statuses.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/query_statuses:read ]
+  '/query_statuses/{query_status_id}':
+    parameters:
+      - description: 'The Invotra UUID of the query status.'
+        in: path
+        name: query_status_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'query statuses'
+      description: 'Get information about the query status.'
+      responses:
+        '200':
+          description: 'Returns a single complete query status object.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/query-status-schema'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to show this query status.'
+        '404':
+          description: 'The UUID does not correspond to an existing query status.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/query_statuses:read ]
+    put:
+      tags:
+        - 'query statuses'
+      description: 'Update query status information.'
+      responses:
+        '200':
+          description: 'The query status information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this query status.'
+        '404':
+          description: 'The UUID does not correspond to an existing query status.'
+        '422':
+          description: 'The query status was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/query-status-schema-common'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/query_statuses:write ]
+    delete:
+      tags:
+        - 'query statuses'
+      description: 'Delete a query status.'
+      responses:
+        '200':
+          description: 'The query status was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this query status.'
+        '404':
+          description: 'The UUID does not correspond to an existing query status.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/query_statuses:write ]        
   '/regions':
     post:
       tags:
@@ -21120,6 +21267,47 @@ components:
           description: 'Colour of the query category. Any CSS colour allowed.'
           type: string
           example: '#4BB88B'
+    query-status-schema:
+      allOf:
+        - type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the query status.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+          required:
+            - uuid
+            - name
+        - $ref: '#/components/schemas/query-status-schema-common'
+    query-status-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/query-status-schema-common'
+        - type: object
+          properties:
+            name:
+              type: string
+          required:
+            - name
+    query-status-schema-common:
+      type: object
+      properties:
+        name:
+          description: 'Name of the query status.'
+          type: string
+          example: 'Open'
+        description:
+          description: 'Description of the query status.'
+          type: string
+          example: 'This query is open.'
+        external_id:
+          description: 'The query status external reference id.'
+          type: string
+          example: 'ABC123'
+        weight:
+          description: 'Determines the position of a query status in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 3
     region-schema:
       allOf:
         - type: object
