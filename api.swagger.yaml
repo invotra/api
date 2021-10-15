@@ -11206,6 +11206,39 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/security_classifications:write ]
+  '/site_sections':
+    post:
+      tags:
+        - 'site sections'
+      description: 'Provision a new site section.'
+      responses:
+        '201':
+          description: 'The site section was created successfully.'
+          headers:
+            Location:
+              description: 'The URL at which the newly provisioned site section may be retrieved.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/successful-post-response-schema'
+        '400':
+          description: 'The site section was not saved due to malformed JSON.'
+        '403':
+          description: 'User is not authorized to create a site section.'
+        '422':
+          description: 'The site section was not saved due to Drupal validation failure or JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site-section-schema'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:write ]
   '/site_sections/list':
     get:
       tags:
@@ -11294,6 +11327,48 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/site_sections:read ]
+    put:
+      tags:
+        - 'site sections'
+      description: 'Update site section information.'
+      responses:
+        '200':
+          description: 'The site section information was updated successfully.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'User is not authorized to update this site section.'
+        '404':
+          description: 'The UUID does not correspond to an existing site section.'
+        '422':
+          description: 'The site section was not updated due to a Drupal validation failure or a JSON schema validation failure.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/site-section-schema'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:write ]
+    delete:
+      tags:
+        - 'site sections'
+      description: 'Delete a site section.'
+      responses:
+        '200':
+          description: 'The site section was successfully deleted.'
+        '400':
+          description: 'The supplied UUID was malformed.'
+        '403':
+          description: 'User is not authorized to delete this site section.'
+        '404':
+          description: 'The UUID does not correspond to an existing site section.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/site_sections:write ]
   '/titles':
     post:
       tags:
