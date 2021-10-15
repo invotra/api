@@ -11233,7 +11233,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/site-section-schema'
+              $ref: '#/components/schemas/site-section-schema-create'
         required: true
       security:
         - SessionCookieHeader: []
@@ -11346,7 +11346,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/site-section-schema'
+              $ref: '#/components/schemas/site-section-schema-update'
         required: true
       security:
         - SessionCookieHeader: []
@@ -21335,6 +21335,7 @@ components:
           example: 3
     site-section-schema:
       allOf:
+        - $ref: '#/components/schemas/site-section-schema-common'
         - type: object
           properties:
             uuid:
@@ -21351,7 +21352,41 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
+          required:
+            - uuid
+            - name
+            - has_children
+            - published
+            - weight
+    site-section-schema-update:
+      allOf:
         - $ref: '#/components/schemas/site-section-schema-common'
+        - type: object
+          properties:
+            image:
+              description: 'Image for the site section.'
+              type: object
+              properties:
+                uuid:
+                  description: 'Invotra UUID of the image.'
+                  type: string
+                  format: uuid
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+    site-section-schema-create:
+      allOf:
+        - $ref: '#/components/schemas/site-section-schema-common'
+        - $ref: '#/components/schemas/site-section-schema-update'
+        - type: object
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            image:
+              type: object
+          required:
+            - name
+            - description
     site-section-schema-common:
       type: object
       properties:
