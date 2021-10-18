@@ -21358,6 +21358,21 @@ components:
               items:
                 allOf:
                   - $ref: '#/components/schemas/file-schema'
+            general_topics:
+              description: 'The general topics of this site section.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: 'This is the name of the general topic.'
+                    type: string
+                    example: 'Darts'
           required:
             - uuid
             - name
@@ -21386,6 +21401,17 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            general_topics:
+              description: 'The general topics of this site section.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the general topic.'
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
