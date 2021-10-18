@@ -21352,6 +21352,12 @@ components:
               type: object
               allOf:
                 - $ref: '#/components/schemas/file-schema'
+            attachments:
+              description: 'List of attachments on the site section.'
+              type: array
+              items:
+                allOf:
+                  - $ref: '#/components/schemas/file-schema'
           required:
             - uuid
             - name
@@ -21372,6 +21378,17 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            attachments:
+              description: 'The attached files of this site section.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the file.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
     site-section-schema-create:
       allOf:
         - $ref: '#/components/schemas/site-section-schema-common'
@@ -21380,13 +21397,16 @@ components:
           properties:
             name:
               type: string
-            description:
-              type: string
-            image:
-              type: object
+            published:
+              default: true
+            archived:
+              default: false
+            restricted:
+              default: false
+            root_level:
+              default: false
           required:
             - name
-            - description
     site-section-schema-common:
       type: object
       properties:
@@ -21411,10 +21431,58 @@ components:
           description: 'Indicates that this site section is published.'
           type: boolean
           example: true
+        archived:
+          description: 'Archived status of the site section.'
+          type: boolean
+          example: true
+        restricted:
+          description: 'Indicates this is a restricted site section.'
+          type: boolean
+          example: true
+        root_level:
+          description: 'When using the root level navigation widget and want to always display this section as the top section.'
+          type: boolean
+          example: true
         weight:
           description: 'Determines the position of a site section in the hierarchy in relation to its siblings.'
           type: integer
           example: 3
+        related_external_links:
+          description: 'Related external links for the site section'
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                description: 'The title for the external link.'
+                type: string
+                example: 'More information on the Invotra site.'
+              url:
+                description: 'The url for the external link'
+                type: string
+                example: 'https://dev.invotra.com/info/passwords'
+        related_content_links:
+          description: 'Related content links for the site section'
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                description: 'The type of related content.'
+                type: string
+                enum:
+                  - 'content'
+                  - 'site_section'
+                  - 'file'
+              title:
+                description: 'The title for the related content.'
+                type: string
+                example: 'More information here.'
+              uuid:
+                description: 'Invotra UUID of the related content.'
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
     title-schema:
       allOf:
         - type: object
