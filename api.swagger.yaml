@@ -12081,12 +12081,12 @@ components:
               example: 'https://ogp.me/logo.png'
             width:
               description: 'The width of the image in pixels.'
-              type: integer
-              example: 300
+              type: string
+              example: '1920'
             height:
               description: 'The height of the image in pixels.'
-              type: integer
-              example: 300
+              type: string
+              example: '1080'
             type:
               description: 'The MIME type of the image.'
               type: string
