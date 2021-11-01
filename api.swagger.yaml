@@ -13522,6 +13522,10 @@ components:
               description: 'The machine name of the post category.'
               type: string
               example: 'note'
+            category_colour:
+              description: 'The color of the post category.'
+              type: string
+              example: '#FFFFFF'
         poll_options:
           description: 'The options for this group poll, with vote counts.'
           type: array
@@ -13578,6 +13582,10 @@ components:
           example: 5
         likes_count:
           description: 'Count of likes on the content.'
+          type: integer
+          example: 5
+        attachments_count:
+          description: 'Count of attachments on the content.'
           type: integer
           example: 5
         published:
