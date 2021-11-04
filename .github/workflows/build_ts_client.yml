@@ -68,7 +68,7 @@ jobs:
           yarn publish --tag pr-build --access restricted --registry https://npm.pkg.github.com
       - name: Comment PR
         if: github.event_name == 'pull_request'
-        uses: thollander/actions-comment-pull-request@master
+        uses: thollander/actions-comment-pull-request@main
         with:
           message: |
             :robot: beep beep beep
