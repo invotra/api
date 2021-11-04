@@ -28,7 +28,7 @@ jobs:
       - name: Generate TypeScript API client
         working-directory: client/typescript-axios
         run: |
-          yarn openapi-generator generate -i ../../api.swagger.yaml -g typescript-axios -o build/src/ -c generator.yml
+          yarn openapi-generator-cli generate -i ../../api.swagger.yaml -g typescript-axios -o build/src/ -c generator.yml
       - name: Generate PR build version
         if: github.event_name == 'pull_request'
         working-directory: client/typescript-axios
