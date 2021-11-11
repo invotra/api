@@ -285,20 +285,30 @@ paths:
       parameters:
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
+        - description: Category type
+          in: query
+          name: category
+          required: false
+          schema:
+            type: string
+            enum:
+              - default
+              - custom
+            default: custom
       responses:
         '200':
-          description: 'List of layouts.'
+          description: List of layouts
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   count:
-                    description: 'Count of results.'
+                    description: Count of results
                     type: integer
                     example: 50
                   results:
-                    description: 'The results set.'
+                    description: The results set
                     type: array
                     items:
                       $ref: '#/components/schemas/layout-schema'
@@ -815,6 +825,33 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - description: Filter on Invotra UUID of the free skill.
+          in: query
+          name: free_skill_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+        - description: Filter on Invotra UUID of the personal interest.
+          in: query
+          name: personal_interest_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
+        - description: Filter on Invotra UUID of the organisational skill
+          in: query
+          name: organisational_skill_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: 01234567-89ab-cdef-1234-56789abcdef0
         - description: Field to sort by
           in: query
           name: sort
@@ -12044,12 +12081,12 @@ components:
               example: 'https://ogp.me/logo.png'
             width:
               description: 'The width of the image in pixels.'
-              type: integer
-              example: 300
+              type: string
+              example: '1920'
             height:
               description: 'The height of the image in pixels.'
-              type: integer
-              example: 300
+              type: string
+              example: '1080'
             type:
               description: 'The MIME type of the image.'
               type: string
@@ -12278,7 +12315,82 @@ components:
         password:
           description: The password that the user logs in with
           type: string
-    layout-schema:
+    default-layout-schema:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of layout
+          example: Bartlett
+        icon:
+          type: string
+          description: The icon of layout
+          example: bartlett.png
+        category:
+          type: string
+          description: The category of layout
+          example: Invotra
+        theme:
+          type: string
+          description: The theme of layout
+          example: bartlett
+        module:
+          type: string
+          description: The module of layout
+          example: madonna
+        name:
+          type: string
+          description: The layout name
+          example: bartlett
+        path:
+          type: string
+          description: The layout path
+          example: sites/all/themes/madonna/panels-layouts/bartlett
+        file:
+          type: string
+          description: The file of layout
+          example: bartlett.inc
+        plugin:
+          type: object
+          properties:
+            module:
+              type: string
+              description: The plugin module of layout
+              example: panels
+            type:
+              type: string
+              description: The plugin type of layout
+              example: layouts
+        description:
+          type: string
+          description: Layout description.
+          example: This layout has a full width header row, followed by a 4 part body row.
+        regions:
+          type: array
+          items:
+            type: object
+            properties:
+              region:
+                type: string
+                description: The region of layout
+                example: sidebar
+              region_label: 
+                type: string
+                description: The label of region
+                example: Region 1
+      required:
+        - title
+        - icon
+        - category
+        - theme
+        - module
+        - name
+        - path
+        - file
+        - plugin
+        - description
+        - regions
+    custom-layout-schema:
       allOf:
         - $ref: '#/components/schemas/layout-schema-create'
         - type: object
@@ -12288,7 +12400,11 @@ components:
               type: string
               example: 'head_1_body_4'
           required:
-            - machine_name
+              - machine_name    
+    layout-schema:
+      oneOf:
+        - $ref: '#/components/schemas/default-layout-schema'
+        - $ref: '#/components/schemas/custom-layout-schema'
     layout-schema-create:
       type: object
       required:
@@ -12847,7 +12963,23 @@ components:
               type: boolean
               example: false
               readOnly: true
+            free_skills:
+              description: Free Skills
+              type: array
+              items:
+                $ref: '#/components/schemas/free-skill-schema'
+            personal_interests:
+              description: Personal Interests
+              type: array
+              items:
+                $ref: '#/components/schemas/personal-interest-schema'
+            organisational_skills:
+              description: Organisational Skills
+              type: array
+              items:
+                $ref: '#/components/schemas/organisational-skill-schema'
     user-schema-common:
+      type: object
       properties:
         uuid:
           description: The UUID of the user
@@ -12978,7 +13110,25 @@ components:
           example: 01234567-89ab-cdef-1234-56789abcdef0
           deprecated: true
           readOnly: true
-      type: object
+        social_media:
+          type: object
+          properties:
+            facebook:
+              type: string
+              description: Facebook Url
+              example: "https://www.facebook.com/Akagera.Brooke.Bean"
+            linkedin:
+              type: string
+              description: Linkedin Url
+              example: "https://www.linkedin.com/user/Akagera.Brooke.Bean"
+            twitter:
+              type: string
+              description: Twitter Url
+              example: "https://twitter.com/Akagera.Brooke.Bean"
+        about_me:
+          type: string
+          description: The brief introduction.
+          example: "I am a driven individual that wants to make sure we are the best ..."
     user-schema-update:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
@@ -13045,6 +13195,36 @@ components:
                 properties:
                   uuid:
                     description: 'Invotra UUID of the region.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            free_skills:
+              description: Free Skills
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            personal_interests:
+              description: Personal Interests
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+            organisational_skills:
+              description: Organisational Skills
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
                     type: string
                     format: uuid
                     example: '01234567-89ab-cdef-1234-56789abcdef0'
@@ -14425,6 +14605,11 @@ components:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
               type: integer
               example: 1510941596
+            gallery_items:
+              description: List of multi media
+              type: array
+              items:
+                $ref: '#/components/schemas/multi-media-schema'
     gallery-schema-update:
       allOf:
         - $ref: '#/components/schemas/gallery-schema-common'
@@ -14521,6 +14706,7 @@ components:
             - body
             - state
             - site_section
+            - owner
           properties:
             schedule_date_timestamp:
               description: 'The timestamp of the schedule date (in seconds). If present the content is scheduled for a workflow state change, if not, the workflow state will be changed immediately.'
@@ -14678,6 +14864,17 @@ components:
           description: 'The gallery external reference id.'
           type: string
           example: 'ABC123'
+        gallery_items:
+          description: Invotra UUIDs of the multi media
+          type: array
+          items:
+            type: object
+            properties:
+              uuid: 
+                description: Invotra UUID of the multi media.
+                type: string
+                format: uuid
+                example: 01234567-89ab-cdef-1234-56789abcdef0
     group-document-schema:
       allOf:
         - $ref: '#/components/schemas/group-document-schema-common'
@@ -20942,65 +21139,74 @@ components:
                 content: '#/components/schemas/search-highlight-list-content-schema'
                 site_section: '#/components/schemas/search-highlight-list-site_section-schema'
                 link: '#/components/schemas/search-highlight-list-link-schema'
-    search-highlight-list-common-schema:
+    search-highlight-list-content-schema:
       type: object
       properties:
+        title:
+          description: 'Title of the content or link.'
+          type: string
+          example: 'More information here.'
         type:
           description: 'The type of content in the search highlight.'
           type: string
           enum:
             - 'content'
-            - 'site_section'
-            - 'link'
+        content:
+          type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the content.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+      required:
+        - type
+        - title
+        - content
+    search-highlight-list-site_section-schema:
+      type: object
+      properties:
         title:
           description: 'Title of the content or link.'
           type: string
           example: 'More information here.'
-      required:
-      - type
-      - title
-      - content
-    search-highlight-list-content-schema:
-      allOf:
-        - $ref: '#/components/schemas/search-highlight-list-common-schema'
-        - type: object
+        type:
+          description: 'The type of content in the search highlight.'
+          type: string
+          enum:
+            - 'site_section'
+        content:
+          type: object
           properties:
-            type:
-              example: 'content'
-            content:
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the content.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-    search-highlight-list-site_section-schema:
-      allOf:
-        - $ref: '#/components/schemas/search-highlight-list-common-schema'
-        - type: object
-          properties:
-            type:
-              example: 'site_section'
-            content:
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the site section.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-    search-highlight-list-link-schema:
-      allOf:
-        - $ref: '#/components/schemas/search-highlight-list-common-schema'
-        - type: object
-          properties:
-            type:
-              example: 'link'
-            content:
+            uuid:
+              description: 'Invotra UUID of the site section.'
               type: string
-              description: 'The URL of the link.'
-              example: 'https://example.com'
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+      required:
+        - type
+        - title
+        - content
+    search-highlight-list-link-schema:
+      type: object
+      properties:
+        title:
+          description: 'Title of the content or link.'
+          type: string
+          example: 'More information here.'
+        type:
+          description: 'The type of content in the search highlight.'
+          type: string
+          enum:
+            - 'link'
+        content:
+          type: string
+          description: 'The URL of the link.'
+          example: 'https://example.com'
+      required:
+        - type
+        - title
+        - content
     security-classification-schema:
       allOf:
         - type: object
@@ -21313,3 +21519,40 @@ components:
         current_user_saved:
           type: boolean
           default: false
+    personal-interest-schema:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: 'Invotra UUID of the personal interest.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        name:
+          type: string
+          description: 'Name of the personal interest.'
+          example: 'Personal Interest'
+        description:
+          type: string
+          description: 'Description of the personal interest.'
+          example: 'Personal interest'
+        external_id:
+          type: string
+          description: 'The personal interest external reference id.'
+          example: 'ABC123'
+        has_children:
+          type: boolean
+          description: 'Indicates that this personal interest has children.'
+          example: false
+        parent_uuid:
+          type: string
+          format: uuid
+          description: 'Invotra UUID of the personal interest skill.'
+          example: '01234567-89ab-cdef-1234-56789abcdef0'
+        published:
+          description: 'Indicates that this personal interest is published.'
+          type: boolean
+          example: true
+        weight:
+          description: 'Determines the position of an personal interest in the hierarchy in relation to its siblings.'
+          type: integer
+          example: 1
