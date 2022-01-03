@@ -12113,6 +12113,7 @@ components:
       required:
         - mandatory_content_review
         - feed_messages
+        - franchise_settings
       properties:
         mandatory_content_review:
           description: 'Mandatory configuration for the "content_review" property.'
@@ -12145,6 +12146,31 @@ components:
                 - short_description
                 - one_line
                 - none
+        franchise_settings:
+          description: The franchise setting
+          type: object
+          properties:
+            enable_franchise_options:
+              description: This field is known to enable franchise feature
+              type: boolean
+              example: false
+            franchise_fields_merge_tag:
+              type: array
+              description: This field contains all fields for franchise.
+              items:
+                type: object
+                properties:
+                  label:
+                    type: string
+                    description: The label
+                    example: Business Website
+                  merge_tag:
+                    type: string
+                    description: The merge tag 
+                    example: <<MB03website>>
+                required:
+                  - label
+                  - merge_tag
     administration-schema-update:
       type: object
       properties:
@@ -12160,6 +12186,31 @@ components:
                 - short_description
                 - one_line
                 - none
+        franchise_settings:
+          description: The franchise setting
+          type: object
+          properties:
+            enable_franchise_options:
+              description: This field is used to enable franchise featured
+              type: boolean
+              example: false
+            franchise_fields_merge_tag:
+              type: array
+              description: This field is used to add more custom fields when Franchise feature is enable.
+              items:
+                type: object
+                properties:
+                  label:
+                    type: string
+                    description: The label
+                    example: Business Website
+                  merge_tag:
+                    type: string
+                    description: The merge tag 
+                    example: <<MB03website>>
+                required:
+                  - label
+                  - merge_tag
     branding-schema:
       properties:
         logo:
@@ -12299,11 +12350,11 @@ components:
                   type: object
                   properties:
                     desktop:
-                      type: integer
-                      example: 1
+                      type: string
+                      example: '1'
                     mobile:
-                      type: integer
-                      example: 2
+                      type: string
+                      example: '2'
     session-schema:
       required:
         - username
