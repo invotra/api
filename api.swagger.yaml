@@ -12866,6 +12866,20 @@ components:
           description: 'Indicates that this team is published.'
           type: boolean
           example: true
+        profile_details:
+          description: This is the profile details when franchise setting is enabled
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                description: The franchise setting label
+                type: string
+                example: Franchise
+              value:
+                description: The value of label
+                type: string
+                example: South Western Region
     user-schema:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
