@@ -17345,18 +17345,34 @@ components:
                   type: string
                   example: 'Involving staff training'
             team:
-              description: 'The team targeting this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the team.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: This is the name of the team
-                  type: string
-                  example: Operations
+              description: 'The teams targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the team.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: This is the name of the team
+                    type: string
+                    example: Operations
+                  profile_details:
+                    description: This is the profile details when franchise setting is enabled
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        label:
+                          description: The franchise setting label
+                          type: string
+                          example: Franchise
+                        value:
+                          description: The value of label
+                          type: string
+                          example: South Western Region
             locations:
               description: 'The locations targeting this policy.'
               type: array
@@ -17502,14 +17518,16 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
-              description: 'The team targeting this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the team.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              description: 'The teams targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the team.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             locations:
               description: 'The locations targeting this policy.'
               type: array
@@ -17625,14 +17643,16 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
-              description: 'The team targeting this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the team.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              description: 'The teams targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the team.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             locations:
               description: 'The locations targeting this policy.'
               type: array
