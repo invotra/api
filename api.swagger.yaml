@@ -5276,6 +5276,32 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policies:write ]
+  '/policies/{policy_id}/confirmation':
+    parameters:
+      - description: 'The Invotra UUID of the policy.'
+        in: path
+        name: policy_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      tags:
+        - 'policies'
+      description: Set checked read confirmation flag
+      responses:
+        200:
+          description: The policy information was read confirmation successfully.
+        400:
+          description: The supplied UUID was malformed.
+        403:
+          description: User is not authorized to run this operation.
+        404:
+          description: The UUID does not correspond to an existing policy.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/policies:write ]
   '/polls':
     post:
       tags:
@@ -17813,6 +17839,14 @@ components:
           description: 'The policy external reference id.'
           type: string
           example: 'ABC123'
+        mandatory_read:
+          description: Indicates that mandatory read are enabled for this content.
+          type: boolean
+          example: true
+        read_confirmation:
+          description: Indicates that read confirmation are checked for this content.
+          type: boolean
+          example: true
     poll-schema:
       allOf:
         - $ref: '#/components/schemas/poll-schema-common'
