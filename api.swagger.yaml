@@ -13756,6 +13756,10 @@ components:
           description: 'This is the timestamp (in seconds) of when the content was published.'
           type: integer
           example: 1510941696
+        closing_date_timestamp:
+          description: 'This is the timestamp (in seconds) of when the content was closed.'
+          type: integer
+          example: 1510941696
         comment_count:
           description: 'Count of comments on the content.'
           type: integer
@@ -13768,6 +13772,11 @@ components:
           description: 'Count of attachments on the content.'
           type: integer
           example: 5
+        attachments:
+          description: 'List of attachments on the custom content.'
+          type: array
+          items:
+            $ref: '#/components/schemas/file-schema'
         published:
           description: 'Published status of the content.'
           type: boolean
