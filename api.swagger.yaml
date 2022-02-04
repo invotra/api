@@ -13808,6 +13808,10 @@ components:
           description: 'The custom content type machine name. Only present is the content type is "custom_content".'
           type: string
           example: 'guideline'
+        custom_content_name:
+          description: 'The custom content name. Only present is the content type is "custom_content".'
+          type: string
+          example: 'custom_content_name'
         author:
           description: 'The author of this content.'
           allOf:
