@@ -3,7 +3,7 @@ servers:
   - url: 'https://dev.invotra.com/api/0.3'
 info:
   title: Invotra API
-  description: In general most fields are optional for update (PUT) requests; you can leave them blank (pass an empty string / array / whatever as appropriate) to clear them, or omit the key to leave them unchanged.
+  description: '# Due to be deprecated. This document can still be used for reference.'
   version: '0.3'
 security:
   - SessionCookieHeader: []
@@ -22,6 +22,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/status-schema'
       description: 'Returns the status of the Invotra API. If successful, the API is running as expected and will return the "OK" response that includes the server time. (If it is not, an appropriate 5xx error message will be returned).'
+      deprecated: true
   /administration:
     get:
       tags:
@@ -38,6 +39,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/administration:read ]
+      deprecated: true
     put:
       tags:
         - configuration
@@ -57,6 +59,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/administration:write ]
+      deprecated: true
   /branding:
     get:
       tags:
@@ -70,6 +73,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/branding-schema'
       description: Returns the branding for an instance of Invotra.
+      deprecated: true
   /product_options:
     get:
       tags:
@@ -86,6 +90,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/drupal_info ]
+      deprecated: true
   /configuration:
     get:
       tags:
@@ -101,6 +106,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/drupal_info ]
+      deprecated: true
   /file_types:
     get:
       tags:
@@ -120,6 +126,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/drupal_info ]
+      deprecated: true
   /entities/path-lookup:
     get:
       tags:
@@ -149,6 +156,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/path_lookup ]
+      deprecated: true
   /sessions/token:
     get:
       tags:
@@ -163,6 +171,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/csrf-token-schema'
+      deprecated: true
     post:
       tags:
         - sessions
@@ -193,6 +202,7 @@ paths:
           description: The token was not valid.
         '422':
           description: The JSON did not match the schema.
+      deprecated: true
   /sessions/login:
     post:
       tags:
@@ -216,6 +226,7 @@ paths:
             schema:
               $ref: '#/components/schemas/session-schema'
         required: true
+      deprecated: true
   /sessions/logout:
     post:
       tags:
@@ -226,6 +237,7 @@ paths:
       responses:
         '200':
           description: Successfully logged user out.
+      deprecated: true
   /preview_mode:
     post:
       tags:
@@ -240,6 +252,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/preview_mode:write ]
+      deprecated: true
     delete:
       tags:
         - preview mode
@@ -253,6 +266,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/preview_mode:write ]
+      deprecated: true
   /layouts:
     post:
       tags:
@@ -277,6 +291,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/layouts:write ]
+      deprecated: true
   /layouts/list:
     get:
       tags:
@@ -318,6 +333,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/layouts:read ]
+      deprecated: true
   /logs:
     post:
       tags:
@@ -345,6 +361,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/logs:write ]
+      deprecated: true
   /pdf-export/close-job:
     post:
       tags:
@@ -366,6 +383,7 @@ paths:
           description: An incorrect or malformed token was provided.
         '404':
           description: A file was not found at the supplied S3 URL.
+      deprecated: true
   /open_graph:
     post:
       tags:
@@ -396,6 +414,7 @@ paths:
           description: 'The Open Graph scrape failed as the URL was not found.'
         '504':
           description: 'The Open Graph scrape timed out performing the request on the upstream server.'
+      deprecated: true
   /teams:
     get:
       deprecated: true
@@ -453,6 +472,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/teams:write ]
+      deprecated: true
   /teams/list:
     get:
       tags:
@@ -514,6 +534,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/teams:read ]
+      deprecated: true
   '/teams/{team_id}':
     parameters:
       - description: The Invotra UUID of the team.
@@ -542,6 +563,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/teams:read ]
+      deprecated: true
     put:
       tags:
         - teams
@@ -567,6 +589,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/teams:write ]
+      deprecated: true
     delete:
       tags:
         - teams
@@ -584,6 +607,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/teams:write ]
+      deprecated: true
   '/teams/{team_id}/memberships':
     parameters:
       - description: The Invotra UUID of the team.
@@ -626,6 +650,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/teams:read, invotra/users:read ]
+      deprecated: true
   '/teams/{team_id}/memberships/{user_id}':
     parameters:
       - description: The Invotra UUID of the team.
@@ -659,6 +684,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/teams:write, invotra/users:read ]
+      deprecated: true
     put:
       tags:
         - teams
@@ -682,6 +708,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/teams:write, invotra/users:read ]
+      deprecated: true
   /users:
     get:
       deprecated: true
@@ -748,6 +775,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write ]
+      deprecated: true
   /users/metrics/accessed:
     get:
       tags:
@@ -773,6 +801,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:admin ]
+      deprecated: true
   /users/metrics/profiles:
     get:
       tags:
@@ -791,6 +820,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:admin ]
+      deprecated: true
   /users/search:
     get:
       tags:
@@ -900,6 +930,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read ]
+      deprecated: true
   /users/mention:
     get:
       tags:
@@ -983,6 +1014,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read ]
+      deprecated: true
   /users/me:
     get:
       tags:
@@ -1001,6 +1033,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:self:read ]
+      deprecated: true
   '/users/{user_id}':
     parameters:
       - description: The Invotra UUID of the user.
@@ -1037,6 +1070,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read ]
+      deprecated: true
     put:
       tags:
         - users
@@ -1067,6 +1101,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write ]
+      deprecated: true
   '/users/{user_id}/activity':
     parameters:
       - in: path
@@ -1157,6 +1192,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read ]
+      deprecated: true
   '/users/{user_id}/job_roles':
     parameters:
       - in: path
@@ -1203,6 +1239,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read, invotra/job_roles:read ]
+      deprecated: true
   '/users/{user_id}/job_roles/{job_role_id}':
     parameters:
       - description: The Invotra UUID of the user.
@@ -1236,6 +1273,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write, invotra/job_roles:read ]
+      deprecated: true
     put:
       tags:
         - users
@@ -1253,6 +1291,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write, invotra/job_roles:read ]
+      deprecated: true
   '/users/{user_id}/locations':
     parameters:
       - in: path
@@ -1295,6 +1334,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read, invotra/locations:read ]
+      deprecated: true
   '/users/{user_id}/locations/{location_id}':
     parameters:
       - description: The Invotra UUID of the user.
@@ -1328,6 +1368,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write, invotra/locations:read ]
+      deprecated: true
     put:
       tags:
         - users
@@ -1345,6 +1386,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write, invotra/locations:read ]
+      deprecated: true
   '/users/{user_id}/teams':
     parameters:
       - in: path
@@ -1388,6 +1430,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read, invotra/teams:read ]
+      deprecated: true
   '/users/{user_id}/following':
     parameters:
       - in: path
@@ -1432,6 +1475,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read ]
+      deprecated: true
   '/users/{user_id}/groups':
     parameters:
       - in: path
@@ -1473,6 +1517,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read, invotra/groups:read ]
+      deprecated: true
   '/users/{user_id}/follow':
     parameters:
       - description: The Invotra UUID of the user.
@@ -1498,6 +1543,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write ]
+      deprecated: true
     get:
       tags:
         - users
@@ -1517,6 +1563,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read ]
+      deprecated: true
     put:
       tags:
         - users
@@ -1532,6 +1579,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:write ]
+      deprecated: true
   /groups:
     get:
       deprecated: true
@@ -1591,6 +1639,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
   '/groups/{group_id}/posts':
     parameters:
       - description: The Invotra UUID of the group.
@@ -1638,6 +1687,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
   /groups/search:
     get:
       tags:
@@ -1796,6 +1846,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
   /groups/categories:
     get:
       tags:
@@ -1843,6 +1894,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
   '/groups/metrics':
     get:
       tags:
@@ -1860,6 +1912,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:metrics ]
+      deprecated: true
   '/groups/{group_id}':
     parameters:
       - description: The Invotra UUID of the group.
@@ -1897,6 +1950,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
     put:
       tags:
         - groups
@@ -1924,6 +1978,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
     delete:
       tags:
         - groups
@@ -1941,6 +1996,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
   '/groups/{group_id}/members':
     parameters:
       - description: The Invotra UUID of the group.
@@ -1988,6 +2044,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read, invotra/users:read ]
+      deprecated: true
   '/groups/{group_id}/my_membership':
     parameters:
       - description: The Invotra UUID of the group to check membership status against.
@@ -2017,6 +2074,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read, invotra/users:self:read ]
+      deprecated: true
   '/groups/{group_id}/members/{user_id}':
     parameters:
       - description: The Invotra UUID of the group.
@@ -2052,6 +2110,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write, invotra/users:read ]
+      deprecated: true
     put:
       tags:
         - groups
@@ -2080,6 +2139,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write, invotra/users:read ]
+      deprecated: true
   '/groups/{group_id}/document_folders':
     parameters:
       - description: 'The Invotra UUID of the group.'
@@ -2121,6 +2181,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
   '/groups/{group_id}/document_folders/list':
     parameters:
       - description: 'The Invotra UUID of the group.'
@@ -2177,6 +2238,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
   '/groups/{group_id}/document_folders/{group_document_folder_id}':
     parameters:
       - description: 'The Invotra UUID of the group.'
@@ -2214,6 +2276,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
     put:
       tags:
         - 'groups'
@@ -2239,6 +2302,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
     delete:
       tags:
         - 'groups'
@@ -2256,6 +2320,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
   /posts:
     get:
       deprecated: true
@@ -2315,6 +2380,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
   /posts/list:
     get:
       summary: List of posts.
@@ -2374,6 +2440,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
   '/posts/{post_id}':
     parameters:
       - description: The Invotra UUID of the post.
@@ -2402,6 +2469,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
     put:
       tags:
         - posts
@@ -2427,6 +2495,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
     delete:
       tags:
         - posts
@@ -2444,6 +2513,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
   '/posts/{post_id}/replies':
     parameters:
       - description: The Invotra UUID of the parent post. Currently this must be a top-level post in its group. This restriction may be relaxed in a future API version.
@@ -2492,6 +2562,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
   '/posts/categories':
     get:
       tags:
@@ -2511,6 +2582,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
   '/posts/{post_id}/likes':
     parameters:
       - description: The Invotra UUID of the post.
@@ -2558,6 +2630,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
   '/posts/{post_id}/like':
     parameters:
       - description: The Invotra UUID of the post.
@@ -2585,6 +2658,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
     get:
       tags:
         - posts
@@ -2607,6 +2681,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
     put:
       tags:
         - posts
@@ -2624,6 +2699,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
   '/posts/{post_id}/report':
     parameters:
       - description: The Invotra UUID of the post.
@@ -2651,6 +2727,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
     get:
       tags:
         - posts
@@ -2673,6 +2750,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:read ]
+      deprecated: true
     put:
       tags:
         - posts
@@ -2698,6 +2776,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/groups:write ]
+      deprecated: true
   '/content/list':
     get:
       tags:
@@ -2868,6 +2947,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content:read ]
+      deprecated: true
   '/blogs':
     post:
       tags:
@@ -2901,6 +2981,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/blogs:write ]
+      deprecated: true
   '/blogs/list':
     get:
       tags:
@@ -3014,6 +3095,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/blogs:read ]
+      deprecated: true
   '/blogs/{blog_id}':
     parameters:
       - description: 'The Invotra UUID of the blog.'
@@ -3044,6 +3126,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/blogs:read ]
+      deprecated: true
     put:
       tags:
         - 'blogs'
@@ -3069,6 +3152,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/blogs:write ]
+      deprecated: true
     delete:
       tags:
         - 'blogs'
@@ -3086,6 +3170,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/blogs:write ]
+      deprecated: true
   '/custom_content':
     post:
       tags:
@@ -3119,6 +3204,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/custom_content:write ]
+      deprecated: true
   '/custom_content/list':
     get:
       tags:
@@ -3220,6 +3306,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/custom_content:read ]
+      deprecated: true
   '/custom_content/{custom_content_id}':
     parameters:
       - description: 'The Invotra UUID of the custom content.'
@@ -3250,6 +3337,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/custom_content:read ]
+      deprecated: true
     put:
       tags:
         - 'custom content'
@@ -3275,6 +3363,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/custom_content:write ]
+      deprecated: true
     delete:
       tags:
         - 'custom content'
@@ -3292,6 +3381,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/custom_content:write ]
+      deprecated: true
   '/galleries':
     post:
       tags:
@@ -3325,6 +3415,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/galleries:write ]
+      deprecated: true
   '/galleries/list':
     get:
       tags:
@@ -3420,6 +3511,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/galleries:read ]
+      deprecated: true
   '/galleries/{gallery_id}':
     parameters:
       - description: 'The Invotra UUID of the gallery.'
@@ -3450,6 +3542,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/galleries:read ]
+      deprecated: true
     put:
       tags:
         - 'galleries'
@@ -3475,6 +3568,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/galleries:write ]
+      deprecated: true
     delete:
       tags:
         - galleries
@@ -3492,6 +3586,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/galleries:write ]
+      deprecated: true
   '/group_documents':
     post:
       tags:
@@ -3525,6 +3620,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_documents:write ]
+      deprecated: true
   '/group_documents/list':
     get:
       tags:
@@ -3627,6 +3723,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_documents:read ]
+      deprecated: true
   '/group_documents/{group_document_id}':
     parameters:
       - description: 'The Invotra UUID of the group document.'
@@ -3657,6 +3754,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_documents:read ]
+      deprecated: true
     put:
       tags:
         - 'group documents'
@@ -3682,6 +3780,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_documents:write ]
+      deprecated: true
     delete:
       tags:
         - 'group documents'
@@ -3699,6 +3798,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_documents:write ]
+      deprecated: true
   '/group_polls':
     post:
       tags:
@@ -3733,6 +3833,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:write ]
+      deprecated: true
   '/group_polls/list':
     get:
       tags:
@@ -3829,6 +3930,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:read ]
+      deprecated: true
   '/group_polls/{group_poll_id}':
     parameters:
       - description: 'The Invotra UUID of the group poll.'
@@ -3859,6 +3961,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:read ]
+      deprecated: true
     delete:
       tags:
         - 'group polls'
@@ -3876,6 +3979,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:write ]
+      deprecated: true
   '/group_polls/{group_poll_id}/vote':
     parameters:
       - description: 'The Invotra UUID of the group poll.'
@@ -3910,6 +4014,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_polls:write ]
+      deprecated: true
   '/ideas/list':
     get:
       tags:
@@ -4005,6 +4110,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/ideas:read ]
+      deprecated: true
   '/ideas/{idea_id}':
     parameters:
       - description: 'The Invotra UUID of the idea.'
@@ -4035,6 +4141,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/ideas:read ]
+      deprecated: true
     put:
       tags:
         - 'ideas'
@@ -4060,6 +4167,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/ideas:write ]
+      deprecated: true
     delete:
       tags:
         - 'ideas'
@@ -4077,6 +4185,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/ideas:write ]
+      deprecated: true
   '/lists':
     post:
       tags:
@@ -4110,6 +4219,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/lists:write ]
+      deprecated: true
   '/lists/list':
     get:
       tags:
@@ -4210,6 +4320,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/lists:read ]
+      deprecated: true
   '/lists/{list_id}':
     parameters:
       - description: 'The Invotra UUID of the list.'
@@ -4240,6 +4351,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/lists:read ]
+      deprecated: true
     put:
       tags:
         - 'lists'
@@ -4265,6 +4377,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/lists:write ]
+      deprecated: true
     delete:
       tags:
         - 'lists'
@@ -4282,6 +4395,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/lists:write ]
+      deprecated: true
   '/messages':
     post:
       tags:
@@ -4315,6 +4429,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/messages:write ]
+      deprecated: true
   '/messages/list':
     get:
       tags:
@@ -4404,6 +4519,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/messages:read ]
+      deprecated: true
   '/messages/{message_id}':
     parameters:
       - description: 'The Invotra UUID of the message.'
@@ -4434,6 +4550,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/messages:read ]
+      deprecated: true
     put:
       tags:
         - 'messages'
@@ -4459,6 +4576,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/messages:write ]
+      deprecated: true
     delete:
       tags:
         - 'messages'
@@ -4476,6 +4594,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/messages:write ]
+      deprecated: true
   '/multi_media':
     post:
       tags:
@@ -4509,6 +4628,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/multi_media:write ]
+      deprecated: true
   '/multi_media/list':
     get:
       tags:
@@ -4604,6 +4724,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/multi_media:read ]
+      deprecated: true
   '/multi_media/{multi_media_id}':
     parameters:
       - description: 'The Invotra UUID of the multi media.'
@@ -4634,6 +4755,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/multi_media:read ]
+      deprecated: true
     put:
       tags:
         - 'multi media'
@@ -4659,6 +4781,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/multi_media:write ]
+      deprecated: true
     delete:
       tags:
         - 'multi media'
@@ -4676,6 +4799,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/multi_media:write ]
+      deprecated: true
   '/news':
     post:
       tags:
@@ -4709,6 +4833,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/news:write ]
+      deprecated: true
   '/news/list':
     get:
       tags:
@@ -4804,6 +4929,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/news:read ]
+      deprecated: true
   '/news/{news_id}':
     parameters:
       - description: 'The Invotra UUID of the news.'
@@ -4834,6 +4960,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/news:read ]
+      deprecated: true
     put:
       tags:
         - 'news'
@@ -4859,6 +4986,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/news:write ]
+      deprecated: true
     delete:
       tags:
         - 'news'
@@ -4876,6 +5004,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/news:write ]
+      deprecated: true
   '/pages':
     post:
       tags:
@@ -4909,6 +5038,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/pages:write ]
+      deprecated: true
   '/pages/list':
     get:
       tags:
@@ -5004,6 +5134,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/pages:read ]
+      deprecated: true
   '/pages/{page_id}':
     parameters:
       - description: 'The Invotra UUID of the page.'
@@ -5034,6 +5165,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/pages:read ]
+      deprecated: true
     put:
       tags:
         - 'pages'
@@ -5059,6 +5191,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/pages:write ]
+      deprecated: true
     delete:
       tags:
         - 'pages'
@@ -5076,6 +5209,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/pages:write ]
+      deprecated: true
   '/policies':
     post:
       tags:
@@ -5109,6 +5243,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policies:write ]
+      deprecated: true
   '/policies/list':
     get:
       tags:
@@ -5204,6 +5339,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policies:read ]
+      deprecated: true
   '/policies/{policy_id}':
     parameters:
       - description: 'The Invotra UUID of the policy.'
@@ -5234,6 +5370,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policies:read ]
+      deprecated: true
     put:
       tags:
         - 'policies'
@@ -5259,6 +5396,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policies:write ]
+      deprecated: true
     delete:
       tags:
         - 'policies'
@@ -5276,6 +5414,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policies:write ]
+      deprecated: true
   '/polls':
     post:
       tags:
@@ -5309,6 +5448,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/polls:write ]
+      deprecated: true
   '/polls/list':
     get:
       tags:
@@ -5404,6 +5544,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/polls:read ]
+      deprecated: true
   '/polls/{poll_id}':
     parameters:
       - description: 'The Invotra UUID of the poll.'
@@ -5434,6 +5575,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/polls:read ]
+      deprecated: true
     put:
       tags:
         - 'polls'
@@ -5459,6 +5601,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/polls:write ]
+      deprecated: true
     delete:
       tags:
         - 'polls'
@@ -5476,6 +5619,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/polls:write ]
+      deprecated: true
   '/promotions':
     post:
       tags:
@@ -5509,6 +5653,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
+      deprecated: true
   '/promotions/list':
     get:
       tags:
@@ -5609,6 +5754,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:read ]
+      deprecated: true
   '/promotions/{promotion_id}':
     parameters:
       - description: 'The Invotra UUID of the promotion.'
@@ -5639,6 +5785,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:read ]
+      deprecated: true
     put:
       tags:
         - 'promotions'
@@ -5664,6 +5811,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
+      deprecated: true
     delete:
       tags:
         - 'promotions'
@@ -5681,6 +5829,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/promotions:write ]
+      deprecated: true
   '/queries/list':
     get:
       tags:
@@ -5776,6 +5925,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/queries:read ]
+      deprecated: true
   '/queries/{query_id}':
     parameters:
       - description: 'The Invotra UUID of the query.'
@@ -5806,6 +5956,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/queries:read ]
+      deprecated: true
     put:
       tags:
         - 'queries'
@@ -5831,6 +5982,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/queries:write ]
+      deprecated: true
     delete:
       tags:
         - 'queries'
@@ -5848,6 +6000,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/queries:write ]
+      deprecated: true
   '/support_tickets/list':
     get:
       tags:
@@ -5924,6 +6077,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/support_tickets:read ]
+      deprecated: true
   '/support_tickets/{support_ticket_id}':
     parameters:
       - description: 'The Invotra UUID of the support ticket.'
@@ -5954,6 +6108,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/support_tickets:read ]
+      deprecated: true
     put:
       tags:
         - 'support tickets'
@@ -5979,6 +6134,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/support_tickets:write ]
+      deprecated: true
     delete:
       tags:
         - 'support tickets'
@@ -5996,6 +6152,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/support_tickets:write ]
+      deprecated: true
   '/webforms':
     post:
       tags:
@@ -6029,6 +6186,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:write ]
+      deprecated: true
   '/webforms/list':
     get:
       tags:
@@ -6124,6 +6282,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:read ]
+      deprecated: true
   '/webforms/{webform_id}':
     parameters:
       - description: 'The Invotra UUID of the webform.'
@@ -6154,6 +6313,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:read ]
+      deprecated: true
     put:
       tags:
         - 'webforms'
@@ -6179,6 +6339,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:write ]
+      deprecated: true
     delete:
       tags:
         - 'webforms'
@@ -6196,6 +6357,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:write ]
+      deprecated: true
   '/webforms/{webform_id}/submissions':
     parameters:
       - description: 'The Invotra UUID of the webform.'
@@ -6222,6 +6384,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/webforms:write ]
+      deprecated: true
   '/manuals':
     get:
       description: Get a listing of all manuals
@@ -6258,6 +6421,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/manuals:read ]
+      deprecated: true
   '/manuals/{manual_page_id}':
     parameters:
       - description: The Invotra UUID of a manual page.
@@ -6289,6 +6453,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/manuals:read ]
+      deprecated: true
     put:
       tags:
         - 'manuals'
@@ -6314,6 +6479,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/manuals:write ]
+      deprecated: true
     delete:
       tags:
         - manuals
@@ -6333,6 +6499,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/manuals:write ]
+      deprecated: true
   '/manuals/pages':
     get:
       description: Get all pages in a manual or manual page.
@@ -6371,6 +6538,7 @@ paths:
           description: The user does not have access to the requested manual page.
         '404':
           description: No manual page with that UUID was found.
+      deprecated: true
   '/manual_pages/{manual_page_id}':
     parameters:
       - description: The Invotra UUID of a manual page.
@@ -6402,6 +6570,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/manual_pages:read ]
+      deprecated: true
     put:
       tags:
         - 'manual pages'
@@ -6427,6 +6596,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/manual_pages:write ]
+      deprecated: true
     delete:
       tags:
         - manual pages
@@ -6446,6 +6616,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/manual_pages:write ]
+      deprecated: true
   '/pdf-export/{content_id}':
     get:
       description: Get content in HTML for PDF export.
@@ -6483,6 +6654,7 @@ paths:
           description: The user does not have access to the requested content.
         '404':
           description: No content with that UUID was found.
+      deprecated: true
   '/follow/{content_id}':
     parameters:
       - name: content_id
@@ -6510,6 +6682,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/follow:write ]
+      deprecated: true
     delete:
       tags:
         - follow
@@ -6527,6 +6700,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/follow:write ]
+      deprecated: true
     get:
       description: 'Check if a piece of content/user is followed or not.'
       tags:
@@ -6559,6 +6733,7 @@ paths:
           description: The user does not have access to the requested content/user.
         '404':
           description: No content/user with that UUID was found.
+      deprecated: true
   '/likes/{content_id}':
     parameters:
       - name: content_id
@@ -6586,6 +6761,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/like:write ]
+      deprecated: true
     delete:
       tags:
         - likes
@@ -6603,6 +6779,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/like:write ]
+      deprecated: true
     get:
       description: 'Check if a piece of content/comment is liked or not.'
       tags:
@@ -6635,6 +6812,7 @@ paths:
           description: The user does not have access to the requested content/comment.
         '404':
           description: No content/comment with that UUID was found.
+      deprecated: true
   '/rate/{content_id}':
     parameters:
       - name: content_id
@@ -6677,6 +6855,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/rate:write ]
+      deprecated: true
     get:
       description: 'Check if a piece of content/comment is rated or not.'
       tags:
@@ -6709,6 +6888,7 @@ paths:
           description: The user does not have access to the requested content/comment.
         '404':
           description: No content/comment with that UUID was found.
+      deprecated: true
   '/saved/{content_id}':
     parameters:
       - name: content_id
@@ -6745,6 +6925,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/saved:write ]
+      deprecated: true
     delete:
       tags:
         - saved
@@ -6771,6 +6952,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/saved:write ]
+      deprecated: true
     get:
       description: 'Check if a piece of content/comment is Saved or not.'
       tags:
@@ -6803,6 +6985,7 @@ paths:
           description: The user does not have access to the requested content/comment.
         '404':
           description: No content/comment with that UUID was found.
+      deprecated: true
   /comments:
     post:
       tags:
@@ -6836,6 +7019,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/comments:write ]
+      deprecated: true
   /comments/list:
     get:
       tags:
@@ -6933,6 +7117,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/comments:read ]
+      deprecated: true
   '/comments/{comment_id}':
     parameters:
       - description: 'The Invotra UUID of the comment.'
@@ -6961,6 +7146,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/comments:read ]
+      deprecated: true
     delete:
       tags:
         - 'comments'
@@ -6978,6 +7164,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/comments:write ]
+      deprecated: true
   /files:
     post:
       requestBody:
@@ -7015,6 +7202,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/files:write ]
+      deprecated: true
   '/files/list':
     get:
       tags:
@@ -7168,6 +7356,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/files:read ]
+      deprecated: true
   '/files/{file_id}':
     parameters:
       - description: The Invotra UUID of the file.
@@ -7196,6 +7385,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/files:read ]
+      deprecated: true
     put:
       tags:
         - files
@@ -7223,6 +7413,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/files:write ]
+      deprecated: true
     delete:
       tags:
         - files
@@ -7240,6 +7431,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/files:write ]
+      deprecated: true
   /job_roles:
     get:
       deprecated: true
@@ -7300,6 +7492,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/job_roles:write ]
+      deprecated: true
   '/job_roles/list':
     get:
       tags:
@@ -7353,6 +7546,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/job_roles:read ]
+      deprecated: true
   '/job_roles/{job_role_id}':
     parameters:
       - description: The Invotra UUID of the job role.
@@ -7381,6 +7575,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/job_roles:read ]
+      deprecated: true
     put:
       tags:
         - job roles
@@ -7406,6 +7601,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/job_roles:write ]
+      deprecated: true
     delete:
       tags:
         - job roles
@@ -7423,6 +7619,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/job_roles:write ]
+      deprecated: true
   /locations:
     get:
       deprecated: true
@@ -7515,6 +7712,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:read ]
+      deprecated: true
   /locations/sites:
     post:
       tags:
@@ -7550,6 +7748,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
   '/locations/sites/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
@@ -7580,6 +7779,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:read ]
+      deprecated: true
     put:
       tags:
         - locations
@@ -7607,6 +7807,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
     delete:
       tags:
         - locations
@@ -7624,6 +7825,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
   /locations/buildings:
     post:
       tags:
@@ -7659,6 +7861,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
   '/locations/buildings/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
@@ -7689,6 +7892,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:read ]
+      deprecated: true
     put:
       tags:
         - locations
@@ -7716,6 +7920,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
     delete:
       tags:
       - locations
@@ -7733,6 +7938,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
   /locations/floors:
     post:
       tags:
@@ -7768,6 +7974,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
   '/locations/floors/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
@@ -7798,6 +8005,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:read ]
+      deprecated: true
     put:
       tags:
         - locations
@@ -7825,6 +8033,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
     delete:
       tags:
       - locations
@@ -7842,6 +8051,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
   /locations/spaces:
     post:
       tags:
@@ -7877,6 +8087,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
   '/locations/spaces/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
@@ -7907,6 +8118,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:read ]
+      deprecated: true
     put:
       tags:
         - locations
@@ -7934,6 +8146,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
     delete:
       tags:
       - locations
@@ -7951,6 +8164,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:write ]
+      deprecated: true
   '/locations/{location_id}':
     parameters:
       - description: The Invotra UUID of the location.
@@ -7981,6 +8195,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:read ]
+      deprecated: true
   '/locations/{location_id}/members':
     parameters:
       - description: The Invotra UUID of the location.
@@ -8034,6 +8249,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/locations:read ]
+      deprecated: true
   '/badges':
     post:
       tags:
@@ -8067,6 +8283,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/badges:write ]
+      deprecated: true
   '/badges/list':
     get:
       tags:
@@ -8120,6 +8337,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/badges:read ]
+      deprecated: true
   '/badges/{badge_id}':
     parameters:
       - description: 'The Invotra UUID of the badge.'
@@ -8150,6 +8368,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/badges:read ]
+      deprecated: true
     put:
       tags:
         - 'badges'
@@ -8175,6 +8394,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/badges:write ]
+      deprecated: true
     delete:
       tags:
         - 'badges'
@@ -8192,6 +8412,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/badges:write ]
+      deprecated: true
   '/content_categories':
     post:
       tags:
@@ -8225,6 +8446,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content_categories:write ]
+      deprecated: true
   '/content_categories/list':
     get:
       tags:
@@ -8278,6 +8500,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content_categories:read ]
+      deprecated: true
   '/content_categories/{content_category_id}':
     parameters:
       - description: 'The Invotra UUID of the content category.'
@@ -8308,6 +8531,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content_categories:read ]
+      deprecated: true
     put:
       tags:
         - 'content categories'
@@ -8333,6 +8557,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content_categories:write ]
+      deprecated: true
     delete:
       tags:
         - 'content categories'
@@ -8350,6 +8575,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content_categories:write ]
+      deprecated: true
   '/content_types':
     post:
       tags:
@@ -8383,6 +8609,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content_types:write ]
+      deprecated: true
   '/content_types/list':
     get:
       tags:
@@ -8436,6 +8663,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content_types:read ]
+      deprecated: true
   '/content_types/{content_type_id}':
     parameters:
       - description: 'The Invotra UUID of the content type.'
@@ -8466,6 +8694,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content_types:read ]
+      deprecated: true
     put:
       tags:
         - 'content types'
@@ -8491,6 +8720,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content_types:write ]
+      deprecated: true
     delete:
       tags:
         - 'content types'
@@ -8508,6 +8738,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/content_types:write ]
+      deprecated: true
   '/countries':
     post:
       tags:
@@ -8541,6 +8772,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/countries:write ]
+      deprecated: true
   '/countries/list':
     get:
       tags:
@@ -8594,6 +8826,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/countries:read ]
+      deprecated: true
   '/countries/{country_id}':
     parameters:
       - description: 'The Invotra UUID of the country.'
@@ -8624,6 +8857,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/countries:read ]
+      deprecated: true
     put:
       tags:
         - 'countries'
@@ -8649,6 +8883,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/countries:write ]
+      deprecated: true
     delete:
       tags:
         - 'countries'
@@ -8666,6 +8901,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/countries:write ]
+      deprecated: true
   '/free_skills':
     post:
       tags:
@@ -8699,6 +8935,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/free_skills:write ]
+      deprecated: true
   '/free_skills/list':
     get:
       tags:
@@ -8752,6 +8989,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/free_skills:read ]
+      deprecated: true
   '/free_skills/{free_skill_id}':
     parameters:
       - description: 'The Invotra UUID of the free skill.'
@@ -8782,6 +9020,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/free_skills:read ]
+      deprecated: true
     put:
       tags:
         - 'free skills'
@@ -8807,6 +9046,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/free_skills:write ]
+      deprecated: true
     delete:
       tags:
         - 'free skills'
@@ -8824,6 +9064,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/free_skills:write ]
+      deprecated: true
   '/general_topics':
     post:
       tags:
@@ -8857,6 +9098,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/general_topics:write ]
+      deprecated: true
   '/general_topics/list':
     get:
       tags:
@@ -8910,6 +9152,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/general_topics:read ]
+      deprecated: true
   '/general_topics/{general_topic_id}':
     parameters:
       - description: 'The Invotra UUID of the general topic.'
@@ -8940,6 +9183,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/general_topics:read ]
+      deprecated: true
     put:
       tags:
         - 'general topics'
@@ -8965,6 +9209,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/general_topics:write ]
+      deprecated: true
     delete:
       tags:
         - 'general topics'
@@ -8982,6 +9227,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/general_topics:write ]
+      deprecated: true
   '/grades':
     post:
       tags:
@@ -9015,6 +9261,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/grades:write ]
+      deprecated: true
   '/grades/list':
     get:
       tags:
@@ -9074,6 +9321,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/grades:read ]
+      deprecated: true
   '/grades/{grade_id}':
     parameters:
       - description: 'The Invotra UUID of the grade.'
@@ -9104,6 +9352,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/grades:read ]
+      deprecated: true
     put:
       tags:
         - 'grades'
@@ -9129,6 +9378,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/grades:write ]
+      deprecated: true
     delete:
       tags:
         - 'grades'
@@ -9146,6 +9396,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/grades:write ]
+      deprecated: true
   '/group_categories':
     post:
       tags:
@@ -9179,6 +9430,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_categories:write ]
+      deprecated: true
   '/group_categories/list':
     get:
       tags:
@@ -9232,6 +9484,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_categories:read ]
+      deprecated: true
   '/group_categories/{group_category_id}':
     parameters:
       - description: 'The Invotra UUID of the group category.'
@@ -9262,6 +9515,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_categories:read ]
+      deprecated: true
     put:
       tags:
         - 'group categories'
@@ -9287,6 +9541,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_categories:write ]
+      deprecated: true
     delete:
       tags:
         - 'group categories'
@@ -9304,6 +9559,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/group_categories:write ]
+      deprecated: true
   '/idea_categories':
     post:
       tags:
@@ -9337,6 +9593,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/idea_categories:write ]
+      deprecated: true
   '/idea_categories/list':
     get:
       tags:
@@ -9390,6 +9647,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/idea_categories:read ]
+      deprecated: true
   '/idea_categories/{idea_category_id}':
     parameters:
       - description: 'The Invotra UUID of the idea category.'
@@ -9420,6 +9678,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/idea_categories:read ]
+      deprecated: true
     put:
       tags:
         - 'idea categories'
@@ -9445,6 +9704,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/idea_categories:write ]
+      deprecated: true
     delete:
       tags:
         - 'idea categories'
@@ -9462,6 +9722,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/idea_categories:write ]
+      deprecated: true
   '/interests':
     post:
       tags:
@@ -9495,6 +9756,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/interests:write ]
+      deprecated: true
   '/interests/list':
     get:
       tags:
@@ -9548,6 +9810,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/interests:read ]
+      deprecated: true
   '/interests/{interest_id}':
     parameters:
       - description: 'The Invotra UUID of the interest.'
@@ -9578,6 +9841,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/interests:read ]
+      deprecated: true
     put:
       tags:
         - 'interests'
@@ -9603,6 +9867,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/interests:write ]
+      deprecated: true
     delete:
       tags:
         - 'interests'
@@ -9620,6 +9885,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/interests:write ]
+      deprecated: true
   '/message_types':
     post:
       tags:
@@ -9653,6 +9919,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/message_types:write ]
+      deprecated: true
   '/message_types/list':
     get:
       tags:
@@ -9706,6 +9973,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/message_types:read ]
+      deprecated: true
   '/message_types/{message_type_id}':
     parameters:
       - description: 'The Invotra UUID of the message type.'
@@ -9736,6 +10004,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/message_types:read ]
+      deprecated: true
     put:
       tags:
         - 'message types'
@@ -9761,6 +10030,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/message_types:write ]
+      deprecated: true
     delete:
       tags:
         - 'message types'
@@ -9778,6 +10048,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/message_types:write ]
+      deprecated: true
   '/organisational_skills':
     post:
       tags:
@@ -9811,6 +10082,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/organisational_skills:write ]
+      deprecated: true
   '/organisational_skills/list':
     get:
       tags:
@@ -9864,6 +10136,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/organisational_skills:read ]
+      deprecated: true
   '/organisational_skills/{organisational_skill_id}':
     parameters:
       - description: 'The Invotra UUID of the organisational skill.'
@@ -9894,6 +10167,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/organisational_skills:read ]
+      deprecated: true
     put:
       tags:
         - 'organisational skills'
@@ -9919,6 +10193,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/organisational_skills:write ]
+      deprecated: true
     delete:
       tags:
         - 'organisational skills'
@@ -9936,6 +10211,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/organisational_skills:write ]
+      deprecated: true
   '/person_types':
     post:
       tags:
@@ -9969,6 +10245,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/person_types:write ]
+      deprecated: true
   '/person_types/list':
     get:
       tags:
@@ -10022,6 +10299,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/person_types:read ]
+      deprecated: true
   '/person_types/{person_type_id}':
     parameters:
       - description: 'The Invotra UUID of the person type.'
@@ -10052,6 +10330,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/person_types:read ]
+      deprecated: true
     put:
       tags:
         - 'person types'
@@ -10077,6 +10356,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/person_types:write ]
+      deprecated: true
     delete:
       tags:
         - 'person types'
@@ -10094,6 +10374,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/person_types:write ]
+      deprecated: true
   '/policy_types':
     post:
       tags:
@@ -10127,6 +10408,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policy_types:write ]
+      deprecated: true
   '/policy_types/list':
     get:
       tags:
@@ -10180,6 +10462,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policy_types:read ]
+      deprecated: true
   '/policy_types/{policy_type_id}':
     parameters:
       - description: 'The Invotra UUID of the policy type.'
@@ -10210,6 +10493,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policy_types:read ]
+      deprecated: true
     put:
       tags:
         - 'policy types'
@@ -10235,6 +10519,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policy_types:write ]
+      deprecated: true
     delete:
       tags:
         - 'policy types'
@@ -10252,6 +10537,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policy_types:write ]
+      deprecated: true
   '/primary_categories':
     post:
       tags:
@@ -10285,6 +10571,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/primary_categories:write ]
+      deprecated: true
   '/primary_categories/list':
     get:
       tags:
@@ -10338,6 +10625,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/primary_categories:read ]
+      deprecated: true
   '/primary_categories/{primary_category_id}':
     parameters:
       - description: 'The Invotra UUID of the primary category.'
@@ -10368,6 +10656,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/primary_categories:read ]
+      deprecated: true
     put:
       tags:
         - 'primary categories'
@@ -10393,6 +10682,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/primary_categories:write ]
+      deprecated: true
     delete:
       tags:
         - 'primary categories'
@@ -10410,6 +10700,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/primary_categories:write ]
+      deprecated: true
   '/projects':
     post:
       tags:
@@ -10443,6 +10734,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/projects:write ]
+      deprecated: true
   '/projects/list':
     get:
       tags:
@@ -10496,6 +10788,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/projects:read ]
+      deprecated: true
   '/projects/{project_id}':
     parameters:
       - description: 'The Invotra UUID of the project.'
@@ -10526,6 +10819,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/projects:read ]
+      deprecated: true
     put:
       tags:
         - 'projects'
@@ -10551,6 +10845,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/projects:write ]
+      deprecated: true
     delete:
       tags:
         - 'projects'
@@ -10568,6 +10863,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/projects:write ]
+      deprecated: true
   '/query_categories':
     post:
       tags:
@@ -10601,6 +10897,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/query_categories:write ]
+      deprecated: true
   '/query_categories/list':
     get:
       tags:
@@ -10654,6 +10951,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/query_categories:read ]
+      deprecated: true
   '/query_categories/{query_category_id}':
     parameters:
       - description: 'The Invotra UUID of the query category.'
@@ -10684,6 +10982,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/query_categories:read ]
+      deprecated: true
     put:
       tags:
         - 'query categories'
@@ -10709,6 +11008,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/query_categories:write ]
+      deprecated: true
     delete:
       tags:
         - 'query categories'
@@ -10726,6 +11026,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/query_categories:write ]
+      deprecated: true
   '/regions':
     post:
       tags:
@@ -10759,6 +11060,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/regions:write ]
+      deprecated: true
   '/regions/list':
     get:
       tags:
@@ -10818,6 +11120,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/regions:read ]
+      deprecated: true
   '/regions/{region_id}':
     parameters:
       - description: 'The Invotra UUID of the region.'
@@ -10848,6 +11151,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/regions:read ]
+      deprecated: true
     put:
       tags:
         - 'regions'
@@ -10873,6 +11177,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/regions:write ]
+      deprecated: true
     delete:
       tags:
         - 'regions'
@@ -10890,6 +11195,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/regions:write ]
+      deprecated: true
   '/search_highlights':
     post:
       tags:
@@ -10923,6 +11229,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/search_highlights:write ]
+      deprecated: true
   '/search_highlights/list':
     get:
       tags:
@@ -10976,6 +11283,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/search_highlights:read ]
+      deprecated: true
   '/search_highlights/{search_highlight_id}':
     parameters:
       - description: 'The Invotra UUID of the search highlight.'
@@ -11006,6 +11314,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/search_highlights:read ]
+      deprecated: true
     put:
       tags:
         - 'search highlights'
@@ -11031,6 +11340,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/search_highlights:write ]
+      deprecated: true
     delete:
       tags:
         - 'search highlights'
@@ -11048,6 +11358,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/search_highlights:write ]
+      deprecated: true
   '/security_classifications':
     post:
       tags:
@@ -11081,6 +11392,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/security_classifications:write ]
+      deprecated: true
   '/security_classifications/list':
     get:
       tags:
@@ -11134,6 +11446,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/security_classifications:read ]
+      deprecated: true
   '/security_classifications/{security_classification_id}':
     parameters:
       - description: 'The Invotra UUID of the security classification.'
@@ -11164,6 +11477,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/security_classifications:read ]
+      deprecated: true
     put:
       tags:
         - 'security classifications'
@@ -11189,6 +11503,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/security_classifications:write ]
+      deprecated: true
     delete:
       tags:
         - 'security classifications'
@@ -11206,6 +11521,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/security_classifications:write ]
+      deprecated: true
   '/site_sections/list':
     get:
       tags:
@@ -11264,6 +11580,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/site_sections:read ]
+      deprecated: true
   '/site_sections/{site_section_id}':
     parameters:
       - description: 'The Invotra UUID of the site section.'
@@ -11294,6 +11611,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/site_sections:read ]
+      deprecated: true
   '/titles':
     post:
       tags:
@@ -11327,6 +11645,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/titles:write ]
+      deprecated: true
   '/titles/list':
     get:
       tags:
@@ -11380,6 +11699,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/titles:read ]
+      deprecated: true
   '/titles/{title_id}':
     parameters:
       - description: 'The Invotra UUID of the title.'
@@ -11410,6 +11730,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/titles:read ]
+      deprecated: true
     put:
       tags:
         - 'titles'
@@ -11435,6 +11756,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/titles:write ]
+      deprecated: true
     delete:
       tags:
         - 'titles'
@@ -11452,6 +11774,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/titles:write ]
+      deprecated: true
   '/user_categories':
     post:
       tags:
@@ -11485,6 +11808,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/user_categories:write ]
+      deprecated: true
   '/user_categories/list':
     get:
       tags:
@@ -11538,6 +11862,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/user_categories:read ]
+      deprecated: true
   '/user_categories/{user_category_id}':
     parameters:
       - description: 'The Invotra UUID of the user category.'
@@ -11568,6 +11893,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/user_categories:read ]
+      deprecated: true
     put:
       tags:
         - 'user categories'
@@ -11593,6 +11919,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/user_categories:write ]
+      deprecated: true
     delete:
       tags:
         - 'user categories'
@@ -11610,6 +11937,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/user_categories:write ]
+      deprecated: true
   /notifications:
     get:
       tags:
@@ -11645,6 +11973,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/notifications:read ]
+      deprecated: true
   '/notifications/{notification_id}':
     parameters:
       - description: The Invotra UUID of the notification.
@@ -11670,6 +11999,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/notifications:write ]
+      deprecated: true
   '/notifications/clear_all':
     parameters:
       - description: Marks all notifications for the mobile app as read. If true, this will mark as read notifications with entity type user, and entity type node and bundle type post only.
@@ -11691,6 +12021,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/notifications:write ]
+      deprecated: true
   /notifications/register/{service_id}:
     parameters:
       - description: Identifying name of the notification service to be used.
@@ -11723,6 +12054,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/notifications:write ]
+      deprecated: true
     delete:
       tags:
         - notifications
@@ -11754,6 +12086,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/notifications:write ]
+      deprecated: true
   /feeds/status:
     get:
       tags:
@@ -11770,6 +12103,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/feeds:read ]
+      deprecated: true
     put:
       tags:
         - feeds
@@ -11785,6 +12119,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/feeds:write ]
+      deprecated: true
   /feeds:
     get:
       tags:
@@ -11866,6 +12201,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/feeds:read ]
+      deprecated: true
 components:
   securitySchemes:
     APIKeyHeader:
