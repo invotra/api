@@ -19507,6 +19507,10 @@ components:
           description: 'This field is known as usage count'
           type: integer
           example: 1
+        file_id:
+          description: This field is known as internal id
+          type: integer
+          example: 1
     file-schema-update:
       properties:
         filename:
