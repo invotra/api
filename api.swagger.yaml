@@ -12240,6 +12240,14 @@ components:
                 - short_description
                 - one_line
                 - none
+        microsoft_365:
+          description: Configuration for microsoft 365
+          type: object
+          properties:
+            search:
+              description: This field is known as enable search in the Microsoft 365
+              type: boolean
+              example: false
     administration-schema-update:
       type: object
       properties:
@@ -12255,6 +12263,14 @@ components:
                 - short_description
                 - one_line
                 - none
+        microsoft_365:
+          description: Configuration for microsoft 365
+          type: object
+          properties:
+            search:
+              description: Configure for microsoft 365 search
+              type: boolean
+              example: false
     branding-schema:
       properties:
         logo:
