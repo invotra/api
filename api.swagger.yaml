@@ -1473,6 +1473,51 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read, invotra/groups:read ]
+  '/users/{user_id}/policies':
+    parameters:
+      - in: path
+        name: user_id
+        description: The Invotra UUID of the user.
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - users
+      description: List a user's policies.
+      parameters:
+        - name: title_autocomplete
+          description: Autocomplete term. Matches on policy name, per letter, from the start of the word.
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of a user's policies.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user-policy-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read, invotra/policies:read ]
   '/users/{user_id}/follow':
     parameters:
       - description: The Invotra UUID of the user.
@@ -5302,6 +5347,54 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policies:write ]
+  '/policies/{policy_id}/team_members':
+    parameters:
+      - description: The Invotra UUID of the policy.
+        in: path
+        name: policy_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'policies'
+      description: Get all team members of targeting team when applying policy
+      parameters:
+        - name: username_autocomplete
+          description: Autocomplete term. Matches on user name, per letter, from the start of the word.
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        200:
+          description: List of team members of targeting team when applying policy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/policy-team-member-schema'
+        400:
+          description: The supplied UUID was malformed.
+        403:
+          description: User is not authorized to run this operation.
+        404:
+          description: The UUID does not correspond to an existing policy.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/policies:read ]
   '/polls':
     post:
       tags:
@@ -21694,3 +21787,55 @@ components:
           description: 'Determines the position of an personal interest in the hierarchy in relation to its siblings.'
           type: integer
           example: 1
+    user-policy-schema:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: Invotra UUID of the policy.
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        title:
+          type: string
+          description: The title of the policy
+          example: Policy Title
+        mandatory_read:
+          description: Indicates that mandatory read are enabled for this content.
+          type: boolean
+          example: true
+        read_confirmation:
+          description: Indicates that read confirmation are checked for this content.
+          type: boolean
+          example: false
+    policy-team-member-schema:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: Invotra UUID of the user.
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        username:
+          description: The user's username
+          type: string
+          example: Dorothy Whitehead
+        firstname:
+          description: The user's first name
+          type: string
+          example: Dorothy
+        middle_name:
+          description: The user's middle name
+          type: string
+          example: Papadopoulos
+        surname:
+          description: The user's surname
+          type: string
+          example: Whitehead
+        known_as:
+          description: The user's known as name
+          type: string
+          example: Dot
+        read_confirmation:
+          description: Indicates that read confirmation are checked for this content.
+          type: boolean
+          example: true
