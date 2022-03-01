@@ -852,6 +852,16 @@ paths:
               type: string
               format: uuid
               example: 01234567-89ab-cdef-1234-56789abcdef0
+        - name: integrations
+          description: Filter on integrations the user has configured.
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - jira
+                - microsoft365
         - description: Field to sort by
           in: query
           name: sort
@@ -13250,6 +13260,15 @@ components:
           type: string
           description: The brief introduction.
           example: "I am a driven individual that wants to make sure we are the best ..."
+        intergrations:
+          description: The intergrations that this user is configured to use.
+          type: array
+          items:
+            type: string
+            uniqueItems: true
+            enum:
+              - jira
+              - microsoft365
     user-schema-update:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
