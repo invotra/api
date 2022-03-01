@@ -7140,6 +7140,8 @@ paths:
                 - image
                 - ms_excel
                 - ms_powerpoint
+                - ms_onenote
+                - ms_onedrive
                 - ms_word
                 - open_document_format
                 - other_document_types
@@ -7221,6 +7223,7 @@ paths:
               - site_section
               - timestamp_created
               - timestamp_updated
+              - relevance
             default: timestamp_created
         - name: order
           description: 'Sort order.'
@@ -19734,6 +19737,8 @@ components:
                       - image
                       - ms_excel
                       - ms_powerpoint
+                      - ms_onenote
+                      - ms_onedrive
                       - ms_word
                       - open_document_format
                       - other_document_types
