@@ -12894,6 +12894,7 @@ components:
             - invotra.comment.like
             - invotra.group.pending
             - invotra.group.added
+            - invotra.file.share
         status:
           description: Whether the notification has been read or not
           type: boolean
@@ -12910,6 +12911,7 @@ components:
             - node
             - user
             - comment
+            - file
         target_subtype:
           description: This is the subtype (or "bundle" in Drupal parlance) of the entity that the notification links to
           type: string
