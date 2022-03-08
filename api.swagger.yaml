@@ -12233,6 +12233,7 @@ components:
         - mandatory_content_review
         - feed_messages
         - franchise_settings
+        - worldpay_settings
       properties:
         mandatory_content_review:
           description: 'Mandatory configuration for the "content_review" property.'
@@ -12286,10 +12287,18 @@ components:
                   merge_tag:
                     type: string
                     description: The merge tag 
-                    example: <<MB03website>>
+                    example: «MB03website»
                 required:
                   - label
                   - merge_tag
+        worldpay_settings:
+          description: The worldpay setting
+          type: object
+          properties:
+            installation_id:
+              description: This field is known as installation id
+              type: string
+              example: 123456789
     administration-schema-update:
       type: object
       properties:
@@ -12326,7 +12335,7 @@ components:
                   merge_tag:
                     type: string
                     description: The merge tag 
-                    example: <<MB03website>>
+                    example: «MB03website»
                 required:
                   - label
                   - merge_tag
