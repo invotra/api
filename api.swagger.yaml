@@ -19373,6 +19373,10 @@ components:
           description: 'This is the timestamp (in seconds) of when the file was last updated.'
           type: integer
           example: 1510941696
+        file_id:
+          description: This field is known as internal id
+          type: integer
+          example: 1
     file-schema-update:
       properties:
         filename:
