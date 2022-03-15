@@ -2898,6 +2898,12 @@ paths:
           schema:
             type: integer
             example: 1563357496
+        - name: timestamp_published
+          description: 'Filter the results to include only messages by the specified timestamp (in seconds).'
+          in: query
+          schema:
+            type: integer
+            example: 1563357496
         - name: review_date_timestamp_start
           description: 'Filter the results to only include messages with a review date from (greater than or equal to) the specified timestamp (in seconds).'
           in: query
