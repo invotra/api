@@ -12572,16 +12572,10 @@ components:
                   properties:
                     desktop:
                       type: string
-<<<<<<< HEAD
                       example: '1'
                     mobile:
                       type: string
                       example: '2'
-=======
-                      example: 1
-                    mobile:
-                      type: string
-                      example: 2
         connect:
           description: Configuration settings for integration connections.
           type: object
@@ -12597,7 +12591,6 @@ components:
                   description: Jira sub domain.
                   type: string
                   example: 'my-subdomain'
->>>>>>> 705837a5ff2621e8a05608436865749ee8c8be6e
     session-schema:
       required:
         - username
