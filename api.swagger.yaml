@@ -7328,6 +7328,12 @@ paths:
           schema:
             type: integer
             example: 1563357496
+        - name: file_usage_count
+          description: 'Filter the results by usage count'
+          in: query
+          schema:
+            type: integer
+            example: 1
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -7340,6 +7346,7 @@ paths:
               - site_section
               - timestamp_created
               - timestamp_updated
+              - file_usage_count
             default: timestamp_created
         - name: order
           description: 'Sort order.'
@@ -19859,6 +19866,14 @@ components:
           description: 'This is the timestamp (in seconds) of when the file was last updated.'
           type: integer
           example: 1510941696
+        file_usage_count:
+          description: 'This field is known as usage count'
+          type: integer
+          example: 1
+        file_id:
+          description: This field is known as internal id
+          type: integer
+          example: 1
     file-schema-update:
       properties:
         filename:
