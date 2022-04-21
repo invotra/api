@@ -396,6 +396,30 @@ paths:
           description: 'The Open Graph scrape failed as the URL was not found.'
         '504':
           description: 'The Open Graph scrape timed out performing the request on the upstream server.'
+  /send/email:
+    post:
+      tags:
+        - send email
+      description: 'Send Email'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/send-email-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write ]
+      responses:
+        '200':
+          description: 'The Email Send was successful.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'Access denied'
+        '429':
+          description: 'Too many requests.'
   /teams:
     get:
       deprecated: true
@@ -12261,6 +12285,29 @@ components:
       required:
         - message
         - uuid
+    send-email-schema:
+      type: object
+      properties:
+        subject:
+          description: 'The subject for email'
+          type: string
+          example: 'Test subject'
+        body:
+          description: 'The body for email'
+          type: string
+          example: 'Test body text'
+        recipient:
+          description: 'The recipient email'
+          type: string
+          example: 'example@gmail.com'
+        sender:
+          description: 'The sender email'
+          type: string
+          example: 'example@gmail.com'
+      required:
+        - subject
+        - body
+
     open-graph-request-schema:
       type: object
       properties:
