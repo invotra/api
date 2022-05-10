@@ -949,6 +949,15 @@ paths:
             type: boolean
             default: false
           description: 'Filter on users that are group administrators only.'
+        - name: site_section_uuid
+          description: 'Filter on Invotra UUID of the site section.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
