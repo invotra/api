@@ -943,6 +943,18 @@ paths:
             type: string
             format: uuid
           description: UUID of the group to filter by.
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: group_admins_only
           in: query
           schema:
@@ -3129,6 +3141,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: state
           description: 'Filter the list of blogs on a comma-separated list of states. Valid states are "published" and "unpublished". You may include both. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
@@ -3344,6 +3368,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: state
           description: 'Filter the list of custom content on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
@@ -3544,6 +3580,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: state
           description: 'Filter the list of galleries on a comma seperated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
@@ -3751,6 +3799,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: state
           description: 'Filter the list of group documents on a comma seperated list of statuses. Valid statuses are "published" and "unpublished", you may inlude both. The default when not supplied is "published" only.'
           in: query
@@ -3959,6 +4019,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4135,6 +4207,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4340,6 +4424,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4534,6 +4630,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4734,6 +4842,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -4928,6 +5048,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: state
           description: 'Filter the list of news on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
@@ -5128,6 +5260,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: state
           description: 'Filter the list of pages on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
@@ -5328,6 +5472,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: state
           description: 'Filter the list of policies on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
@@ -5602,6 +5758,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: state
           description: 'Filter the list of polls on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only. When preview mode is enabled for the user, all content will be shown by default.'
           in: query
@@ -5807,6 +5975,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: state
           description: 'Filter the list of promotions on a comma-separated list of states. Valid statuses are "draft", "needs_review", "reviewed", "published", and "unpublished". You may include multiple. The default when not supplied is "published" only.'
           in: query
@@ -5980,6 +6160,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -6328,6 +6520,18 @@ paths:
           schema:
             type: string
             example: 'ABC123'
+        - name: site_section_uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: site_section_descendants
+          schema: 
+            type: boolean
+            example: true
+            default: false
         - name: sort
           description: 'Field to sort by.'
           in: query
