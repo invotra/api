@@ -949,6 +949,15 @@ paths:
             type: boolean
             default: false
           description: 'Filter on users that are group administrators only.'
+        - name: site_section_uuid
+          description: 'Filter on Invotra UUID of the site section.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
@@ -12435,7 +12444,7 @@ components:
                     example: Business Website
                   merge_tag:
                     type: string
-                    description: The merge tag 
+                    description: The merge tag
                     example: «MB03website»
                 required:
                   - label
@@ -12483,7 +12492,7 @@ components:
                     example: Business Website
                   merge_tag:
                     type: string
-                    description: The merge tag 
+                    description: The merge tag
                     example: «MB03website»
                 required:
                   - label
@@ -12717,7 +12726,7 @@ components:
                 type: string
                 description: The region of layout
                 example: sidebar
-              region_label: 
+              region_label:
                 type: string
                 description: The label of region
                 example: Region 1
@@ -12743,7 +12752,7 @@ components:
               type: string
               example: 'head_1_body_4'
           required:
-              - machine_name    
+              - machine_name
     layout-schema:
       oneOf:
         - $ref: '#/components/schemas/default-layout-schema'
@@ -13286,7 +13295,7 @@ components:
                 type: object
                 properties:
                   site_section_roles:
-                    description: The user's site section roles within this site section. 
+                    description: The user's site section roles within this site section.
                     type: array
                     items:
                       type: string
@@ -15382,7 +15391,7 @@ components:
           items:
             type: object
             properties:
-              uuid: 
+              uuid:
                 description: Invotra UUID of the multi media.
                 type: string
                 format: uuid
@@ -22124,6 +22133,19 @@ components:
           description: Indicates that read confirmation are checked for this content.
           type: boolean
           example: false
+        site_section:
+          description: 'The site section of this list.'
+          type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the site section.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            name:
+              description: 'The name of the site section.'
+              type: string
+              example: 'Operations'
     policy-team-member-schema:
       type: object
       properties:
