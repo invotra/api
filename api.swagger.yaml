@@ -18266,6 +18266,16 @@ components:
           description: Indicates that read confirmation are checked for this content.
           type: boolean
           example: true
+        revisions: 
+          description: 'The revisions of the policy.'
+          type: array
+          items:
+            type: number
+            uniqueItems: true
+            example:
+              - 10605
+              - 10505
+
     poll-schema:
       allOf:
         - $ref: '#/components/schemas/poll-schema-common'
@@ -22133,6 +22143,10 @@ components:
           description: Indicates that read confirmation are checked for this content.
           type: boolean
           example: false
+        revision_id: 
+          description: the id of revision.
+          type: number
+          example: 123
         site_section:
           description: 'The site section of this list.'
           type: object
