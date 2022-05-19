@@ -22144,9 +22144,13 @@ components:
           type: boolean
           example: false
         revision_id: 
-          description: the id of revision.
+          description: Latest revition ID
           type: number
           example: 123
+        date_time: 
+          description: The review date timestamp for the content (in seconds).
+          type: integer
+          example: 1563357496
         site_section:
           description: 'The site section of this list.'
           type: object
@@ -22192,3 +22196,11 @@ components:
           description: Indicates that read confirmation are checked for this content.
           type: boolean
           example: true
+        revision_id:
+          description: Latest revition ID
+          type: number
+          example: 85213
+        date_time: 
+          description: The review date timestamp for the content (in seconds).
+          type: integer
+          example: 1563357496
