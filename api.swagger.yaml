@@ -5322,6 +5322,15 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - name: site_section_uuid
+          description: 'Filter on Invotra UUID of the site section.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - description: 'Filter by external ID.'
           in: query
           name: external_id
@@ -18266,7 +18275,7 @@ components:
           description: Indicates that read confirmation are checked for this content.
           type: boolean
           example: true
-        revisions: 
+        revisions:
           description: 'The revisions of the policy.'
           type: array
           items:
@@ -22143,11 +22152,11 @@ components:
           description: Indicates that read confirmation are checked for this content.
           type: boolean
           example: false
-        revision_id: 
+        revision_id:
           description: Latest revition ID
           type: number
           example: 123
-        date_time: 
+        date_time:
           description: The review date timestamp for the content (in seconds).
           type: integer
           example: 1563357496
@@ -22200,7 +22209,7 @@ components:
           description: Latest revition ID
           type: number
           example: 85213
-        date_time: 
+        date_time:
           description: The review date timestamp for the content (in seconds).
           type: integer
           example: 1563357496
