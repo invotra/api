@@ -13353,6 +13353,20 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/organisational-skill-schema'
+            new_starter:
+              description: Is a new user or not
+              type: boolean
+              default: true
+              example: true
+            start_date:
+              description: A new user first access date
+              type: string
+              default: '1970-01-01T00:00:00Z'
+              example: '2022-01-01T00:00:00Z'
+            time_frame_name:
+              description: Timeframes name from the user's Start date
+              type: string
+              example: 'Day 1'
     user-schema-common:
       type: object
       properties:
