@@ -12401,6 +12401,7 @@ components:
         - feed_messages
         - franchise_settings
         - worldpay_settings
+        - timeframe_settings
       properties:
         mandatory_content_review:
           description: 'Mandatory configuration for the "content_review" property.'
@@ -12466,6 +12467,9 @@ components:
               description: This field is known as installation id
               type: string
               example: 123456789
+        timeframe_settings:
+          description: 'Key-value map with timeframe periods. Value: prettied timeframe name'
+          type: object
     administration-schema-update:
       type: object
       properties:
