@@ -12326,10 +12326,6 @@ components:
           description: 'The carbon copy email. You may separate multiple addresses with comma'
           type: string
           example: 'example@gmail.com'
-        bcc:
-          description: 'The blind carbon copy email. You may separate multiple addresses with comma'
-          type: string
-          example: 'example@gmail.com'
       required:
         - subject
         - body
