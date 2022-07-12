@@ -18310,6 +18310,19 @@ components:
             example:
               - 10605
               - 10505
+        confirmed_revision:
+          description: 'The confirmed revisions of the policy.'
+          type: array
+          items:
+            type: number
+            uniqueItems: true
+            example:
+              - 10605
+              - 10505
+        current_revision_id:
+          description: 'The current revision id'
+          type: integer
+          example: 151
 
     poll-schema:
       allOf:
