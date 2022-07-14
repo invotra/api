@@ -12402,6 +12402,7 @@ components:
         - franchise_settings
         - worldpay_settings
         - timeframe_settings
+        - custom_overlay_tour_points
       properties:
         mandatory_content_review:
           description: 'Mandatory configuration for the "content_review" property.'
@@ -12470,6 +12471,19 @@ components:
         timeframe_settings:
           description: 'Key-value map with timeframe periods. Value: prettied timeframe name'
           type: object
+        custom_overlay_tour_points:
+          description: 'Key-value map with timeframe periods. Value: prettied timeframe name'
+          type: object
+          properties:
+            title:
+              description: Overlay title
+              type: string
+              example: 'Notifications'
+            selector:
+              description: CSS selector that describe which elements should be highlighted 
+              type: string
+              example: '.notifications-icon-wrapper'
+
     administration-schema-update:
       type: object
       properties:
