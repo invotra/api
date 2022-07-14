@@ -17934,15 +17934,12 @@ components:
               description: 'Published status for the policy.'
               type: boolean
               example: true
-            confirmed_revisions:
-              description: 'The confirmed revisions of the policy.'
-              type: array
-              items:
-                type: number
-                uniqueItems: true
-                example:
-                  - 84620
-                  - 84619
+            last_confirmed_revision:
+              description: 'Last confirmed revision of the policy.'
+              type: number
+              example:
+                - 84620
+                - 84619
             current_revision_id:
               description: current revision ID
               type: number
@@ -18072,15 +18069,12 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
-            confirmed_revisions:
-              description: 'The confirmed revisions of the policy.'
-              type: array
-              items:
-                type: number
-                uniqueItems: true
-                example:
-                  - 84620
-                  - 84619
+            last_confirmed_revision:
+              description: 'Last confirmed revision of the policy.'
+              type: number
+              example:
+                - 84620
+                - 84619
     policy-schema-create:
       allOf:
         - $ref: '#/components/schemas/policy-schema-common'
