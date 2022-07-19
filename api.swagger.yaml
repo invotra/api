@@ -12315,11 +12315,15 @@ components:
           type: string
           example: 'Test body text'
         recipient:
-          description: 'The recipient email'
+          description: 'The recipient email. The default value is a mail of the current user'
           type: string
           example: 'example@gmail.com'
         sender:
           description: 'The sender email'
+          type: string
+          example: 'example@gmail.com'
+        cc:
+          description: 'The carbon copy email. You may separate multiple addresses with comma'
           type: string
           example: 'example@gmail.com'
       required:
@@ -17930,6 +17934,16 @@ components:
               description: 'Published status for the policy.'
               type: boolean
               example: true
+            last_confirmed_revision:
+              description: 'Last confirmed revision of the policy.'
+              type: number
+              example:
+                - 84620
+                - 84619
+            current_revision_id:
+              description: current revision ID
+              type: number
+              example: 84840
     policy-schema-update:
       allOf:
         - $ref: '#/components/schemas/policy-schema-common'
@@ -18055,6 +18069,12 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            last_confirmed_revision:
+              description: 'Last confirmed revision of the policy.'
+              type: number
+              example:
+                - 84620
+                - 84619
     policy-schema-create:
       allOf:
         - $ref: '#/components/schemas/policy-schema-common'
@@ -18284,6 +18304,10 @@ components:
             example:
               - 10605
               - 10505
+        current_revision_id:
+          description: 'The current revision id'
+          type: integer
+          example: 151
 
     poll-schema:
       allOf:
