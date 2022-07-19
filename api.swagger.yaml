@@ -12130,6 +12130,14 @@ paths:
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/feeds:read ]
   /checklists/{widget_id}/statuses:
+    parameters:
+      - description: Widget id (pid).
+        in: path
+        name: widget_id
+        required: true
+        schema:
+          type: string
+          format: uuid
     get:
       responses:
         '200':
@@ -12144,6 +12152,19 @@ paths:
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/checklists:read, invotra/statuses:read ]
   /checklists/{widget_id}/statuses/{task_id}:
+    parameters:
+      - description: Widget id (pid).
+        in: path
+        name: widget_id
+        required: true
+        schema:
+          type: integer
+      - description: Task id. Widget generates it when a creating task
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
     put:
       responses:
         '200':
