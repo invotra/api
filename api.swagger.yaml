@@ -12145,7 +12145,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/checklists'
+                $ref: '#/components/schemas/checklists-get-response-schema'
       description: Returns checked user's tasks uuid
       security:
         - SessionCookieHeader: []
@@ -12170,6 +12170,12 @@ paths:
         '200':
           description: 'Task status changed successfully.'
       description: Change task status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/checklists-status-schema'
+        required: true
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
@@ -22273,8 +22279,13 @@ components:
           description: The review date timestamp for the content (in seconds).
           type: integer
           example: 1563357496
-    checklists:
+    checklists-get-response-schema:
       type: array
       items:
         type: string
         description: Checked task uuid.
+    checklists-status-schema:
+      type: object
+      keys:
+        type: boolean
+        description: Task state
