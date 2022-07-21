@@ -22287,5 +22287,6 @@ components:
     checklists-status-schema:
       type: object
       properties:
-        type: boolean
-        description: Task state
+        value:
+          type: boolean
+          description: Task state
