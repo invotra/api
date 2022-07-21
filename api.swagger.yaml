@@ -22286,6 +22286,6 @@ components:
         description: Checked task uuid.
     checklists-status-schema:
       type: object
-      keys:
+      properties:
         type: boolean
         description: Task state
