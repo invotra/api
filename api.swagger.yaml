@@ -12129,6 +12129,58 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/feeds:read ]
+  /checklists/{widget_id}/statuses:
+    parameters:
+      - description: Widget id (pid).
+        in: path
+        name: widget_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      responses:
+        '200':
+          description: 'Checked tasks uuids are returned for widget.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/checklists-get-response-schema'
+      description: Returns checked user's tasks uuid
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/checklists:read, invotra/statuses:read ]
+  /checklists/{widget_id}/statuses/{task_id}:
+    parameters:
+      - description: Widget id (pid).
+        in: path
+        name: widget_id
+        required: true
+        schema:
+          type: integer
+      - description: Task id. Widget generates it when a creating task
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+    put:
+      responses:
+        '200':
+          description: 'Task status changed successfully.'
+      description: Change task status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/checklists-status-schema'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/checklists:write, invotra/statuses:read ]
+
 components:
   securitySchemes:
     APIKeyHeader:
@@ -22245,3 +22297,14 @@ components:
           description: The review date timestamp for the content (in seconds).
           type: integer
           example: 1563357496
+    checklists-get-response-schema:
+      type: array
+      items:
+        type: string
+        description: Checked task uuid.
+    checklists-status-schema:
+      type: object
+      properties:
+        value:
+          type: boolean
+          description: Task state
