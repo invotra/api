@@ -22227,3 +22227,71 @@ components:
           description: The review date timestamp for the content (in seconds).
           type: integer
           example: 1563357496
+    checklists-report-schema:
+      type: object
+      properties:
+        users:
+          type: object
+          description: Starter users
+          additionalProperties:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+              avatar_url:
+                type: string
+                format: url
+                example: 'https://dev.invotra.com/files/styles/avatar/public/user.png'
+              full_name:
+                type: string
+                example: 'Dorothy Whitehead'
+              starting_date:
+                type: integer
+                example: 1563357496
+        tasks:
+          type: object
+          description: 'Tasks info'
+          additionalProperties:
+            type: object
+            properties:
+              id:
+                type: string
+                example: unique-id-for-task
+              text:
+                type: string
+                example: 'Upload a profile picture'
+              timeframe:
+                type: string
+                example: 'Weeks 3-7'
+        users_progress:
+          type: object
+          description: 'Progress for each user'
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              properties:
+                task_id:
+                  type: string
+                status:
+                  type: boolean
+        tasks_progress:
+          type: object
+          description: 'Progress for each task'
+          additionalProperties:
+            type: object
+            properties:
+              completed:
+                type: array
+                description: 'The UUID of users performing this task'
+                items:
+                  type: string
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              not_completed:
+                type: array
+                description: 'The UUID of users not performing this task'
+                items:
+                  type: string
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
