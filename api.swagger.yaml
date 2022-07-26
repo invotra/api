@@ -12180,6 +12180,20 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/checklists:write, invotra/statuses:read ]
+  /checklists/report:
+    get:
+      responses:
+        '200':
+          description: 'Report created successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/checklists-report-schema'
+      description: Get tasks status report
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/checklists:write, invotra/statuses:read ]
 
 components:
   securitySchemes:
@@ -22332,3 +22346,72 @@ components:
         value:
           type: boolean
           description: Task state
+    checklists-report-schema:
+      type: object
+      properties:
+        users:
+          type: object
+          description: Starter users
+          additionalProperties:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+              avatar_url:
+                type: string
+                format: url
+                example: 'https://dev.invotra.com/files/styles/avatar/public/user.png'
+              full_name:
+                type: string
+                example: 'Dorothy Whitehead'
+              starting_date:
+                type: integer
+                example: 1563357496
+        tasks:
+          type: object
+          description: 'Tasks info'
+          additionalProperties:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+              text:
+                type: string
+                example: 'Upload a profile picture'
+              checklist:
+                type: string
+                example: 'Weeks 3-7'
+        users_progress:
+          type: object
+          description: 'Progress for each user'
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              properties:
+                task_uuid:
+                  type: string
+                status:
+                  type: boolean
+        tasks_progress:
+          type: object
+          description: 'Progress for each task'
+          additionalProperties:
+            type: object
+            properties:
+              completed:
+                type: array
+                description: 'The UUID of users performing this task'
+                items:
+                  type: string
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              not_completed:
+                type: array
+                description: 'The UUID of users not performing this task'
+                items:
+                  type: string
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
