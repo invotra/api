@@ -22258,11 +22258,11 @@ components:
             properties:
               id:
                 type: string
-                example: unique-id-for-task
+                example: OFVLz8qRmU0zk2wTNopPW
               text:
                 type: string
                 example: 'Upload a profile picture'
-              timeframe:
+              checklist:
                 type: string
                 example: 'Weeks 3-7'
         users_progress:
