@@ -12132,7 +12132,7 @@ paths:
   /checklists/statuses:
     get:
       tags:
-        - feeds
+        - checklists
       responses:
         '200':
           description: 'Checked tasks uuids are returned for widget.'
@@ -12155,7 +12155,7 @@ paths:
           type: string
     put:
       tags:
-        - feeds
+        - checklists
       responses:
         '200':
           description: 'Task status changed successfully.'
