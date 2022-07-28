@@ -12131,6 +12131,8 @@ paths:
         - CognitoJwt: [ invotra/feeds:read ]
   /checklists/statuses:
     get:
+      tags:
+        - feeds
       responses:
         '200':
           description: 'Checked tasks uuids are returned for widget.'
@@ -12152,6 +12154,8 @@ paths:
         schema:
           type: string
     put:
+      tags:
+        - feeds
       responses:
         '200':
           description: 'Task status changed successfully.'
