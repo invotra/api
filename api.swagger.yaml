@@ -12172,6 +12172,8 @@ paths:
         - CognitoJwt: [ invotra/checklists:write, invotra/statuses:read ]
   /checklists/report:
     get:
+      tags:
+        - checklists
       responses:
         '200':
           description: 'Report created successfully.'
