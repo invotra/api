@@ -17944,6 +17944,10 @@ components:
               description: current revision ID
               type: number
               example: 84840
+            major_revision_id:
+              description: major revision ID
+              type: number
+              example: 84840
     policy-schema-update:
       allOf:
         - $ref: '#/components/schemas/policy-schema-common'
