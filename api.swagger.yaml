@@ -22342,9 +22342,9 @@ components:
       type: object
       properties:
         users:
-          type: object
+          type: array
           description: Starter users
-          additionalProperties:
+          items:
             type: object
             properties:
               uuid:
@@ -22362,9 +22362,9 @@ components:
                 type: integer
                 example: 1563357496
         tasks:
-          type: object
+          type: array
           description: 'Tasks info'
-          additionalProperties:
+          items:
             type: object
             properties:
               uuid:
