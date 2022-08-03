@@ -22376,7 +22376,19 @@ components:
                 example: 'Upload a profile picture'
               checklist:
                 type: string
-                example: 'Weeks 3-7'
+                example: 'Tasks for onboarding'
+              timeframes:
+                type: array
+                items:
+                  type: object
+                  description: Associated with this task timeframes
+                  properties:
+                    value:
+                      type: string
+                      example: 'weeks-3-7'
+                    label:
+                      type: string
+                      example: 'Weeks 3-7'
         users_progress:
           type: object
           description: 'Progress for each user'
