@@ -22342,9 +22342,9 @@ components:
       type: object
       properties:
         users:
-          type: object
+          type: array
           description: Starter users
-          additionalProperties:
+          items:
             type: object
             properties:
               uuid:
@@ -22361,10 +22361,15 @@ components:
               starting_date:
                 type: integer
                 example: 1563357496
+              job_roles:
+                type: array
+                items:
+                  type: string
+                  example: Project manager
         tasks:
-          type: object
+          type: array
           description: 'Tasks info'
-          additionalProperties:
+          items:
             type: object
             properties:
               uuid:
@@ -22376,7 +22381,19 @@ components:
                 example: 'Upload a profile picture'
               checklist:
                 type: string
-                example: 'Weeks 3-7'
+                example: 'Tasks for onboarding'
+              timeframes:
+                type: array
+                items:
+                  type: object
+                  description: Associated with this task timeframes
+                  properties:
+                    value:
+                      type: string
+                      example: 'weeks-3-7'
+                    label:
+                      type: string
+                      example: 'Weeks 3-7'
         users_progress:
           type: object
           description: 'Progress for each user'
