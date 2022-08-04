@@ -22361,6 +22361,11 @@ components:
               starting_date:
                 type: integer
                 example: 1563357496
+              job_roles:
+                type: array
+                items:
+                  type: string
+                  example: Project manager
         tasks:
           type: array
           description: 'Tasks info'
