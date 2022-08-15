@@ -14202,6 +14202,15 @@ components:
               type: string
             source:
               type: string
+            message_type:
+              type: string
+              enum:
+                - group_groupadd
+                - user_updated
+                - comment_created
+                - comment_updated
+                - node_created
+                - node_updated
     post-schema-update:
       allOf:
         - $ref: '#/components/schemas/post-schema-common'
