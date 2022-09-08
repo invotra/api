@@ -12145,7 +12145,7 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/checklists:read, invotra/statuses:read ]
-  /checklists/statuses/{task_id}:
+  /checklists/{pid}/statuses/{task_id}:
     parameters:
       - description: Task id. Widget generates it when a creating task
         in: path
@@ -12153,6 +12153,12 @@ paths:
         required: true
         schema:
           type: string
+      - description: Pane id
+        in: path
+        name: pid
+        required: true
+        schema:
+          type: integer
     put:
       tags:
         - checklists
