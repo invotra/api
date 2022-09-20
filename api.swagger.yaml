@@ -12133,6 +12133,16 @@ paths:
     get:
       tags:
         - checklists
+      parameters:
+        - in: query
+          name: task_ids
+          required: true
+          description: 'Describes which tasks statuses required to fetch.'
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'qwu3Q76chkQwP7_ZnxUIT-1663324380052'
       responses:
         '200':
           description: 'Checked tasks uuids are returned for widget.'
