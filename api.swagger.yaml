@@ -12543,6 +12543,30 @@ components:
         timeframe_settings:
           description: 'Key-value map with timeframe periods. Value: prettied timeframe name'
           type: object
+          additionalProperties:
+            type: object
+            properties:
+              machine_name:
+                type: string
+                description: Timeframe machine name
+                example: "week-7-_ca12"
+              title:
+                type: string
+                example: "Induction"
+              timeframe:
+                type: string
+                description: Timeframe period
+                example: "7"
+              type:
+                type: string
+                enum:
+                  - day
+                  - days
+                  - week
+                  - weeks
+                description: Period type
+                example: "week"
+
         custom_overlay_tour_points:
           description: 'Key-value map with timeframe periods. Value: prettied timeframe name'
           type: object
