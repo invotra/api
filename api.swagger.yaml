@@ -13457,6 +13457,11 @@ components:
               description: Timeframes name from the user's Start date
               type: string
               example: 'Day 1'
+            picture_url:
+              description: User's avatar url
+              type: string
+              format: url
+              example: http://invotra.test/sites/all/themes/madonna/i/avatar.png
     user-schema-common:
       type: object
       properties:
