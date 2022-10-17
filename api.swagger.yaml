@@ -901,7 +901,7 @@ paths:
           name: integrations
           schema:
             type: array
-            values:
+            items:
               type: string
               enum:
                 - microsoft365
