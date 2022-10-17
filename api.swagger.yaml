@@ -896,6 +896,15 @@ paths:
               - asc
               - desc
             default: desc
+        - description: Enabled integrations for user
+          in: query
+          name: integrations
+          schema:
+            type: array
+            values:
+              type: string
+              enum:
+                - microsoft365
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
