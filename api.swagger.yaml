@@ -7306,6 +7306,11 @@ paths:
                 - other_document_types
                 - pdf
                 - video
+                - ms_onedrive
+                - ms_docx
+                - ms_xlsx
+                - ms_pptx
+                - ms_onenote
         - name: filemime
           description: 'Filter by file MIME type.'
           in: query
@@ -20233,6 +20238,11 @@ components:
                       - other_document_types
                       - pdf
                       - video
+                      - ms_onedrive
+                      - ms_docx
+                      - ms_xlsx
+                      - ms_pptx
+                      - ms_onenote
     file-type-configuration-schema:
       type: object
       required:
@@ -20252,6 +20262,11 @@ components:
             - other_document_types
             - pdf
             - video
+            - ms_onedrive
+            - ms_docx
+            - ms_xlsx
+            - ms_pptx
+            - ms_onenote
         extensions:
           description: 'The file extensions permitted within the file type.'
           type: array
