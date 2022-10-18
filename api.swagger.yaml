@@ -20245,7 +20245,6 @@ components:
             - ms_xlsx
             - ms_pptx
             - ms_onenote
-
         extensions:
           description: 'The file extensions permitted within the file type.'
           type: array
