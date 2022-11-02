@@ -12129,6 +12129,74 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/feeds:read ]
+  /checklists/statuses:
+    get:
+      tags:
+        - checklists
+      parameters:
+        - in: query
+          name: task_ids
+          required: true
+          description: 'Describes which tasks statuses required to fetch.'
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'qwu3Q76chkQwP7_ZnxUIT-1663324380052'
+      responses:
+        '200':
+          description: 'Checked tasks uuids are returned for widget.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/checklists-get-response-schema'
+      description: Returns checked user's tasks uuid
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/checklists:read, invotra/statuses:read ]
+  /checklists/statuses/{task_id}:
+    parameters:
+      - description: Task id. Widget generates it when a creating task
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+    put:
+      tags:
+        - checklists
+      responses:
+        '200':
+          description: 'Task status changed successfully.'
+      description: Change task status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/checklists-status-schema'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/checklists:write, invotra/statuses:read ]
+  /checklists/report:
+    get:
+      tags:
+        - checklists
+      responses:
+        '200':
+          description: 'Report created successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/checklists-report-schema'
+      description: Get tasks status report
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/checklists:write, invotra/statuses:read ]
+
 components:
   securitySchemes:
     APIKeyHeader:
@@ -12405,6 +12473,8 @@ components:
         - feed_messages
         - franchise_settings
         - worldpay_settings
+        - timeframe_settings
+        - custom_overlay_tour_points
       properties:
         mandatory_content_review:
           description: 'Mandatory configuration for the "content_review" property.'
@@ -12470,6 +12540,46 @@ components:
               description: This field is known as installation id
               type: string
               example: 123456789
+        timeframe_settings:
+          description: 'Key-value map with timeframe periods. Value: prettied timeframe name'
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              machine_name:
+                type: string
+                description: Timeframe machine name
+                example: "week-7-_ca12"
+              title:
+                type: string
+                example: "Induction"
+              timeframe:
+                type: string
+                description: Timeframe period
+                example: "7"
+              type:
+                type: string
+                enum:
+                  - day
+                  - days
+                  - week
+                  - weeks
+                description: Period type
+                example: "week"
+
+        custom_overlay_tour_points:
+          description: 'Key-value map with timeframe periods. Value: prettied timeframe name'
+          type: object
+          properties:
+            title:
+              description: Overlay title
+              type: string
+              example: 'Notifications'
+            selector:
+              description: CSS selector that describe which elements should be highlighted 
+              type: string
+              example: '.notifications-icon-wrapper'
+
     administration-schema-update:
       type: object
       properties:
@@ -13357,6 +13467,25 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/organisational-skill-schema'
+            new_starter:
+              description: Is a new user or not
+              type: boolean
+              default: true
+              example: true
+            start_date:
+              description: A new user first access date
+              type: string
+              default: '1970-01-01T00:00:00Z'
+              example: '2022-01-01T00:00:00Z'
+            time_frame_name:
+              description: Timeframes name from the user's Start date
+              type: string
+              example: 'Day 1'
+            picture_url:
+              description: User's avatar url
+              type: string
+              format: url
+              example: http://invotra.test/sites/all/themes/madonna/i/avatar.png
     user-schema-common:
       type: object
       properties:
@@ -22241,3 +22370,100 @@ components:
           description: The review date timestamp for the content (in seconds).
           type: integer
           example: 1563357496
+    checklists-get-response-schema:
+      type: array
+      items:
+        type: string
+        description: Checked task uuid.
+    checklists-status-schema:
+      type: object
+      properties:
+        value:
+          type: boolean
+          description: Task state
+    checklists-report-schema:
+      type: object
+      properties:
+        users:
+          type: array
+          description: Starter users
+          items:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+              avatar_url:
+                type: string
+                format: url
+                example: 'https://dev.invotra.com/files/styles/avatar/public/user.png'
+              full_name:
+                type: string
+                example: 'Dorothy Whitehead'
+              starting_date:
+                type: integer
+                example: 1563357496
+              job_roles:
+                type: array
+                items:
+                  type: string
+                  example: Project manager
+        tasks:
+          type: array
+          description: 'Tasks info'
+          items:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+              text:
+                type: string
+                example: 'Upload a profile picture'
+              checklist:
+                type: string
+                example: 'Tasks for onboarding'
+              timeframes:
+                type: array
+                items:
+                  type: object
+                  description: Associated with this task timeframes
+                  properties:
+                    value:
+                      type: string
+                      example: 'weeks-3-7'
+                    label:
+                      type: string
+                      example: 'Weeks 3-7'
+        users_progress:
+          type: object
+          description: 'Progress for each user'
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              properties:
+                task_uuid:
+                  type: string
+                status:
+                  type: boolean
+        tasks_progress:
+          type: object
+          description: 'Progress for each task'
+          additionalProperties:
+            type: object
+            properties:
+              completed:
+                type: array
+                description: 'The UUID of users performing this task'
+                items:
+                  type: string
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              not_completed:
+                type: array
+                description: 'The UUID of users not performing this task'
+                items:
+                  type: string
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
