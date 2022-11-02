@@ -7503,6 +7503,36 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/files:write ]
+  '/files/{file_id}/share':
+    parameters:
+      - description: The Invotra UUID of the file.
+        in: path
+        name: file_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      tags:
+        - files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/file-schema-share'
+      responses:
+        '200':
+          description: The file was shared successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: Group, user or file is not exist.
+        '422':
+          description: Group and user UUIDs were passed both or none of them.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/files:read ]
   /job_roles:
     get:
       deprecated: true
@@ -20236,6 +20266,20 @@ components:
           items:
             type: string
             example: '.mp3'
+    file-schema-share:
+      type: object
+      required:
+        - message
+      properties:
+        user_uuid:
+          type: string
+          format: uuid
+        group_uuid:
+          type: string
+          format: uuid
+        message:
+          type: string
+          format: uuid
     job-role-schema:
       allOf:
         - type: object
