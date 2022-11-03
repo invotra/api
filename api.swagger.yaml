@@ -396,6 +396,30 @@ paths:
           description: 'The Open Graph scrape failed as the URL was not found.'
         '504':
           description: 'The Open Graph scrape timed out performing the request on the upstream server.'
+  /send/email:
+    post:
+      tags:
+        - send email
+      description: 'Send Email'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/send-email-schema'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:write ]
+      responses:
+        '200':
+          description: 'The Email Send was successful.'
+        '400':
+          description: 'The supplied UUID or JSON was malformed.'
+        '403':
+          description: 'Access denied'
+        '429':
+          description: 'Too many requests.'
   /teams:
     get:
       deprecated: true
@@ -872,6 +896,15 @@ paths:
               - asc
               - desc
             default: desc
+        - description: Enabled integrations for user
+          in: query
+          name: integrations
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - microsoft365
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -925,6 +958,15 @@ paths:
             type: boolean
             default: false
           description: 'Filter on users that are group administrators only.'
+        - name: site_section_uuid
+          description: 'Filter on Invotra UUID of the site section.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
@@ -1473,6 +1515,51 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/users:read, invotra/groups:read ]
+  '/users/{user_id}/policies':
+    parameters:
+      - in: path
+        name: user_id
+        description: The Invotra UUID of the user.
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - users
+      description: List a user's policies.
+      parameters:
+        - name: title_autocomplete
+          description: Autocomplete term. Matches on policy name, per letter, from the start of the word.
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: List of a user's policies.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/user-policy-schema'
+        '400':
+          description: The supplied UUID was malformed.
+        '404':
+          description: The UUID does not correspond to an existing user.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/users:read, invotra/policies:read ]
   '/users/{user_id}/follow':
     parameters:
       - description: The Invotra UUID of the user.
@@ -5244,6 +5331,15 @@ paths:
           schema:
             type: string
             example: '2012-12-25'
+        - name: site_section_uuid
+          description: 'Filter on Invotra UUID of the site section.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
         - description: 'Filter by external ID.'
           in: query
           name: external_id
@@ -5371,6 +5467,80 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/policies:write ]
+  '/policies/{policy_id}/confirmation':
+    parameters:
+      - description: 'The Invotra UUID of the policy.'
+        in: path
+        name: policy_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      tags:
+        - 'policies'
+      description: Set checked read confirmation flag
+      responses:
+        200:
+          description: The policy information was read confirmation successfully.
+        400:
+          description: The supplied UUID was malformed.
+        403:
+          description: User is not authorized to run this operation.
+        404:
+          description: The UUID does not correspond to an existing policy.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/policies:write ]
+  '/policies/{policy_id}/team_members':
+    parameters:
+      - description: The Invotra UUID of the policy.
+        in: path
+        name: policy_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags:
+        - 'policies'
+      description: Get all team members of targeting team when applying policy
+      parameters:
+        - name: username_autocomplete
+          description: Autocomplete term. Matches on user name, per letter, from the start of the word.
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/offsetParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        200:
+          description: List of team members of targeting team when applying policy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    description: Count of results.
+                    type: integer
+                    example: 50
+                  results:
+                    description: The results set.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/policy-team-member-schema'
+        400:
+          description: The supplied UUID was malformed.
+        403:
+          description: User is not authorized to run this operation.
+        404:
+          description: The UUID does not correspond to an existing policy.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/policies:read ]
   '/polls':
     post:
       tags:
@@ -7209,6 +7379,12 @@ paths:
           schema:
             type: integer
             example: 1563357496
+        - name: file_usage_count
+          description: 'Filter the results by usage count'
+          in: query
+          schema:
+            type: integer
+            example: 1
         - name: sort
           description: 'Field to sort by.'
           in: query
@@ -7221,6 +7397,7 @@ paths:
               - site_section
               - timestamp_created
               - timestamp_updated
+              - file_usage_count
             default: timestamp_created
         - name: order
           description: 'Sort order.'
@@ -11961,6 +12138,74 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/feeds:read ]
+  /checklists/statuses:
+    get:
+      tags:
+        - checklists
+      parameters:
+        - in: query
+          name: task_ids
+          required: true
+          description: 'Describes which tasks statuses required to fetch.'
+          schema:
+            type: array
+            items:
+              type: string
+              example: 'qwu3Q76chkQwP7_ZnxUIT-1663324380052'
+      responses:
+        '200':
+          description: 'Checked tasks uuids are returned for widget.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/checklists-get-response-schema'
+      description: Returns checked user's tasks uuid
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/checklists:read, invotra/statuses:read ]
+  /checklists/statuses/{task_id}:
+    parameters:
+      - description: Task id. Widget generates it when a creating task
+        in: path
+        name: task_id
+        required: true
+        schema:
+          type: string
+    put:
+      tags:
+        - checklists
+      responses:
+        '200':
+          description: 'Task status changed successfully.'
+      description: Change task status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/checklists-status-schema'
+        required: true
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/checklists:write, invotra/statuses:read ]
+  /checklists/report:
+    get:
+      tags:
+        - checklists
+      responses:
+        '200':
+          description: 'Report created successfully.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/checklists-report-schema'
+      description: Get tasks status report
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/checklists:write, invotra/statuses:read ]
+
 components:
   securitySchemes:
     APIKeyHeader:
@@ -12135,6 +12380,33 @@ components:
       required:
         - message
         - uuid
+    send-email-schema:
+      type: object
+      properties:
+        subject:
+          description: 'The subject for email'
+          type: string
+          example: 'Test subject'
+        body:
+          description: 'The body for email'
+          type: string
+          example: 'Test body text'
+        recipient:
+          description: 'The recipient email. The default value is a mail of the current user'
+          type: string
+          example: 'example@gmail.com'
+        sender:
+          description: 'The sender email'
+          type: string
+          example: 'example@gmail.com'
+        cc:
+          description: 'The carbon copy email. You may separate multiple addresses with comma'
+          type: string
+          example: 'example@gmail.com'
+      required:
+        - subject
+        - body
+
     open-graph-request-schema:
       type: object
       properties:
@@ -12208,6 +12480,10 @@ components:
       required:
         - mandatory_content_review
         - feed_messages
+        - franchise_settings
+        - worldpay_settings
+        - timeframe_settings
+        - custom_overlay_tour_points
       properties:
         mandatory_content_review:
           description: 'Mandatory configuration for the "content_review" property.'
@@ -12248,6 +12524,79 @@ components:
               description: This field is known as enable search in the Microsoft 365
               type: boolean
               example: false
+        franchise_settings:
+          description: The franchise setting
+          type: object
+          properties:
+            enable_franchise_options:
+              description: This field is known to enable franchise feature
+              type: boolean
+              example: false
+            franchise_fields_merge_tag:
+              type: array
+              description: This field contains all fields for franchise.
+              items:
+                type: object
+                properties:
+                  label:
+                    type: string
+                    description: The label
+                    example: Business Website
+                  merge_tag:
+                    type: string
+                    description: The merge tag
+                    example: «MB03website»
+                required:
+                  - label
+                  - merge_tag
+        worldpay_settings:
+          description: The worldpay setting
+          type: object
+          properties:
+            installation_id:
+              description: This field is known as installation id
+              type: string
+              example: 123456789
+        timeframe_settings:
+          description: 'Key-value map with timeframe periods. Value: prettied timeframe name'
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              machine_name:
+                type: string
+                description: Timeframe machine name
+                example: "week-7-_ca12"
+              title:
+                type: string
+                example: "Induction"
+              timeframe:
+                type: string
+                description: Timeframe period
+                example: "7"
+              type:
+                type: string
+                enum:
+                  - day
+                  - days
+                  - week
+                  - weeks
+                description: Period type
+                example: "week"
+
+        custom_overlay_tour_points:
+          description: 'Key-value map with timeframe periods. Value: prettied timeframe name'
+          type: object
+          properties:
+            title:
+              description: Overlay title
+              type: string
+              example: 'Notifications'
+            selector:
+              description: CSS selector that describe which elements should be highlighted 
+              type: string
+              example: '.notifications-icon-wrapper'
+
     administration-schema-update:
       type: object
       properties:
@@ -12263,6 +12612,7 @@ components:
                 - short_description
                 - one_line
                 - none
+<<<<<<< HEAD
         microsoft_365:
           description: Configuration for microsoft 365
           type: object
@@ -12271,6 +12621,33 @@ components:
               description: Configure for microsoft 365 search
               type: boolean
               example: false
+=======
+        franchise_settings:
+          description: The franchise setting
+          type: object
+          properties:
+            enable_franchise_options:
+              description: This field is used to enable franchise featured
+              type: boolean
+              example: false
+            franchise_fields_merge_tag:
+              type: array
+              description: This field is used to add more custom fields when Franchise feature is enable.
+              items:
+                type: object
+                properties:
+                  label:
+                    type: string
+                    description: The label
+                    example: Business Website
+                  merge_tag:
+                    type: string
+                    description: The merge tag
+                    example: «MB03website»
+                required:
+                  - label
+                  - merge_tag
+>>>>>>> MSI.SWAGGER-5.36
     branding-schema:
       properties:
         logo:
@@ -12500,7 +12877,7 @@ components:
                 type: string
                 description: The region of layout
                 example: sidebar
-              region_label: 
+              region_label:
                 type: string
                 description: The label of region
                 example: Region 1
@@ -12526,7 +12903,7 @@ components:
               type: string
               example: 'head_1_body_4'
           required:
-              - machine_name    
+              - machine_name
     layout-schema:
       oneOf:
         - $ref: '#/components/schemas/default-layout-schema'
@@ -12910,6 +13287,7 @@ components:
             - invotra.comment.like
             - invotra.group.pending
             - invotra.group.added
+            - invotra.file.share
         status:
           description: Whether the notification has been read or not
           type: boolean
@@ -12926,6 +13304,7 @@ components:
             - node
             - user
             - comment
+            - file
         target_subtype:
           description: This is the subtype (or "bundle" in Drupal parlance) of the entity that the notification links to
           type: string
@@ -12992,6 +13371,20 @@ components:
           description: 'Indicates that this team is published.'
           type: boolean
           example: true
+        profile_details:
+          description: This is the profile details when franchise setting is enabled
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                description: The franchise setting label
+                type: string
+                example: Franchise
+              value:
+                description: The value of label
+                type: string
+                example: South Western Region
     user-schema:
       allOf:
         - $ref: '#/components/schemas/user-schema-common'
@@ -13055,7 +13448,7 @@ components:
                 type: object
                 properties:
                   site_section_roles:
-                    description: The user's site section roles within this site section. 
+                    description: The user's site section roles within this site section.
                     type: array
                     items:
                       type: string
@@ -13104,6 +13497,20 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/organisational-skill-schema'
+            new_starter:
+              description: Is a new user or not
+              type: boolean
+              default: true
+              example: true
+            start_date:
+              description: A new user first access date
+              type: string
+              default: '1970-01-01T00:00:00Z'
+              example: '2022-01-01T00:00:00Z'
+            time_frame_name:
+              description: Timeframes name from the user's Start date
+              type: string
+              example: 'Day 1'
     user-schema-common:
       type: object
       properties:
@@ -13949,6 +14356,15 @@ components:
               type: string
             source:
               type: string
+            message_type:
+              type: string
+              enum:
+                - group_groupadd
+                - user_updated
+                - comment_created
+                - comment_updated
+                - node_created
+                - node_updated
     post-schema-update:
       allOf:
         - $ref: '#/components/schemas/post-schema-common'
@@ -15151,7 +15567,7 @@ components:
           items:
             type: object
             properties:
-              uuid: 
+              uuid:
                 description: Invotra UUID of the multi media.
                 type: string
                 format: uuid
@@ -17561,18 +17977,34 @@ components:
                   type: string
                   example: 'Involving staff training'
             team:
-              description: 'The team targeting this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the team.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
-                name:
-                  description: This is the name of the team
-                  type: string
-                  example: Operations
+              description: 'The teams targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the team.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
+                  name:
+                    description: This is the name of the team
+                    type: string
+                    example: Operations
+                  profile_details:
+                    description: This is the profile details when franchise setting is enabled
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        label:
+                          description: The franchise setting label
+                          type: string
+                          example: Franchise
+                        value:
+                          description: The value of label
+                          type: string
+                          example: South Western Region
             locations:
               description: 'The locations targeting this policy.'
               type: array
@@ -17665,6 +18097,20 @@ components:
               description: 'Published status for the policy.'
               type: boolean
               example: true
+            last_confirmed_revision:
+              description: 'Last confirmed revision of the policy.'
+              type: number
+              example:
+                - 84620
+                - 84619
+            current_revision_id:
+              description: current revision ID
+              type: number
+              example: 84840
+            major_revision_id:
+              description: major revision ID
+              type: number
+              example: 84840
     policy-schema-update:
       allOf:
         - $ref: '#/components/schemas/policy-schema-common'
@@ -17718,14 +18164,16 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
-              description: 'The team targeting this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the team.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              description: 'The teams targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the team.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             locations:
               description: 'The locations targeting this policy.'
               type: array
@@ -17788,6 +18236,12 @@ components:
                   type: string
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
+            last_confirmed_revision:
+              description: 'Last confirmed revision of the policy.'
+              type: number
+              example:
+                - 84620
+                - 84619
     policy-schema-create:
       allOf:
         - $ref: '#/components/schemas/policy-schema-common'
@@ -17841,14 +18295,16 @@ components:
                   format: uuid
                   example: '01234567-89ab-cdef-1234-56789abcdef0'
             team:
-              description: 'The team targeting this policy.'
-              type: object
-              properties:
-                uuid:
-                  description: 'Invotra UUID of the team.'
-                  type: string
-                  format: uuid
-                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              description: 'The teams targeting this policy.'
+              type: array
+              items:
+                type: object
+                properties:
+                  uuid:
+                    description: 'Invotra UUID of the team.'
+                    type: string
+                    format: uuid
+                    example: '01234567-89ab-cdef-1234-56789abcdef0'
             locations:
               description: 'The locations targeting this policy.'
               type: array
@@ -17998,6 +18454,28 @@ components:
           description: 'The policy external reference id.'
           type: string
           example: 'ABC123'
+        mandatory_read:
+          description: Indicates that mandatory read are enabled for this content.
+          type: boolean
+          example: true
+        read_confirmation:
+          description: Indicates that read confirmation are checked for this content.
+          type: boolean
+          example: true
+        revisions:
+          description: 'The revisions of the policy.'
+          type: array
+          items:
+            type: number
+            uniqueItems: true
+            example:
+              - 10605
+              - 10505
+        current_revision_id:
+          description: 'The current revision id'
+          type: integer
+          example: 151
+
     poll-schema:
       allOf:
         - $ref: '#/components/schemas/poll-schema-common'
@@ -19654,6 +20132,14 @@ components:
           description: 'This is the timestamp (in seconds) of when the file was last updated.'
           type: integer
           example: 1510941696
+        file_usage_count:
+          description: 'This field is known as usage count'
+          type: integer
+          example: 1
+        file_id:
+          description: This field is known as internal id
+          type: integer
+          example: 1
     file-schema-update:
       properties:
         filename:
@@ -21837,3 +22323,181 @@ components:
           description: 'Determines the position of an personal interest in the hierarchy in relation to its siblings.'
           type: integer
           example: 1
+    user-policy-schema:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: Invotra UUID of the policy.
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        title:
+          type: string
+          description: The title of the policy
+          example: Policy Title
+        mandatory_read:
+          description: Indicates that mandatory read are enabled for this content.
+          type: boolean
+          example: true
+        read_confirmation:
+          description: Indicates that read confirmation are checked for this content.
+          type: boolean
+          example: false
+        revision_id:
+          description: Latest revition ID
+          type: number
+          example: 123
+        date_time:
+          description: The review date timestamp for the content (in seconds).
+          type: integer
+          example: 1563357496
+        site_section:
+          description: 'The site section of this list.'
+          type: object
+          properties:
+            uuid:
+              description: 'Invotra UUID of the site section.'
+              type: string
+              format: uuid
+              example: '01234567-89ab-cdef-1234-56789abcdef0'
+            name:
+              description: 'The name of the site section.'
+              type: string
+              example: 'Operations'
+    policy-team-member-schema:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: Invotra UUID of the user.
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        username:
+          description: The user's username
+          type: string
+          example: Dorothy Whitehead
+        firstname:
+          description: The user's first name
+          type: string
+          example: Dorothy
+        middle_name:
+          description: The user's middle name
+          type: string
+          example: Papadopoulos
+        surname:
+          description: The user's surname
+          type: string
+          example: Whitehead
+        known_as:
+          description: The user's known as name
+          type: string
+          example: Dot
+        read_confirmation:
+          description: Indicates that read confirmation are checked for this content.
+          type: boolean
+          example: true
+        revision_id:
+          description: Latest revition ID
+          type: number
+          example: 85213
+        date_time:
+          description: The review date timestamp for the content (in seconds).
+          type: integer
+          example: 1563357496
+    checklists-get-response-schema:
+      type: array
+      items:
+        type: string
+        description: Checked task uuid.
+    checklists-status-schema:
+      type: object
+      properties:
+        value:
+          type: boolean
+          description: Task state
+    checklists-report-schema:
+      type: object
+      properties:
+        users:
+          type: array
+          description: Starter users
+          items:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+              avatar_url:
+                type: string
+                format: url
+                example: 'https://dev.invotra.com/files/styles/avatar/public/user.png'
+              full_name:
+                type: string
+                example: 'Dorothy Whitehead'
+              starting_date:
+                type: integer
+                example: 1563357496
+              job_roles:
+                type: array
+                items:
+                  type: string
+                  example: Project manager
+        tasks:
+          type: array
+          description: 'Tasks info'
+          items:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: '01234567-89ab-cdef-1234-56789abcdef0'
+              text:
+                type: string
+                example: 'Upload a profile picture'
+              checklist:
+                type: string
+                example: 'Tasks for onboarding'
+              timeframes:
+                type: array
+                items:
+                  type: object
+                  description: Associated with this task timeframes
+                  properties:
+                    value:
+                      type: string
+                      example: 'weeks-3-7'
+                    label:
+                      type: string
+                      example: 'Weeks 3-7'
+        users_progress:
+          type: object
+          description: 'Progress for each user'
+          additionalProperties:
+            type: array
+            items:
+              type: object
+              properties:
+                task_uuid:
+                  type: string
+                status:
+                  type: boolean
+        tasks_progress:
+          type: object
+          description: 'Progress for each task'
+          additionalProperties:
+            type: object
+            properties:
+              completed:
+                type: array
+                description: 'The UUID of users performing this task'
+                items:
+                  type: string
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
+              not_completed:
+                type: array
+                description: 'The UUID of users not performing this task'
+                items:
+                  type: string
+                  example: '01234567-89ab-cdef-1234-56789abcdef0'
