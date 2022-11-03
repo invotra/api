@@ -12612,7 +12612,6 @@ components:
                 - short_description
                 - one_line
                 - none
-<<<<<<< HEAD
         microsoft_365:
           description: Configuration for microsoft 365
           type: object
@@ -12621,7 +12620,6 @@ components:
               description: Configure for microsoft 365 search
               type: boolean
               example: false
-=======
         franchise_settings:
           description: The franchise setting
           type: object
@@ -12647,7 +12645,6 @@ components:
                 required:
                   - label
                   - merge_tag
->>>>>>> MSI.SWAGGER-5.36
     branding-schema:
       properties:
         logo:
