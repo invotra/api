@@ -12516,6 +12516,14 @@ components:
                 - short_description
                 - one_line
                 - none
+        microsoft_365:
+          description: Configuration for microsoft 365
+          type: object
+          properties:
+            search:
+              description: This field is known as enable search in the Microsoft 365
+              type: boolean
+              example: false
         franchise_settings:
           description: The franchise setting
           type: object
@@ -12604,6 +12612,14 @@ components:
                 - short_description
                 - one_line
                 - none
+        microsoft_365:
+          description: Configuration for microsoft 365
+          type: object
+          properties:
+            search:
+              description: Configure for microsoft 365 search
+              type: boolean
+              example: false
         franchise_settings:
           description: The franchise setting
           type: object
