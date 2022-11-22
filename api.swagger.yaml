@@ -13835,8 +13835,6 @@ components:
           required:
             - group_uuid
             - title
-            - group_category_uuid
-            - group_category
             - description
             - privacy_setting
             - author_uuid
