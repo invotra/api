@@ -7403,6 +7403,7 @@ paths:
               - timestamp_created
               - timestamp_updated
               - file_usage_count
+              - relevance
             default: timestamp_created
         - name: order
           description: 'Sort order.'
