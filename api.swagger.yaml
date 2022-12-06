@@ -7315,6 +7315,11 @@ paths:
                 - other_document_types
                 - pdf
                 - video
+                - ms_onedrive
+                - ms_docx
+                - ms_xlsx
+                - ms_pptx
+                - ms_onenote
         - name: filemime
           description: 'Filter by file MIME type.'
           in: query
@@ -7398,6 +7403,7 @@ paths:
               - timestamp_created
               - timestamp_updated
               - file_usage_count
+              - relevance
             default: timestamp_created
         - name: order
           description: 'Sort order.'
@@ -12052,6 +12058,28 @@ paths:
           description: 'The device id was deregistered.'
         '404':
           description: 'The device id was not found or the service was unknown.'
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/notifications:write ]
+  /notifications:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create-notifications-schema'
+        required: true
+      tags:
+        - notifications
+      description: Share entity thought notifications.
+      responses:
+        '201':
+          description: The token and device id was registered successfully.
+        '404':
+          description: Entity not found.
+        '422':
+          description: Unprocessable entity.
       security:
         - SessionCookieHeader: []
         - APIKeyHeader: []
@@ -20273,6 +20301,11 @@ components:
                       - other_document_types
                       - pdf
                       - video
+                      - ms_onedrive
+                      - ms_docx
+                      - ms_xlsx
+                      - ms_pptx
+                      - ms_onenote
     file-type-configuration-schema:
       type: object
       required:
@@ -20292,6 +20325,11 @@ components:
             - other_document_types
             - pdf
             - video
+            - ms_onedrive
+            - ms_docx
+            - ms_xlsx
+            - ms_pptx
+            - ms_onenote
         extensions:
           description: 'The file extensions permitted within the file type.'
           type: array
@@ -20726,6 +20764,47 @@ components:
           enum:
             - ios
             - android
+      type: object
+    create-notifications-schema:
+      properties:
+        author:
+          description: Author uuid.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        recipient:
+          description: Recipient uuid.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        type:
+          type: string
+          enum:
+            - 'invotra.user.follow'
+            - 'invotra.user.mention'
+            - 'invotra.user.shared'
+            - 'invotra.m365.shared'
+            - 'invotra.post.comment'
+            - 'invotra.comment.reply'
+            - 'invotra.post.like'
+            - 'invotra.comment.like'
+            - 'invotra.webform.type.created'
+            - 'invotra.webform.type.assignee'
+            - 'invotra.group.added'
+            - 'invotra.group.pending'
+            - 'invotra.group.adminless'
+            - 'invotra.video.uploaded'
+            - 'invotra.workflow.updated'
+        entity_type:
+          type: string
+          enum:
+            - file
+        entity_uuid:
+          description: Sharing entity uuid.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+
       type: object
     location-context-list-item-schema:
       type: object
