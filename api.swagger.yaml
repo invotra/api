@@ -13602,6 +13602,11 @@ components:
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
           readOnly: true
+        uuid:
+          description: The id of the user
+          type: string
+          example: '1241'
+          readOnly: true
         username:
           description: The user's username
           type: string
