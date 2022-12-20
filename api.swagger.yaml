@@ -20402,7 +20402,7 @@ components:
         share_options:
           type: object
           allOf:
-            - $ref: '#/components/schemas/comment-schema-common'
+            - $ref: '#/components/schemas/file-schema-share'
     job-role-schema:
       allOf:
         - type: object
