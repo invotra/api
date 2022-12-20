@@ -7548,6 +7548,28 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/files:read ]
+  '/files/share-microsoft-file':
+    put:
+      tags:
+        - files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/microsoft-file-schema-share'
+      responses:
+        '200':
+          description: The file was shared successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: Group, user or file is not exist.
+        '422':
+          description: Group and user UUIDs were passed both or none of them.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/files:read ]
   /job_roles:
     get:
       deprecated: true
@@ -13579,6 +13601,11 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
+          readOnly: true
+        uuid:
+          description: The id of the user
+          type: string
+          example: '1241'
           readOnly: true
         username:
           description: The user's username
@@ -20350,6 +20377,32 @@ components:
         message:
           type: string
           format: uuid
+    microsoft-file-schema-share:
+      type: object
+      required:
+        - file
+        - share_options
+      properties:
+        file:
+          type: object
+          required:
+            - filename
+            - filemime
+            - url
+          properties:
+            filename:
+              type: string
+              example: 'image.jpg'
+            filemime:
+              type: string
+              example: 'image/jpg'
+            url:
+              type: string
+              example: 'https://1drv.ms/i/s!AF0oTJKSfiiDcb'
+        share_options:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/comment-schema-common'
     job-role-schema:
       allOf:
         - type: object
