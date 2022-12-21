@@ -896,6 +896,15 @@ paths:
               - asc
               - desc
             default: desc
+        - description: Enabled integrations for user
+          in: query
+          name: integrations
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - microsoft365
         - $ref: '#/components/parameters/offsetParam'
         - $ref: '#/components/parameters/limitParam'
       responses:
@@ -7312,6 +7321,11 @@ paths:
                 - other_document_types
                 - pdf
                 - video
+                - ms_onedrive
+                - ms_docx
+                - ms_xlsx
+                - ms_pptx
+                - ms_onenote
         - name: filemime
           description: 'Filter by file MIME type.'
           in: query
@@ -7395,6 +7409,7 @@ paths:
               - timestamp_created
               - timestamp_updated
               - file_usage_count
+              - relevance
             default: timestamp_created
         - name: order
           description: 'Sort order.'
@@ -7509,6 +7524,58 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/files:write ]
+  '/files/{file_id}/share':
+    parameters:
+      - description: The Invotra UUID of the file.
+        in: path
+        name: file_id
+        required: true
+        schema:
+          type: string
+          format: uuid
+    put:
+      tags:
+        - files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/file-schema-share'
+      responses:
+        '200':
+          description: The file was shared successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: Group, user or file is not exist.
+        '422':
+          description: Group and user UUIDs were passed both or none of them.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/files:read ]
+  '/files/share-microsoft-file':
+    put:
+      tags:
+        - files
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/microsoft-file-schema-share'
+      responses:
+        '200':
+          description: The file was shared successfully.
+        '400':
+          description: The supplied UUID or JSON was malformed.
+        '404':
+          description: Group, user or file is not exist.
+        '422':
+          description: Group and user UUIDs were passed both or none of them.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/files:read ]
   /job_roles:
     get:
       deprecated: true
@@ -12023,6 +12090,28 @@ paths:
         - SessionCookieHeader: []
         - APIKeyHeader: []
         - CognitoJwt: [ invotra/notifications:write ]
+  /notifications:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create-notifications-schema'
+        required: true
+      tags:
+        - notifications
+      description: Share entity thought notifications.
+      responses:
+        '201':
+          description: The token and device id was registered successfully.
+        '404':
+          description: Entity not found.
+        '422':
+          description: Unprocessable entity.
+      security:
+        - SessionCookieHeader: []
+        - APIKeyHeader: []
+        - CognitoJwt: [ invotra/notifications:write ]
   /feeds/status:
     get:
       tags:
@@ -12513,6 +12602,14 @@ components:
                 - short_description
                 - one_line
                 - none
+        microsoft_365:
+          description: Configuration for microsoft 365
+          type: object
+          properties:
+            search:
+              description: This field is known as enable search in the Microsoft 365
+              type: boolean
+              example: false
         franchise_settings:
           description: The franchise setting
           type: object
@@ -12601,6 +12698,14 @@ components:
                 - short_description
                 - one_line
                 - none
+        microsoft_365:
+          description: Configuration for microsoft 365
+          type: object
+          properties:
+            search:
+              description: Configure for microsoft 365 search
+              type: boolean
+              example: false
         franchise_settings:
           description: The franchise setting
           type: object
@@ -13265,6 +13370,7 @@ components:
             - invotra.comment.like
             - invotra.group.pending
             - invotra.group.added
+            - invotra.file.share
         status:
           description: Whether the notification has been read or not
           type: boolean
@@ -13281,6 +13387,7 @@ components:
             - node
             - user
             - comment
+            - file
         target_subtype:
           description: This is the subtype (or "bundle" in Drupal parlance) of the entity that the notification links to
           type: string
@@ -13500,6 +13607,11 @@ components:
           type: string
           format: uuid
           example: 01234567-89ab-cdef-1234-56789abcdef0
+          readOnly: true
+        uuid:
+          description: The id of the user
+          type: string
+          example: '1241'
           readOnly: true
         username:
           description: The user's username
@@ -14337,6 +14449,15 @@ components:
               type: string
             source:
               type: string
+            message_type:
+              type: string
+              enum:
+                - group_groupadd
+                - user_updated
+                - comment_created
+                - comment_updated
+                - node_created
+                - node_updated
     post-schema-update:
       allOf:
         - $ref: '#/components/schemas/post-schema-common'
@@ -20213,6 +20334,11 @@ components:
                       - other_document_types
                       - pdf
                       - video
+                      - ms_onedrive
+                      - ms_docx
+                      - ms_xlsx
+                      - ms_pptx
+                      - ms_onenote
     file-type-configuration-schema:
       type: object
       required:
@@ -20232,12 +20358,57 @@ components:
             - other_document_types
             - pdf
             - video
+            - ms_onedrive
+            - ms_docx
+            - ms_xlsx
+            - ms_pptx
+            - ms_onenote
         extensions:
           description: 'The file extensions permitted within the file type.'
           type: array
           items:
             type: string
             example: '.mp3'
+    file-schema-share:
+      type: object
+      required:
+        - message
+      properties:
+        user_uuid:
+          type: string
+          format: uuid
+        group_uuid:
+          type: string
+          format: uuid
+        message:
+          type: string
+          format: uuid
+    microsoft-file-schema-share:
+      type: object
+      required:
+        - file
+        - share_options
+      properties:
+        file:
+          type: object
+          required:
+            - filename
+            - filemime
+            - url
+          properties:
+            filename:
+              type: string
+              example: 'image.jpg'
+            filemime:
+              type: string
+              example: 'image/jpg'
+            url:
+              type: string
+              example: 'https://1drv.ms/i/s!AF0oTJKSfiiDcb'
+        share_options:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/file-schema-share'
     job-role-schema:
       allOf:
         - type: object
@@ -20652,6 +20823,47 @@ components:
           enum:
             - ios
             - android
+      type: object
+    create-notifications-schema:
+      properties:
+        author:
+          description: Author uuid.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        recipient:
+          description: Recipient uuid.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+        type:
+          type: string
+          enum:
+            - 'invotra.user.follow'
+            - 'invotra.user.mention'
+            - 'invotra.user.shared'
+            - 'invotra.m365.shared'
+            - 'invotra.post.comment'
+            - 'invotra.comment.reply'
+            - 'invotra.post.like'
+            - 'invotra.comment.like'
+            - 'invotra.webform.type.created'
+            - 'invotra.webform.type.assignee'
+            - 'invotra.group.added'
+            - 'invotra.group.pending'
+            - 'invotra.group.adminless'
+            - 'invotra.video.uploaded'
+            - 'invotra.workflow.updated'
+        entity_type:
+          type: string
+          enum:
+            - file
+        entity_uuid:
+          description: Sharing entity uuid.
+          type: string
+          format: uuid
+          example: 01234567-89ab-cdef-1234-56789abcdef0
+
       type: object
     location-context-list-item-schema:
       type: object
