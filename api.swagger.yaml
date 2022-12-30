@@ -20365,8 +20365,6 @@ components:
             example: '.mp3'
     file-schema-share:
       type: object
-      required:
-        - message
       properties:
         user_uuid:
           type: string
