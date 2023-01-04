@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
-    "@types/node": "^13.7.6",
+    "@types/node": "^18.11.18",
     "typescript": "^3.7.5"
   },
   "dependencies": {
