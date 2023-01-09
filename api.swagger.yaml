@@ -2931,6 +2931,12 @@ paths:
           schema:
             type: string
             example: 'parking'
+        - name: fulltext_search_exclude_body
+          description: 'Exclude body from full text search.'
+          in: query
+          schema:
+            type: boolean
+            example: 'true'
         - name: external_id
           description: 'Filter by external ID.'
           in: query
