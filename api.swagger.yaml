@@ -967,6 +967,17 @@ paths:
               type: string
               format: uuid
               example: '01234567-89ab-cdef-1234-56789abcdef0'
+        - name: integrations
+          description: 'Filter on users that have enabled integration.'
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - jira
+                - microsoft365
+              example: jira
         - $ref: '#/components/parameters/limitParam'
       responses:
         '200':
@@ -1010,6 +1021,15 @@ paths:
                       format: email
                       type: string
                       example: dorothy.whitehead@akagera.com
+                    integrations:
+                      description: Enabled user's integrations
+                      type: array
+                      items:
+                        type: string
+                        enum:
+                          - jira
+                          - microsoft365
+                        example: jira
                   required:
                     - uuid
                     - username
